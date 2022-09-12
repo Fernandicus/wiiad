@@ -1,7 +1,6 @@
 import { Advertise } from "../../../lib/advertise/domain/Advertise";
 import AdTitle from "../../../lib/advertise/domain/AdTitle";
 import { NextApiRequest, NextApiResponse } from "next";
-import ReviewParams from "../../../lib/advertise/use-case/ReviewParams";
 import AdDescription from "../../../lib/advertise/domain/AdDescription";
 import AdImage from "../../../lib/advertise/domain/AdImage";
 import AdRedirectionUrl from "../../../lib/advertise/domain/AdRedirectionUrl";
@@ -13,23 +12,20 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   try {
-    const {
-      title,
-      description,
-      image,
-      redirectionUrl,
-    }: {
-      title: AdTitle;
-      description: AdDescription;
-      image: AdImage;
-      redirectionUrl: AdRedirectionUrl;
-    } = ReviewParams.forCreateAd({ reqBody: req.body });
+    const adTitle: AdTitle = new AdTitle(req.body.title);
+    const adDescription: AdDescription = new AdDescription(
+      req.body.description
+    );
+    const adImage: AdImage = new AdImage(req.body.image);
+    const adRedirectionUrl: AdRedirectionUrl = new AdRedirectionUrl(
+      req.body.redirectionUrl
+    );
 
     const advertise: Advertise = Advertise.new(
-      title,
-      description,
-      image,
-      redirectionUrl
+      adTitle,
+      adDescription,
+      adImage,
+      adRedirectionUrl
     );
 
     return res.status(200);

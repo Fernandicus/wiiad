@@ -5,10 +5,10 @@ import AdTitle from "./AdTitle";
 
 export class Advertise {
   private constructor(
-    private title: AdTitle,
-    private description: AdDescription,
-    private image: AdImage,
-    private redirectionUrl: AdRedirectionUrl
+    public readonly title: AdTitle,
+    public readonly description: AdDescription,
+    public readonly image: AdImage,
+    public readonly redirectionUrl: AdRedirectionUrl
   ) {}
 
   static new(
