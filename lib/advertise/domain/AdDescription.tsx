@@ -1,7 +1,7 @@
 import CreateAdError from "./CreateAdError";
 
 export default class AdDescription {
-  public readonly value;
+  public readonly description;
 
   constructor(description: string) {
     if (description == null || description.length == 0) {
@@ -10,6 +10,6 @@ export default class AdDescription {
     if (description.length > 500) {
       throw new CreateAdError("Ad description max length is 500 characters");
     }
-    this.value = description;
+    this.description = description;
   }
 }

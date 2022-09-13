@@ -4,6 +4,7 @@ import createAdvertise from "@/pages/api/advertisements/create-advertise";
 import { NextApiRequest, NextApiResponse } from "next";
 
 describe("On 'api/advertisements'", () => {
+
   it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 status", async () => {
     const req = httpMock.createRequest({
       method: "POST",
@@ -25,7 +26,6 @@ describe("On 'api/advertisements'", () => {
     const req = httpMock.createRequest({
       method: "POST",
       body: {
-        title: "",
         description: "Amazing advertise",
         image: "ad-image.png",
         redirectionUrl: "mysite.com",

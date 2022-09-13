@@ -3,20 +3,23 @@ import AdImage from "./AdImage";
 import AdRedirectionUrl from "./AdRedirectionUrl";
 import AdTitle from "./AdTitle";
 
-export class Advertise {
-  private constructor(
-    public readonly title: AdTitle,
-    public readonly description: AdDescription,
-    public readonly image: AdImage,
-    public readonly redirectionUrl: AdRedirectionUrl
-  ) {}
+export interface AdvertiseProps {
+  title: AdTitle;
+  description: AdDescription;
+  image: AdImage;
+  redirectionUrl: AdRedirectionUrl;
+}
 
-  static new(
-    title: AdTitle,
-    description: AdDescription,
-    image: AdImage,
-    redirectionUrl: AdRedirectionUrl
-  ): Advertise {
-    return new Advertise(title, description, image, redirectionUrl);
+export class Advertise {
+  public readonly title: AdTitle;
+  public readonly description: AdDescription;
+  public readonly image: AdImage;
+  public readonly redirectionUrl: AdRedirectionUrl;
+
+  constructor({ title, description, image, redirectionUrl }: AdvertiseProps) {
+    this.title = title;
+    this.description = description;
+    this.image = image;
+    this.redirectionUrl = redirectionUrl;
   }
 }

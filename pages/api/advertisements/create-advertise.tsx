@@ -12,21 +12,21 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   try {
-    const adTitle: AdTitle = new AdTitle(req.body.title);
-    const adDescription: AdDescription = new AdDescription(
-      req.body.description
-    );
-    const adImage: AdImage = new AdImage(req.body.image);
-    const adRedirectionUrl: AdRedirectionUrl = new AdRedirectionUrl(
+    const title = new AdTitle(req.body.title);
+    const description = new AdDescription(req.body.description);
+    const image = new AdImage(req.body.image);
+    const redirectionUrl = new AdRedirectionUrl(
       req.body.redirectionUrl
     );
 
-    const advertise: Advertise = Advertise.new(
-      adTitle,
-      adDescription,
-      adImage,
-      adRedirectionUrl
-    );
+    const advertise = new Advertise({
+      title,
+      description,
+      image,
+      redirectionUrl,
+    });
+
+    //!TODO:: TDD =>  USE CASE 'CreateNewAd'
 
     return res.status(200);
   } catch (err) {
