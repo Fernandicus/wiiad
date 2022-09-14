@@ -19,4 +19,4 @@ const adSchema = new Schema({
   redirectionUrl: { type: String, required: true },
 });
 
-export const AdModel = mongoose.model("AdModel", adSchema);
+export const AdModel = mongoose.model("Ad", adSchema);
