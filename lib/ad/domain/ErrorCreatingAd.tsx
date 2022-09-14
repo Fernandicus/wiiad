@@ -1,4 +1,4 @@
-export default class CreateAdError extends Error {
+export class ErrorCreatingAd extends Error {
   constructor(message: string) {
     super(message);
   }

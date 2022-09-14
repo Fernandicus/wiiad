@@ -1,4 +1,4 @@
 
-export interface DataBase {
+export interface Repository {
   save(model: unknown): Promise<void>;
 }

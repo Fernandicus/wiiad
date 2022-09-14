@@ -6,7 +6,7 @@ import { Ad, AdProps } from "@/lib/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
 import { AdConstants } from "@/lib/ad/ad-constants";
 
-export default class AdFake extends Ad {
+export class FakeAd extends Ad {
   
   constructor({
     title,
@@ -26,7 +26,7 @@ export default class AdFake extends Ad {
     const image = new AdImage(faker.image.avatar());
     const redirectionUrl = new AdRedirectionUrl(faker.internet.url());
 
-    return new AdFake({ title, description, image, redirectionUrl });
+    return new FakeAd({ title, description, image, redirectionUrl });
   }
 
   static empty(): Ad {
@@ -35,6 +35,6 @@ export default class AdFake extends Ad {
     const image = new AdImage("");
     const redirectionUrl = new AdRedirectionUrl("");
 
-    return new AdFake({ title, description, image, redirectionUrl });
+    return new FakeAd({ title, description, image, redirectionUrl });
   }
 }

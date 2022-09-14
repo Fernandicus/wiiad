@@ -1,21 +1,23 @@
-import CreateAdError from "@/lib/ad/domain/CreateAdError";
+import { ErrorCreatingAd } from "@/lib/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/lib/ad/use-case/CreateAd";
-import AdvertiseFake from "../../../../__mocks__/lib/advertise/AdFake";
+import {FakeAd} from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("On Create New Ad", () => {
   it("Repository should call the save method 1 time", async () => {
     const mockedRepository = { save: jest.fn() };
-    const createAdvertise = new CreateAd(mockedRepository);
-    const advertise = AdvertiseFake.createRandom();
+    const createAd = new CreateAd(mockedRepository);
+    const advertise = FakeAd.createRandom();
 
-    await createAdvertise.save(advertise);
+    await createAd.save(advertise);
 
     expect(mockedRepository.save).toBeCalledTimes(1);
   });
 
-  it("Throw 'CreateAdError' on empty advertise data", () => {
+  it("Throw 'ErrorCreatingAd' on empty advertise data", () => {
     expect(() => {
-      AdvertiseFake.empty();
-    }).toThrowError(CreateAdError);
+      FakeAd.empty();
+    }).toThrowError(ErrorCreatingAd);
   });
 });
+
+//TODO: On AdMongoDBRepository . . . .

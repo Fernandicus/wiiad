@@ -1,8 +1,8 @@
 import { Ad } from "../domain/Ad";
-import { DataBase } from "../domain/DataBase";
+import { Repository } from "../domain/Repository";
 
 export class CreateAd {
-  constructor(private repository: DataBase) {}
+  constructor(private repository: Repository) {}
 
   async save(ad: Ad): Promise<void> {
     await this.repository.save(ad);
