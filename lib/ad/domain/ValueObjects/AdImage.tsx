@@ -1,4 +1,4 @@
-import CreateAdError from "./CreateAdError";
+import CreateAdError from "../CreateAdError";
 
 export default class AdImage {
   public readonly image;

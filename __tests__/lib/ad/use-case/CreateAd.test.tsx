@@ -1,15 +1,14 @@
-import CreateAdError from "@/lib/advertise/domain/CreateAdError";
-import CreateNewAd from "@/lib/advertise/use-case/CreateNewAd";
-import AdvertiseFake from "../../../../__mocks__/lib/advertise/AdvertiseFake";
+import CreateAdError from "@/lib/ad/domain/CreateAdError";
+import { CreateAd } from "@/lib/ad/use-case/CreateAd";
+import AdvertiseFake from "../../../../__mocks__/lib/advertise/AdFake";
 
 describe("On Create New Ad", () => {
-
   it("Repository should call the save method 1 time", async () => {
     const mockedRepository = { save: jest.fn() };
-    const newAd = new CreateNewAd(mockedRepository);
-    const ad = AdvertiseFake.createRandom();
+    const createAdvertise = new CreateAd(mockedRepository);
+    const advertise = AdvertiseFake.createRandom();
 
-    await newAd.save(ad);
+    await createAdvertise.save(advertise);
 
     expect(mockedRepository.save).toBeCalledTimes(1);
   });

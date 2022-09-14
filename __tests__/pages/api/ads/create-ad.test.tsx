@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import httpMock from "node-mocks-http";
-import createAdvertise from "@/pages/api/advertisements/create-advertise";
+import createAdvertise from "@/pages/api/ads/create-ad";
 import { NextApiRequest, NextApiResponse } from "next";
 
 describe("On 'api/advertisements'", () => {

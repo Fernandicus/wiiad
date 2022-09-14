@@ -1,9 +1,9 @@
-import { Advertise } from "../../../lib/advertise/domain/Advertise";
-import AdTitle from "../../../lib/advertise/domain/AdTitle";
+import { Ad } from "../../../lib/ad/domain/Ad";
+import AdTitle from "../../../lib/ad/domain/ValueObjects/AdTitle";
 import { NextApiRequest, NextApiResponse } from "next";
-import AdDescription from "../../../lib/advertise/domain/AdDescription";
-import AdImage from "../../../lib/advertise/domain/AdImage";
-import AdRedirectionUrl from "../../../lib/advertise/domain/AdRedirectionUrl";
+import AdDescription from "../../../lib/ad/domain/ValueObjects/AdDescription";
+import AdImage from "../../../lib/ad/domain/ValueObjects/AdImage";
+import AdRedirectionUrl from "../../../lib/ad/domain/ValueObjects/AdRedirectionUrl";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +19,7 @@ export default async function handler(
       req.body.redirectionUrl
     );
 
-    const advertise = new Advertise({
+    const advertise = new Ad({
       title,
       description,
       image,
