@@ -3,9 +3,9 @@ import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create-ad";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
-describe.only("On 'api/advertisements'", () => {
+describe("On 'api/advertisements'", () => {
 
-  it.only("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
+  it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
     const ad = FakeAd.createRandom();
 
     const req = httpMock.createRequest({

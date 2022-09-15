@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import { Ad } from "../domain/Ad";
 import { Repository } from "../domain/Repository";
+import AdDescription from "../domain/ValueObjects/AdDescription";
+import AdImage from "../domain/ValueObjects/AdImage";
+import AdRedirectionUrl from "../domain/ValueObjects/AdRedirectionUrl";
+import AdTitle from "../domain/ValueObjects/AdTitle";
 import { AdModel } from "./AdModel";
 
 export class AdMongoDBRepository implements Repository {
@@ -35,5 +39,17 @@ export class AdMongoDBRepository implements Repository {
     const adModel = new AdModel({ title, description, image, redirectionUrl });
     const savedAd = await adModel.save();
     return savedAd.id;
+  }
+
+  public async findById(id: string): Promise<Ad | void> {
+    const adModel = await AdModel.findById(id);
+    if(!adModel) return;
+    
+    const title = new AdTitle(adModel.title);
+    const description = new AdDescription(adModel.description);
+    const image = new AdImage(adModel.image);
+    const redirectionUrl = new AdRedirectionUrl(adModel.redirectionUrl);
+
+    return new Ad({ title, description, image, redirectionUrl });
   }
 }

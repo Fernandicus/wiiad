@@ -7,10 +7,10 @@ describe("Given AdMongoDBRepository", () => {
     const ad = FakeAd.createRandom();
     const mongoDBRepository = await AdMongoDBRepository.connect();
     const adId = await mongoDBRepository.save(ad);
+
+    const adInRepository = await mongoDBRepository.findById(adId)
     await mongoDBRepository.disconnect();
+    expect(adInRepository!.title.title).toBe(ad.title.title);
 
-    expect(adId).toBe(adId);
-
-    //TODO: expect find data in mongo db atlas
   });
 });
