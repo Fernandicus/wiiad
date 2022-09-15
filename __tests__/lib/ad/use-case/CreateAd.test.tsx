@@ -1,10 +1,10 @@
 import { ErrorCreatingAd } from "@/lib/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/lib/ad/use-case/CreateAd";
-import {FakeAd} from "../../../../__mocks__/lib/advertise/FakeAd";
+import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("On Create New Ad", () => {
   it("Repository should call the save method 1 time", async () => {
-    const mockedRepository = { save: jest.fn() };
+    const mockedRepository = { save: jest.fn(), findById: jest.fn() };
     const createAd = new CreateAd(mockedRepository);
     const advertise = FakeAd.createRandom();
 

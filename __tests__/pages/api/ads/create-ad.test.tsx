@@ -11,6 +11,7 @@ describe("On 'api/advertisements'", () => {
     const req = httpMock.createRequest({
       method: "POST",
       body: {
+        advertiserId: ad.advertiserId.id,
         title: ad.title.title,
         description: ad.description.description,
         image: ad.image.image,

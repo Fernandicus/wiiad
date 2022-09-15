@@ -3,6 +3,7 @@ import { AdConstants } from "../ad-constants";
 const { Schema } = mongoose;
 
 const adSchema = new Schema({
+  advertiserId: { type: Schema.Types.ObjectId, required: true },
   title: {
     type: String,
     required: true,
