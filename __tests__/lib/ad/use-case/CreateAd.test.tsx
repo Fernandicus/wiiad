@@ -10,7 +10,7 @@ describe("On Create New Ad", () => {
 
     await createAd.save(advertise);
 
-    expect(mockedRepository.save).toBeCalledTimes(1);
+    expect(mockedRepository.save).toBeCalledWith(advertise);
   });
 
   it("Throw 'ErrorCreatingAd' on empty advertise data", () => {
@@ -19,5 +19,3 @@ describe("On Create New Ad", () => {
     }).toThrowError(ErrorCreatingAd);
   });
 });
-
-//TODO: On AdMongoDBRepository . . . .

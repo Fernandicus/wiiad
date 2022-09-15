@@ -1,12 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create-ad";
-import { NextApiRequest, NextApiResponse } from "next";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe.only("On 'api/advertisements'", () => {
-  it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 status", async () => {
+
+  it.only("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
     const ad = FakeAd.createRandom();
+
     const req = httpMock.createRequest({
       method: "POST",
       body: {
@@ -18,20 +19,39 @@ describe.only("On 'api/advertisements'", () => {
     });
     const res = httpMock.createResponse();
 
-    const response = (await createAdvertise(req, res)) as NextApiResponse;
+    await createAdvertise(req, res);
 
-    expect(response.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 
-  it("When sending a 'POST' request without all the required params to the '/create-advertise' route should return a 400 status", async () => {
+  it("When sending a 'POST' request without all the required params to the '/create-advertise' route should return a 400 statusCode", async () => {
     const req = httpMock.createRequest({
       method: "POST",
       body: {},
     });
+
+    const res = httpMock.createResponse({});
+
+    await createAdvertise(req, res);
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("When sending a 'GET' request to the '/create-advertise' route should return a 400 statusCode", async () => {
+    const ad = FakeAd.createRandom();
+    const req = httpMock.createRequest({
+      method: "GET",
+      body: {
+        title: ad.title.title,
+        description: ad.description.description,
+        image: ad.image.image,
+        redirectionUrl: ad.redirectionUrl.url,
+      },
+    });
     const res = httpMock.createResponse();
 
-    const response = (await createAdvertise(req, res)) as NextApiResponse;
+    await createAdvertise(req, res);
 
-    expect(response.statusCode).toBe(400);
+    expect(res.statusCode).toBe(400);
   });
 });

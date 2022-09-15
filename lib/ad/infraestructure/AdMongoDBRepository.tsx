@@ -27,12 +27,13 @@ export class AdMongoDBRepository implements Repository {
     }
   }
 
-  public async save(ad: Ad): Promise<void> {
+  public async save(ad: Ad): Promise<string> {
     const title = ad.title.title;
     const description = ad.description.description;
     const image = ad.image.image;
     const redirectionUrl = ad.redirectionUrl.url;
     const adModel = new AdModel({ title, description, image, redirectionUrl });
-    await adModel.save();
+    const savedAd = await adModel.save();
+    return savedAd.id;
   }
 }
