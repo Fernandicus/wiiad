@@ -11,6 +11,7 @@ import {
   AdSegments,
   AdSegmentType,
 } from "@/src/ad/domain/ValueObjects/AdSegments";
+import mongoose from "mongoose";
 
 interface ReqBodyProps {
   title: string;
@@ -49,6 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const adRepository = await AdMongoDBRepository.connect();
 
     const createAd = new CreateAd(adRepository);
+    
     await createAd.save(ad);
 
     await adRepository.disconnect();

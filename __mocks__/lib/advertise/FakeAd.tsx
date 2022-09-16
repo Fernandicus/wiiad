@@ -105,7 +105,7 @@ export class FakeAd extends Ad {
       .substring(0, AdConstants.descriptionMaxLength);
     const fakeImage = faker.image.avatar();
     const fakeUrl = faker.internet.url();
-    const fakeAdvertiserId = faker.random.numeric(12);
+    const fakeAdvertiserId = faker.random.numeric(5);
     const fakeSegments = this.getRandomAdSegments();
 
     return {

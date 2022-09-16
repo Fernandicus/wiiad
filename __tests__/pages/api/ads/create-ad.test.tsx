@@ -28,7 +28,7 @@ describe("On 'api/advertisements'", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it.only("When sending a 'POST' request with a not valid Advertiser Id to the '/create-advertise' route should return a 400 statusCode", async () => {
+  it("When sending a 'POST' request with a not valid Advertiser Id to the '/create-advertise' route should return a 400 statusCode", async () => {
     const ad = FakeAd.createRandom();
 
     const req = httpMock.createRequest({
