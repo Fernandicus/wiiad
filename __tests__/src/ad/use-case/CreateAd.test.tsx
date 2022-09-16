@@ -12,8 +12,7 @@ describe("On Create New Ad", () => {
       findAllByAdvertiserId: jest.fn(),
     };
     const createAd = new CreateAd(mockedRepository);
-    const advertiserId = new mongoose.Types.ObjectId().toHexString()
-    const advertise = FakeAd.createRandomWithAdvertiserId(advertiserId);
+    const advertise = FakeAd.createRandom();
 
     await createAd.save(advertise);
 

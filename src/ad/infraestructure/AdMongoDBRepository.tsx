@@ -36,12 +36,6 @@ export class AdMongoDBRepository implements Repository {
     }
   }
 
-  private isHex(h: string): Boolean {
-    var a = parseInt(h, 16);
-    console.log(a.toString(16) === h.toLowerCase());
-    return a.toString(16) === h.toLowerCase();
-  }
-
   public async save(ad: Ad): Promise<void> {
     try {
       const advertiserObjectId = new mongoose.Types.ObjectId(
