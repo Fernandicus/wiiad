@@ -1,12 +1,12 @@
-import AdDescription from "@/lib/ad/domain/ValueObjects/AdDescription";
-import AdImage from "@/lib/ad/domain/ValueObjects/AdImage";
-import AdRedirectionUrl from "@/lib/ad/domain/ValueObjects/AdRedirectionUrl";
-import AdTitle from "@/lib/ad/domain/ValueObjects/AdTitle";
-import { Ad, AdProps } from "@/lib/ad/domain/Ad";
+import AdDescription from "src/ad/domain/ValueObjects/AdDescription";
+import AdImage from "src/ad/domain/ValueObjects/AdImage";
+import AdRedirectionUrl from "src/ad/domain/ValueObjects/AdRedirectionUrl";
+import AdTitle from "src/ad/domain/ValueObjects/AdTitle";
+import { Ad, AdProps } from "src/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
-import { AdConstants } from "@/lib/ad/ad-constants";
+import { AdConstants } from "src/ad/ad-constants";
 import { Schema } from "mongoose";
-import AdvertiserId from "@/lib/ad/domain/ValueObjects/AdvertiserId";
+import AdvertiserId from "src/ad/domain/ValueObjects/AdvertiserId";
 
 export class FakeAd extends Ad {
   constructor({

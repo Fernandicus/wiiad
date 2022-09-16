@@ -1,5 +1,5 @@
-import { ErrorCreatingAd } from "@/lib/ad/domain/ErrorCreatingAd";
-import { CreateAd } from "@/lib/ad/use-case/CreateAd";
+import { ErrorCreatingAd } from "src/ad/domain/ErrorCreatingAd";
+import { CreateAd } from "src/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("On Create New Ad", () => {

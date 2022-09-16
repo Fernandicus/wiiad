@@ -1,12 +1,12 @@
-import { Ad } from "../../../lib/ad/domain/Ad";
-import AdTitle from "../../../lib/ad/domain/ValueObjects/AdTitle";
+import { Ad } from "../../../src/ad/domain/Ad";
+import AdTitle from "../../../src/ad/domain/ValueObjects/AdTitle";
 import { NextApiRequest, NextApiResponse } from "next";
-import AdDescription from "../../../lib/ad/domain/ValueObjects/AdDescription";
-import AdImage from "../../../lib/ad/domain/ValueObjects/AdImage";
-import AdRedirectionUrl from "../../../lib/ad/domain/ValueObjects/AdRedirectionUrl";
-import { CreateAd } from "@/lib/ad/use-case/CreateAd";
-import { AdMongoDBRepository } from "@/lib/ad/infraestructure/AdMongoDBRepository";
-import AdvertiserId from "@/lib/ad/domain/ValueObjects/AdvertiserId";
+import AdDescription from "../../../src/ad/domain/ValueObjects/AdDescription";
+import AdImage from "../../../src/ad/domain/ValueObjects/AdImage";
+import AdRedirectionUrl from "../../../src/ad/domain/ValueObjects/AdRedirectionUrl";
+import { CreateAd } from "src/ad/use-case/CreateAd";
+import { AdMongoDBRepository } from "src/ad/infraestructure/AdMongoDBRepository";
+import AdvertiserId from "src/ad/domain/ValueObjects/AdvertiserId";
 
 interface ReqBodyProps {
   title: string;

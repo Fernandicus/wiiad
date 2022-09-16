@@ -1,5 +1,5 @@
 
-import { AdMongoDBRepository } from "@/lib/ad/infraestructure/AdMongoDBRepository";
+import { AdMongoDBRepository } from "src/ad/infraestructure/AdMongoDBRepository";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("Given AdMongoDBRepository", () => {
@@ -12,7 +12,7 @@ describe("Given AdMongoDBRepository", () => {
     
     await adMongoDBRepository.disconnect();
     
-    expect(adInRepository!.title.title).toBe(ad.title.title);
+    expect(adInRepository!.title).toBe(ad.title.title);
 
   });
 });
