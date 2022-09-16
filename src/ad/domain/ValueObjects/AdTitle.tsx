@@ -1,7 +1,7 @@
 import { AdConstants } from "../../ad-constants";
 import { ErrorCreatingAd } from "../ErrorCreatingAd";
 
-export default class AdTitle {
+export class AdTitle {
   public readonly title;
 
   constructor(title: string) {

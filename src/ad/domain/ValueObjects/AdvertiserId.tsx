@@ -1,6 +1,6 @@
 import { ErrorCreatingAd } from "../ErrorCreatingAd";
 
-export default class AdvertiserId {
+export class AdvertiserId {
   public readonly id;
 
   constructor(id: string) {

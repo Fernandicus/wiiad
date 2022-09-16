@@ -16,7 +16,6 @@ describe("Given AdMongoDBRepository", () => {
     );
 
     adMongoDBRepository.disconnect();
-
     const adFound = adInRepository.find(
       (advertise) => advertise.title == ad.title.title
     );

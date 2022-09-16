@@ -1,8 +1,9 @@
-import AdDescription from "./ValueObjects/AdDescription";
-import AdImage from "./ValueObjects/AdImage";
-import AdRedirectionUrl from "./ValueObjects/AdRedirectionUrl";
-import AdTitle from "./ValueObjects/AdTitle";
-import AdvertiserId from "./ValueObjects/AdvertiserId";
+import {AdDescription} from "./ValueObjects/AdDescription";
+import {AdImage} from "./ValueObjects/AdImage";
+import {AdRedirectionUrl} from "./ValueObjects/AdRedirectionUrl";
+import { AdSegments } from "./ValueObjects/AdSegments";
+import {AdTitle} from "./ValueObjects/AdTitle";
+import {AdvertiserId} from "./ValueObjects/AdvertiserId";
 
 export interface AdProps {
   title: AdTitle;
@@ -10,6 +11,7 @@ export interface AdProps {
   image: AdImage;
   redirectionUrl: AdRedirectionUrl;
   advertiserId: AdvertiserId;
+  segments: AdSegments;
 }
 
 export class Ad {
@@ -18,12 +20,14 @@ export class Ad {
   public readonly description: AdDescription;
   public readonly image: AdImage;
   public readonly redirectionUrl: AdRedirectionUrl;
+  public readonly segments: AdSegments;
 
-  constructor({ title, description, image, redirectionUrl, advertiserId }: AdProps) {
+  constructor({ title, description, image, redirectionUrl, advertiserId, segments }: AdProps) {
     this.title = title;
     this.description = description;
     this.image = image;
     this.redirectionUrl = redirectionUrl;
     this.advertiserId = advertiserId;
+    this.segments = segments;
   }
 }

@@ -1,6 +1,6 @@
 import {ErrorCreatingAd} from "../ErrorCreatingAd";
 
-export default class AdRedirectionUrl {
+export class AdRedirectionUrl {
   public readonly url;
   constructor(url: string) {
     if (url == null || url.length == 0) {

@@ -5,22 +5,25 @@ import { Repository } from "@/src/ad/domain/Repository";
 import mongoose from "mongoose";
 
 describe("On Create New Ad", () => {
-  it("Repository should call the save method 1 time", async () => {
+    it("Repository should call the save method with the advertise data", async () => {
+
     const mockedRepository: Repository = {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
     };
     const createAd = new CreateAd(mockedRepository);
-    const advertise = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString()
+    const advertise = FakeAd.createRandomWithAdvertiserId(advertiserId);
 
     await createAd.save(advertise);
 
     expect(mockedRepository.save).toBeCalledWith(advertise);
   });
-
+  
   it("Throw 'ErrorCreatingAd' on empty advertise data", () => {
     expect(() => {
       FakeAd.empty();
     }).toThrowError(ErrorCreatingAd);
-  });
+  }); 
+  
 });

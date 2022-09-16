@@ -38,32 +38,31 @@ export class AdMongoDBRepository implements Repository {
 
   private isHex(h: string): Boolean {
     var a = parseInt(h, 16);
-    console.log(a.toString(16) === h.toLowerCase())
+    console.log(a.toString(16) === h.toLowerCase());
     return a.toString(16) === h.toLowerCase();
   }
 
-  public async save(ad: Ad): Promise<string> {
-    const { title, description, image, redirectionUrl, advertiserId }: Ad = ad;
+  public async save(ad: Ad): Promise<void> {
     try {
-      const advertiserObjectId = new mongoose.Types.ObjectId(advertiserId.id);
+      const advertiserObjectId = new mongoose.Types.ObjectId(
+        ad.advertiserId.id
+      );
       const adModel = new AdModel({
-        title: title.title,
-        description: description.description,
-        image: image.image,
-        redirectionUrl: redirectionUrl.url,
+        title: ad.title.title,
+        description: ad.description.description,
+        image: ad.image.image,
+        redirectionUrl: ad.redirectionUrl.url,
         advertiserId: advertiserObjectId,
+        segment: ad.segments.segments,
       });
 
-      const savedAd = await adModel.save();
-
-      return savedAd.id;
-     } catch (err) {
-      if(err instanceof TypeError) throw new ErrorCreatingAd(err.message);
+      await adModel.save();
+    } catch (err) {
+      if (err instanceof TypeError) throw new ErrorCreatingAd(err.message);
       throw new ErrorCreatingAd("Something went wrong saving ad in MongoDB");
-    } 
+    }
   }
 
-  //TODO: find by ADVERTISER ID
   public async findAllByAdvertiserId(id: string): Promise<AdModelProps[]> {
     const adModel = await AdModel.find<AdModelProps>({
       advertiserId: new mongoose.Types.ObjectId(id),

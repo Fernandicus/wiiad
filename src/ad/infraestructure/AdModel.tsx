@@ -18,6 +18,7 @@ const adSchema = new Schema({
   },
   image: { type: String, required: true },
   redirectionUrl: { type: String, required: true },
+  segment: { type: Array, required: true },
 });
 
 export const AdModel = mongoose.model("Ad", adSchema);

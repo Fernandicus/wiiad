@@ -1,7 +1,7 @@
 import { AdConstants } from "../../ad-constants";
 import {ErrorCreatingAd} from "../ErrorCreatingAd";
 
-export default class AdDescription {
+export class AdDescription {
   public readonly description;
 
   constructor(description: string) {
