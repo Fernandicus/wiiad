@@ -2,11 +2,13 @@ import { render, screen } from "@testing-library/react";
 import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create-ad";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
+import mongoose from "mongoose";
 
 describe("On 'api/advertisements'", () => {
 
   it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
-    const ad = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.createRandomWithAdvertiserId(advertiserId);
 
     const req = httpMock.createRequest({
       method: "POST",
@@ -31,6 +33,7 @@ describe("On 'api/advertisements'", () => {
       body: {},
     });
 
+    
     const res = httpMock.createResponse({});
 
     await createAdvertise(req, res);

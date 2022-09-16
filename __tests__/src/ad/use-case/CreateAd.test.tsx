@@ -6,7 +6,10 @@ import mongoose from "mongoose";
 
 describe("On Create New Ad", () => {
   it("Repository should call the save method 1 time", async () => {
-    const mockedRepository: Repository = { save: jest.fn(), findAllByAdvertiserId: jest.fn() };
+    const mockedRepository: Repository = {
+      save: jest.fn(),
+      findAllByAdvertiserId: jest.fn(),
+    };
     const createAd = new CreateAd(mockedRepository);
     const advertise = FakeAd.createRandom();
 

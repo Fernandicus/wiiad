@@ -29,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const description = new AdDescription(reqBody.description);
     const image = new AdImage(reqBody.image);
     const redirectionUrl = new AdRedirectionUrl(reqBody.redirectionUrl);
-    const advertiserId = new AdvertiserId(parseInt(reqBody.advertiserId));
+    const advertiserId = new AdvertiserId(reqBody.advertiserId);
 
     const ad = new Ad({
       title,
@@ -39,12 +39,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       advertiserId
     });
 
-    /* const adRepository = await AdMongoDBRepository.connect();
+    const adRepository = await AdMongoDBRepository.connect();
 
     const createAd = new CreateAd(adRepository);
     await createAd.save(ad);
 
-    await adRepository.disconnect(); */
+    await adRepository.disconnect();
 
     res.status(200);
     return;

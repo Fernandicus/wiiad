@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Ad } from "../domain/Ad";
+import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
 import { Repository } from "../domain/Repository";
 import { AdModel } from "./AdModel";
 
@@ -35,20 +36,31 @@ export class AdMongoDBRepository implements Repository {
     }
   }
 
+  private isHex(h: string): Boolean {
+    var a = parseInt(h, 16);
+    console.log(a.toString(16) === h.toLowerCase())
+    return a.toString(16) === h.toLowerCase();
+  }
+
   public async save(ad: Ad): Promise<string> {
     const { title, description, image, redirectionUrl, advertiserId }: Ad = ad;
+    try {
+      const advertiserObjectId = new mongoose.Types.ObjectId(advertiserId.id);
+      const adModel = new AdModel({
+        title: title.title,
+        description: description.description,
+        image: image.image,
+        redirectionUrl: redirectionUrl.url,
+        advertiserId: advertiserObjectId,
+      });
 
-    const adModel = new AdModel({
-      title: title.title,
-      description: description.description,
-      image: image.image,
-      redirectionUrl: redirectionUrl.url,
-      advertiserId: new mongoose.Types.ObjectId(advertiserId.id),
-    });
+      const savedAd = await adModel.save();
 
-    const savedAd = await adModel.save();
-
-    return savedAd.id;
+      return savedAd.id;
+     } catch (err) {
+      if(err instanceof TypeError) throw new ErrorCreatingAd(err.message);
+      throw new ErrorCreatingAd("Something went wrong saving ad in MongoDB");
+    } 
   }
 
   //TODO: find by ADVERTISER ID
