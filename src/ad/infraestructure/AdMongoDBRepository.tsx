@@ -52,10 +52,10 @@ export class AdMongoDBRepository implements Repository {
   }
 
   //TODO: find by ADVERTISER ID
-  public async findById(id: string): Promise<AdModelProps | void> {
-    const adModel = await AdModel.findById<AdModelProps>(id);
-    if (!adModel) return;
-
+  public async findAllByAdvertiserId(id: string): Promise<AdModelProps[]> {
+    const adModel = await AdModel.find<AdModelProps>({
+      advertiserId: new mongoose.Types.ObjectId(id),
+    });
     return adModel;
   }
 }

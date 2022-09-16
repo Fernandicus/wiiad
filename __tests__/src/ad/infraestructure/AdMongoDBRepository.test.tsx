@@ -1,18 +1,22 @@
 
-import { AdMongoDBRepository } from "src/ad/infraestructure/AdMongoDBRepository";
+import { AdMongoDBRepository } from "@/src/ad/infraestructure/AdMongoDBRepository";
+import mongoose from "mongoose";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("Given AdMongoDBRepository", () => {
   it("When save Ad data should be saved in MongoDB Atlas", async () => {
-    const ad = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.createRandomWithAdvertiserId(advertiserId);
     const adMongoDBRepository = await AdMongoDBRepository.connect();
-    const adId = await adMongoDBRepository.save(ad);
+    await adMongoDBRepository.save(ad);
+    
+    const adInRepository = await adMongoDBRepository.findAllByAdvertiserId(advertiserId)
+    
+    adMongoDBRepository.disconnect();
 
-    const adInRepository = await adMongoDBRepository.findById(adId)
+    const adFound = adInRepository.find(advertise => advertise.title == ad.title.title);
     
-    await adMongoDBRepository.disconnect();
-    
-    expect(adInRepository!.title).toBe(ad.title.title);
+    expect(adFound!.title).toBe(ad.title.title);
 
   });
 });

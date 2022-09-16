@@ -1,12 +1,11 @@
-import AdDescription from "src/ad/domain/ValueObjects/AdDescription";
-import AdImage from "src/ad/domain/ValueObjects/AdImage";
-import AdRedirectionUrl from "src/ad/domain/ValueObjects/AdRedirectionUrl";
-import AdTitle from "src/ad/domain/ValueObjects/AdTitle";
-import { Ad, AdProps } from "src/ad/domain/Ad";
+import AdDescription from "@/src/ad/domain/ValueObjects/AdDescription";
+import AdImage from "@/src/ad/domain/ValueObjects/AdImage";
+import AdRedirectionUrl from "@/src/ad/domain/ValueObjects/AdRedirectionUrl";
+import AdTitle from "@/src/ad/domain/ValueObjects/AdTitle";
+import { Ad, AdProps } from "@/src/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
-import { AdConstants } from "src/ad/ad-constants";
-import { Schema } from "mongoose";
-import AdvertiserId from "src/ad/domain/ValueObjects/AdvertiserId";
+import { AdConstants } from "@/src/ad/ad-constants";
+import AdvertiserId from "@/src/ad/domain/ValueObjects/AdvertiserId";
 
 export class FakeAd extends Ad {
   constructor({
@@ -19,20 +18,33 @@ export class FakeAd extends Ad {
     super({ title, description, image, redirectionUrl, advertiserId });
   }
 
-  static createRandom(): Ad {
-    const fakeTitle = faker.commerce
-      .productName()
-      .substring(0, AdConstants.titleMaxLength);
-    const fakeDescription = faker.commerce
-      .productDescription()
-      .substring(0, AdConstants.descriptionMaxLength);
-    const fakeId = Math.floor(Math.random() * 10000);
+  static createRandomWithAdvertiserId(id: string): Ad {
+    const {fakeTitle, fakeDescription, fakeImage, fakeUrl} = this.generateFakeAdData();
 
     const title = new AdTitle(fakeTitle);
     const description = new AdDescription(fakeDescription);
-    const image = new AdImage(faker.image.avatar());
-    const redirectionUrl = new AdRedirectionUrl(faker.internet.url());
-    const advertiserId = new AdvertiserId(fakeId);
+    const image = new AdImage(fakeImage);
+    const redirectionUrl = new AdRedirectionUrl(fakeUrl);
+    const advertiserId = new AdvertiserId(id);
+
+    return new FakeAd({
+      title,
+      description,
+      image,
+      redirectionUrl,
+      advertiserId,
+    });
+  }
+
+  static createRandom(): Ad {
+    const {fakeTitle, fakeDescription, fakeImage, fakeUrl} = this.generateFakeAdData();
+    const fakeAdvertiserId = Math.floor(Math.random() * 100000).toString(16);
+
+    const title = new AdTitle(fakeTitle);
+    const description = new AdDescription(fakeDescription);
+    const image = new AdImage(fakeImage);
+    const redirectionUrl = new AdRedirectionUrl(fakeUrl);
+    const advertiserId = new AdvertiserId(fakeAdvertiserId);
 
     return new FakeAd({
       title,
@@ -48,7 +60,7 @@ export class FakeAd extends Ad {
     const description = new AdDescription("");
     const image = new AdImage("");
     const redirectionUrl = new AdRedirectionUrl("");
-    const advertiserId = new AdvertiserId(0);
+    const advertiserId = new AdvertiserId("");
 
     return new FakeAd({
       title,
@@ -58,4 +70,24 @@ export class FakeAd extends Ad {
       advertiserId,
     });
   }
+
+  private static generateFakeAdData(): FakeAdDataProps {
+    const fakeTitle = faker.commerce
+      .productName()
+      .substring(0, AdConstants.titleMaxLength);
+    const fakeDescription = faker.commerce
+      .productDescription()
+      .substring(0, AdConstants.descriptionMaxLength);
+    const fakeImage = faker.image.avatar();
+    const fakeUrl = faker.internet.url();
+
+    return { fakeTitle, fakeDescription, fakeImage, fakeUrl };
+  }
+}
+
+interface FakeAdDataProps {
+  fakeTitle: string;
+  fakeDescription: string;
+  fakeImage: string;
+  fakeUrl: string;
 }

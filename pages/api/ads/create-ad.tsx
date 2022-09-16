@@ -4,9 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import AdDescription from "../../../src/ad/domain/ValueObjects/AdDescription";
 import AdImage from "../../../src/ad/domain/ValueObjects/AdImage";
 import AdRedirectionUrl from "../../../src/ad/domain/ValueObjects/AdRedirectionUrl";
-import { CreateAd } from "src/ad/use-case/CreateAd";
-import { AdMongoDBRepository } from "src/ad/infraestructure/AdMongoDBRepository";
-import AdvertiserId from "src/ad/domain/ValueObjects/AdvertiserId";
+import { CreateAd } from "../../../src/ad/use-case/CreateAd";
+import { AdMongoDBRepository } from "../../../src/ad/infraestructure/AdMongoDBRepository";
+import AdvertiserId from "../../../src/ad/domain/ValueObjects/AdvertiserId";
 
 interface ReqBodyProps {
   title: string;
