@@ -1,4 +1,4 @@
-import { Ad } from "../../../src/ad/domain/Ad";
+import { Ad, AdPropsPrimitives } from "../../../src/ad/domain/Ad";
 import { AdTitle } from "../../../src/ad/domain/ValueObjects/AdTitle";
 import { NextApiRequest, NextApiResponse } from "next";
 import { AdDescription } from "../../../src/ad/domain/ValueObjects/AdDescription";
@@ -7,20 +7,8 @@ import { AdRedirectionUrl } from "../../../src/ad/domain/ValueObjects/AdRedirect
 import { CreateAd } from "../../../src/ad/use-case/CreateAd";
 import { AdMongoDBRepository } from "../../../src/ad/infraestructure/AdMongoDBRepository";
 import { AdvertiserId } from "../../../src/ad/domain/ValueObjects/AdvertiserId";
-import {
-  AdSegments,
-  AdSegmentType,
-} from "@/src/ad/domain/ValueObjects/AdSegments";
-import mongoose from "mongoose";
-
-interface ReqBodyProps {
-  title: string;
-  description: string;
-  image: string;
-  redirectionUrl: string;
-  advertiserId: string;
-  segments: string[];
-}
+import { AdSegments } from "@/src/ad/domain/ValueObjects/AdSegments";
+import { GetAdValueObjects } from "@/src/ad/domain/services/GetAdValueObjects";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -29,23 +17,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const reqBody: ReqBodyProps = req.body;
+    const reqBody: AdPropsPrimitives = req.body;
 
-    const segments = new AdSegments(reqBody.segments);
-    const title = new AdTitle(reqBody.title);
-    const description = new AdDescription(reqBody.description);
-    const image = new AdImage(reqBody.image);
-    const redirectionUrl = new AdRedirectionUrl(reqBody.redirectionUrl);
-    const advertiserId = new AdvertiserId(reqBody.advertiserId);
+    const adValueObjects = GetAdValueObjects.convertPrimitives({ ...reqBody });
 
-    const ad = new Ad({
-      title,
-      description,
-      image,
-      redirectionUrl,
-      advertiserId,
-      segments,
-    });
+    const ad = new Ad({ ...adValueObjects });
 
     const adRepository = await AdMongoDBRepository.connect();
 
