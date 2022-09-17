@@ -35,7 +35,7 @@ describe("On 'api/advertisements'", () => {
       method: "POST",
       body: {
         segments: ad.segments.segments,
-        advertiserId: ad.advertiserId.id,
+        advertiserId: "123",
         title: ad.title.title,
         description: ad.description.description,
         image: ad.image.image,

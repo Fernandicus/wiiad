@@ -1,5 +1,7 @@
 export class ErrorCreatingAd extends Error {
-  constructor(message: string) {
+  readonly info;
+  constructor(info: string, message?: string) {
     super(message);
+    this.info = info;
   }
 }

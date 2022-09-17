@@ -52,7 +52,7 @@ export class AdMongoDBRepository implements Repository {
 
       await adModel.save();
     } catch (err) {
-      if (err instanceof TypeError) throw new ErrorCreatingAd(err.message);
+      if (err instanceof TypeError) throw new ErrorCreatingAd("Error saving AdvertiserId", err.message);
       throw new ErrorCreatingAd("Something went wrong saving ad in MongoDB");
     }
   }

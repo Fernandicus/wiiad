@@ -50,7 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const adRepository = await AdMongoDBRepository.connect();
 
     const createAd = new CreateAd(adRepository);
-    
+
     await createAd.save(ad);
 
     await adRepository.disconnect();
@@ -58,11 +58,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200);
     return;
   } catch (err) {
-    if (!(err instanceof Error)) {
-      res.json({ message: "Error creating new ad" });
+    if (err instanceof Error) {
+      res.json({ message: err.message });
       return res.status(400);
     }
-    res.json({ message: err.message });
+    res.json({ message: "Error creating new ad" });
     return res.status(400);
   }
 };
