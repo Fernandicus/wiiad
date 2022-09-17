@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 
 const adSchema = new Schema(
   {
-    _id: { type: Schema.Types.ObjectId, required: true },
-    advertiserId: { type: Schema.Types.ObjectId, required: true },
+    _id: { type: String, required: true },
+    advertiserId: { type: String, required: true },
     title: {
       type: String,
       required: true,
@@ -26,8 +26,8 @@ const adSchema = new Schema(
 );
 
 export interface AdModelProps {
-  _id: mongoose.Types.ObjectId;
-  advertiserId: mongoose.Types.ObjectId;
+  _id: string;
+  advertiserId: string;
   title: string;
   description: string;
   image: string;

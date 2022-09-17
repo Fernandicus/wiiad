@@ -10,7 +10,6 @@ import {
   AdSegments,
   AdSegmentType,
 } from "@/src/ad/domain/ValueObjects/AdSegments";
-import { GetAdValueObjects } from "@/src/ad/domain/services/GetAdValueObjects";
 
 export class FakeAd extends Ad {
   constructor({
@@ -45,13 +44,6 @@ export class FakeAd extends Ad {
 
     return new FakeAd({ ...ad });
   }
-
-  /*   static createRandom(): Ad {
-    const fakeAdData = this.generateFakeAdData();
-    const ad = Ad.createFromPrimitives({ ...fakeAdData });
-
-    return new FakeAd({ ...ad });
-  } */
 
   static empty(): Ad {
     const ad = Ad.createFromPrimitives({

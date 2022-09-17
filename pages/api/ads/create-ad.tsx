@@ -1,14 +1,9 @@
 import { Ad, AdPropsPrimitives } from "../../../src/ad/domain/Ad";
-import { AdTitle } from "../../../src/ad/domain/ValueObjects/AdTitle";
+
 import { NextApiRequest, NextApiResponse } from "next";
-import { AdDescription } from "../../../src/ad/domain/ValueObjects/AdDescription";
-import { AdImage } from "../../../src/ad/domain/ValueObjects/AdImage";
-import { AdRedirectionUrl } from "../../../src/ad/domain/ValueObjects/AdRedirectionUrl";
 import { CreateAd } from "../../../src/ad/use-case/CreateAd";
 import { AdMongoDBRepository } from "../../../src/ad/infraestructure/AdMongoDBRepository";
-import { AdvertiserId } from "../../../src/ad/domain/ValueObjects/AdvertiserId";
-import { AdSegments } from "@/src/ad/domain/ValueObjects/AdSegments";
-import { GetAdValueObjects } from "@/src/ad/domain/services/GetAdValueObjects";
+import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -18,8 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const reqBody: AdPropsPrimitives = req.body;
-
-    const ad = Ad.createFromPrimitives({ ...reqBody });
+    const adId = AdUniqId.generate();
+    const ad = Ad.createFromPrimitives({ ...reqBody, id: adId });
 
     const adRepository = await AdMongoDBRepository.connect();
 

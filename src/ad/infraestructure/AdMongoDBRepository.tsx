@@ -29,42 +29,32 @@ export class AdMongoDBRepository implements Repository {
   }
 
   public async save(ad: Ad): Promise<void> {
-    try {
-      const advertiserObjectId = new mongoose.Types.ObjectId(
-        ad.advertiserId.id
-      );
-      const adModel = new AdModel({
-        _id: ad.id.id,
-        title: ad.title.title,
-        description: ad.description.description,
-        image: ad.image.image,
-        redirectionUrl: ad.redirectionUrl.url,
-        advertiserId: advertiserObjectId,
-        segments: ad.segments.segments,
-      });
-
-      await adModel.save();
-    } catch (err) {
-      if (err instanceof TypeError)
-        throw new ErrorCreatingAd("Error saving AdvertiserId", err.message);
-      throw new ErrorCreatingAd("Something went wrong saving ad in MongoDB");
-    }
+    const adModel = new AdModel({
+      _id: ad.id.id,
+      title: ad.title.title,
+      description: ad.description.description,
+      image: ad.image.image,
+      redirectionUrl: ad.redirectionUrl.url,
+      advertiserId: ad.advertiserId.id,
+      segments: ad.segments.segments,
+    });
+    await adModel.save();
   }
 
   public async findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]> {
     const adModel = await AdModel.find<AdModelProps>({
-      advertiserId: new mongoose.Types.ObjectId(id),
+      advertiserId: id,
     });
 
     const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
       return {
-        id: model._id.toHexString(),
+        id: model._id,
         title: model.title,
         description: model.description,
         image: model.image,
         redirectionUrl: model.redirectionUrl,
         segments: model.segments,
-        advertiserId: model.advertiserId.toHexString(),
+        advertiserId: model.advertiserId,
       };
     });
 

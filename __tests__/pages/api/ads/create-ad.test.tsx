@@ -3,12 +3,13 @@ import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create-ad";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 import mongoose from "mongoose";
+import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 describe("On 'api/advertisements'", () => {
 
   it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
-    const advertiserId = new mongoose.Types.ObjectId().toHexString();
-    const adId = new mongoose.Types.ObjectId().toHexString();
+    const advertiserId = AdUniqId.generate();
+    const adId = AdUniqId.generate();
     const ad = FakeAd.withIds({advertiserId, adId});
 
     const req = httpMock.createRequest({
@@ -30,15 +31,15 @@ describe("On 'api/advertisements'", () => {
   });
 
   it("When sending a 'POST' request with a not valid Advertiser Id to the '/create-advertise' route should return a 400 statusCode", async () => {
-    const advertiserId = new mongoose.Types.ObjectId().toHexString();
-    const adId = new mongoose.Types.ObjectId().toHexString();
+    const advertiserId = AdUniqId.generate();
+    const adId = AdUniqId.generate();
     const ad = FakeAd.withIds({advertiserId, adId});
 
     const req = httpMock.createRequest({
       method: "POST",
       body: {
         segments: ad.segments.segments,
-        advertiserId: "123",
+        advertiserId: "",
         title: ad.title.title,
         description: ad.description.description,
         image: ad.image.image,
@@ -57,7 +58,6 @@ describe("On 'api/advertisements'", () => {
       method: "POST",
       body: {},
     });
-
     
     const res = httpMock.createResponse({});
 
@@ -67,8 +67,8 @@ describe("On 'api/advertisements'", () => {
   });
 
   it("When sending a 'GET' request to the '/create-advertise' route should return a 400 statusCode", async () => {
-    const advertiserId = new mongoose.Types.ObjectId().toHexString();
-    const adId = new mongoose.Types.ObjectId().toHexString();
+    const advertiserId = AdUniqId.generate();
+    const adId = AdUniqId.generate();
     const ad = FakeAd.withIds({advertiserId, adId});
     
     const req = httpMock.createRequest({
