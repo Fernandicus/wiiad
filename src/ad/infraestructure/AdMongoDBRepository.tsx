@@ -1,16 +1,8 @@
-import mongoose from "mongoose";
-import { Ad } from "../domain/Ad";
+import mongoose, { Schema } from "mongoose";
+import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
 import { Repository } from "../domain/Repository";
-import { AdModel } from "./AdModel";
-
-interface AdModelProps {
-  title: string;
-  description: string;
-  image: string;
-  redirectionUrl: string;
-  advertiserId: number;
-}
+import { AdModel, AdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements Repository {
   private constructor() {}
@@ -47,20 +39,33 @@ export class AdMongoDBRepository implements Repository {
         image: ad.image.image,
         redirectionUrl: ad.redirectionUrl.url,
         advertiserId: advertiserObjectId,
-        segment: ad.segments.segments,
+        segments: ad.segments.segments,
       });
 
       await adModel.save();
     } catch (err) {
-      if (err instanceof TypeError) throw new ErrorCreatingAd("Error saving AdvertiserId", err.message);
+      if (err instanceof TypeError)
+        throw new ErrorCreatingAd("Error saving AdvertiserId", err.message);
       throw new ErrorCreatingAd("Something went wrong saving ad in MongoDB");
     }
   }
 
-  public async findAllByAdvertiserId(id: string): Promise<AdModelProps[]> {
+  public async findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]> {
     const adModel = await AdModel.find<AdModelProps>({
       advertiserId: new mongoose.Types.ObjectId(id),
     });
-    return adModel;
+
+    const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
+      return {
+        title: model.title,
+        description: model.description,
+        image: model.image,
+        redirectionUrl: model.redirectionUrl,
+        segments: model.segments,
+        advertiserId: model.advertiserId.toHexString(),
+      };
+    });
+
+    return adPrimitivesArray;
   }
 }

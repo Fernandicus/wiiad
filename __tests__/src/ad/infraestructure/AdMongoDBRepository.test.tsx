@@ -17,14 +17,20 @@ describe("Given AdMongoDBRepository", () => {
 
     adMongoDBRepository.disconnect();
     const adFound = adInRepository.find(
-      (advertise) => advertise.title == ad.title.title
+      (advertise) => advertise.title === ad.title.title
     );
 
     expect(adFound!.title).toBe(ad.title.title);
+    expect(adFound!.description).toBe(ad.description.description);
+    expect(adFound!.image).toBe(ad.image.image);
+    expect(adFound!.advertiserId).toBe(ad.advertiserId.id);
+    expect(adFound!.redirectionUrl).toBe(ad.redirectionUrl.url);
+    expect(adFound!.segments).toEqual(
+      expect.arrayContaining(ad.segments.segments)
+    );
   });
 
   it("When trying to save a not valid AdvertiserId (not valid ObjectId) in MongoDB expect an 'ErrorCreatingAd' ", async () => {
-
     const ad = FakeAd.createRandom();
     const adMongoDBRepository = await AdMongoDBRepository.connect();
 

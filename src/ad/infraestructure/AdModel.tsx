@@ -18,7 +18,16 @@ const adSchema = new Schema({
   },
   image: { type: String, required: true },
   redirectionUrl: { type: String, required: true },
-  segment: { type: Array, required: true },
+  segments: { type: Array, required: true },
 });
+
+export interface AdModelProps {
+  advertiserId: mongoose.Types.ObjectId,
+  title: string,
+  description: string
+  image: string
+  redirectionUrl: string
+  segments: string[]
+}
 
 export const AdModel = mongoose.model("Ad", adSchema);
