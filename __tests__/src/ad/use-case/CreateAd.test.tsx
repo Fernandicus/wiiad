@@ -2,7 +2,6 @@ import { ErrorCreatingAd } from "@/src/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/src/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 import { Repository } from "@/src/ad/domain/Repository";
-import mongoose from "mongoose";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 describe("On Create New Ad", () => {

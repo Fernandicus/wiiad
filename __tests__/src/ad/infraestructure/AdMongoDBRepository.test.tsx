@@ -1,7 +1,6 @@
 import { ErrorCreatingAd } from "@/src/ad/domain/ErrorCreatingAd";
 import { AdMongoDBRepository } from "@/src/ad/infraestructure/AdMongoDBRepository";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
-import mongoose from "mongoose";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("Given AdMongoDBRepository", () => {
