@@ -21,6 +21,7 @@ describe("Given AdMongoDBRepository", () => {
       (advertise) => advertise.title === ad.title.title
     );
 
+    expect(adFound!.id).toBe(ad.id.id);
     expect(adFound!.title).toBe(ad.title.title);
     expect(adFound!.description).toBe(ad.description.description);
     expect(adFound!.image).toBe(ad.image.image);
