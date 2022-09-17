@@ -14,6 +14,7 @@ import { GetAdValueObjects } from "@/src/ad/domain/services/GetAdValueObjects";
 
 export class FakeAd extends Ad {
   constructor({
+    id,
     title,
     description,
     image,
@@ -22,6 +23,7 @@ export class FakeAd extends Ad {
     segments,
   }: AdProps) {
     super({
+      id,
       title,
       description,
       image,
@@ -31,27 +33,29 @@ export class FakeAd extends Ad {
     });
   }
 
-  static createRandomWithAdvertiserId(id: string): Ad {
+  static withIds({
+    advertiserId,
+    adId,
+  }: {
+    advertiserId: string;
+    adId: string;
+  }): Ad {
     const fakeAdData = this.generateFakeAdData();
-    const adValueObjects = GetAdValueObjects.convertPrimitives({
-      ...fakeAdData,
-    });
-    const advertiserId = new AdvertiserId(id);
+    const ad = Ad.createFromPrimitives({ ...fakeAdData, advertiserId, id: adId });
 
-    return new FakeAd({ ...adValueObjects, advertiserId });
+    return new FakeAd({ ...ad });
   }
 
-  static createRandom(): Ad {
+  /*   static createRandom(): Ad {
     const fakeAdData = this.generateFakeAdData();
-    const adValueObjects = GetAdValueObjects.convertPrimitives({
-      ...fakeAdData,
-    });
+    const ad = Ad.createFromPrimitives({ ...fakeAdData });
 
-    return new FakeAd({ ...adValueObjects });
-  }
+    return new FakeAd({ ...ad });
+  } */
 
   static empty(): Ad {
-    const adValueObjects = GetAdValueObjects.convertPrimitives({
+    const ad = Ad.createFromPrimitives({
+      id: "",
       title: "",
       description: "",
       image: "",
@@ -60,9 +64,7 @@ export class FakeAd extends Ad {
       segments: [],
     });
 
-    return new FakeAd({
-      ...adValueObjects,
-    });
+    return new FakeAd({ ...ad });
   }
 
   private static generateFakeAdData(): AdPropsPrimitives {
@@ -78,6 +80,7 @@ export class FakeAd extends Ad {
     const segments = this.getRandomAdSegments();
 
     return {
+      id: "",
       title,
       description,
       image,

@@ -19,9 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const reqBody: AdPropsPrimitives = req.body;
 
-    const adValueObjects = GetAdValueObjects.convertPrimitives({ ...reqBody });
-
-    const ad = new Ad({ ...adValueObjects });
+    const ad = Ad.createFromPrimitives({ ...reqBody });
 
     const adRepository = await AdMongoDBRepository.connect();
 

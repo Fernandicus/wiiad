@@ -6,7 +6,8 @@ import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 describe("Given AdMongoDBRepository", () => {
   it("When save Ad data should be saved in MongoDB Atlas", async () => {
     const advertiserId = new mongoose.Types.ObjectId().toHexString();
-    const ad = FakeAd.createRandomWithAdvertiserId(advertiserId);
+    const adId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.withIds({advertiserId, adId});
 
     const adMongoDBRepository = await AdMongoDBRepository.connect();
     await adMongoDBRepository.save(ad);
@@ -31,7 +32,9 @@ describe("Given AdMongoDBRepository", () => {
   });
 
   it("When trying to save a not valid AdvertiserId (not valid ObjectId) in MongoDB expect an 'ErrorCreatingAd' ", async () => {
-    const ad = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString();
+    const adId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.withIds({advertiserId, adId});
     const adMongoDBRepository = await AdMongoDBRepository.connect();
 
     expect(async () => {

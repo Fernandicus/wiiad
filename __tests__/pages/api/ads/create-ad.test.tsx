@@ -8,7 +8,8 @@ describe("On 'api/advertisements'", () => {
 
   it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
     const advertiserId = new mongoose.Types.ObjectId().toHexString();
-    const ad = FakeAd.createRandomWithAdvertiserId(advertiserId);
+    const adId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.withIds({advertiserId, adId});
 
     const req = httpMock.createRequest({
       method: "POST",
@@ -29,7 +30,9 @@ describe("On 'api/advertisements'", () => {
   });
 
   it("When sending a 'POST' request with a not valid Advertiser Id to the '/create-advertise' route should return a 400 statusCode", async () => {
-    const ad = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString();
+    const adId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.withIds({advertiserId, adId});
 
     const req = httpMock.createRequest({
       method: "POST",
@@ -64,7 +67,10 @@ describe("On 'api/advertisements'", () => {
   });
 
   it("When sending a 'GET' request to the '/create-advertise' route should return a 400 statusCode", async () => {
-    const ad = FakeAd.createRandom();
+    const advertiserId = new mongoose.Types.ObjectId().toHexString();
+    const adId = new mongoose.Types.ObjectId().toHexString();
+    const ad = FakeAd.withIds({advertiserId, adId});
+    
     const req = httpMock.createRequest({
       method: "GET",
       body: {

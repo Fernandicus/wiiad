@@ -10,7 +10,7 @@ export class AdTitle {
     }
     if (title.length > AdConstants.titleMaxLength) {
       throw new ErrorCreatingAd(
-        `Ad title max length is 30 characters ${title} ${title.length}`
+        `Ad title max length is ${AdConstants.titleMaxLength} characters`
       );
     }
     this.title = title;

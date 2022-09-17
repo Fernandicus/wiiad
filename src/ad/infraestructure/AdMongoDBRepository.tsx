@@ -34,6 +34,7 @@ export class AdMongoDBRepository implements Repository {
         ad.advertiserId.id
       );
       const adModel = new AdModel({
+        _id: ad.id.id,
         title: ad.title.title,
         description: ad.description.description,
         image: ad.image.image,
@@ -57,6 +58,7 @@ export class AdMongoDBRepository implements Repository {
 
     const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
       return {
+        id: model._id.toHexString(),
         title: model.title,
         description: model.description,
         image: model.image,
