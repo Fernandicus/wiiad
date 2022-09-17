@@ -16,7 +16,8 @@ describe("Given AdMongoDBRepository", () => {
       advertiserId
     );
 
-    adMongoDBRepository.disconnect();
+    await adMongoDBRepository.disconnect();
+    
     const adFound = adInRepository.find(
       (advertise) => advertise.title === ad.title.title
     );
@@ -30,16 +31,5 @@ describe("Given AdMongoDBRepository", () => {
     expect(adFound!.segments).toEqual(
       expect.arrayContaining(ad.segments.segments)
     );
-  });
-
-  it("When trying to save a not valid AdvertiserId (not valid ObjectId) in MongoDB expect an 'ErrorCreatingAd' ", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
-    const ad = FakeAd.withIds({advertiserId, adId});
-    const adMongoDBRepository = await AdMongoDBRepository.connect();
-
-    expect(async () => {
-      await adMongoDBRepository.save(ad);
-    }).rejects.toThrowError(ErrorCreatingAd);
   });
 });
