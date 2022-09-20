@@ -2,14 +2,40 @@ import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/ads/remove-ad";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
+import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
+import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import mongoose from "mongoose";
 
 describe("On api/ads/remove-ad route", () => {
+  beforeAll(async () => {
+    const mongoDBUrl: string = process.env.MONGODB_URL!;
+    await mongoose.connect(mongoDBUrl);
+    await AdModel.deleteMany({});
+  }, 8000);
+
+  afterAll(async () => {
+    await mongoose.disconnect();
+  }, 8000);
 
   it("When send 'DELETE' method with correct ad id response with status 200", async () => {
+    const advertiserId = AdUniqId.generate();
+    const adId = AdUniqId.generate();
+    const adData = FakeAd.withIds({ advertiserId, adId });
+    const ad = new AdModel({
+      title: adData.title.title,
+      description: adData.description.description,
+      _id: adData.id.id,
+      advertiserId: adData.advertiserId.id,
+      image: adData.image.image,
+      redirectionUrl: adData.redirectionUrl.url,
+      segments: adData.segments.segments,
+    });
+    await ad.save();
+
     const req = httpMock.createRequest({
       method: "DELETE",
       body: {
-        adId: "12345",
+        adId: ad.id,
       },
     });
     const res: NextApiResponse = httpMock.createResponse();
@@ -17,7 +43,7 @@ describe("On api/ads/remove-ad route", () => {
     await removeAd(req, res);
 
     expect(res.statusCode).toBe(200);
-  }, 8000);
+  }, 20000);
 
   it("When send 'DELETE' method without a correct ad id response with status 400", async () => {
     const req = httpMock.createRequest({

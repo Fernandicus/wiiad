@@ -28,7 +28,7 @@ export class AdCreatorController {
     this.createAd = new CreateAd(repository);
   }
 
-  async create() {
+  async create(): Promise<void> {
     await this.createAd.save(this.ad);
   }
 }

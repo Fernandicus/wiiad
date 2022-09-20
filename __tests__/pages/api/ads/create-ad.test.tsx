@@ -6,16 +6,16 @@ import { AdModel } from "@/src/ad/infraestructure/AdModel";
 import mongoose, { mongo } from "mongoose";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 
-describe("On 'api/ads'", () => {
+describe("On 'api/ads/create-ad'", () => {
   beforeAll(async () => {
     const mongoDBUrl: string = process.env.MONGODB_URL!;
     await mongoose.connect(mongoDBUrl);
     await AdModel.deleteMany({});
-  });
+  }, 8000);
 
   afterAll(async () => {
     await mongoose.disconnect();
-  });
+  }, 8000);
 
   it("When sending a 'POST' request with all the required params to the '/create-advertise' route should return a 200 statusCode", async () => {
     const advertiserId = AdUniqId.generate();
