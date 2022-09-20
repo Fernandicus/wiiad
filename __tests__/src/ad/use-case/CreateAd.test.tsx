@@ -10,6 +10,7 @@ describe("On Create New Ad", () => {
     const mockedRepository: Repository = {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
+      remove: jest.fn()
     };
     const createAd = new CreateAd(mockedRepository);
     const advertiserId = AdUniqId.generate();
