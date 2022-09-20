@@ -35,40 +35,13 @@ export class Ad {
   public readonly redirectionUrl: AdRedirectionUrl;
   public readonly segments: AdSegments;
 
-  constructor({
-    id,
-    title,
-    description,
-    image,
-    redirectionUrl,
-    advertiserId,
-    segments,
-  }: AdProps) {
-    (this.id = id), (this.title = title);
-    this.description = description;
-    this.image = image;
-    this.redirectionUrl = redirectionUrl;
-    this.advertiserId = advertiserId;
-    this.segments = segments;
-  }
-
-  static createFromPrimitives({
-    id,
-    advertiserId,
-    title,
-    description,
-    image,
-    redirectionUrl,
-    segments,
-  }: AdPropsPrimitives): Ad {
-    return new Ad({
-      id: new AdId(id),
-      segments: new AdSegments(segments),
-      title: new AdTitle(title),
-      description: new AdDescription(description),
-      image: new AdImage(image),
-      redirectionUrl: new AdRedirectionUrl(redirectionUrl),
-      advertiserId: new AdvertiserId(advertiserId),
-    });
+  constructor(adProps: AdProps) {
+    this.id = adProps.id;
+    this.title = adProps.title;
+    this.description = adProps.description;
+    this.image = adProps.image;
+    this.redirectionUrl = adProps.redirectionUrl;
+    this.advertiserId = adProps.advertiserId;
+    this.segments = adProps.segments;
   }
 }

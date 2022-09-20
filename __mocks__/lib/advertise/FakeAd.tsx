@@ -10,6 +10,7 @@ import {
   AdSegments,
   AdSegmentType,
 } from "@/src/ad/domain/ValueObjects/AdSegments";
+import { AdId } from "@/src/ad/domain/ValueObjects/AdId";
 
 export class FakeAd extends Ad {
   constructor({
@@ -40,23 +41,19 @@ export class FakeAd extends Ad {
     adId: string;
   }): Ad {
     const fakeAdData = this.generateFakeAdData();
-    const ad = Ad.createFromPrimitives({ ...fakeAdData, advertiserId, id: adId });
-
-    return new FakeAd({ ...ad });
+    return this.getAd({ ...fakeAdData, advertiserId, id: adId });
   }
 
   static empty(): Ad {
-    const ad = Ad.createFromPrimitives({
-      id: "",
+    return this.getAd({
       title: "",
       description: "",
+      advertiserId: "",
+      id: "",
       image: "",
       redirectionUrl: "",
-      advertiserId: "",
       segments: [],
     });
-
-    return new FakeAd({ ...ad });
   }
 
   private static generateFakeAdData(): AdPropsPrimitives {
@@ -95,5 +92,17 @@ export class FakeAd extends Ad {
     }
 
     return segments;
+  }
+
+  private static getAd(adProps: AdPropsPrimitives): Ad {
+    return new Ad({
+      id: new AdId(adProps.id),
+      segments: new AdSegments(adProps.segments),
+      title: new AdTitle(adProps.title),
+      description: new AdDescription(adProps.description),
+      image: new AdImage(adProps.image),
+      redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
+      advertiserId: new AdvertiserId(adProps.advertiserId),
+    });
   }
 }
