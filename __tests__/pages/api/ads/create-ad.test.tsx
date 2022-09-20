@@ -1,8 +1,6 @@
-import { render, screen } from "@testing-library/react";
 import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create-ad";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
-import mongoose from "mongoose";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 describe("On 'api/advertisements'", () => {
