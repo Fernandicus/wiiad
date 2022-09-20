@@ -1,9 +1,7 @@
-import { Ad, AdPropsPrimitives } from "../../../src/ad/domain/Ad";
-
+import { AdPropsPrimitives } from "../../../src/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
-import { CreateAd } from "../../../src/ad/use-case/CreateAd";
-import { AdMongoDBRepository } from "../../../src/ad/infraestructure/AdMongoDBRepository";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { AdCreatorController } from "@/src/ad/controller/AdCreatorController";
+import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -13,16 +11,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const reqBody: AdPropsPrimitives = req.body;
-    const adId = AdUniqId.generate();
-    const ad = Ad.createFromPrimitives({ ...reqBody, id: adId });
 
-    const adRepository = await AdMongoDBRepository.connect();
+    const adRepository = await MongoDB.adRepository();
 
-    const createAd = new CreateAd(adRepository);
+    const adCreatorController = new AdCreatorController(reqBody, adRepository);
+    await adCreatorController.create();
 
-    await createAd.save(ad);
-
-    await adRepository.disconnect();
+    await MongoDB.disconnect();
 
     res.status(200);
     return;

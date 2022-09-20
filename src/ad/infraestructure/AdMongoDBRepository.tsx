@@ -1,32 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
 import { Repository } from "../domain/Repository";
 import { AdModel, AdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements Repository {
-  private constructor() {}
-
-  static async connect(): Promise<AdMongoDBRepository> {
-    const mongoIsDisonnected =
-      mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
-
-    if (mongoIsDisonnected) {
-      const mongoDBUrl = process.env.MONGODB_URL;
-      if (!mongoDBUrl) throw new Error("DB url doesn't provided");
-      await mongoose.connect(mongoDBUrl);
-    }
-    return new AdMongoDBRepository();
-  }
-
-  public async disconnect(): Promise<void> {
-    const mongoIsConnected =
-      mongoose.connection.readyState === mongoose.ConnectionStates.connected;
-
-    if (mongoIsConnected) {
-      await mongoose.disconnect();
-    }
-  }
 
   public async save(ad: Ad): Promise<void> {
     const adModel = new AdModel({

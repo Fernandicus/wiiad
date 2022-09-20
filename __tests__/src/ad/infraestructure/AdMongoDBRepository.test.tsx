@@ -1,23 +1,22 @@
-import { ErrorCreatingAd } from "@/src/ad/domain/ErrorCreatingAd";
-import { AdMongoDBRepository } from "@/src/ad/infraestructure/AdMongoDBRepository";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 describe("Given AdMongoDBRepository", () => {
   it("When save Ad data should be saved in MongoDB Atlas", async () => {
     const advertiserId = AdUniqId.generate();
     const adId = AdUniqId.generate();
-    const ad = FakeAd.withIds({advertiserId, adId});
+    const ad = FakeAd.withIds({ advertiserId, adId });
 
-    const adMongoDBRepository = await AdMongoDBRepository.connect();
-    await adMongoDBRepository.save(ad);
+    const adRepository = await MongoDB.adRepository();
+    await adRepository.save(ad);
 
-    const adInRepository = await adMongoDBRepository.findAllByAdvertiserId(
+    const adInRepository = await adRepository.findAllByAdvertiserId(
       advertiserId
     );
 
-    await adMongoDBRepository.disconnect();
-    
+    await MongoDB.adRepository();
+
     const adFound = adInRepository.find(
       (advertise) => advertise.title === ad.title.title
     );
