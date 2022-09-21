@@ -1,5 +1,5 @@
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { Repository } from "../domain/Repository";
+import { AdRepository } from "../domain/AdRepository";
 import { AdDescription } from "../domain/ValueObjects/AdDescription";
 import { AdId } from "../domain/ValueObjects/AdId";
 import { AdImage } from "../domain/ValueObjects/AdImage";
@@ -14,7 +14,7 @@ export class AdCreatorController {
   private createAd;
   private ad;
 
-  constructor(adProps: AdPropsPrimitives, repository: Repository) {
+  constructor(adProps: AdPropsPrimitives, repository: AdRepository) {
     const id = AdUniqId.generate();
     this.ad = new Ad({
       id: new AdId(id),

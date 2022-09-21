@@ -1,9 +1,9 @@
 
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { Repository } from "../domain/Repository";
+import { AdRepository } from "../domain/AdRepository";
 import { AdModel, AdModelProps } from "./AdModel";
 
-export class AdMongoDBRepository implements Repository {
+export class AdMongoDBRepository implements AdRepository {
 
   public async save(ad: Ad): Promise<void> {
     const adModel = new AdModel({

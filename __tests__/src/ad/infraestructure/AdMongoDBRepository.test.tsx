@@ -1,6 +1,8 @@
+import { AdvertiserId } from "@/src/ad/domain/ValueObjects/AdvertiserId";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { FindAds } from "@/src/ad/use-case/FindAds";
 import mongoose from "mongoose";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
@@ -57,4 +59,31 @@ describe("Given AdMongoDBRepository", () => {
 
     expect(adFound).toBe(null);
   }, 8000);
+
+  it.only("Given some existing ads in MongoDB when call findAllByAdvertiserId expect to find the same ads that in MongoDB", async () => {
+    const adsToGenerate = Math.floor(Math.random() * 5);
+    const advertiserId = AdUniqId.generate();
+    
+    for (var i = 0; i <= adsToGenerate; i++) {
+      const adId = AdUniqId.generate();
+      const adData = FakeAd.withIds({ advertiserId, adId });
+      const ad = new AdModel({
+        title: adData.title.title,
+        description: adData.description.description,
+        _id: adData.id.id,
+        advertiserId: adData.advertiserId.id,
+        image: adData.image.image,
+        redirectionUrl: adData.redirectionUrl.url,
+        segments: adData.segments.segments,
+      });
+      await ad.save();
+    }
+
+    const adRepository = await MongoDB.adRepository();
+    const adsFound = await adRepository.findAllByAdvertiserId(advertiserId);
+    const count = await AdModel.count({ advertiserId });
+
+    expect(count).toBe(adsFound.length);
+
+  }, 12000);
 });

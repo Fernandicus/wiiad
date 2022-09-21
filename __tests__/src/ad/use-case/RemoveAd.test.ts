@@ -1,10 +1,10 @@
-import { Repository } from "@/src/ad/domain/Repository";
+import { AdRepository } from "@/src/ad/domain/AdRepository";
 import { AdId } from "@/src/ad/domain/ValueObjects/AdId";
 import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 
 describe("Given then RemoveAd use case", () => {
   it("If ad id exists remove it", async () => {
-    const repository: Repository = {
+    const repository: AdRepository = {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
       remove: jest.fn(),

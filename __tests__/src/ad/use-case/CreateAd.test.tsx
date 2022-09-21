@@ -1,13 +1,13 @@
 import { ErrorCreatingAd } from "@/src/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/src/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
-import { Repository } from "@/src/ad/domain/Repository";
+import { AdRepository } from "@/src/ad/domain/AdRepository";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 describe("On Create New Ad", () => {
     it("Repository should call the save method with the advertise data", async () => {
 
-    const mockedRepository: Repository = {
+    const mockedRepository: AdRepository = {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
       remove: jest.fn()
