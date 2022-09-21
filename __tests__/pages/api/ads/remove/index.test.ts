@@ -1,8 +1,8 @@
 import httpMock from "node-mocks-http";
-import removeAd from "@/pages/api/ads/remove-ad";
+import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
-import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
+import { FakeAd } from "../../../../../__mocks__/lib/advertise/FakeAd";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 import mongoose from "mongoose";
 
