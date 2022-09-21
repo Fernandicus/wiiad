@@ -1,3 +1,8 @@
+import { AdFinderController } from "@/src/ad/controller/AdFinderController";
+import { AdvertiserId } from "@/src/ad/domain/ValueObjects/AdvertiserId";
+import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { FindAds } from "@/src/ad/use-case/FindAds";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,31 +11,23 @@ export default async function handler(
 ) {
   if (req.method !== "GET") return res.status(400);
 
-  try {
-    
-    /* 
-    const adRepository = await MongoDB.adRepository();
-    const findAds = new FindAds(adRepository);
-    const adsFound = await findAds.findAllByAdvertiserId(
-      new AdvertiserId(advertiserId)
-    );
-    
-    const ads = adsFound.map((ad) => {
-      return new Ad({
-        title: new AdTitle(ad.title),
-        description: new AdDescription(ad.description),
-        image: new AdImage(ad.image),
-        advertiserId: new AdvertiserId(ad.advertiserId),
-        id: new AdId(ad.id),
-        redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
-        segments: new AdSegments(ad.segments),
-      });
-    }); 
-    
-    return res.status(200).json({ads});
-    */
+  //TODO: AVOID USING QUERY TO CATCH ADVERTISER ID,
+  //TODO: Use getToken({req}) to get advertiser/user id
+  const { advertiserId } = req.query;
+  if (advertiserId === undefined || typeof advertiserId !== "string")
+    return res.status(400);
 
-    return res.status(200).json({});
+  try {
+    const adRepository = await MongoDB.adRepository();
+
+    const adFinderController = new AdFinderController(
+      advertiserId,
+      adRepository
+    );
+    const adsFound = await adFinderController.findAllToJSON();
+    await MongoDB.disconnect();
+
+    return res.status(200).json({ ads: adsFound });
   } catch (err) {
     return res.status(400);
   }
