@@ -5,7 +5,7 @@ export class AdDescription {
   public readonly description;
 
   constructor(description: string) {
-    if (description == null || description.length == 0) {
+    if (description.length == 0) {
       throw new ErrorCreatingAd("Ad description is mandatory");
     }
     if (description.length > AdConstants.descriptionMaxLength) {

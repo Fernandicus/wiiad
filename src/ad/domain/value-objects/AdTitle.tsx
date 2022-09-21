@@ -5,7 +5,7 @@ export class AdTitle {
   public readonly title;
 
   constructor(title: string) {
-    if (title == null || title.length == 0) {
+    if (title.length == 0) {
       throw new ErrorCreatingAd("Ad title is mandatory");
     }
     if (title.length > AdConstants.titleMaxLength) {
