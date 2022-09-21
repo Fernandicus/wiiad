@@ -11,6 +11,7 @@ import {
   AdSegmentType,
 } from "@/src/ad/domain/ValueObjects/AdSegments";
 import { AdId } from "@/src/ad/domain/ValueObjects/AdId";
+import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 
 export class FakeAd extends Ad {
   constructor({
@@ -31,6 +32,21 @@ export class FakeAd extends Ad {
       advertiserId,
       segments,
     });
+  }
+
+  static createManyWithPrimitives(
+    advertiserId: string,
+    amount: number
+  ): AdPropsPrimitives[] {
+    let ads: AdPropsPrimitives[] = [];
+    for (var i = 0; i <= amount; i++) {
+      ads.push({
+        ...this.generateFakeAdData(),
+        advertiserId,
+        id: AdUniqId.generate(),
+      });
+    }
+    return ads;
   }
 
   static withIds({
