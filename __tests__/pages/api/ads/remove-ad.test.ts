@@ -43,7 +43,7 @@ describe("On api/ads/remove-ad route", () => {
     await removeAd(req, res);
 
     expect(res.statusCode).toBe(200);
-  }, 20000);
+  }, 8000);
 
   it("When send 'DELETE' method without a correct ad id response with status 400", async () => {
     const req = httpMock.createRequest({

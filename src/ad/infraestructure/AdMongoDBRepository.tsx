@@ -39,6 +39,6 @@ export class AdMongoDBRepository implements Repository {
   }
 
   public async remove(id: string): Promise<void> {
-    await AdModel.findOneAndRemove({_id: id});
+    await AdModel.findByIdAndRemove({_id: id});
   }
 }
