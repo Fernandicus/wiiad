@@ -1,5 +1,5 @@
 import { AdRepository } from "../domain/AdRepository";
-import { AdId } from "../domain/ValueObjects/AdId";
+import { AdId } from "../domain/value-objects/AdId";
 import { RemoveAd } from "../use-case/RemoveAd";
 
 export class AdRemoverController {

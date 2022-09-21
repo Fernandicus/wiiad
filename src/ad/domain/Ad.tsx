@@ -1,10 +1,10 @@
-import { AdDescription } from "./ValueObjects/AdDescription";
-import { AdId } from "./ValueObjects/AdId";
-import { AdImage } from "./ValueObjects/AdImage";
-import { AdRedirectionUrl } from "./ValueObjects/AdRedirectionUrl";
-import { AdSegments } from "./ValueObjects/AdSegments";
-import { AdTitle } from "./ValueObjects/AdTitle";
-import { AdvertiserId } from "./ValueObjects/AdvertiserId";
+import { AdDescription } from "./value-objects/AdDescription";
+import { AdId } from "./value-objects/AdId";
+import { AdImage } from "./value-objects/AdImage";
+import { AdRedirectionUrl } from "./value-objects/AdRedirectionUrl";
+import { AdSegments } from "./value-objects/AdSegments";
+import { AdTitle } from "./value-objects/AdTitle";
+import { AdvertiserId } from "../../advertiser/domain/value-objects/AdvertiserId";
 
 export interface AdPropsPrimitives {
   id: string;

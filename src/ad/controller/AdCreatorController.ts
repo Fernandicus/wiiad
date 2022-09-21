@@ -1,12 +1,12 @@
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { AdRepository } from "../domain/AdRepository";
-import { AdDescription } from "../domain/ValueObjects/AdDescription";
-import { AdId } from "../domain/ValueObjects/AdId";
-import { AdImage } from "../domain/ValueObjects/AdImage";
-import { AdRedirectionUrl } from "../domain/ValueObjects/AdRedirectionUrl";
-import { AdSegments } from "../domain/ValueObjects/AdSegments";
-import { AdTitle } from "../domain/ValueObjects/AdTitle";
-import { AdvertiserId } from "../domain/ValueObjects/AdvertiserId";
+import { AdDescription } from "../domain/value-objects/AdDescription";
+import { AdId } from "../domain/value-objects/AdId";
+import { AdImage } from "../domain/value-objects/AdImage";
+import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "../domain/value-objects/AdSegments";
+import { AdTitle } from "../domain/value-objects/AdTitle";
+import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
 import { AdUniqId } from "../infraestructure/AdUniqId";
 import { CreateAd } from "../use-case/CreateAd";
 

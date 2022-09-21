@@ -1,5 +1,5 @@
 import { AdRepository } from "@/src/ad/domain/AdRepository";
-import { AdId } from "@/src/ad/domain/ValueObjects/AdId";
+import { AdId } from "@/src/ad/domain/value-objects/AdId";
 import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 
 describe("Given then RemoveAd use case", () => {

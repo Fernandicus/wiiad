@@ -1,6 +1,6 @@
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { AdRepository } from "../domain/AdRepository";
-import { AdvertiserId } from "../domain/ValueObjects/AdvertiserId";
+import { AdvertiserId } from "../../advertiser/domain/value-objects/AdvertiserId";
 
 export class FindAds {
   constructor(private repository: AdRepository) {}

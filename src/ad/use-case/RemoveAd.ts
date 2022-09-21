@@ -1,5 +1,5 @@
 import { AdRepository } from "../domain/AdRepository";
-import { AdId } from "../domain/ValueObjects/AdId";
+import { AdId } from "../domain/value-objects/AdId";
 
 export class RemoveAd {
   constructor(private repository: AdRepository) {}

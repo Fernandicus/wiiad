@@ -1,5 +1,5 @@
 import { AdRemoverController } from "@/src/ad/controller/AdRemoverController";
-import { AdId } from "@/src/ad/domain/ValueObjects/AdId";
+import { AdId } from "@/src/ad/domain/value-objects/AdId";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 import { NextApiRequest, NextApiResponse } from "next";
