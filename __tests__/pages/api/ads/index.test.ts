@@ -18,10 +18,10 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let res: MockResponse<NextApiResponse>;
 
   beforeAll(async () => {
-    const adRepo = await TestAdMongoDBRepository.connect();
-    const createAd = new TestCreateAd(adRepo);
     const amount = Math.floor(Math.random() * 5);
     const adsArray = FakeAd.createMany(advertiserId, amount);
+    const adRepo = await TestAdMongoDBRepository.connect();
+    const createAd = new TestCreateAd(adRepo);
     await createAd.saveMany(adsArray);
   }, 8000);
 

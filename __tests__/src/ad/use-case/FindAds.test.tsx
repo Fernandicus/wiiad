@@ -3,18 +3,18 @@ import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId
 import { UniqId } from "@/src/utils/UniqId";
 import { FindAds } from "@/src/ad/use-case/FindAds";
 
-describe("Given then FindAds use case", () => {
-  it("If user has ads return all ads", async () => {
-    const advertiserId = UniqId.generate();
-    const repository: AdRepository = {
-      findAllByAdvertiserId: jest.fn(),
-      remove: jest.fn(),
-      save: jest.fn(),
-    };
+describe("On FindAds use case, GIVEN an advertiser id and a repository", () => {
+  const advertiserId = UniqId.generate();
+  const repository: AdRepository = {
+    findAllByAdvertiserId: jest.fn(),
+    remove: jest.fn(),
+    save: jest.fn(),
+  };
+  
+  it(`WHEN call FindAds findAllByAdvertiserId, 
+  THEN the repository findAllByAdvertiserId should be called with the advertiser id`, async () => {
     const findAds = new FindAds(repository);
-    await findAds.findAllByAdvertiserId(
-      new AdvertiserId(advertiserId)
-    );
-    expect(repository.findAllByAdvertiserId).toHaveBeenCalledWith(advertiserId)
+    await findAds.findAllByAdvertiserId(new AdvertiserId(advertiserId));
+    expect(repository.findAllByAdvertiserId).toHaveBeenCalledWith(advertiserId);
   });
 });

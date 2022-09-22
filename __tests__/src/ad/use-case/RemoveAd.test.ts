@@ -2,17 +2,18 @@ import { AdRepository } from "@/src/ad/domain/AdRepository";
 import { AdId } from "@/src/ad/domain/value-objects/AdId";
 import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 
-describe("Given then RemoveAd use case", () => {
-  it("If ad id exists remove it", async () => {
-    const repository: AdRepository = {
-      save: jest.fn(),
-      findAllByAdvertiserId: jest.fn(),
-      remove: jest.fn(),
-    };
-    const removeAd = new RemoveAd(repository);
-    const adId = new AdId("1234");
-    await removeAd.byId(adId);
+describe("On RemoveAd use case, GIVEN a repository and ad id", () => {
+  const repository: AdRepository = {
+    save: jest.fn(),
+    findAllByAdvertiserId: jest.fn(),
+    remove: jest.fn(),
+  };
+  const adId = new AdId("1234");
 
-    expect(repository.remove).toBeCalledWith(adId.id)
+  it(`WHEN call the RemoveAd byId method, 
+  THEN the repository remove method must be called with the ad id`, async () => {
+    const removeAd = new RemoveAd(repository);
+    await removeAd.byId(adId);
+    expect(repository.remove).toBeCalledWith(adId.id);
   });
 });

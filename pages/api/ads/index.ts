@@ -17,7 +17,6 @@ export default async function handler(
 
   try {
     const adRepository = await MongoDB.adRepository();
-console.log(token.id)
     const adFinderController = new AdFinderController(token.id, adRepository);
     const adsFound = await adFinderController.findAllToJSON();
     await MongoDB.disconnect();

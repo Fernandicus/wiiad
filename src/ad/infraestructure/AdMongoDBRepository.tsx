@@ -17,15 +17,21 @@ export class AdMongoDBRepository implements AdRepository {
   }
 
   public async findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]> {
-    const adModels = await AdModel.find<AdModelProps>({
+    const adModel = await AdModel.find<AdModelProps>({
       advertiserId: id,
     });
-    const adPrimitivesArray = adModels.map((model): AdPropsPrimitives => {
+    const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
       return {
         id: model._id,
-        ...model,
+        title: model.title,
+        description: model.description,
+        image: model.image,
+        redirectionUrl: model.redirectionUrl,
+        segments: model.segments,
+        advertiserId: model.advertiserId,
       };
     });
+
     return adPrimitivesArray;
   }
 
