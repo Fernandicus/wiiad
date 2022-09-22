@@ -17,7 +17,7 @@ export class TestAdMongoDBRepository implements TestRepository {
     return new TestAdMongoDBRepository();
   }
 
-  async disconnect(adsModel: AdModelProps[]): Promise<void> {
+  async disconnect(): Promise<void> {
     await mongoose.disconnect();
   }
 

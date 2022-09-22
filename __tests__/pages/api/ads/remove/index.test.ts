@@ -2,7 +2,7 @@ import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
-import { FakeAd } from "../../../../../__mocks__/lib/advertise/FakeAd";
+import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 

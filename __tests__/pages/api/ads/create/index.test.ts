@@ -1,6 +1,6 @@
 import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create";
-import { FakeAd } from "../../../../../__mocks__/lib/advertise/FakeAd";
+import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";

@@ -6,9 +6,9 @@ import { UniqId } from "@/src/utils/UniqId";
 import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
 import { getToken, JWT } from "next-auth/jwt";
 import { NextApiRequest, NextApiResponse } from "next";
-import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/advertise/infraestructure/TestAdMongoDBRepository";
-import { TestCreateAd } from "../../../../__mocks__/lib/advertise/use-case/TestCreateAd";
-import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
+import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
+import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
 
 jest.mock("next-auth/jwt");
 
