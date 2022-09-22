@@ -19,14 +19,14 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let res: MockResponse<NextApiResponse>;
 
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connect();
-    const controller = await TestCreateAdController.cleanAndInit(testAdRepo);
+    const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
+    const controller = new TestCreateAdController(testAdRepo);
     const createAdsData = await controller.crateMany();
     advertiserId = createAdsData.advertiserId;
   }, 8000);
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await TestAdMongoDBRepository.disconnect();
   }, 8000);
 
   it(`WHEN send a 'GET' request, 

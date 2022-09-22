@@ -14,8 +14,8 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   let advertiserId: string;
 
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connect();
-    const testCreateAdController = await TestCreateAdController.cleanAndInit(testAdRepo);
+    const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
+    const testCreateAdController = new TestCreateAdController(testAdRepo);
     const createAdsData = await testCreateAdController.crateMany();
     fakeAds = createAdsData.fakeAds;
     advertiserId = createAdsData.advertiserId;
@@ -23,7 +23,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   }, 8000);
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await TestAdMongoDBRepository.disconnect();
   }, 8000);
 
   it(`WHEN create a new ad and call repository save method, 

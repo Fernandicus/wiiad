@@ -5,7 +5,7 @@ import { TestRepository } from "../domain/TestRepository";
 export class TestAdMongoDBRepository implements TestRepository {
   constructor() {}
 
-  static async connect(): Promise<TestAdMongoDBRepository> {
+  static async connectAndClean(): Promise<TestAdMongoDBRepository> {
     const mongoIsDisonnected =
       mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
 
@@ -14,10 +14,11 @@ export class TestAdMongoDBRepository implements TestRepository {
       if (!mongoDBUrl) throw new Error("DB url doesn't provided");
       await mongoose.connect(mongoDBUrl);
     }
+    await AdModel.deleteMany({});
     return new TestAdMongoDBRepository();
   }
 
-  async disconnect(): Promise<void> {
+  static async disconnect(): Promise<void> {
     await mongoose.disconnect();
   }
 

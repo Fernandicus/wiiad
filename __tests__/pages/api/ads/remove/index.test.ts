@@ -10,12 +10,11 @@ import { TestCreateAdController } from "../../../../../__mocks__/lib/ads/control
 
 describe("On api/ads/remove-ad route", () => {
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connect();
-    await TestCreateAdController.cleanAndInit(testAdRepo);
+    await TestAdMongoDBRepository.connectAndClean();
   }, 8000);
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await TestAdMongoDBRepository.disconnect()
   }, 8000);
 
   it("When send 'DELETE' method with correct ad id response with status 200", async () => {

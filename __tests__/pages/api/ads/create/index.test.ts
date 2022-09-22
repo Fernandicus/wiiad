@@ -2,19 +2,15 @@ import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create";
 import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdModel } from "@/src/ad/infraestructure/AdModel";
-import mongoose from "mongoose";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { TestCreateAdController } from "../../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
 describe("On 'api/ads/create-ad'", () => {
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connect();
-    await TestCreateAdController.cleanAndInit(testAdRepo);
+    await TestAdMongoDBRepository.connectAndClean();
   }, 8000);
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await TestAdMongoDBRepository.disconnect();
   }, 8000);
 
   it("When sending a 'POST' request with all the required params should return a 200 statusCode", async () => {
