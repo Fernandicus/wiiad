@@ -34,6 +34,17 @@ export class FakeAd extends Ad {
     });
   }
 
+  static createMany(advertiserId: string, amount: number): Ad[] {
+    const fakeAdData = this.generateFakeAdData();
+    let ads: Ad[] = [];
+    
+    for (var i = 0; i <= amount; i++) {
+      const ad = this.getAd({ ...fakeAdData, advertiserId, id: AdUniqId.generate() });
+      ads.push(ad);
+    }
+    return ads;
+  }
+
   static createManyWithPrimitives(
     advertiserId: string,
     amount: number

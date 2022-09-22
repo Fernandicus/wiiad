@@ -11,7 +11,7 @@ export default async function handler(
 
   const token = await getToken({ req });
   if (!token || token.rol === "user") {
-    res.status(401).json({ message: "You must are not authorized" });
+    res.status(400).json({ message: "You must are not authorized" });
     return;
   }
 

@@ -1,53 +1,54 @@
 import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
-import httpMock from "node-mocks-http";
+import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import findAd from "@/pages/api/ads";
 import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
-import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
 import { getToken, JWT } from "next-auth/jwt";
-import { Session, User } from "next-auth";
+import { NextApiRequest, NextApiResponse } from "next";
+import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/advertise/infraestructure/TestAdMongoDBRepository";
+import { TestCreateAd } from "../../../../__mocks__/lib/advertise/use-case/TestCreateAd";
+import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
 jest.mock("next-auth/jwt");
 
-describe("On api/ads ", () => {
+describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
+  let advertiserId: string = AdUniqId.generate();
+  let req: MockRequest<NextApiRequest>;
+  let res: MockResponse<NextApiResponse>;
+
   beforeAll(async () => {
-    const mongoDBUrl: string = process.env.MONGODB_URL!;
-    await mongoose.connect(mongoDBUrl);
-    await AdModel.deleteMany({});
+    const adRepo = await TestAdMongoDBRepository.connect();
+    const createAd = new TestCreateAd(adRepo);
+    const amount = Math.floor(Math.random() * 5);
+    const adsArray = FakeAd.createMany(advertiserId, amount);
+    await createAd.saveMany(adsArray);
   }, 8000);
 
   afterAll(async () => {
     await mongoose.disconnect();
   }, 8000);
 
-  it.only("== When send 'GET' request receive all user ads and a statusCode 200", async () => {
-    const amount = Math.floor(Math.random() * 5);
-    const advertiserId = AdUniqId.generate();
-
-    const adsArray = FakeAd.createManyWithPrimitives(advertiserId, amount);
-    const adsModel = adsArray.map((ad): AdModelProps => {
-      return { ...ad, _id: ad.id };
-    });
-
-    await AdModel.insertMany(adsModel);
-
-    const mongooseTotal = await AdModel.count({ advertiserId });
+  it(`WHEN send a 'GET' request, 
+  THEN receive a statusCode 200 and same amount of ads that in the DB`, async () => {
+    const adsInMongoose = await AdModel.count({ advertiserId });
     const token: JWT = { rol: "business", id: advertiserId };
     (getToken as jest.Mock).mockResolvedValue(token);
-
-    const req = httpMock.createRequest({ method: "GET" });
-    const res = httpMock.createResponse();
-
+    req = httpMock.createRequest({ method: "GET" });
+    res = httpMock.createResponse();
     await findAd(req, res);
 
     const adsData: AdPropsPrimitives[] = JSON.parse(res._getJSONData().ads);
-
     expect(res.statusCode).toBe(200);
-    expect(adsData.length).toBe(mongooseTotal);
-  }, 8000);
+    expect(adsData.length).toBe(adsInMongoose);
+  });
 
-  it("When send 'GET' request receive all user ads and a statusCode 200", async () => {
-    //TODO: Send token with a non existing advertiserId to get 0 ads
+  it(`WHEN send 'GET' request and User is not logged in or has not a rol of business or agency, 
+  THEN receive a statusCode 400`, async () => {
+    const token: JWT = { rol: "user", id: advertiserId };
+    (getToken as jest.Mock).mockResolvedValue(token);
+    await findAd(req, res);
+
+    expect(res.statusCode).toBe(400);
   }, 8000);
 });
