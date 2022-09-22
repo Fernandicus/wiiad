@@ -1,9 +1,7 @@
 import { AdFinderController } from "@/src/ad/controller/AdFinderController";
-import { AdvertiserId } from "@/src/ad/domain/ValueObjects/AdvertiserId";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
-import { FindAds } from "@/src/ad/use-case/FindAds";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,19 +9,16 @@ export default async function handler(
 ) {
   if (req.method !== "GET") return res.status(400);
 
-  //TODO: AVOID USING QUERY TO CATCH ADVERTISER ID,
-  //TODO: Use getToken({req}) to get advertiser/user id
-  const { advertiserId } = req.query;
-  if (advertiserId === undefined || typeof advertiserId !== "string")
-    return res.status(400);
+  const token = await getToken({ req });
+  if (!token || token.rol === "user") {
+    res.status(401).json({ message: "You must are not authorized" });
+    return;
+  }
 
   try {
     const adRepository = await MongoDB.adRepository();
-
-    const adFinderController = new AdFinderController(
-      advertiserId,
-      adRepository
-    );
+console.log(token.id)
+    const adFinderController = new AdFinderController(token.id, adRepository);
     const adsFound = await adFinderController.findAllToJSON();
     await MongoDB.disconnect();
 

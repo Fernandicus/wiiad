@@ -1,8 +1,7 @@
 import { AdRemoverController } from "@/src/ad/controller/AdRemoverController";
-import { AdId } from "@/src/ad/domain/value-objects/AdId";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
-import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 import { NextApiRequest, NextApiResponse } from "next";
+
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "DELETE") return res.status(400);
