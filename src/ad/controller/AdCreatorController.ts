@@ -7,7 +7,7 @@ import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
 import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
-import { AdUniqId } from "../infraestructure/AdUniqId";
+import { UniqId } from "../../utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
 
 export class AdCreatorController {
@@ -15,7 +15,7 @@ export class AdCreatorController {
   private ad;
 
   constructor(adProps: AdPropsPrimitives, repository: AdRepository) {
-    const id = AdUniqId.generate();
+    const id = UniqId.generate();
     this.ad = new Ad({
       id: new AdId(id),
       segments: new AdSegments(adProps.segments),

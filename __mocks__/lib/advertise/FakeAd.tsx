@@ -11,7 +11,7 @@ import {
   AdSegmentType,
 } from "@/src/ad/domain/value-objects/AdSegments";
 import { AdId } from "@/src/ad/domain/value-objects/AdId";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { UniqId } from "@/src/utils/UniqId";
 
 export class FakeAd extends Ad {
   constructor({
@@ -39,7 +39,7 @@ export class FakeAd extends Ad {
     let ads: Ad[] = [];
     
     for (var i = 0; i <= amount; i++) {
-      const ad = this.getAd({ ...fakeAdData, advertiserId, id: AdUniqId.generate() });
+      const ad = this.getAd({ ...fakeAdData, advertiserId, id: UniqId.generate() });
       ads.push(ad);
     }
     return ads;
@@ -54,7 +54,7 @@ export class FakeAd extends Ad {
       ads.push({
         ...this.generateFakeAdData(),
         advertiserId,
-        id: AdUniqId.generate(),
+        id: UniqId.generate(),
       });
     }
     return ads;

@@ -1,10 +1,8 @@
-
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { AdRepository } from "../domain/AdRepository";
 import { AdModel, AdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements AdRepository {
-
   public async save(ad: Ad): Promise<void> {
     const adModel = new AdModel({
       _id: ad.id.id,
@@ -19,26 +17,19 @@ export class AdMongoDBRepository implements AdRepository {
   }
 
   public async findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]> {
-    const adModel = await AdModel.find<AdModelProps>({
+    const adModels = await AdModel.find<AdModelProps>({
       advertiserId: id,
     });
-
-    const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
+    const adPrimitivesArray = adModels.map((model): AdPropsPrimitives => {
       return {
         id: model._id,
-        title: model.title,
-        description: model.description,
-        image: model.image,
-        redirectionUrl: model.redirectionUrl,
-        segments: model.segments,
-        advertiserId: model.advertiserId,
+        ...model,
       };
     });
-
     return adPrimitivesArray;
   }
 
   public async remove(id: string): Promise<void> {
-    await AdModel.findByIdAndRemove({_id: id});
+    await AdModel.findByIdAndRemove({ _id: id });
   }
 }

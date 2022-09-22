@@ -2,7 +2,7 @@ import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import findAd from "@/pages/api/ads";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { UniqId } from "@/src/utils/UniqId";
 import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
 import { getToken, JWT } from "next-auth/jwt";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -13,7 +13,7 @@ import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 jest.mock("next-auth/jwt");
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
-  let advertiserId: string = AdUniqId.generate();
+  let advertiserId: string = UniqId.generate();
   let req: MockRequest<NextApiRequest>;
   let res: MockResponse<NextApiResponse>;
 

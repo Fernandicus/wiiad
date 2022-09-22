@@ -3,7 +3,7 @@ import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/advertise/FakeAd";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 
 describe("On api/ads/remove-ad route", () => {
@@ -18,8 +18,8 @@ describe("On api/ads/remove-ad route", () => {
   }, 8000);
 
   it("When send 'DELETE' method with correct ad id response with status 200", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const adData = FakeAd.withIds({ advertiserId, adId });
     const ad = new AdModel({
       title: adData.title.title,

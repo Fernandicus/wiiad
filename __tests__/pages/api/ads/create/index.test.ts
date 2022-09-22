@@ -1,10 +1,9 @@
 import httpMock from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create";
 import { FakeAd } from "../../../../../__mocks__/lib/advertise/FakeAd";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { UniqId } from "@/src/utils/UniqId";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
-import mongoose, { mongo } from "mongoose";
-import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import mongoose from "mongoose";
 
 describe("On 'api/ads/create-ad'", () => {
   beforeAll(async () => {
@@ -18,8 +17,8 @@ describe("On 'api/ads/create-ad'", () => {
   }, 8000);
 
   it("When sending a 'POST' request with all the required params should return a 200 statusCode", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const ad = FakeAd.withIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({
@@ -41,8 +40,8 @@ describe("On 'api/ads/create-ad'", () => {
   }, 8000);
 
   it("When sending a 'POST' request with a not valid params route should return a 400 statusCode", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const ad = FakeAd.withIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({
@@ -77,8 +76,8 @@ describe("On 'api/ads/create-ad'", () => {
   }, 8000);
 
   it("When sending a not 'POST' request should return a 400 statusCode", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const ad = FakeAd.withIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({

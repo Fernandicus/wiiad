@@ -1,8 +1,6 @@
-import { AdvertiserId } from "@/src/ad/domain/ValueObjects/AdvertiserId";
 import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
-import { AdUniqId } from "@/src/ad/infraestructure/AdUniqId";
+import { UniqId } from "@/src/utils/UniqId";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
-import { FindAds } from "@/src/ad/use-case/FindAds";
 import mongoose from "mongoose";
 import { FakeAd } from "../../../../__mocks__/lib/advertise/FakeAd";
 
@@ -18,8 +16,8 @@ describe("Given AdMongoDBRepository", () => {
   }, 8000);
 
   it("When save ad data it should be saved in MongoDB", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const ad = FakeAd.withIds({ advertiserId, adId });
 
     const adRepository = await MongoDB.adRepository();
@@ -39,8 +37,8 @@ describe("Given AdMongoDBRepository", () => {
   }, 8000);
 
   it("Given an existing ad in MongoDB when call the remove method it should delete it from the DB", async () => {
-    const advertiserId = AdUniqId.generate();
-    const adId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
+    const adId = UniqId.generate();
     const adData = FakeAd.withIds({ advertiserId, adId });
     const ad = new AdModel({
       title: adData.title.title,
@@ -62,7 +60,7 @@ describe("Given AdMongoDBRepository", () => {
 
   it("Given some existing ads in MongoDB when call findAllByAdvertiserId expect to find the same ads that in MongoDB", async () => {
     const amount = Math.floor(Math.random() * 5);
-    const advertiserId = AdUniqId.generate();
+    const advertiserId = UniqId.generate();
 
     const adsArray = FakeAd.createManyWithPrimitives(advertiserId, amount);
     const adsModel = adsArray.map((ad): AdModelProps => {
