@@ -4,12 +4,13 @@ import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdModel } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
+import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { TestCreateAdController } from "../../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
 describe("On 'api/ads/create-ad'", () => {
   beforeAll(async () => {
-    const mongoDBUrl: string = process.env.MONGODB_URL!;
-    await mongoose.connect(mongoDBUrl);
-    await AdModel.deleteMany({});
+    const testAdRepo = await TestAdMongoDBRepository.connect();
+    await TestCreateAdController.cleanAndInit(testAdRepo);
   }, 8000);
 
   afterAll(async () => {

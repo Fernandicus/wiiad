@@ -9,20 +9,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
+import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
 jest.mock("next-auth/jwt");
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
-  let advertiserId: string = UniqId.generate();
+  let advertiserId: string;
   let req: MockRequest<NextApiRequest>;
   let res: MockResponse<NextApiResponse>;
 
   beforeAll(async () => {
-    const amount = Math.floor(Math.random() * 5);
-    const adsArray = FakeAd.createMany(advertiserId, amount);
-    const adRepo = await TestAdMongoDBRepository.connect();
-    const createAd = new TestCreateAd(adRepo);
-    await createAd.saveMany(adsArray);
+    const testAdRepo = await TestAdMongoDBRepository.connect();
+    const controller = await TestCreateAdController.cleanAndInit(testAdRepo);
+    const createAdsData = await controller.crateMany();
+    advertiserId = createAdsData.advertiserId;
   }, 8000);
 
   afterAll(async () => {
