@@ -20,7 +20,7 @@ describe("On api/ads/remove-ad route", () => {
   it("When send 'DELETE' method with correct ad id response with status 200", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
-    const adData = FakeAd.withIds({ advertiserId, adId });
+    const adData = FakeAd.createWithGivenIds({ advertiserId, adId });
     const ad = new AdModel({
       title: adData.title.title,
       description: adData.description.description,

@@ -19,7 +19,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
   };
   const advertiserId = UniqId.generate();
   const adId = UniqId.generate();
-  const ad = FakeAd.primitivesWithIds({ advertiserId, adId });
+  const ad = FakeAd.createPrimitivesWithGivenIds({ advertiserId, adId });
 
   it(`WHEN call the CreateAd save method,
   THEN the repository save method must be called with the ad data`, async () => {

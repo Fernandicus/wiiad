@@ -16,7 +16,7 @@ describe("On 'api/ads/create-ad'", () => {
   it("When sending a 'POST' request with all the required params should return a 200 statusCode", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
-    const ad = FakeAd.withIds({ advertiserId, adId });
+    const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({
       method: "POST",
@@ -39,7 +39,7 @@ describe("On 'api/ads/create-ad'", () => {
   it("When sending a 'POST' request with a not valid params route should return a 400 statusCode", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
-    const ad = FakeAd.withIds({ advertiserId, adId });
+    const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({
       method: "POST",
@@ -75,7 +75,7 @@ describe("On 'api/ads/create-ad'", () => {
   it("When sending a not 'POST' request should return a 400 statusCode", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
-    const ad = FakeAd.withIds({ advertiserId, adId });
+    const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
 
     const req = httpMock.createRequest({
       method: "GET",

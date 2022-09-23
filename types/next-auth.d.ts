@@ -1,7 +1,7 @@
 import { JWT } from "next-auth/jwt";
 import NextAuth, { DefaultSession } from "next-auth";
 
-declare type Rol = "agency" | "business" | "user";
+type Rol = "agency" | "business" | "user";
 
 declare module "next-auth/jwt" {
   interface JWT {

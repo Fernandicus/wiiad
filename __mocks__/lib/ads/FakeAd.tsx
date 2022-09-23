@@ -50,7 +50,7 @@ export class FakeAd extends Ad {
     amount: number
   ): AdPropsPrimitives[] {
     let ads: AdPropsPrimitives[] = [];
-    for (var i = 0; i <= amount; i++) {
+    for (var i = 0; i <= amount -1; i++) {
       ads.push({
         ...this.generateFakeAdData(),
         advertiserId,
@@ -60,7 +60,7 @@ export class FakeAd extends Ad {
     return ads;
   }
 
-  static primitivesWithIds({
+  static createPrimitivesWithGivenIds({
     advertiserId,
     adId,
   }: {
@@ -71,7 +71,7 @@ export class FakeAd extends Ad {
     return { ...fakeAdData, advertiserId, id: adId };
   }
 
-  static withIds({
+  static createWithGivenIds({
     advertiserId,
     adId,
   }: {

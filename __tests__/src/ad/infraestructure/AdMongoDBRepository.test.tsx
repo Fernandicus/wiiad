@@ -28,7 +28,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   it(`WHEN create a new ad and call repository save method, 
   THEN it should be saved in MongoDB`, async () => {
     const adId = UniqId.generate();
-    const fakeAd = FakeAd.primitivesWithIds({ advertiserId, adId });
+    const fakeAd = FakeAd.createPrimitivesWithGivenIds({ advertiserId, adId });
 
     await adMongoDBRepo.save(fakeAd);
 
