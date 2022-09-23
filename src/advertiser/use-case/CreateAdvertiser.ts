@@ -1,5 +1,5 @@
 import { Advertiser } from "../domain/Advertiser";
-import { AdvertiserRepo } from "../infraestructure/AdvertiserRepo";
+import { AdvertiserRepo } from "../domain/AdvertiserRepo";
 
 export class CreateAdvertiser {
   constructor(private repository: AdvertiserRepo) {}

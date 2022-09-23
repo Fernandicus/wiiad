@@ -1,3 +1,5 @@
+import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
+import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
 import { AdMongoDBRepository } from "./AdMongoDBRepository";
 
@@ -25,5 +27,10 @@ export class MongoDB {
   static async adRepository(): Promise<AdMongoDBRepository> {
     await this.connect();
     return new AdMongoDBRepository();
+  }
+
+  static async advertiserRepo(): Promise<AdvertiserMongoDBRepo> {
+    await this.connect();
+    return new AdvertiserMongoDBRepo();
   }
 }

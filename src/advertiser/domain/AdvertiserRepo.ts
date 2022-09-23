@@ -1,4 +1,4 @@
-import { AdvertiserPropsPrimitives } from "../domain/Advertiser";
+import { AdvertiserPropsPrimitives } from "./Advertiser";
 
 export interface AdvertiserRepo {
   save(model: AdvertiserPropsPrimitives): Promise<void>;

@@ -5,7 +5,7 @@ import {
   AdvertiserRol,
   AdvertiserRolType,
 } from "@/src/advertiser/domain/value-objects/AdvertiserRol";
-import { AdvertiserRepo } from "@/src/advertiser/infraestructure/AdvertiserRepo";
+import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
