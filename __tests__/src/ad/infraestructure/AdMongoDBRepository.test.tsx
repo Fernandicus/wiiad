@@ -7,7 +7,6 @@ import { AdMongoDBRepository } from "@/src/ad/infraestructure/AdMongoDBRepositor
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
 import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
-
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {
   let fakeAds: FakeAd[];
   let adMongoDBRepo: AdMongoDBRepository;
@@ -16,9 +15,9 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   beforeAll(async () => {
     const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
     const testCreateAdController = new TestCreateAdController(testAdRepo);
-    const createAdsData = await testCreateAdController.crateMany();
-    fakeAds = createAdsData.fakeAds;
-    advertiserId = createAdsData.advertiserId;
+    const createdAdsData = await testCreateAdController.crateMany();
+    fakeAds = createdAdsData.fakeAds;
+    advertiserId = createdAdsData.advertiserId;
     adMongoDBRepo = new AdMongoDBRepository();
   }, 8000);
 
@@ -33,7 +32,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
 
     await adMongoDBRepo.save(fakeAd);
 
-    const adInRepository = await AdModel.findOne({_id: fakeAd.id});
+    const adInRepository = await AdModel.findOne({ _id: fakeAd.id });
 
     expect(adInRepository!.id).toBe(fakeAd.id);
     expect(adInRepository!.title).toBe(fakeAd.title);
@@ -46,14 +45,14 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     );
   }, 8000);
 
-  it("WHEN call findAllByAdvertiserId expect to find the same ads that in MongoDB", async () => {
+  it("WHEN call repository findAllByAdvertiserId, THEN find the same amount of ads that in MongoDB", async () => {
     const adsFound = await adMongoDBRepo.findAllByAdvertiserId(advertiserId);
     const count = await AdModel.count({ advertiserId });
 
     expect(count).toBe(adsFound.length);
   }, 8000);
 
-  it("WHEN call the remove method it should delete it from the DB", async () => {
+  it("WHEN call the repository remove method, THEN the selected ad should be deleted it from the DB", async () => {
     await adMongoDBRepo.remove(fakeAds[0].id.id);
     const adFound = await AdModel.findById(fakeAds[0].id.id);
     expect(adFound).toBe(null);

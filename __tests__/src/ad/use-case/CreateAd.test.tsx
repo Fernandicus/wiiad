@@ -39,7 +39,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
     expect(mockedRepository.save).toBeCalledWith(ad);
   });
 
-  it("Throw 'ErrorCreatingAd' on empty advertise data", () => {
+  it("WHEN try to create an empty Ad, THEN throw 'ErrorCreatingAd'", () => {
     expect(() => {
       FakeAd.empty();
     }).toThrowError(ErrorCreatingAd);
