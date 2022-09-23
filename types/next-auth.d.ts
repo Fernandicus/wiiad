@@ -22,15 +22,3 @@ declare module "next-auth" {
     rol: Rol;
   }
 }
-
-/* declare module "next-auth" {
-  interface Session {
-    user: {
-      advertiserId: string;
-    } & DefaultSession["user"];
-  }
-
-  interface Advertiser implements User {
-    advertiserId: string;
-  }
-} */

@@ -44,4 +44,16 @@ export class Ad {
     this.advertiserId = adProps.advertiserId;
     this.segments = adProps.segments;
   }
+
+  toPrimitives(): AdPropsPrimitives {
+    return {
+      id: this.id.id,
+      advertiserId: this.advertiserId.id,
+      title: this.title.title,
+      description: this.description.description,
+      image: this.image.image,
+      redirectionUrl: this.redirectionUrl.url,
+      segments: this.segments.segments,
+    };
+  }
 }
