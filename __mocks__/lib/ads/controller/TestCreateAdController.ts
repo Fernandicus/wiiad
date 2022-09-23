@@ -11,12 +11,6 @@ export class TestCreateAdController {
     this.testCreateAd = new TestCreateAd(repository);
   }
 
-/*   static async cleanAndInit(
-    repository: TestRepository
-  ): Promise<TestCreateAdController> {
-    return new TestCreateAdController(repository);
-  } */
-
   async crateMany(): Promise<{ advertiserId: string; fakeAds: Ad[] }> {
     const amount = Math.floor(Math.random() * 5);
     const advertiserId = UniqId.generate();

@@ -29,20 +29,20 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   it(`WHEN create a new ad and call repository save method, 
   THEN it should be saved in MongoDB`, async () => {
     const adId = UniqId.generate();
-    const fakeAd = FakeAd.withIds({ advertiserId, adId });
+    const fakeAd = FakeAd.primitivesWithIds({ advertiserId, adId });
 
     await adMongoDBRepo.save(fakeAd);
 
-    const adInRepository = await AdModel.findOne({_id: fakeAd.id.id});
+    const adInRepository = await AdModel.findOne({_id: fakeAd.id});
 
-    expect(adInRepository!.id).toBe(fakeAd.id.id);
-    expect(adInRepository!.title).toBe(fakeAd.title.title);
-    expect(adInRepository!.description).toBe(fakeAd.description.description);
-    expect(adInRepository!.image).toBe(fakeAd.image.image);
-    expect(adInRepository!.advertiserId).toBe(fakeAd.advertiserId.id);
-    expect(adInRepository!.redirectionUrl).toBe(fakeAd.redirectionUrl.url);
+    expect(adInRepository!.id).toBe(fakeAd.id);
+    expect(adInRepository!.title).toBe(fakeAd.title);
+    expect(adInRepository!.description).toBe(fakeAd.description);
+    expect(adInRepository!.image).toBe(fakeAd.image);
+    expect(adInRepository!.advertiserId).toBe(fakeAd.advertiserId);
+    expect(adInRepository!.redirectionUrl).toBe(fakeAd.redirectionUrl);
     expect(adInRepository!.segments).toEqual(
-      expect.arrayContaining(fakeAd.segments.segments)
+      expect.arrayContaining(fakeAd.segments)
     );
   }, 8000);
 

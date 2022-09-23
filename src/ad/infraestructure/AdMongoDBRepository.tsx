@@ -3,15 +3,10 @@ import { AdRepository } from "../domain/AdRepository";
 import { AdModel, AdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements AdRepository {
-  public async save(ad: Ad): Promise<void> {
+  public async save(ad: AdPropsPrimitives): Promise<void> {
     const adModel = new AdModel({
-      _id: ad.id.id,
-      title: ad.title.title,
-      description: ad.description.description,
-      image: ad.image.image,
-      redirectionUrl: ad.redirectionUrl.url,
-      advertiserId: ad.advertiserId.id,
-      segments: ad.segments.segments,
+      _id: ad.id,
+      ...ad,
     });
     await adModel.save();
   }

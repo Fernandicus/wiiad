@@ -60,6 +60,17 @@ export class FakeAd extends Ad {
     return ads;
   }
 
+  static primitivesWithIds({
+    advertiserId,
+    adId,
+  }: {
+    advertiserId: string;
+    adId: string;
+  }): AdPropsPrimitives {
+    const fakeAdData = this.generateFakeAdData();
+    return { ...fakeAdData, advertiserId, id: adId };
+  }
+
   static withIds({
     advertiserId,
     adId,

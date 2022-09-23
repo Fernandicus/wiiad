@@ -1,7 +1,7 @@
-import { AdPropsPrimitives } from "./Ad";
+import { Ad, AdPropsPrimitives } from "./Ad";
 
 export interface AdRepository {
-  save(model: unknown): Promise<void>;
+  save(model: AdPropsPrimitives): Promise<void>;
   findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]>;
   remove(id: string): Promise<void>;
 }
