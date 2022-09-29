@@ -1,5 +1,6 @@
-import { AdFinderController } from "@/src/ad/handler/AdFinderController";
+import { AdFinderHandler } from "@/src/ad/handler/AdFinderHandler";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { FindAds } from "@/src/ad/use-case/FindAds";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 
@@ -17,8 +18,11 @@ export default async function handler(
 
   try {
     const adRepository = await MongoDB.adRepository();
-    const adFinderController = new AdFinderController(token.id, adRepository);
-    const adsFound = await adFinderController.findAllToJSON();
+    const findAds = new FindAds(adRepository);
+
+    const adFinderHandler = new AdFinderHandler(findAds);
+    const adsFound = await adFinderHandler.findAllToJSON(token.id);
+    
     await MongoDB.disconnect();
 
     return res.status(200).json({ ads: adsFound });

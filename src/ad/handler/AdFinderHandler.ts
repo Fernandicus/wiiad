@@ -9,19 +9,12 @@ import { AdTitle } from "../domain/value-objects/AdTitle";
 import { AdvertiserId } from "../../advertiser/domain/value-objects/AdvertiserId";
 import { FindAds } from "../use-case/FindAds";
 
-export class AdFinderController {
-  private findAds;
-  private advertiserId;
+export class AdFinderHandler {
+  constructor(private findAds: FindAds) {}
 
-  constructor(advertiserId: string, repository: AdRepository) {
-    this.findAds = new FindAds(repository);
-    this.advertiserId = new AdvertiserId(advertiserId);
-  }
-
-  async findAll(): Promise<Ad[]> {
-    const adsFound = await this.findAds.findAllByAdvertiserId(
-      this.advertiserId
-    );
+  async findAll(advertiserId: string): Promise<Ad[]> {
+    const id = new AdvertiserId(advertiserId);
+    const adsFound = await this.findAds.findAllByAdvertiserId(id);
     const ads = adsFound.map((ad) => {
       return new Ad({
         title: new AdTitle(ad.title),
@@ -36,8 +29,9 @@ export class AdFinderController {
     return ads;
   }
 
-  async findAllToJSON(): Promise<string> {
-    const adsFound = await this.findAds.findAllByAdvertiserId(this.advertiserId);
+  async findAllToJSON(advertiserId: string): Promise<string> {
+    const id = new AdvertiserId(advertiserId);
+    const adsFound = await this.findAds.findAllByAdvertiserId(id);
     return JSON.stringify(adsFound);
   }
 }
