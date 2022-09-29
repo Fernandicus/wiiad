@@ -1,4 +1,4 @@
-import { AdRemoverController } from "@/src/ad/controller/AdRemoverController";
+import { AdRemoverController } from "@/src/ad/handler/AdRemoverController";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 

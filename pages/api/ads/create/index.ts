@@ -1,7 +1,8 @@
 import { AdPropsPrimitives } from "../../../../src/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
-import { AdCreatorController } from "@/src/ad/controller/AdCreatorController";
+import { AdCreatorHandler } from "@/src/ad/handler/AdCreatorHandler";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { CreateAd } from "@/src/ad/use-case/CreateAd";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -13,9 +14,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const reqBody: AdPropsPrimitives = req.body;
 
     const adRepository = await MongoDB.adRepository();
+    const createAd = new CreateAd(adRepository);
 
-    const adCreatorController = new AdCreatorController(reqBody, adRepository);
-    await adCreatorController.create();
+    const adCreatorHandler = new AdCreatorHandler(createAd);
+    await adCreatorHandler.create(reqBody);
 
     await MongoDB.disconnect();
 

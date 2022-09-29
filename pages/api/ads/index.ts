@@ -1,4 +1,4 @@
-import { AdFinderController } from "@/src/ad/controller/AdFinderController";
+import { AdFinderController } from "@/src/ad/handler/AdFinderController";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";

@@ -1,5 +1,4 @@
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { AdRepository } from "../domain/AdRepository";
 import { AdDescription } from "../domain/value-objects/AdDescription";
 import { AdId } from "../domain/value-objects/AdId";
 import { AdImage } from "../domain/value-objects/AdImage";
@@ -10,13 +9,12 @@ import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId
 import { UniqId } from "../../utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
 
-export class AdCreatorController {
-  private createAd;
-  private ad;
+export class AdCreatorHandler {
+  constructor(private createAd: CreateAd) {}
 
-  constructor(adProps: AdPropsPrimitives, repository: AdRepository) {
+  async create(adProps: AdPropsPrimitives): Promise<void> {
     const id = UniqId.generate();
-    this.ad = new Ad({
+    const ad = new Ad({
       id: new AdId(id),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
@@ -25,10 +23,6 @@ export class AdCreatorController {
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new AdvertiserId(adProps.advertiserId),
     });
-    this.createAd = new CreateAd(repository);
-  }
-
-  async create(): Promise<void> {
-    await this.createAd.save(this.ad);
+    await this.createAd.save(ad);
   }
 }

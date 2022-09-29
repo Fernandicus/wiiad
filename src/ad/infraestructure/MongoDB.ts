@@ -1,4 +1,3 @@
-import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
 import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
 import { AdMongoDBRepository } from "./AdMongoDBRepository";
