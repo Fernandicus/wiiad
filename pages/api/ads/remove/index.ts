@@ -1,5 +1,6 @@
-import { AdRemoverController } from "@/src/ad/handler/AdRemoverController";
+import { AdRemoverHandler } from "@/src/ad/handler/AdRemoverHandler";
 import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 import { NextApiRequest, NextApiResponse } from "next";
 
 
@@ -9,11 +10,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res.status(400);
 
   const adId: string = req.body.adId;
+
   try {
     const adRepository = await MongoDB.adRepository();
+    const removeAd = new RemoveAd(adRepository);
 
-    const adRemoverController = new AdRemoverController(adId, adRepository);
-    await adRemoverController.remove();
+    const adRemoverHandler = new AdRemoverHandler(removeAd);
+    await adRemoverHandler.remove(adId);
+
     res.status(200);
     return;
   } catch (err) {
