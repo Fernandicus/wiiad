@@ -9,7 +9,6 @@ import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Password } from "@/src/domain/Password";
 import { UniqId } from "@/src/utils/UniqId";
 
 describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser repo", () => {
@@ -21,11 +20,10 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
       id: new AdvertiserId(UniqId.generate()),
       name: new Name("NAME"),
       email: new Email("test@test.com"),
-      password: new Password("1234"),
       rol: new AdvertiserRol(AdvertiserRolType.BUSINESS),
     });
     advertiserRepoMock = {
-      findAllByAdvertiserId: jest.fn(),
+      findById: jest.fn(),
       save: jest.fn(),
     };
   });

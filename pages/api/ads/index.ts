@@ -22,7 +22,7 @@ export default async function handler(
 
     const adFinderHandler = new AdFinderHandler(findAds);
     const adsFound = await adFinderHandler.findAllToJSON(token.id);
-    
+
     await MongoDB.disconnect();
 
     return res.status(200).json({ ads: adsFound });

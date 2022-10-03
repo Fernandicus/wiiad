@@ -10,7 +10,6 @@ import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/Advertis
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Password } from "@/src/domain/Password";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -28,7 +27,6 @@ export default async function handler(
       email: new Email(reqBody.email),
       id: new AdvertiserId(reqBody.email),
       name: new Name(reqBody.name),
-      password: new Password(reqBody.password),
       rol: new AdvertiserRol(reqBody.rol),
     });
     await createAd.create(advertiser);

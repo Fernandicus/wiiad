@@ -10,7 +10,6 @@ import {
 } from "@/src/advertiser/domain/value-objects/AdvertiserRol";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Password } from "@/src/domain/Password";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 
@@ -43,8 +42,8 @@ export class FakeAdvertiser extends Advertiser {
     id: string;
   } {
     return {
-      email: faker.company.name(),
-      name: faker.internet.email(),
+      email: faker.internet.email() ,
+      name: faker.company.name(),
       password: faker.internet.password(),
       id: UniqId.generate(),
     };
@@ -57,7 +56,6 @@ export class FakeAdvertiser extends Advertiser {
       id: new AdvertiserId(primitives.id),
       email: new Email(primitives.email),
       name: new Name(primitives.name),
-      password: new Password(primitives.password),
       rol: new AdvertiserRol(primitives.rol),
     });
   }

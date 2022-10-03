@@ -18,12 +18,13 @@ export class AdMongoDBRepository implements AdRepository {
     const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
       return {
         id: model._id,
-        title: model.title,
+        ...model,
+        /* title: model.title,
         description: model.description,
         image: model.image,
         redirectionUrl: model.redirectionUrl,
         segments: model.segments,
-        advertiserId: model.advertiserId,
+        advertiserId: model.advertiserId, */
       };
     });
 
