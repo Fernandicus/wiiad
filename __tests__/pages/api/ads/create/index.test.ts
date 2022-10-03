@@ -4,7 +4,7 @@ import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 
-describe("On 'api/ads/create-ad'", () => {
+describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
   beforeAll(async () => {
     await TestAdMongoDBRepository.connectAndClean();
   }, 8000);
@@ -13,7 +13,8 @@ describe("On 'api/ads/create-ad'", () => {
     await TestAdMongoDBRepository.disconnect();
   }, 8000);
 
-  it("When sending a 'POST' request with all the required params should return a 200 statusCode", async () => {
+  it(`WHEN sending a 'POST' request with all the required params, 
+  THEN should return a 200 statusCode`, async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
     const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
@@ -36,7 +37,7 @@ describe("On 'api/ads/create-ad'", () => {
     expect(res.statusCode).toBe(200);
   }, 8000);
 
-  it("When sending a 'POST' request with a not valid params route should return a 400 statusCode", async () => {
+  it("WHEN sending a 'POST' request with a not valid params route, THEN should return a 400 statusCode", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
     const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
@@ -59,7 +60,7 @@ describe("On 'api/ads/create-ad'", () => {
     expect(res.statusCode).toBe(400);
   }, 8000);
 
-  it("When sending a 'POST' request without all the required params should return a 400 statusCode", async () => {
+  it("WHEN sending a 'POST' request without all the required params, THEN should return a 400 statusCode", async () => {
     const req = httpMock.createRequest({
       method: "POST",
       body: {},
@@ -72,7 +73,7 @@ describe("On 'api/ads/create-ad'", () => {
     expect(res.statusCode).toBe(400);
   }, 8000);
 
-  it("When sending a not 'POST' request should return a 400 statusCode", async () => {
+  it("WHEN sending a not 'POST' request, THEN should return a 400 statusCode", async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
     const ad = FakeAd.createWithGivenIds({ advertiserId, adId });

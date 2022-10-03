@@ -18,10 +18,11 @@ export default async function handler(
     const createAdvertiser = new CreateAdvertiser(advertiserRepo);
 
     const advertiserHandler = new AdvertiserCreatorHandler(createAdvertiser);
-    await advertiserHandler.create({ ...reqBody, id: UniqId.generate() });
-    
+    const uniqId = UniqId.generate();
+    await advertiserHandler.create({ ...reqBody, id: uniqId });
+
     await MongoDB.disconnect();
-    return res.status(200);
+    return res.status(200).json({ id: uniqId });
   } catch (err) {
     return res.status(400);
   }

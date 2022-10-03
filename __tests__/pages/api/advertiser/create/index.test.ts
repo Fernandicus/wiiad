@@ -25,6 +25,7 @@ describe("On api/advertiser/create, GIVEN an Advertiser ", () => {
 
     await createAdvertiser(req, res);
     expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toHaveProperty("id");
   });
 
   it(`WHEN send a GET request with advertiser data,

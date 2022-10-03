@@ -38,13 +38,11 @@ export class FakeAdvertiser extends Advertiser {
   private static generateFakeData(): {
     email: string;
     name: string;
-    password: string;
     id: string;
   } {
     return {
       email: faker.internet.email() ,
       name: faker.company.name(),
-      password: faker.internet.password(),
       id: UniqId.generate(),
     };
   }
