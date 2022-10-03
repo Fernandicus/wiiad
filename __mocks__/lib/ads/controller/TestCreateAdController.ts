@@ -1,15 +1,11 @@
 import { Ad } from "@/src/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestRepository } from "../domain/TestRepository";
+import { TestAdRepository } from "../domain/TestAdRepository";
 import { FakeAd } from "../FakeAd";
 import { TestCreateAd } from "../use-case/TestCreateAd";
 
 export class TestCreateAdController {
-  private testCreateAd;
-
-  constructor(private repository: TestRepository) {
-    this.testCreateAd = new TestCreateAd(repository);
-  }
+  constructor(private testCreateAd: TestCreateAd) {}
 
   async crateMany(): Promise<{ advertiserId: string; fakeAds: Ad[] }> {
     const amount = Math.floor(Math.random() * 5);

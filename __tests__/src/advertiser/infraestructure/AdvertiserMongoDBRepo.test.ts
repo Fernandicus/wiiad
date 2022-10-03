@@ -2,7 +2,7 @@ import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
 import { AdvertiserRolType } from "@/src/advertiser/domain/value-objects/AdvertiserRol";
 import { AdvertiserModel } from "@/src/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
-import mongoose from "mongoose";
+import { TestAdvertiserMongoDBRepo } from "__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
 
 describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoDB Repo", () => {
@@ -10,16 +10,14 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
   let advertiserRepo: AdvertiserMongoDBRepo;
 
   beforeAll(async () => {
-    const mongoDBUrl = process.env.MONGODB_URL;
-    await mongoose.connect(mongoDBUrl!);
-    await AdvertiserModel.deleteMany();
+    await TestAdvertiserMongoDBRepo.connectAndClean();
 
     advertiser = FakeAdvertiser.createPrimitives(AdvertiserRolType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await TestAdvertiserMongoDBRepo.disconnect();
   });
 
   it("WHEN call advertiser repository save method, THEN advertiser is saved in MongoDB", async () => {

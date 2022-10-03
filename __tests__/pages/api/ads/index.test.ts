@@ -20,7 +20,8 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
 
   beforeAll(async () => {
     const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
-    const controller = new TestCreateAdController(testAdRepo);
+    const testCreateAd = new TestCreateAd(testAdRepo);
+    const controller = new TestCreateAdController(testCreateAd);
     const createAdsData = await controller.crateMany();
     advertiserId = createAdsData.advertiserId;
   }, 8000);
