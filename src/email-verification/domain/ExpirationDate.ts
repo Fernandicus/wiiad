@@ -1,5 +1,5 @@
 import { VerificationTokenConstants } from "../verification-token-constants";
-import { ErrorVerificationToken } from "./ErrorVerificationToken";
+import { ErrorEmailVerification } from "./ErrorEmailVerification";
 
 export class ExpirationDate {
   readonly date;
@@ -14,11 +14,11 @@ export class ExpirationDate {
     );
 
     if (date < minimumExpirationDate) {
-      throw new ErrorVerificationToken(
+      throw new ErrorEmailVerification(
         "Minimum expiration date should be in 3 min"
       );
     } else if (date > maximumExpirationDate) {
-      throw new ErrorVerificationToken(
+      throw new ErrorEmailVerification(
         "Maximum expiration date should be in 24 h"
       );
     }
