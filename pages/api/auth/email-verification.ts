@@ -8,6 +8,7 @@ import { EmailVerificationToken } from "@/src/email-verification/domain/EmailVer
 import { VerificationTokenId } from "@/src/email-verification/domain/VerificationTokenId";
 import { ExpirationDate } from "@/src/email-verification/domain/ExpirationDate";
 import { Email } from "@/src/domain/Email";
+import { EmailVerificationTokenHandler } from "@/src/email-verification/handler/EmailVerificationTokenHandler";
 
 export interface IVerificationTokenBodyRequest {
   email: string;
@@ -32,13 +33,14 @@ export default async function handler(
     const saveEmailVerificationToken = new SaveEmailVerificationToken(
       verificationTokenRepo
     );
-
-    const emailVerificationToken = new EmailVerificationToken(
-      new VerificationTokenId(id),
-      ExpirationDate.inFiveMinutes(),
-      new Email(reqBody.email)
+    
+    const verificationTokenHandler = new EmailVerificationTokenHandler(
+      saveEmailVerificationToken
     );
-    await saveEmailVerificationToken.save(emailVerificationToken);
+    await verificationTokenHandler.saveWithExpirationIn5min({
+      email: reqBody.email,
+      id,
+    });
 
     const transport = createTransport({
       host: process.env.SMTP_SERVER!,
