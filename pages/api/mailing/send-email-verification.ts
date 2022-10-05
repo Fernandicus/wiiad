@@ -1,17 +1,13 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
-import { SaveEmailVerificationToken } from "@/src/email-verification/use-case/SaveEmailVerificationToken";
-import { EmailVerificationTokenHandler } from "@/src/email-verification/handler/EmailVerificationTokenHandler";
-import { NodemailerSendVerificationEmail } from "@/src/email-verification/infrastructure/NodemailerSendVerificationEmail";
-import { Name } from "@/src/domain/Name";
-import { Email } from "@/src/domain/Email";
-import { VerificationTokenId } from "@/src/email-verification/domain/VerificationTokenId";
-import { SendEmailVerification } from "@/src/email-verification/use-case/SendVerificationEmail";
-import { VerificationEmail } from "@/src/email-verification/domain/VerificationEmail";
-import { SendVerificationEmailHandler } from "@/src/email-verification/handler/SendVerificationEmailHandler";
-import { ErrorEmailVerification } from "@/src/email-verification/domain/ErrorEmailVerification";
-import { ErrorSendingEmail } from "@/src/email-verification/domain/ErrorSendingEmail";
+import { SaveEmailVerificationToken } from "@/src/mailing/send-email-verification/use-case/SaveEmailVerificationToken";
+import { EmailVerificationTokenHandler } from "@/src/mailing/send-email-verification/handler/EmailVerificationTokenHandler";
+import { NodemailerSendVerificationEmail } from "@/src/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
+import { SendEmailVerification } from "@/src/mailing/send-email-verification/use-case/SendVerificationEmail";
+import { SendVerificationEmailHandler } from "@/src/mailing/send-email-verification/handler/SendVerificationEmailHandler";
+import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
+import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;

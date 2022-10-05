@@ -1,7 +1,7 @@
 import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
 import { AdMongoDBRepository } from "../ad/infraestructure/AdMongoDBRepository";
-import { VerificationTokenMongoDBRepo } from "../email-verification/infrastructure/VerificationTokenMongoDBRepo";
+import { VerificationTokenMongoDBRepo } from "../mailing/send-email-verification/infrastructure/VerificationTokenMongoDBRepo";
 
 export class MongoDB {
   private static async connect() {
