@@ -2,6 +2,8 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { createTransport, Transporter } from "nodemailer";
 import { ErrorSendingEmail } from "../domain/ErrorSendingEmail";
+import { IEmailSender } from "../domain/IEmailSender";
+import { VerificationEmail } from "../domain/VerificationEmail";
 import { VerificationTokenId } from "../domain/VerificationTokenId";
 
 abstract class SMTPEmailSender {
@@ -24,33 +26,14 @@ abstract class SMTPEmailSender {
   }
 }
 
-class VerificationEmail extends SMTPEmailSender {
-  readonly url;
-  readonly to;
-
-  constructor(props: {
-    userName: Name;
-    to: Email;
-    token: VerificationTokenId;
-  }) {
-    super();
-
-    const { to, token, userName } = props;
-    this.to = to;
-
-    this.url = `${this.host}/${userName.name}?email=${to.email}&verificationToken=${token.id}`;
-  }
-}
-
-export class NodemailerSendVerificationEmail extends VerificationEmail {
+export class NodemailerSendVerificationEmail
+  extends SMTPEmailSender
+  implements IEmailSender
+{
   private transport: Transporter;
 
-  constructor(props: {
-    userName: Name;
-    to: Email;
-    token: VerificationTokenId;
-  }) {
-    super({ userName: props.userName, to: props.to, token: props.token });
+  constructor() {
+    super();
 
     this.transport = createTransport({
       host: this.host,
@@ -63,17 +46,17 @@ export class NodemailerSendVerificationEmail extends VerificationEmail {
     });
   }
 
-  async send(): Promise<void> {
+  async send(props: { to: string; url: string }): Promise<void> {
     const result = await this.transport.sendMail({
       from: process.env.EMAIL_FROM,
-      to: this.to.email,
+      to: props.to,
       subject: `Sign in to ${this.host}`,
       text: text({
-        url: this.url,
+        url: props.url,
         host: this.host,
       }),
       html: html({
-        url: this.url,
+        url: props.url,
         host: this.host,
         theme: { brandColor: undefined },
       }),
@@ -82,7 +65,9 @@ export class NodemailerSendVerificationEmail extends VerificationEmail {
     const failed = result.rejected.concat(result.pending).filter(Boolean);
 
     if (failed.length) {
-      throw new ErrorSendingEmail(`Email(s) (${failed.join(", ")}) could not be sent`);
+      throw new ErrorSendingEmail(
+        `Email(s) (${failed.join(", ")}) could not be sent`
+      );
     }
   }
 }

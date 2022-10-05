@@ -3,7 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
 import { SaveEmailVerificationToken } from "@/src/email-verification/use-case/SaveEmailVerificationToken";
 import { EmailVerificationTokenHandler } from "@/src/email-verification/handler/EmailVerificationTokenHandler";
-import { NodemailerSendVerificationEmail } from "@/src/email-verification/infrastructure/SendVerificationEmail";
+import { NodemailerSendVerificationEmail } from "@/src/email-verification/infrastructure/NodemailerSendVerificationEmail";
+import { Name } from "@/src/domain/Name";
+import { Email } from "@/src/domain/Email";
+import { VerificationTokenId } from "@/src/email-verification/domain/VerificationTokenId";
+import { SendEmailVerification } from "@/src/email-verification/use-case/SendVerificationEmail";
+import { VerificationEmail } from "@/src/email-verification/domain/VerificationEmail";
+import { SendVerificationEmailHandler } from "@/src/email-verification/handler/SendVerificationEmailHandler";
 
 export interface IVerificationTokenBodyRequest {
   email: string;
@@ -28,7 +34,7 @@ export default async function handler(
     const saveEmailVerificationToken = new SaveEmailVerificationToken(
       verificationTokenRepo
     );
-    
+
     const verificationTokenHandler = new EmailVerificationTokenHandler(
       saveEmailVerificationToken
     );
@@ -37,34 +43,20 @@ export default async function handler(
       id,
     });
 
-    /* const transport = createTransport({
-      host: process.env.SMTP_SERVER!,
-      port: parseInt(process.env.SMTP_PORT!),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
+    const nodemailerSender = new NodemailerSendVerificationEmail();
+
+    const sendEmail = new SendEmailVerification(nodemailerSender);
+
+    const verificaitionEmailHandler = new SendVerificationEmailHandler(
+      sendEmail
+    );
+    await verificaitionEmailHandler.send({
+      id,
+      email: reqBody.email,
+      userName: reqBody.userName,
     });
 
-    
-
-    const result = await transport.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: reqBody.email,
-      subject: `Sign in to ${process.env.BASE_URL}`,
-      text: text({
-        url: verificationUrl,
-        host: process.env.BASE_URL!,
-      }),
-      html: html({
-        url: verificationUrl,
-        host: process.env.BASE_URL!,
-        theme: { brandColor: undefined },
-      }),
-    }); */
-
-    
+   
 
     await MongoDB.disconnect();
     return res.status(200).json({});
