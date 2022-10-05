@@ -1,40 +1,16 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
 import { createTransport, Transporter } from "nodemailer";
 import { ErrorSendingEmail } from "../domain/ErrorSendingEmail";
 import { IEmailSender } from "../domain/IEmailSender";
-import { VerificationEmail } from "../domain/VerificationEmail";
-import { VerificationTokenId } from "../domain/VerificationTokenId";
-
-abstract class SMTPEmailSender {
-  readonly host;
-  readonly port;
-  readonly user;
-  readonly pass;
-
-  constructor() {
-    if (!process.env.SMTP_USER) throw Error("SMTP_USER env var is empty");
-    if (!process.env.SMTP_SERVER) throw Error("SMTP_SERVER env var is empty");
-    if (!process.env.SMTP_PORT) throw Error("SMTP_PORT env var is empty");
-    if (!process.env.SMTP_PASSWORD)
-      throw Error("SMTP_PASSWORD env var is empty");
-
-    this.host = process.env.SMTP_SERVER;
-    this.port = parseInt(process.env.SMTP_PORT);
-    this.user = process.env.SMTP_USER;
-    this.pass = process.env.SMTP_PASSWORD;
-  }
-}
+import { SMTPData } from "../domain/SMTPData";
 
 export class NodemailerSendVerificationEmail
-  extends SMTPEmailSender
+  extends SMTPData
   implements IEmailSender
 {
   private transport: Transporter;
 
   constructor() {
     super();
-
     this.transport = createTransport({
       host: this.host,
       port: this.port,

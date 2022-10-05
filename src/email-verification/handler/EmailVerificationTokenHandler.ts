@@ -1,8 +1,5 @@
 import { Email } from "@/src/domain/Email";
-import {
-  EmailVerificationToken,
-  EmailVerificationTokenPropsPrimitives,
-} from "../domain/EmailVerificationToken";
+import { EmailVerificationToken } from "../domain/EmailVerificationToken";
 import { ExpirationDate } from "../domain/ExpirationDate";
 import { VerificationTokenId } from "../domain/VerificationTokenId";
 import { SaveEmailVerificationToken } from "../use-case/SaveEmailVerificationToken";

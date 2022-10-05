@@ -10,8 +10,10 @@ import { VerificationTokenId } from "@/src/email-verification/domain/Verificatio
 import { SendEmailVerification } from "@/src/email-verification/use-case/SendVerificationEmail";
 import { VerificationEmail } from "@/src/email-verification/domain/VerificationEmail";
 import { SendVerificationEmailHandler } from "@/src/email-verification/handler/SendVerificationEmailHandler";
+import { ErrorEmailVerification } from "@/src/email-verification/domain/ErrorEmailVerification";
+import { ErrorSendingEmail } from "@/src/email-verification/domain/ErrorSendingEmail";
 
-export interface IVerificationTokenBodyRequest {
+export interface ISendVerificationEmailBodyRequest {
   email: string;
   userName: string;
 }
@@ -22,7 +24,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: IVerificationTokenBodyRequest = req.body; //JSON.parse(req.body);
+  const reqBody: ISendVerificationEmailBodyRequest = req.body; //JSON.parse(req.body);
 
   if (reqBody.email == undefined || reqBody.userName == undefined)
     return res.status(400).json({});
@@ -56,11 +58,18 @@ export default async function handler(
       userName: reqBody.userName,
     });
 
-   
-
     await MongoDB.disconnect();
-    return res.status(200).json({});
+    return res.status(200).json({ message: `Email sent to ${reqBody.email}` });
   } catch (err) {
-    return res.status(400);
+    const errorWithVerification = err instanceof ErrorEmailVerification;
+    const errorSendingEmail = err instanceof ErrorSendingEmail;
+    const errorUnkown = err instanceof Error;
+
+    if (errorWithVerification)
+      return res.status(400).json({ message: err.info });
+
+    if (errorSendingEmail) return res.status(500).json({ message: err.info });
+
+    if (errorUnkown) return res.status(400).json({ message: err.message });
   }
 }

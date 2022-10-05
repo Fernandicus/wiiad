@@ -2,16 +2,10 @@ import { Email } from "@/src/domain/Email";
 import { ExpirationDate } from "./ExpirationDate";
 import { VerificationTokenId } from "./VerificationTokenId";
 
-export interface EmailVerificationTokenProps {
+export interface IEmailVerificationTokenProps {
   id: VerificationTokenId;
   expirationDate: ExpirationDate;
   email: Email;
-}
-
-export interface EmailVerificationTokenPropsPrimitives {
-  id: string;
-  expirationDate: Date;
-  email: string;
 }
 
 export class EmailVerificationToken {
@@ -19,7 +13,7 @@ export class EmailVerificationToken {
   readonly expirationDate;
   readonly email;
 
-  constructor({ id, expirationDate, email }: EmailVerificationTokenProps) {
+  constructor({ id, expirationDate, email }: IEmailVerificationTokenProps) {
     this.id = id;
     this.expirationDate = expirationDate;
     this.email = email;

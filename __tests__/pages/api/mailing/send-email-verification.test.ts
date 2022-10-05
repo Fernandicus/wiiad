@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
-import signUp, {
-  IVerificationTokenBodyRequest,
-} from "@/pages/api/auth/email-verification";
+import sendEmailVerification, {
+  ISendVerificationEmailBodyRequest,
+} from "@/pages/api/mailing/send-email-verification";
 
 describe("On api/auth/sign-up, GIVEN an user", () => {
-  let user: IVerificationTokenBodyRequest;
+  let user: ISendVerificationEmailBodyRequest;
   beforeAll(() => {
     user = { email: "test@test.com", userName: "fernandisco" };
   });
@@ -18,7 +18,7 @@ describe("On api/auth/sign-up, GIVEN an user", () => {
     });
     const response: MockResponse<NextApiResponse> = httpMock.createResponse();
 
-    await signUp(request, response);
+    await sendEmailVerification(request, response);
 
     expect(response.statusCode).toBe(200);
   });
@@ -31,7 +31,7 @@ describe("On api/auth/sign-up, GIVEN an user", () => {
     });
     const response: MockResponse<NextApiResponse> = httpMock.createResponse();
 
-    await signUp(request, response);
+    await sendEmailVerification(request, response);
 
     expect(response.statusCode).toBe(400);
   });
@@ -44,7 +44,7 @@ describe("On api/auth/sign-up, GIVEN an user", () => {
     });
     const response: MockResponse<NextApiResponse> = httpMock.createResponse();
 
-    await signUp(request, response);
+    await sendEmailVerification(request, response);
 
     expect(response.statusCode).toBe(400);
   });
