@@ -1,4 +1,4 @@
-import { VerificationTokenConstants } from "../verification-token-constants";
+import { EmailVerificationConstants } from "../EmailVerificationConstants";
 import { ErrorEmailVerification } from "./ErrorEmailVerification";
 
 export class ExpirationDate {
@@ -11,17 +11,17 @@ export class ExpirationDate {
 
   static inFiveMinutes(): ExpirationDate {
     return new ExpirationDate(
-      new Date(Date.now() + VerificationTokenConstants.fiveMin)
+      new Date(Date.now() + EmailVerificationConstants.fiveMin)
     );
   }
 
   private dateIsCorret(date: Date): void {
     const minimumExpirationDate = new Date(
-      Date.now() + VerificationTokenConstants.oneMinute * 3
+      Date.now() + EmailVerificationConstants.oneMinute * 3
     );
 
     const maximumExpirationDate = new Date(
-      Date.now() + VerificationTokenConstants.twentyFourH
+      Date.now() + EmailVerificationConstants.twentyFourH
     );
     if (date < minimumExpirationDate) {
       throw new ErrorEmailVerification(

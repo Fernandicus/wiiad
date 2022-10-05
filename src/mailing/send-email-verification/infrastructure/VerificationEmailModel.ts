@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const verificationTokenSchema = new Schema(
+const verificationEmailSchema = new Schema(
   {
     _id: { type: String, required: true },
     expirationDate: {
@@ -17,13 +17,13 @@ const verificationTokenSchema = new Schema(
   { _id: false }
 );
 
-export interface VerificationTokenModelProps {
+export interface VerificationEmailModelProps {
   _id: string;
   expirationDate: Date;
   email: string;
 }
 
-export const VerificationTokenModel = mongoose.model(
-  "Verification_Token",
-  verificationTokenSchema
+export const VerificationEmailModel = mongoose.model(
+  "Verification_Email",
+  verificationEmailSchema
 );

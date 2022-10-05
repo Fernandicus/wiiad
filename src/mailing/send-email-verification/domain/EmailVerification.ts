@@ -8,7 +8,7 @@ export interface IEmailVerificationTokenProps {
   email: Email;
 }
 
-export class EmailVerificationToken {
+export class EmailVerification {
   readonly id;
   readonly expirationDate;
   readonly email;

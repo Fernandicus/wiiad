@@ -1,7 +1,7 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
-import { SaveEmailVerificationToken } from "@/src/mailing/send-email-verification/use-case/SaveEmailVerificationToken";
+import { SaveEmailVerification } from "@/src/mailing/send-email-verification/use-case/SaveEmailVerification";
 import { EmailVerificationTokenHandler } from "@/src/mailing/send-email-verification/handler/EmailVerificationTokenHandler";
 import { NodemailerSendVerificationEmail } from "@/src/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
 import { SendEmailVerification } from "@/src/mailing/send-email-verification/use-case/SendVerificationEmail";
@@ -29,12 +29,12 @@ export default async function handler(
     const id = UniqId.generate();
 
     const verificationTokenRepo = await MongoDB.verificationTokenRepo();
-    const saveEmailVerificationToken = new SaveEmailVerificationToken(
+    const saveEmailVerification = new SaveEmailVerification(
       verificationTokenRepo
     );
 
     const verificationTokenHandler = new EmailVerificationTokenHandler(
-      saveEmailVerificationToken
+      saveEmailVerification
     );
     await verificationTokenHandler.saveWithExpirationIn5min({
       email: reqBody.email,
