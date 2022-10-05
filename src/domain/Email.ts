@@ -3,7 +3,8 @@ import { ErrorCreatingAdvertiser } from "../advertiser/domain/ErrorCreatingAdver
 export class Email {
   readonly email;
   constructor(email: string) {
-    if (email == "") throw new ErrorCreatingAdvertiser("Email can't be empty");
+    if (email == "" || !email.match(RegExp(/.+\@.+\..+/)))
+      throw new ErrorCreatingAdvertiser("Email can't be empty");
     this.email = email;
   }
 }

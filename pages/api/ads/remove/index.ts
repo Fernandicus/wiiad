@@ -1,5 +1,5 @@
 import { AdRemoverHandler } from "@/src/ad/handler/AdRemoverHandler";
-import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 import { NextApiRequest, NextApiResponse } from "next";
 

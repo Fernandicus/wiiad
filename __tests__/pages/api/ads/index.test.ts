@@ -4,14 +4,11 @@ import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import findAd from "@/pages/api/ads";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
-import { getToken, JWT } from "next-auth/jwt";
 import { NextApiRequest, NextApiResponse } from "next";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
 import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
-
-jest.mock("next-auth/jwt");
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let advertiserId: string;
@@ -33,9 +30,8 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   it(`WHEN send a 'GET' request, 
   THEN receive a statusCode 200 and same amount of ads that in the DB`, async () => {
     const adsInMongoose = await AdModel.count({ advertiserId });
-    const token: JWT = { rol: "business", id: advertiserId };
-    (getToken as jest.Mock).mockResolvedValue(token);
-    req = httpMock.createRequest({ method: "GET" });
+
+    req = httpMock.createRequest({ method: "GET", body: { id: advertiserId } });
     res = httpMock.createResponse();
     await findAd(req, res);
 
@@ -43,13 +39,4 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
     expect(res.statusCode).toBe(200);
     expect(adsData.length).toBe(adsInMongoose);
   });
-
-  it(`WHEN send 'GET' request and User is not logged in or has not a rol of business or agency, 
-  THEN receive a statusCode 400`, async () => {
-    const token: JWT = { rol: "user", id: advertiserId };
-    (getToken as jest.Mock).mockResolvedValue(token);
-    await findAd(req, res);
-
-    expect(res.statusCode).toBe(400);
-  }, 8000);
 });

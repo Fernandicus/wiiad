@@ -14,7 +14,8 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
 
   beforeAll(async () => {
     const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
-    const testCreateAdController = new TestCreateAdController(testAdRepo);
+    const testCreateAd = new TestCreateAd(testAdRepo)
+    const testCreateAdController = new TestCreateAdController(testCreateAd);
     const createdAdsData = await testCreateAdController.crateMany();
     fakeAds = createdAdsData.fakeAds;
     advertiserId = createdAdsData.advertiserId;

@@ -1,4 +1,4 @@
-import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
 import { AdvertiserCreatorHandler } from "@/src/advertiser/handler/AdvertiserCreatorHandler";
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";

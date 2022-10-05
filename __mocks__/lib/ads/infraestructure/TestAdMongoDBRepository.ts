@@ -1,8 +1,7 @@
 import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
-import { TestRepository } from "../domain/TestRepository";
 
-export class TestAdMongoDBRepository implements TestRepository {
+export class TestAdMongoDBRepository {
   constructor() {}
 
   static async connectAndClean(): Promise<TestAdMongoDBRepository> {

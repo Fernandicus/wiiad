@@ -1,15 +1,41 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from "next/head";
+import Image from "next/image";
 
-import styles from '@/pages/index.module.css'
+import styles from "@/pages/index.module.css";
+import { useRef } from "react";
 
 export default function Home() {
+  const myEmail = useRef<HTMLInputElement>(null);
+  const myName = useRef<HTMLInputElement>(null);
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const valueEmail = myEmail.current?.value;
+          const valueName = myName.current?.value;
+          fetch("/api/auth/sign-up", {
+            method: "POST",
+            body: JSON.stringify({
+              email: valueEmail,
+              userName: valueName,
+            }),
+          });
+        }}
+      >
+        <label htmlFor="myEmail">Your Email</label>
+        <br />
+        <input ref={myEmail} type="email" placeholder="Your email"></input>
+        <br />
+        <input ref={myName} type="text" placeholder="Your NAME"></input>
+        <br />
+        <button type="submit">Send</button>
+      </form>
 
       <main>
         <h1 className={styles.title}>
@@ -54,12 +80,12 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import { AdPropsPrimitives } from "../../../../src/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
 import { AdCreatorHandler } from "@/src/ad/handler/AdCreatorHandler";
-import { MongoDB } from "@/src/ad/infraestructure/MongoDB";
+import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { CreateAd } from "@/src/ad/use-case/CreateAd";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
