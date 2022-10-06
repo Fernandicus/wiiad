@@ -8,6 +8,8 @@ export class NodemailerSendVerificationEmail
   implements IEmailSender
 {
   private transport: Transporter;
+  readonly base_url: string;
+  readonly email_from: string;
 
   constructor() {
     super();
@@ -20,20 +22,25 @@ export class NodemailerSendVerificationEmail
         pass: this.pass,
       },
     });
+    if (!process.env.BASE_URL) throw Error("BASE_URL env var cant be empty");
+    if (!process.env.EMAIL_FROM)
+      throw Error("EMAIL_FROM env var cant be empty");
+    this.base_url = process.env.BASE_URL;
+    this.email_from = process.env.EMAIL_FROM;
   }
 
   async send(props: { to: string; url: string }): Promise<void> {
     const result = await this.transport.sendMail({
-      from: process.env.EMAIL_FROM,
+      from: this.email_from,
       to: props.to,
-      subject: `Sign in to ${this.host}`,
+      subject: `Sign in to ${this.base_url}`,
       text: text({
-        url: props.url,
-        host: this.host,
+        url: `${this.base_url}${props.url}`,
+        host: this.base_url,
       }),
       html: html({
-        url: props.url,
-        host: this.host,
+        url: `${this.base_url}${props.url}`,
+        host: this.base_url,
         theme: { brandColor: undefined },
       }),
     });
