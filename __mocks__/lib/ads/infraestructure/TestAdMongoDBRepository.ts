@@ -1,24 +1,11 @@
 import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
+import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
-export class TestAdMongoDBRepository {
-  constructor() {}
-
+export class TestAdMongoDBRepository extends TestMongoDB {
   static async connectAndClean(): Promise<TestAdMongoDBRepository> {
-    const mongoIsDisonnected =
-      mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
-
-    if (mongoIsDisonnected) {
-      const mongoDBUrl = process.env.MONGODB_URL;
-      if (!mongoDBUrl) throw new Error("DB url doesn't provided");
-      await mongoose.connect(mongoDBUrl);
-    }
-    await AdModel.deleteMany({});
+    this.connectAndCleanModel(mongoose.model(AdModel.name, AdModel.schema));
     return new TestAdMongoDBRepository();
-  }
-
-  static async disconnect(): Promise<void> {
-    await mongoose.disconnect();
   }
 
   async saveMany(adsModel: AdModelProps[]): Promise<void> {

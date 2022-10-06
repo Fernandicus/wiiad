@@ -1,23 +1,12 @@
 import { AdvertiserModel } from "@/src/advertiser/infraestructure/AdvertiserModel";
 import mongoose from "mongoose";
+import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
-export class TestAdvertiserMongoDBRepo{
-    constructor() {}
-
-    static async connectAndClean(): Promise<TestAdvertiserMongoDBRepo> {
-      const mongoIsDisonnected =
-        mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
-  
-      if (mongoIsDisonnected) {
-        const mongoDBUrl = process.env.MONGODB_URL;
-        if (!mongoDBUrl) throw new Error("DB url doesn't provided");
-        await mongoose.connect(mongoDBUrl);
-      }
-      await AdvertiserModel.deleteMany({});
-      return new TestAdvertiserMongoDBRepo();
-    }
-  
-    static async disconnect(): Promise<void> {
-      await mongoose.disconnect();
-    }
+export class TestAdvertiserMongoDBRepo extends TestMongoDB {
+  static async connectAndClean(): Promise<TestAdvertiserMongoDBRepo> {
+    await this.connectAndCleanModel(
+      mongoose.model(AdvertiserModel.modelName, AdvertiserModel.schema)
+    );
+    return new TestAdvertiserMongoDBRepo();
+  }
 }

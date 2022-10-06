@@ -10,7 +10,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
   }, 8000);
 
   afterAll(async () => {
-    await TestAdMongoDBRepository.disconnect();
+    await TestAdMongoDBRepository.disconnectMongoDB();
   }, 8000);
 
   it(`WHEN sending a 'POST' request with all the required params, 

@@ -14,7 +14,7 @@ describe("On api/ads/remove-ad route", () => {
   }, 8000);
 
   afterAll(async () => {
-    await TestAdMongoDBRepository.disconnect()
+    await TestAdMongoDBRepository.disconnectMongoDB()
   }, 8000);
 
   it("When send 'DELETE' method with correct ad id response with status 200", async () => {

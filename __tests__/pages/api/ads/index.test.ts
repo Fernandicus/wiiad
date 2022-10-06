@@ -24,7 +24,7 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   }, 8000);
 
   afterAll(async () => {
-    await TestAdMongoDBRepository.disconnect();
+    await TestAdMongoDBRepository.disconnectMongoDB();
   }, 8000);
 
   it(`WHEN send a 'GET' request, 
