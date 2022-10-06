@@ -1,7 +1,7 @@
 import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
 import { AdMongoDBRepository } from "../ad/infraestructure/AdMongoDBRepository";
-import { VerificationTokenMongoDBRepo } from "../mailing/send-email-verification/infrastructure/VerificationTokenMongoDBRepo";
+import { VerificationEmailMongoDBRepo } from "../mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 
 export class MongoDB {
   private static async connect() {
@@ -24,9 +24,9 @@ export class MongoDB {
     }
   }
 
-  static async verificationTokenRepo():Promise<VerificationTokenMongoDBRepo>{
+  static async verificationEmailRepo():Promise<VerificationEmailMongoDBRepo>{
     await this.connect();
-    return new VerificationTokenMongoDBRepo();
+    return new VerificationEmailMongoDBRepo();
   }
 
   static async adRepository(): Promise<AdMongoDBRepository> {

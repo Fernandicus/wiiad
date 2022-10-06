@@ -5,7 +5,7 @@ import sendEmailVerification, {
 } from "@/pages/api/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
 
-describe("On api/auth/sign-up, GIVEN an user", () => {
+describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailBodyRequest;
   beforeAll(() => {
     user = { email: faker.internet.email(), userName: faker.name.firstName() };

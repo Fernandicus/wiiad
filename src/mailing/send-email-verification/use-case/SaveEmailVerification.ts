@@ -1,12 +1,12 @@
-import { IVerificationURLRepo } from "../domain/IVerificationURLRepo";
+import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
 import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
-import { IVerificationURLPropsPrimitives } from "../domain/VerificationURL";
+import { IVerificationEmailPropsPrimitives } from "../domain/VerificationURL";
 
 export class SaveEmailVerification {
-  constructor(private repository: IVerificationURLRepo) {}
+  constructor(private repository: IVerificationEmailRepo) {}
 
   async save(verificationTimer: VerificationEmailTimer): Promise<void> {
-    const verificationTimerPrimitives: IVerificationURLPropsPrimitives = {
+    const verificationTimerPrimitives: IVerificationEmailPropsPrimitives = {
       id: verificationTimer.id.id,
       email: verificationTimer.email.email,
       expirationDate: verificationTimer.expirationDate.date,

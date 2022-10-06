@@ -28,7 +28,7 @@ export default async function handler(
   try {
     const id = UniqId.generate();
 
-    const verificationTokenRepo = await MongoDB.verificationTokenRepo();
+    const verificationTokenRepo = await MongoDB.verificationEmailRepo();
     const saveEmailVerification = new SaveEmailVerification(
       verificationTokenRepo
     );
