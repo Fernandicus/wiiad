@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
 export class TestAdMongoDBRepository extends TestMongoDB {
-  static async connectAndClean(): Promise<TestAdMongoDBRepository> {
+  static async init(): Promise<TestAdMongoDBRepository> {
     this.connectAndCleanModel(mongoose.model(AdModel.name, AdModel.schema));
     return new TestAdMongoDBRepository();
   }

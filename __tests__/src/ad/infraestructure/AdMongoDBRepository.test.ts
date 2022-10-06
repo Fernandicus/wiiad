@@ -13,7 +13,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   let advertiserId: string;
 
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
+    const testAdRepo = await TestAdMongoDBRepository.init();
     const testCreateAd = new TestCreateAd(testAdRepo)
     const testCreateAdController = new TestCreateAdController(testCreateAd);
     const createdAdsData = await testCreateAdController.crateMany();

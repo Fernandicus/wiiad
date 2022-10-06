@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Model } = mongoose;
 
-export abstract class TestMongoDB {
+export class TestMongoDB {
 
   static async connectAndCleanModel<M extends typeof Model>(
     model: M

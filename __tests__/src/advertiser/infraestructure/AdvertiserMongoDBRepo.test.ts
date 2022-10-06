@@ -10,7 +10,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
   let advertiserRepo: AdvertiserMongoDBRepo;
 
   beforeAll(async () => {
-    await TestAdvertiserMongoDBRepo.connectAndClean();
+    await TestAdvertiserMongoDBRepo.init();
 
     advertiser = FakeAdvertiser.createPrimitives(AdvertiserRolType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();

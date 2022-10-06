@@ -16,7 +16,7 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let res: MockResponse<NextApiResponse>;
 
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.connectAndClean();
+    const testAdRepo = await TestAdMongoDBRepository.init();
     const testCreateAd = new TestCreateAd(testAdRepo);
     const controller = new TestCreateAdController(testCreateAd);
     const createAdsData = await controller.crateMany();

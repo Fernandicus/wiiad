@@ -6,7 +6,7 @@ import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infrae
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
   beforeAll(async () => {
-    await TestAdMongoDBRepository.connectAndClean();
+    await TestAdMongoDBRepository.init();
   }, 8000);
 
   afterAll(async () => {

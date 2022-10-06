@@ -10,7 +10,7 @@ import { TestCreateAdController } from "../../../../../__mocks__/lib/ads/control
 
 describe("On api/ads/remove-ad route", () => {
   beforeAll(async () => {
-    await TestAdMongoDBRepository.connectAndClean();
+    await TestAdMongoDBRepository.init();
   }, 8000);
 
   afterAll(async () => {
