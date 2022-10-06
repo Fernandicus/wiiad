@@ -1,7 +1,8 @@
 import { IEmailSender } from "../domain/IEmailSender";
+import { SMTPData } from "../domain/SMTPData";
 import { VerificationEmail } from "../domain/VerificationEmail";
 
-export class SendEmailVerification {
+export class SendlVerificationEmail {
   constructor(private emailSender: IEmailSender) {}
 
   async send(verificationEmail: VerificationEmail): Promise<void> {

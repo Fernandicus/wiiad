@@ -4,10 +4,12 @@ import { UniqId } from "@/src/utils/UniqId";
 import { SaveEmailVerification } from "@/src/mailing/send-email-verification/use-case/SaveEmailVerification";
 import { EmailVerificationTokenHandler } from "@/src/mailing/send-email-verification/handler/EmailVerificationTokenHandler";
 import { NodemailerSendVerificationEmail } from "@/src/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
-import { SendEmailVerification } from "@/src/mailing/send-email-verification/use-case/SendVerificationEmail";
+import { SendlVerificationEmail } from "@/src/mailing/send-email-verification/use-case/SendVerificationEmail";
 import { SendVerificationEmailHandler } from "@/src/mailing/send-email-verification/handler/SendVerificationEmailHandler";
 import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
+import { SMTPData } from "@/src/mailing/send-email-verification/domain/SMTPData";
+import { IEmailSender } from "@/src/mailing/send-email-verification/domain/IEmailSender";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;
@@ -43,7 +45,7 @@ export default async function handler(
 
     const nodemailerSender = new NodemailerSendVerificationEmail();
 
-    const sendEmail = new SendEmailVerification(nodemailerSender);
+    const sendEmail = new SendlVerificationEmail(nodemailerSender);
 
     const verificaitionEmailHandler = new SendVerificationEmailHandler(
       sendEmail

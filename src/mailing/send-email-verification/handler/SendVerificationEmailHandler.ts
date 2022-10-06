@@ -2,10 +2,10 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { VerificationEmail } from "../domain/VerificationEmail";
 import { VerificationTokenId } from "../domain/VerificationTokenId";
-import { SendEmailVerification } from "../use-case/SendVerificationEmail";
+import { SendlVerificationEmail } from "../use-case/SendVerificationEmail";
 
 export class SendVerificationEmailHandler {
-  constructor(private sendEmail: SendEmailVerification) {}
+  constructor(private sendEmail: SendlVerificationEmail) {}
 
   async send(props: {
     userName: string;
