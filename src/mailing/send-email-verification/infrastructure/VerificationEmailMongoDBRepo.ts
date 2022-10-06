@@ -1,5 +1,5 @@
+import { IVerificationEmailPropsPrimitives } from "../domain/IVerificationEmailPropsPrimitives";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
-import { IVerificationEmailPropsPrimitives } from "../domain/VerificationURL";
 import { VerificationEmailModel } from "./VerificationEmailModel";
 
 export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {

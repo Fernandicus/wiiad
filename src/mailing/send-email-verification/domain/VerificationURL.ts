@@ -2,12 +2,6 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { VerificationTokenId } from "./VerificationTokenId";
 
-export interface IVerificationEmailPropsPrimitives {
-  id: string;
-  expirationDate: Date;
-  email: string;
-}
-
 export interface IVerificationURLProps {
   userName: Name;
   to: Email;

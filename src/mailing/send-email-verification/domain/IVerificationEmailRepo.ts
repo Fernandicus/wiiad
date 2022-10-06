@@ -1,4 +1,4 @@
-import { VerificationURL, IVerificationEmailPropsPrimitives } from "./VerificationURL";
+import { IVerificationEmailPropsPrimitives } from "./IVerificationEmailPropsPrimitives";
 
 export interface IVerificationEmailRepo {
   save(model: IVerificationEmailPropsPrimitives): Promise<void>;
