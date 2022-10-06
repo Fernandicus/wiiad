@@ -1,4 +1,4 @@
-import { VerificationEmailModel } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailModel";
+import { VerificationEmailModel, VerificationEmailModelProps } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailModel";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
@@ -13,7 +13,7 @@ export class TestVerificationEmailMongoDBRepo extends TestMongoDB {
     return new TestVerificationEmailMongoDBRepo();
   }
 
-  async saveMany():Promise<void>{
-    
+  async saveMany(verificationEmailsModel: VerificationEmailModelProps[]): Promise<void> {
+    await VerificationEmailModel.insertMany(verificationEmailsModel);
   }
 }
