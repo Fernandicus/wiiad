@@ -1,14 +1,14 @@
 import { IEmailSender } from "../domain/IEmailSender";
 import { SMTPData } from "../domain/SMTPData";
-import { VerificationEmail } from "../domain/VerificationEmail";
+import { VerificationURL } from "../domain/VerificationURL";
 
 export class SendlVerificationEmail {
   constructor(private emailSender: IEmailSender) {}
 
-  async send(verificationEmail: VerificationEmail): Promise<void> {
+  async send(verificationURL: VerificationURL): Promise<void> {
     await this.emailSender.send({
-      to: verificationEmail.to.email,
-      url: verificationEmail.url,
+      to: verificationURL.to.email,
+      url: verificationURL.url,
     });
   }
 }

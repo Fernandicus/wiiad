@@ -2,21 +2,21 @@ import { Email } from "@/src/domain/Email";
 import { ExpirationDate } from "./ExpirationDate";
 import { VerificationTokenId } from "./VerificationTokenId";
 
-export interface IEmailVerificationProps {
+export interface IVerificationEmailTimerProps {
   id: VerificationTokenId;
   expirationDate: ExpirationDate;
   email: Email;
 }
 
-export class EmailVerification {
+export class VerificationEmailTimer {
   readonly id;
   readonly expirationDate;
   readonly email;
 
-  constructor({ id, expirationDate, email }: IEmailVerificationProps) {
-    this.id = id;
-    this.expirationDate = expirationDate;
-    this.email = email;
+  constructor(props: IVerificationEmailTimerProps) {
+    this.id = props.id;
+    this.expirationDate = props.expirationDate;
+    this.email = props.email;
   }
 
 }

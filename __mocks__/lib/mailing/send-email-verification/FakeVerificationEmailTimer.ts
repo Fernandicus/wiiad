@@ -1,24 +1,22 @@
 import { Email } from "@/src/domain/Email";
-import { IEmailVerificationProps } from "@/src/mailing/send-email-verification/domain/EmailVerification";
+import {
+  VerificationEmailTimer,
+  IVerificationEmailTimerProps,
+} from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ExpirationDate } from "@/src/mailing/send-email-verification/domain/ExpirationDate";
 import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
 import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 
-export class FakeEmailVerification {
-  readonly id;
-  readonly expirationDate;
-  readonly email;
-  constructor({ id, expirationDate, email }: IEmailVerificationProps) {
-    this.email = email;
-    this.expirationDate = expirationDate;
-    this.id = id;
+export class FakeVerificationEmailTimer extends VerificationEmailTimer {
+  constructor({ id, expirationDate, email }: IVerificationEmailTimerProps) {
+    super({ id, expirationDate, email });
   }
 
-  static create(): FakeEmailVerification {
+  static create(): FakeVerificationEmailTimer {
     const { email, expirationDate, id } = this.generateRandomData();
-    return new FakeEmailVerification({
+    return new FakeVerificationEmailTimer({
       id: new VerificationTokenId(id),
       email: new Email(email),
       expirationDate: new ExpirationDate(expirationDate),
