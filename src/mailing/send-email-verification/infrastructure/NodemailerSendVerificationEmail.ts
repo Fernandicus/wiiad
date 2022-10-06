@@ -2,6 +2,7 @@ import { createTransport, Transporter } from "nodemailer";
 import { ErrorSendingEmail } from "../domain/ErrorSendingEmail";
 import { IEmailSender } from "../domain/IEmailSender";
 import { SMTPData } from "../domain/SMTPData";
+import { VerificationURL } from "../domain/VerificationURL";
 
 export class NodemailerSendVerificationEmail
   extends SMTPData
@@ -29,10 +30,10 @@ export class NodemailerSendVerificationEmail
     this.email_from = process.env.EMAIL_FROM;
   }
 
-  async send(props: { to: string; url: string }): Promise<void> {
+  async send(props: VerificationURL): Promise<void> {
     const result = await this.transport.sendMail({
       from: this.email_from,
-      to: props.to,
+      to: props.to.email,
       subject: `Sign in to ${this.base_url}`,
       text: text({
         url: `${this.base_url}${props.url}`,

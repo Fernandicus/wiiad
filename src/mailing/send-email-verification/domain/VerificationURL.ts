@@ -8,16 +8,18 @@ export interface IVerificationURLPropsPrimitives {
   email: string;
 }
 
+export interface IVerificationURLProps {
+  userName: Name;
+  to: Email;
+  token: VerificationTokenId;
+}
+
 export class VerificationURL {
   readonly url;
   readonly to;
   readonly userName;
 
-  constructor(props: {
-    userName: Name;
-    to: Email;
-    token: VerificationTokenId;
-  }) {
+  constructor(props: IVerificationURLProps) {
     const { to, token, userName } = props;
     this.to = to;
     this.userName = userName;

@@ -6,9 +6,6 @@ export class SendlVerificationEmail {
   constructor(private emailSender: IEmailSender) {}
 
   async send(verificationURL: VerificationURL): Promise<void> {
-    await this.emailSender.send({
-      to: verificationURL.to.email,
-      url: verificationURL.url,
-    });
+    await this.emailSender.send(verificationURL);
   }
 }

@@ -8,8 +8,6 @@ import { SendlVerificationEmail } from "@/src/mailing/send-email-verification/us
 import { SendVerificationEmailHandler } from "@/src/mailing/send-email-verification/handler/SendVerificationEmailHandler";
 import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
-import { SMTPData } from "@/src/mailing/send-email-verification/domain/SMTPData";
-import { IEmailSender } from "@/src/mailing/send-email-verification/domain/IEmailSender";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;

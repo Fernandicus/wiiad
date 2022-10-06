@@ -1,3 +1,5 @@
+import { VerificationURL } from "./VerificationURL";
+
 export interface IEmailSender {
-  send(verificationEmail: { to: string; url: string }): Promise<void>;
+  send(verificationEmail: VerificationURL): Promise<void>;
 }
