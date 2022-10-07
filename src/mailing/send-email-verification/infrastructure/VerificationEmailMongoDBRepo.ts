@@ -1,9 +1,9 @@
-import { IVerificationEmailPropsPrimitives } from "../domain/IVerificationEmailPropsPrimitives";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
+import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
 import { VerificationEmailModel } from "./VerificationEmailModel";
 
 export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
-  async save(model: IVerificationEmailPropsPrimitives): Promise<void> {
+  async save(model: IVerificationEmailTimerPrimitives): Promise<void> {
     const verificationEmail = new VerificationEmailModel({
       _id: model.id,
       ...model,
@@ -13,13 +13,14 @@ export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
 
   async findById(
     id: string
-  ): Promise<IVerificationEmailPropsPrimitives | null> {
+  ): Promise<IVerificationEmailTimerPrimitives | null> {
     const model = await VerificationEmailModel.findById(id);
     if (!model) return null;
     return {
       id: model._id,
       email: model.email,
       expirationDate: model.expirationDate,
+      rol: model.rol,
     };
   }
 

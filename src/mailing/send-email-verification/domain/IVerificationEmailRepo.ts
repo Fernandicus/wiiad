@@ -1,7 +1,7 @@
-import { IVerificationEmailPropsPrimitives } from "./IVerificationEmailPropsPrimitives";
+import { IVerificationEmailTimerPrimitives } from "./VerificationEmailTimer";
 
 export interface IVerificationEmailRepo {
-  save(model: IVerificationEmailPropsPrimitives): Promise<void>;
-  findById(id: string): Promise<IVerificationEmailPropsPrimitives | null>;
+  save(model: IVerificationEmailTimerPrimitives): Promise<void>;
+  findById(id: string): Promise<IVerificationEmailTimerPrimitives | null>;
   remove(id: string): Promise<void>;
 }

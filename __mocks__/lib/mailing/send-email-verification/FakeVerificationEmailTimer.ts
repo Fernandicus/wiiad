@@ -9,52 +9,57 @@ import { VerificationTokenId } from "@/src/mailing/send-email-verification/domai
 import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
+import { Rol, RolType } from "@/src/domain/Rol";
 
 export class FakeVerificationEmailTimer extends VerificationEmailTimer {
-  constructor({ id, expirationDate, email }: IVerificationEmailTimerProps) {
-    super({ id, expirationDate, email });
+  constructor({ id, expirationDate, email, rol }: IVerificationEmailTimerProps) {
+    super({ id, expirationDate, email, rol });
   }
 
-  static create(): FakeVerificationEmailTimer {
-    const { email, expirationDate, id } = this.generateRandomData();
+  static create(roltype = RolType.BUSINESS): FakeVerificationEmailTimer {
+    const { email, expirationDate, id, rol } = this.generateRandomData(roltype);
     return new FakeVerificationEmailTimer({
       id: new VerificationTokenId(id),
       email: new Email(email),
       expirationDate: new ExpirationDate(expirationDate),
+      rol: new Rol(rol)
     });
   }
 
-  static createWithPrimitives(): IVerificationEmailTimerPrimitives {
-    const { email, expirationDate, id } = this.generateRandomData();
+  static createWithPrimitives(roltype = RolType.BUSINESS): IVerificationEmailTimerPrimitives {
+    const { email, expirationDate, id, rol } = this.generateRandomData(roltype);
     return {
       id,
       email,
       expirationDate,
+      rol,
     };
   }
 
   static createManyWithPrimitives(
-    amount = 5
+    amount = 5,
+    roltype = RolType.BUSINESS
   ): IVerificationEmailTimerPrimitives[] {
-    const vertificationEmailsPrimitives = this.generateMany(amount);
+    const vertificationEmailsPrimitives = this.generateMany(amount, roltype);
     return vertificationEmailsPrimitives;
   }
 
-  static createMany(amount = 5): FakeVerificationEmailTimer[] {
-    const vertificationEmailsPrimitives = this.generateMany(amount);
+  static createMany(amount = 5, roltype: RolType): FakeVerificationEmailTimer[] {
+    const vertificationEmailsPrimitives = this.generateMany(amount, roltype);
     const vertificationEmails = vertificationEmailsPrimitives.map(
       (verificationEmail): FakeVerificationEmailTimer => {
         return {
           id: new VerificationTokenId(verificationEmail.id),
           email: new Email(verificationEmail.email),
           expirationDate: new ExpirationDate(verificationEmail.expirationDate),
+          rol: new Rol(verificationEmail.rol)
         };
       }
     );
     return vertificationEmails;
   }
 
-  private static generateRandomData(): IVerificationEmailTimerPrimitives {
+  private static generateRandomData(rol: RolType): IVerificationEmailTimerPrimitives {
     const email = faker.internet.email();
     const in5min = new Date(Date.now() + EmailVerificationConstants.fiveMin);
     const in24Hours = new Date(
@@ -62,15 +67,16 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     );
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
-    return { email, id, expirationDate };
+    return { email, id, expirationDate, rol };
   }
 
   private static generateMany(
-    amount: number
+    amount: number,
+    rol: RolType,
   ): IVerificationEmailTimerPrimitives[] {
     let verificationEmails: IVerificationEmailTimerPrimitives[] = [];
     for (var i = 0; i <= amount - 1; i++) {
-      verificationEmails.push(this.generateRandomData());
+      verificationEmails.push(this.generateRandomData(rol));
     }
     return verificationEmails;
   }

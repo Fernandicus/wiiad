@@ -12,6 +12,7 @@ import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/
 export interface ISendVerificationEmailBodyRequest {
   email: string;
   userName: string;
+  rol: string;
 }
 
 export default async function handler(
@@ -22,7 +23,11 @@ export default async function handler(
 
   const reqBody: ISendVerificationEmailBodyRequest = req.body; //JSON.parse(req.body);
 
-  if (reqBody.email == undefined || reqBody.userName == undefined)
+  if (
+    reqBody.email == undefined ||
+    reqBody.userName == undefined ||
+    reqBody.rol == undefined
+  )
     return res.status(400).json({});
 
   try {
@@ -39,6 +44,7 @@ export default async function handler(
     await verificationTokenHandler.saveWithExpirationIn5min({
       email: reqBody.email,
       id,
+      rol: reqBody.rol,
     });
 
     const nodemailerSender = new NodemailerSendVerificationEmail();
@@ -48,6 +54,7 @@ export default async function handler(
     const verificaitionEmailHandler = new SendVerificationEmailHandler(
       sendEmail
     );
+    
     await verificaitionEmailHandler.send({
       id,
       email: reqBody.email,

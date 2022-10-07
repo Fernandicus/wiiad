@@ -7,14 +7,14 @@ export interface IVerificationEmailTimerPrimitives {
   email: string;
   id: string;
   expirationDate: Date;
-  rol: RolType;
+  rol: string;
 }
 
 export interface IVerificationEmailTimerProps {
   id: VerificationTokenId;
   expirationDate: ExpirationDate;
   email: Email;
-  rol: RolType;
+  rol: Rol;
 }
 
 export class VerificationEmailTimer {

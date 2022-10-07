@@ -13,6 +13,10 @@ const verificationEmailSchema = new Schema(
       required: true,
       match: /.+\@.+\..+/,
     },
+    rol: {
+      type: String,
+      required: true,
+    },
   },
   { _id: false }
 );
@@ -21,6 +25,7 @@ export interface VerificationEmailModelProps {
   _id: string;
   expirationDate: Date;
   email: string;
+  rol: string;
 }
 
 export const VerificationEmailModel = mongoose.model(

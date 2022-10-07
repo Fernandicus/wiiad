@@ -7,11 +7,11 @@ export enum RolType {
 export class Rol {
   readonly rol;
 
-  constructor(rolType: RolType) {
+  constructor(rolType: RolType | string) {
     const rolTypes = Object.values(RolType);
     const rolFound = rolTypes.find((rol) => rol == rolType);
 
-    if (!rolFound) throw new Error("Rol do not exist");
+    if (!rolFound) throw new Error(`Rol do not exist: ${rolType}`);
     this.rol = rolType;
   }
 }

@@ -14,7 +14,7 @@ export interface AdvertiserPropsPrimitives {
   id: string;
   name: string;
   email: string;
-  rol: RolType;
+  rol: string;
 }
 
 export class Advertiser {
