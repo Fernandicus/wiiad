@@ -2,9 +2,9 @@ import { Advertiser } from "@/src/advertiser/domain/Advertiser";
 import { ErrorCreatingAdvertiser } from "@/src/advertiser/domain/ErrorCreatingAdvertiser";
 import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
 import {
-  AdvertiserRol,
-  AdvertiserRolType,
-} from "@/src/advertiser/domain/value-objects/AdvertiserRol";
+  Rol,
+  RolType,
+} from "@/src/domain/Rol";
 import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
@@ -20,7 +20,7 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
       id: new AdvertiserId(UniqId.generate()),
       name: new Name("NAME"),
       email: new Email("test@test.com"),
-      rol: new AdvertiserRol(AdvertiserRolType.BUSINESS),
+      rol: new Rol(RolType.BUSINESS),
     });
     advertiserRepoMock = {
       findById: jest.fn(),

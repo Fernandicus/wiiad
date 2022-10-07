@@ -4,6 +4,7 @@ import { AdvertiserCreatorHandler } from "@/src/advertiser/handler/AdvertiserCre
 import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
+import { RolType } from "@/src/domain/Rol";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,6 +13,12 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   const reqBody: AdvertiserPropsPrimitives = req.body;
+
+  if (reqBody.rol === RolType.USER || !reqBody.rol) {
+    return res.status(400).json({
+      message: `Cant create an advertiser with this rol ${reqBody.rol}`,
+    });
+  }
 
   try {
     const advertiserRepo = await MongoDB.advertiserRepo();

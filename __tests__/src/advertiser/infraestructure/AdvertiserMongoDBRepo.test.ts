@@ -1,5 +1,5 @@
 import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserRolType } from "@/src/advertiser/domain/value-objects/AdvertiserRol";
+import { RolType } from "@/src/domain/Rol";
 import { AdvertiserModel } from "@/src/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
@@ -12,7 +12,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
   beforeAll(async () => {
     await TestAdvertiserMongoDBRepo.init();
 
-    advertiser = FakeAdvertiser.createPrimitives(AdvertiserRolType.BUSINESS);
+    advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);
 

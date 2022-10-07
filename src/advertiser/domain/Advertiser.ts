@@ -1,20 +1,20 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { AdvertiserId } from "./value-objects/AdvertiserId";
-import { AdvertiserRol } from "./value-objects/AdvertiserRol";
+import { Rol, RolType } from "../../domain/Rol";
 
 export interface AdvertiserProps {
   id: AdvertiserId;
   name: Name;
   email: Email;
-  rol: AdvertiserRol;
+  rol: Rol;
 }
 
 export interface AdvertiserPropsPrimitives {
   id: string;
   name: string;
   email: string;
-  rol: string;
+  rol: RolType;
 }
 
 export class Advertiser {

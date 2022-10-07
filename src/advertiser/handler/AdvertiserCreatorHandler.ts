@@ -2,7 +2,7 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { Advertiser, AdvertiserPropsPrimitives } from "../domain/Advertiser";
 import { AdvertiserId } from "../domain/value-objects/AdvertiserId";
-import { AdvertiserRol } from "../domain/value-objects/AdvertiserRol";
+import { Rol } from "../../domain/Rol";
 import { CreateAdvertiser } from "../use-case/CreateAdvertiser";
 
 export class AdvertiserCreatorHandler {
@@ -13,7 +13,7 @@ export class AdvertiserCreatorHandler {
       id: new AdvertiserId(advertiserProps.id),
       email: new Email(advertiserProps.email),
       name: new Name(advertiserProps.name),
-      rol: new AdvertiserRol(advertiserProps.rol),
+      rol: new Rol(advertiserProps.rol),
     });
     await this.createAdvertiser.create(advertiser);
   }

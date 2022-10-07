@@ -3,7 +3,7 @@ import {
   Advertiser,
   AdvertiserPropsPrimitives,
 } from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserRolType } from "@/src/advertiser/domain/value-objects/AdvertiserRol";
+import { RolType } from "@/src/domain/Rol";
 import { NextApiRequest, NextApiResponse } from "next";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/advertiser/FakeAdvertiser";
@@ -12,7 +12,7 @@ describe("On api/advertiser/create, GIVEN an Advertiser ", () => {
   let advertiser: AdvertiserPropsPrimitives;
 
   beforeAll(() => {
-    advertiser = FakeAdvertiser.createPrimitives(AdvertiserRolType.BUSINESS);
+    advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
   });
 
   it(`WHEN send a POST request with advertiser data,
