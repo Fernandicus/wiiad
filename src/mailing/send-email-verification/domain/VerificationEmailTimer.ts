@@ -2,6 +2,12 @@ import { Email } from "@/src/domain/Email";
 import { ExpirationDate } from "./ExpirationDate";
 import { VerificationTokenId } from "./VerificationTokenId";
 
+export interface IVerificationEmailTimerPrimitives {
+  email: string;
+  id: string;
+  expirationDate: Date;
+}
+
 export interface IVerificationEmailTimerProps {
   id: VerificationTokenId;
   expirationDate: ExpirationDate;

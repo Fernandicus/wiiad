@@ -2,18 +2,13 @@ import { Email } from "@/src/domain/Email";
 import {
   VerificationEmailTimer,
   IVerificationEmailTimerProps,
+  IVerificationEmailTimerPrimitives,
 } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ExpirationDate } from "@/src/mailing/send-email-verification/domain/ExpirationDate";
 import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
 import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-
-interface FakeVerificationEmailTimerPrimitives {
-  email: string;
-  id: string;
-  expirationDate: Date;
-}
 
 export class FakeVerificationEmailTimer extends VerificationEmailTimer {
   constructor({ id, expirationDate, email }: IVerificationEmailTimerProps) {
@@ -29,19 +24,37 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     });
   }
 
+  static createWithPrimitives(): IVerificationEmailTimerPrimitives {
+    const { email, expirationDate, id } = this.generateRandomData();
+    return {
+      id,
+      email,
+      expirationDate,
+    };
+  }
+
+  static createManyWithPrimitives(
+    amount = 5
+  ): IVerificationEmailTimerPrimitives[] {
+    const vertificationEmailsPrimitives = this.generateMany(amount);
+    return vertificationEmailsPrimitives;
+  }
+
   static createMany(amount = 5): FakeVerificationEmailTimer[] {
     const vertificationEmailsPrimitives = this.generateMany(amount);
-    const vertificationEmails = vertificationEmailsPrimitives.map((verificationEmail):FakeVerificationEmailTimer=>{
-      return {
-        id: new VerificationTokenId(verificationEmail.id),
-        email: new Email(verificationEmail.email),
-        expirationDate: new ExpirationDate(verificationEmail.expirationDate),
+    const vertificationEmails = vertificationEmailsPrimitives.map(
+      (verificationEmail): FakeVerificationEmailTimer => {
+        return {
+          id: new VerificationTokenId(verificationEmail.id),
+          email: new Email(verificationEmail.email),
+          expirationDate: new ExpirationDate(verificationEmail.expirationDate),
+        };
       }
-    })
+    );
     return vertificationEmails;
   }
 
-  private static generateRandomData(): FakeVerificationEmailTimerPrimitives {
+  private static generateRandomData(): IVerificationEmailTimerPrimitives {
     const email = faker.internet.email();
     const in5min = new Date(Date.now() + EmailVerificationConstants.fiveMin);
     const in24Hours = new Date(
@@ -49,15 +62,16 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     );
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
-
+    console.log(id);
     return { email, id, expirationDate };
   }
 
   private static generateMany(
     amount: number
-  ): FakeVerificationEmailTimerPrimitives[] {
-    let verificationEmails: FakeVerificationEmailTimerPrimitives[] = [];
+  ): IVerificationEmailTimerPrimitives[] {
+    let verificationEmails: IVerificationEmailTimerPrimitives[] = [];
     for (var i = 0; i <= amount - 1; i++) {
+      console.log(i);
       verificationEmails.push(this.generateRandomData());
     }
     return verificationEmails;

@@ -6,7 +6,7 @@ describe("On SaveEmailVerification, GIVEN a VerificationURLRepo and a Verificati
   let verificationURLRepo: IVerificationEmailRepo;
   let emailTimer: FakeVerificationEmailTimer;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     verificationURLRepo = {
       save: jest.fn(),
       remove: jest.fn(),
@@ -24,7 +24,6 @@ describe("On SaveEmailVerification, GIVEN a VerificationURLRepo and a Verificati
       expirationDate: emailTimer.expirationDate.date,
       id: emailTimer.id.id,
     };
-
     expect(verificationURLRepo.save).toBeCalledWith(
       emailTimerPrimitives
     );

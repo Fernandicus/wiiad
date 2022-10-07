@@ -1,4 +1,8 @@
-import { VerificationEmailModel, VerificationEmailModelProps } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailModel";
+import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
+import {
+  VerificationEmailModel,
+  VerificationEmailModelProps,
+} from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailModel";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
@@ -13,7 +17,17 @@ export class TestVerificationEmailMongoDBRepo extends TestMongoDB {
     return new TestVerificationEmailMongoDBRepo();
   }
 
-  async saveMany(verificationEmailsModel: VerificationEmailModelProps[]): Promise<void> {
-    await VerificationEmailModel.insertMany(verificationEmailsModel);
+  async saveMany(
+    verificationEmailProps: IVerificationEmailTimerPrimitives[]
+  ): Promise<void> {
+    const models = verificationEmailProps.map(
+      (model): VerificationEmailModelProps => {
+        return {
+          _id: model.id,
+          ...model,
+        };
+      }
+    );
+    await VerificationEmailModel.insertMany(models);
   }
 }

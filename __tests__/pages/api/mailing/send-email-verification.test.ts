@@ -4,10 +4,12 @@ import sendEmailVerification, {
   ISendVerificationEmailBodyRequest,
 } from "@/pages/api/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
+import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailBodyRequest;
-  beforeAll(() => {
+  beforeAll(async () => {
+    await TestVerificationEmailMongoDBRepo.init();
     user = { email: faker.internet.email(), userName: faker.name.firstName() };
   });
 
