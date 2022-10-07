@@ -11,10 +11,19 @@ export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
     await verificationEmail.save();
   }
 
-  findById(id: string): Promise<IVerificationEmailPropsPrimitives | null> {
-    throw new Error("Method not implemented.");
+  async findById(
+    id: string
+  ): Promise<IVerificationEmailPropsPrimitives | null> {
+    const model = await VerificationEmailModel.findById(id);
+    if (!model) return null;
+    return {
+      id: model._id,
+      email: model.email,
+      expirationDate: model.expirationDate,
+    };
   }
-  remove(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async remove(id: string): Promise<void> {
+    await VerificationEmailModel.findByIdAndDelete(id);
   }
 }

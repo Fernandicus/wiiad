@@ -1,9 +1,9 @@
 import { Ad, AdPropsPrimitives } from "@/src/ad/domain/Ad";
 import { AdModelProps } from "@/src/ad/infraestructure/AdModel";
-import { TestRepository } from "../domain/TestRepository";
+import { TestAdRepository } from "../domain/TestAdRepository";
 
 export class TestCreateAd {
-  constructor(private repository: TestRepository) {}
+  constructor(private repository: TestAdRepository) {}
 
   async saveMany(ads: Ad[]): Promise<void> {
     const adsPrimitves = this.toPrimitives(ads);

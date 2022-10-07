@@ -62,7 +62,6 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     );
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
-    console.log(id);
     return { email, id, expirationDate };
   }
 
@@ -71,7 +70,6 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
   ): IVerificationEmailTimerPrimitives[] {
     let verificationEmails: IVerificationEmailTimerPrimitives[] = [];
     for (var i = 0; i <= amount - 1; i++) {
-      console.log(i);
       verificationEmails.push(this.generateRandomData());
     }
     return verificationEmails;
