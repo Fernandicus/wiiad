@@ -8,15 +8,15 @@ export class ValidateVerificationEmail {
   async validate(token: string): Promise<IVerificationEmailTimerPrimitives> {
     const verificationEmail = await this.repository.findById(token);
     if (!verificationEmail) throw new ErrorLogIn("Verification Email not found");
-    this.checkExpirationDate(verificationEmail);
-    await this.repository.remove(verificationEmail.id);
+    await this.checkExpirationDate(verificationEmail);
     return verificationEmail;
   }
 
-  private checkExpirationDate(
+  private async checkExpirationDate(
     verificationEmail: IVerificationEmailTimerPrimitives
-  ): void {
+  ): Promise<void> {
     const emailExpiration = verificationEmail.expirationDate;
+    await this.repository.remove(verificationEmail.id);
     if (this.hasExpired(emailExpiration)) {
       throw new ErrorLogIn("Verification Token has expired");
     }

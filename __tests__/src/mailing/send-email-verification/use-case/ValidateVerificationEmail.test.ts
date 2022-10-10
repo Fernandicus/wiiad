@@ -55,7 +55,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     };
     const verifyEmail = new ValidateVerificationEmail(mockedRepo);
 
-    expect(async () => {
+    await expect(async () => {
       await verifyEmail.validate("0");
     }).rejects.toThrowError(ErrorLogIn);
   });

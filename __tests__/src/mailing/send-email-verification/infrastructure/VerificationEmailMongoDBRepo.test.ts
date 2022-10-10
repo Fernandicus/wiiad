@@ -2,6 +2,7 @@ import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/mailing
 import { TestVerificationEmailMongoDBRepo } from "../../../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { VerificationEmailMongoDBRepo } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
+import { RolType } from "@/src/domain/Rol";
 
 describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in MongoDB", () => {
   let verificationEmailMongoRepo: TestVerificationEmailMongoDBRepo;
@@ -21,7 +22,10 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
 
   it(`WHEN call the VerificationEmailMongoDBRepo save method, 
   THEN WHEN call the findById method the verification email should be found in MongoDB`, async () => {
-    const verificationEmail = FakeVerificationEmailTimer.createWithPrimitives();
+    const verificationEmail = FakeVerificationEmailTimer.createWithPrimitives({
+      roltype: RolType.BUSINESS,
+      hasExpired: false
+    });
     await verificationEmailMongoDBRepo.save(verificationEmail);
     const verificationEmailFound = await verificationEmailMongoDBRepo.findById(
       verificationEmail.id
