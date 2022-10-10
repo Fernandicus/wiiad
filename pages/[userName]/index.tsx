@@ -6,6 +6,7 @@ import { EmailVerificationConstants } from "@/src/mailing/send-email-verificatio
 import { VerificationEmailMongoDBRepo } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import { GetServerSideProps, NextPage } from "next";
 import jwt from "jsonwebtoken";
+import { ValidateVerificationEmail } from "@/src/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 
 export interface IProfilePageProps {
   userName: string;
@@ -44,17 +45,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryData = new LogInQueryParams(query, params);
 
     const verificatioEmailRepo = await MongoDB.verificationEmailRepo();
-    const verificationEmail = await verificatioEmailRepo.findById(queryData.token);
 
     //TODO: use-case ValidateVerificationEmail
-    if (!verificationEmail) throw new ErrorLogIn("Missing Verification Email");
-    if (
-      verificationEmail.expirationDate.getTime() <
-      new Date(Date.now()).getTime()
-    ) {
-      await verificatioEmailRepo.remove(verificationEmail.id);
-      throw new ErrorLogIn("Verification Token has expired");
-    }
+    const validateEmail = new ValidateVerificationEmail(verificatioEmailRepo);
+    const verificationEmail = await validateEmail.validate(queryData.token);
 
     //TODO: use-case CreateJWT
     const payload: IJWTProps = {

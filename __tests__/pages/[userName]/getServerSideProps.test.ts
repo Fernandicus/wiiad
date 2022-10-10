@@ -40,7 +40,7 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     })) as { props: {}; redirect: string };
 
     expect(resp.redirect).toBe("/");
-  });
+  }, 12000);
 
   it(`WHEN send an url with an expired token, 
   THEN return redirect to home page '/' and verification email should be removed`, async () => {
@@ -61,7 +61,7 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
 
     expect(resp.redirect).toBe("/");
     expect(verificationEmailFound).toBe(null);
-  });
+  },12000);
 
   it(`WHEN send a req with the url with valid params of an existing verification email, 
   THEN verification email should be removed and return a valid JWT`, async () => {
@@ -92,5 +92,5 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     expect(token.email).toBe(verificationEmail);
     expect(token.userName).toBe(verificationName);
     expect(token.rol).not.toBe(null);
-  });
+  },12000);
 });
