@@ -1,12 +1,13 @@
-import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { LogInQueryParams } from "@/src/domain/LogInQueryParams";
-import { Rol, RolType } from "@/src/domain/Rol";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
-import { VerificationEmailMongoDBRepo } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import { GetServerSideProps, NextPage } from "next";
 import jwt from "jsonwebtoken";
 import { ValidateVerificationEmail } from "@/src/mailing/send-email-verification/use-case/ValidateVerificationEmail";
+import { JsonWebTokenNPM } from "@/src/mailing/send-email-verification/infrastructure/JsonWebTokenNPM";
+import { ManageJWT } from "@/src/mailing/send-email-verification/use-case/ManageJWT";
+import { Advertiser } from "@/src/advertiser/domain/Advertiser";
+import { Email } from "@/src/domain/Email";
+import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
 
 export interface IProfilePageProps {
   userName: string;
@@ -45,10 +46,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryData = new LogInQueryParams(query, params);
 
     const verificatioEmailRepo = await MongoDB.verificationEmailRepo();
-
-    //TODO: use-case ValidateVerificationEmail
     const validateEmail = new ValidateVerificationEmail(verificatioEmailRepo);
     const verificationEmail = await validateEmail.validate(queryData.token);
+
+
+    //TODO: Find Advertiser/User and get id
 
     //TODO: use-case CreateJWT
     const payload: IJWTProps = {
@@ -59,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const jwToken = jwt.sign(payload, process.env.JWT_SECRET!);
 
     //TODO: use-case Remove VerificationEmail
-    
+
     await verificatioEmailRepo.remove(verificationEmail.id);
 
     await MongoDB.disconnect();
@@ -70,7 +72,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     } as IUserNameSSPResponse;
   } catch (err) {
-    
     return {
       props: {},
       redirect: "/",

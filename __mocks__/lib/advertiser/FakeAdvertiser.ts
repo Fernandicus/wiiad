@@ -18,7 +18,7 @@ export class FakeAdvertiser extends Advertiser {
     super(props);
   }
 
-  static create(rol: RolType): FakeAdvertiser {
+  static create(rol = RolType.BUSINESS): FakeAdvertiser {
     const primaryData = this.generateFakeData();
     const advertiser = this.generateAdvertiser({
       ...primaryData,
