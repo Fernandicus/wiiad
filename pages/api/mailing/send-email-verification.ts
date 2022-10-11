@@ -8,6 +8,7 @@ import { SendlVerificationEmail } from "@/src/mailing/send-email-verification/us
 import { SendVerificationEmailHandler } from "@/src/mailing/send-email-verification/handler/SendVerificationEmailHandler";
 import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
+import { verificationEmailHandler, sendEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;
@@ -33,29 +34,15 @@ export default async function handler(
   try {
     const id = UniqId.generate();
 
-    const verificationTokenRepo = await MongoDB.verificationEmailRepo();
-    const saveEmailVerification = new SaveEmailVerification(
-      verificationTokenRepo
-    );
+    await MongoDB.connect()
 
-    const verificationTokenHandler = new EmailVerificationTokenHandler(
-      saveEmailVerification
-    );
-    await verificationTokenHandler.saveWithExpirationIn5min({
+    await verificationEmailHandler.saveWithExpirationIn5min({
       email: reqBody.email,
       id,
       rol: reqBody.rol,
     });
-
-    const nodemailerSender = new NodemailerSendVerificationEmail();
-
-    const sendEmail = new SendlVerificationEmail(nodemailerSender);
-
-    const verificaitionEmailHandler = new SendVerificationEmailHandler(
-      sendEmail
-    );
     
-    await verificaitionEmailHandler.send({
+    await sendEmailHandler.send({
       id,
       email: reqBody.email,
       userName: reqBody.userName,

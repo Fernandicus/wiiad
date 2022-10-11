@@ -4,7 +4,7 @@ import { AdMongoDBRepository } from "../ad/infraestructure/AdMongoDBRepository";
 import { VerificationEmailMongoDBRepo } from "../mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 
 export class MongoDB {
-  private static async connect() {
+  static async connect() {
     const mongoIsDisonnected =
       mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
 
