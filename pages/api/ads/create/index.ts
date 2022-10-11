@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { AdCreatorHandler } from "@/src/ad/handler/AdCreatorHandler";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { CreateAd } from "@/src/ad/use-case/CreateAd";
+import { adCreatorHandler } from "@/src/ad/ad-container";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -13,10 +14,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const reqBody: AdPropsPrimitives = req.body;
 
-    const adRepository = await MongoDB.adRepository();
-    const createAd = new CreateAd(adRepository);
-
-    const adCreatorHandler = new AdCreatorHandler(createAd);
+    await MongoDB.connect();
+    
     await adCreatorHandler.create(reqBody);
 
     await MongoDB.disconnect();

@@ -2,6 +2,7 @@ import { AdFinderHandler } from "@/src/ad/handler/AdFinderHandler";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { FindAds } from "@/src/ad/use-case/FindAds";
 import { NextApiRequest, NextApiResponse } from "next";
+import { adFinderHandler } from "@/src/ad/ad-container";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,10 +13,8 @@ export default async function handler(
   const reqBody: { id: string } = req.body;
 
   try {
-    const adRepository = await MongoDB.adRepository();
-    const findAds = new FindAds(adRepository);
-
-    const adFinderHandler = new AdFinderHandler(findAds);
+    await MongoDB.connect();
+    
     const adsFound = await adFinderHandler.findAllToJSON(reqBody.id);
 
     await MongoDB.disconnect();
