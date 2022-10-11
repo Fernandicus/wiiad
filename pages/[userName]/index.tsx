@@ -13,6 +13,9 @@ import { AdvertiserCreatorHandler } from "@/src/advertiser/handler/AdvertiserCre
 import { UniqId } from "@/src/utils/UniqId";
 import { Rol } from "@/src/domain/Rol";
 import { Name } from "@/src/domain/Name";
+import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
+import { ValidateEmailHandler } from "@/src/mailing/send-email-verification/handler/ValidateEmailHandler";
+import { validateEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
 
 export interface IProfilePageProps {
   userName: string;
@@ -42,17 +45,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query, params } = context;
 
   try {
-    const queryData = new LogInQueryParams(query, params);
+    const logInData = new LogInQueryParams(query, params);
 
     const verificatioEmailRepo = await MongoDB.verificationEmailRepo();
-    const validateEmail = new ValidateVerificationEmail(verificatioEmailRepo);
-    const verificationEmail = await validateEmail.validate(queryData.token);
+    const verificationEmail = await validateEmailHandler.validateToken(
+      logInData.token
+    );
 
     //TODO: Find Advertiser/User and get id
     const advertiserRepo = await MongoDB.advertiserRepo();
     const findAdvertiser = new FindAdvertiser(advertiserRepo);
     const advertiserPrimitives = await findAdvertiser.byEmail(
-      new Email(verificationEmail.email)
+      verificationEmail.email
     );
 
     //TODO: If is new Advertiser create new
@@ -62,9 +66,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const advertiserHandler = new AdvertiserCreatorHandler(createAdvertiser);
       advertiserId = UniqId.generate();
       await advertiserHandler.create({
-        email: verificationEmail.email,
-        name: queryData.userName,
-        rol: verificationEmail.rol,
+        email: verificationEmail.email.email,
+        name: logInData.userName,
+        rol: verificationEmail.rol.rol,
         id: advertiserId,
       });
     } else {
@@ -76,14 +80,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const manageJWT = new ManageJWT(jwtRepo);
     const payload = new Advertiser({
       id: new AdvertiserId(advertiserId),
-      email: new Email(verificationEmail.email),
-      rol: new Rol(verificationEmail.rol),
-      name: new Name(queryData.userName),
+      email: verificationEmail.email,
+      rol: verificationEmail.rol,
+      name: new Name(logInData.userName),
     });
     const jwt = manageJWT.createAdvertiserToken(payload);
 
     //TODO: use-case Remove VerificationEmail
-    await verificatioEmailRepo.remove(verificationEmail.id);
+    await verificatioEmailRepo.remove(verificationEmail.id.id);
 
     await MongoDB.disconnect();
 
