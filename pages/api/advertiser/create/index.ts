@@ -5,6 +5,7 @@ import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
 import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { RolType } from "@/src/domain/Rol";
+import { advertiserHandler } from "@/src/advertiser/advertiser-container";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,10 +22,8 @@ export default async function handler(
   }
 
   try {
-    const advertiserRepo = await MongoDB.advertiserRepo();
-    const createAdvertiser = new CreateAdvertiser(advertiserRepo);
-
-    const advertiserHandler = new AdvertiserCreatorHandler(createAdvertiser);
+    await MongoDB.connect();
+    
     const uniqId = UniqId.generate();
     await advertiserHandler.create({ ...reqBody, id: uniqId });
 
