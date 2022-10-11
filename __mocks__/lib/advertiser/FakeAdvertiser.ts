@@ -27,7 +27,7 @@ export class FakeAdvertiser extends Advertiser {
     return new FakeAdvertiser({ ...advertiser });
   }
 
-  static createPrimitives(rol: RolType): AdvertiserPropsPrimitives {
+  static createPrimitives(rol = RolType.BUSINESS): AdvertiserPropsPrimitives {
     const primaryData = this.generateFakeData();
     return {
       ...primaryData,

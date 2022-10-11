@@ -18,7 +18,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
 
   afterAll(async () => {
     await TestAdvertiserMongoDBRepo.disconnectMongoDB();
-  },8000);
+  }, 8000);
 
   it("WHEN call advertiser repository save method, THEN advertiser is saved in MongoDB", async () => {
     await advertiserRepo.save(advertiser);
@@ -26,17 +26,31 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
     expect(advertiserFound?.name).toBe(advertiser.name);
     expect(advertiserFound?.email).toBe(advertiser.email);
     expect(advertiserFound?.rol).toBe(advertiser.rol);
-  },8000);
+  }, 8000);
 
   it("WHEN call advertiser repository findById method, THEN return the saved advertiser in MongoDB", async () => {
     const advertiserFound = await advertiserRepo.findById(advertiser.id);
     expect(advertiserFound?.name).toBe(advertiser.name);
     expect(advertiserFound?.email).toBe(advertiser.email);
     expect(advertiserFound?.rol).toBe(advertiser.rol);
-  },8000);
+  }, 8000);
 
   it("WHEN call findById with a non existing ID, THEN return null", async () => {
     const advertiserFound = await advertiserRepo.findById("12345");
     expect(advertiserFound).toBe(null);
-  },8000);
+  }, 8000);
+
+  it(`WHEN call advertiser repository findByEmail method, 
+  THEN return the saved advertiser in MongoDB`, async () => {
+    const advertiserFound = await advertiserRepo.findByEmail(advertiser.email);
+    expect(advertiserFound?.name).toBe(advertiser.name);
+    expect(advertiserFound?.email).toBe(advertiser.email);
+    expect(advertiserFound?.rol).toBe(advertiser.rol);
+  }, 8000);
+
+  it(`WHEN call advertiser repository findByEmail method for a non existing advertiser email, 
+  THEN return the saved advertiser in MongoDB`, async () => {
+    const advertiserFound = await advertiserRepo.findByEmail("xxx@xxx.com");
+    expect(advertiserFound).toBe(null);
+  }, 8000);
 });
