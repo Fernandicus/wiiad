@@ -21,4 +21,15 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
       rol: advertiserModel.rol,
     };
   }
+
+  async findByEmail(email: string): Promise<AdvertiserPropsPrimitives | null> {
+    const advertiserModel = await AdvertiserModel.findOne<AdvertiserModelProps>({email});
+    if (!advertiserModel) return null;
+  return {
+    id: advertiserModel._id,
+    name: advertiserModel.name,
+    email: advertiserModel.email,
+    rol: advertiserModel.rol,
+  };
+  }
 }
