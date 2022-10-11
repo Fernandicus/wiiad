@@ -15,7 +15,10 @@ import { Rol } from "@/src/domain/Rol";
 import { Name } from "@/src/domain/Name";
 import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
 import { ValidateEmailHandler } from "@/src/mailing/send-email-verification/handler/ValidateEmailHandler";
-import { validateEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
+import {
+  jwtHandler,
+  validateEmailHandler,
+} from "@/src/mailing/send-email-verification/email-verification-container";
 import {
   createAdvertiserHandler,
   findAdvertiserHandler,
@@ -77,15 +80,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     //TODO: use-case CreateJWT
-    const jwtRepo = new JsonWebTokenNPM();
-    const manageJWT = new ManageJWT(jwtRepo);
-    const payload = new Advertiser({
-      id: new AdvertiserId(advertiserId),
-      email: new Email(verificationEmail.email),
-      rol: new Rol(verificationEmail.rol),
-      name: new Name(logInData.userName),
+    const jwt = jwtHandler.advertiserToken({
+      id: advertiserId,
+      email: verificationEmail.email,
+      rol: verificationEmail.rol,
+      name: logInData.userName,
     });
-    const jwt = manageJWT.createAdvertiserToken(payload);
 
     //TODO: use-case Remove VerificationEmail
     await verificatioEmailRepo.remove(verificationEmail.id);
