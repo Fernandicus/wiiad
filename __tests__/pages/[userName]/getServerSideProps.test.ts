@@ -1,6 +1,5 @@
 import {
   getServerSideProps,
-  IJWTProps,
   IUserNameSSPResponse,
 } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
@@ -10,6 +9,9 @@ import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/mailing
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { faker } from "@faker-js/faker";
+import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
+
+//TODO: Mock VerificationEmail.remove, FindAdvertiser, CreateAdvertiser
 
 describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () => {
   let mongoRepo: TestVerificationEmailMongoDBRepo;
@@ -88,9 +90,9 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     expect(responseJWT).not.toBe(undefined);
     expect(verificationEmailFound).toBe(null);
 
-    const token = jwt.decode(responseJWT) as IJWTProps;
+    const token = jwt.decode(responseJWT) as AdvertiserPropsPrimitives;
     expect(token.email).toBe(verificationEmail);
-    expect(token.userName).toBe(verificationName);
+    expect(token.name).toBe(verificationName);
     expect(token.rol).not.toBe(null);
   },12000);
 });

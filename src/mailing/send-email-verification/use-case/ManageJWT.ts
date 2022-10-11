@@ -1,4 +1,5 @@
 import {
+  Advertiser,
   AdvertiserProps,
   AdvertiserPropsPrimitives,
 } from "@/src/advertiser/domain/Advertiser";
@@ -7,7 +8,7 @@ import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
 export class ManageJWT {
   constructor(private jwtrepo: IJsonWebTokenRepo) {}
 
-  advertiserToken(payload: AdvertiserProps): string {
+  createAdvertiserToken(payload: Advertiser): string {
     const adv: AdvertiserPropsPrimitives = {
       email: payload.email.email,
       id: payload.id.id,

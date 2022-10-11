@@ -18,7 +18,7 @@ describe("On ManageJWT, GIVEN an Advertiser and a IJsonWebTokenRepo", () => {
 
   test(`WHEN call the ManageJWT advertiserToken, 
   THEN return a jwt with all the advertiser data`, () => {
-    const token = jwtmanager.advertiserToken(advertiser);
+    const token = jwtmanager.createAdvertiserToken(advertiser);
     const decoded = jwtmanager.decodeToken<AdvertiserPropsPrimitives>(token);
     expect(decoded.email).toBe(advertiser.email.email);
     expect(decoded.id).toBe(advertiser.id.id);
