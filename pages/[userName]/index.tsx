@@ -16,6 +16,10 @@ import { Name } from "@/src/domain/Name";
 import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
 import { ValidateEmailHandler } from "@/src/mailing/send-email-verification/handler/ValidateEmailHandler";
 import { validateEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
+import {
+  createAdvertiserHandler,
+  findAdvertiserHandler,
+} from "@/src/advertiser/advertiser-container";
 
 export interface IProfilePageProps {
   userName: string;
@@ -53,22 +57,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     );
 
     //TODO: Find Advertiser/User and get id
-    const advertiserRepo = await MongoDB.advertiserRepo();
-    const findAdvertiser = new FindAdvertiser(advertiserRepo);
-    const advertiserPrimitives = await findAdvertiser.byEmail(
+    const advertiserPrimitives = await findAdvertiserHandler.findById(
       verificationEmail.email
     );
 
     //TODO: If is new Advertiser create new
     let advertiserId: string;
+
     if (!advertiserPrimitives) {
-      const createAdvertiser = new CreateAdvertiser(advertiserRepo);
-      const advertiserHandler = new AdvertiserCreatorHandler(createAdvertiser);
       advertiserId = UniqId.generate();
-      await advertiserHandler.create({
-        email: verificationEmail.email.email,
+      await createAdvertiserHandler.create({
+        email: verificationEmail.email,
         name: logInData.userName,
-        rol: verificationEmail.rol.rol,
+        rol: verificationEmail.rol,
         id: advertiserId,
       });
     } else {
@@ -80,14 +81,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const manageJWT = new ManageJWT(jwtRepo);
     const payload = new Advertiser({
       id: new AdvertiserId(advertiserId),
-      email: verificationEmail.email,
-      rol: verificationEmail.rol,
+      email: new Email(verificationEmail.email),
+      rol: new Rol(verificationEmail.rol),
       name: new Name(logInData.userName),
     });
     const jwt = manageJWT.createAdvertiserToken(payload);
 
     //TODO: use-case Remove VerificationEmail
-    await verificatioEmailRepo.remove(verificationEmail.id.id);
+    await verificatioEmailRepo.remove(verificationEmail.id);
 
     await MongoDB.disconnect();
 
