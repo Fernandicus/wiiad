@@ -1,5 +1,6 @@
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
 import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
 import { ValidateVerificationEmail } from "@/src/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
@@ -42,7 +43,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const verifyEmail = new ValidateVerificationEmail(mockedRepo);
 
     expect(async () => {
-      await verifyEmail.validate("0");
+      await verifyEmail.validate(new VerificationTokenId("0"));
     }).rejects.toThrowError(ErrorLogIn);
   });
 
@@ -56,10 +57,9 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const verifyEmail = new ValidateVerificationEmail(mockedRepo);
 
     await expect(async () => {
-      await verifyEmail.validate("0");
+      await verifyEmail.validate(new VerificationTokenId("0"));
     }).rejects.toThrowError(ErrorLogIn);
   });
-
 
   test(`WHEN call the validate method for a non expired date, 
   THEN the mock findById method should be called with id`, async () => {
@@ -70,7 +70,9 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     };
     const validateEmail = new ValidateVerificationEmail(mockRepo);
 
-    const validatedEmail = await validateEmail.validate(validEmailTimer.id);
+    const validatedEmail = await validateEmail.validate(
+      new VerificationTokenId(validEmailTimer.id)
+    );
 
     expect(mockRepo.findById).toBeCalledWith(validEmailTimer.id);
     expect(mockRepo.findById).toReturnWith(validEmailTimer);
