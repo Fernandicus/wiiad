@@ -20,4 +20,8 @@ export class JWTHandler {
     });
     return this.manageJWT.createAdvertiserToken(payload);
   }
+
+  decodeToken<T extends object>(token: string): T {
+    return this.manageJWT.decodeToken<T>(token);
+  }
 }

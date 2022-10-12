@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import styles from "@/pages/index.module.css";
 import { useRef } from "react";
+import { RolType } from "@/src/domain/Rol";
 
 export default function Home() {
   const myEmail = useRef<HTMLInputElement>(null);
@@ -15,15 +16,16 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const valueEmail = myEmail.current?.value;
           const valueName = myName.current?.value;
-          fetch("/api/auth/sign-up", {
+          await fetch("/api/mailing/send-email-verification", {
             method: "POST",
             body: JSON.stringify({
               email: valueEmail,
               userName: valueName,
+              rol: RolType.BUSINESS,
             }),
           });
         }}

@@ -1,11 +1,6 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
-import { SaveEmailVerification } from "@/src/mailing/send-email-verification/use-case/SaveEmailVerification";
-import { EmailVerificationTokenHandler } from "@/src/mailing/send-email-verification/handler/EmailVerificationTokenHandler";
-import { NodemailerSendVerificationEmail } from "@/src/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
-import { SendlVerificationEmail } from "@/src/mailing/send-email-verification/use-case/SendVerificationEmail";
-import { SendVerificationEmailHandler } from "@/src/mailing/send-email-verification/handler/SendVerificationEmailHandler";
 import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
 import { verificationEmailHandler, sendEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
@@ -22,7 +17,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: ISendVerificationEmailBodyRequest = req.body; //JSON.parse(req.body);
+  const reqBody: ISendVerificationEmailBodyRequest = JSON.parse(req.body);
 
   if (
     reqBody.email == undefined ||
@@ -35,6 +30,12 @@ export default async function handler(
     const id = UniqId.generate();
 
     await MongoDB.connect()
+
+    console.log({
+      email: reqBody.email,
+      id,
+      rol: reqBody.rol,
+    })
 
     await verificationEmailHandler.saveWithExpirationIn5min({
       email: reqBody.email,

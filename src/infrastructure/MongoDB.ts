@@ -24,7 +24,7 @@ export class MongoDB {
     }
   }
 
-  static async verificationEmailRepo():Promise<VerificationEmailMongoDBRepo>{
+  static async verificationEmailRepo(): Promise<VerificationEmailMongoDBRepo> {
     await this.connect();
     return new VerificationEmailMongoDBRepo();
   }
@@ -37,5 +37,12 @@ export class MongoDB {
   static async advertiserRepo(): Promise<AdvertiserMongoDBRepo> {
     await this.connect();
     return new AdvertiserMongoDBRepo();
+  }
+
+  static async connectAndDisconnect<T>(cb: ()=>Promise<T>): Promise<T> {
+    await this.connect();
+    const response = await cb();
+    await this.disconnect();
+    return response;
   }
 }

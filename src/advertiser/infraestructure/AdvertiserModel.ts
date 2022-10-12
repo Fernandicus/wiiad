@@ -30,4 +30,4 @@ export interface AdvertiserModelProps {
   rol: string;
 }
 
-export const AdvertiserModel = mongoose.model("Advertiser", advertiserSchema);
+export const AdvertiserModel = mongoose.models.Advertiser || mongoose.model("Advertiser", advertiserSchema);

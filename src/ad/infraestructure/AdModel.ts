@@ -35,4 +35,4 @@ export interface AdModelProps {
   segments: string[];
 }
 
-export const AdModel = mongoose.model("Ad", adSchema);
+export const AdModel = mongoose.models.Ad || mongoose.model("Ad", adSchema);

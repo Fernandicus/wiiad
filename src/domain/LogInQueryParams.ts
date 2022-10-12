@@ -6,9 +6,11 @@ export class LogInQueryParams {
   readonly token: string;
   readonly userName: string;
 
-  constructor(query: ParsedUrlQuery, params?: ParsedUrlQuery) {
+  constructor(query: ParsedUrlQuery, params: ParsedUrlQuery) {
     if (!query["email"]) throw new ErrorLogIn("Missing query param 'email'");
-    if (!query["token"]) throw new ErrorLogIn("Missing query param 'token'");
+    if (!query["verificationToken"]) throw new ErrorLogIn("Missing query param 'verificationToken'");
+    if (!params || !params["userName"])
+      throw new ErrorLogIn("Missing param /<userName> to login");
 
     if (query["email"] instanceof Array) {
       this.email = query["email"][0];
@@ -16,14 +18,12 @@ export class LogInQueryParams {
       this.email = query["email"];
     }
 
-    if (query["token"] instanceof Array) {
-      this.token = query["token"][0];
+    if (query["verificationToken"] instanceof Array) {
+      this.token = query["verificationToken"][0];
     } else {
-      this.token = query["token"];
+      this.token = query["verificationToken"];
     }
 
-    if (!params || !params["userName"])
-      throw new ErrorLogIn("Missing param /<userName> to login");
     if (params["userName"] instanceof Array) {
       this.userName = params["userName"][0];
     } else {

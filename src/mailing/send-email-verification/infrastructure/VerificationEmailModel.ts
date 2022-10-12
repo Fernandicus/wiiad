@@ -28,7 +28,7 @@ export interface VerificationEmailModelProps {
   rol: string;
 }
 
-export const VerificationEmailModel = mongoose.model(
+export const VerificationEmailModel = mongoose.models.Verification_Email || mongoose.model(
   "Verification_Email",
   verificationEmailSchema
 );
