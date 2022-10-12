@@ -1,3 +1,4 @@
+import { Email } from "@/src/domain/Email";
 import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
 import { VerificationTokenId } from "../domain/VerificationTokenId";
 import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail";
@@ -5,11 +6,13 @@ import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail
 export class ValidateEmailHandler {
   constructor(private validateEmail: ValidateVerificationEmail) {}
 
-  async validateToken(
-    token: string
+  async validate(
+    token: string,
+    email: string
   ): Promise<IVerificationEmailTimerPrimitives> {
     const verificationToken = new VerificationTokenId(token);
-    const validatedEmail = await this.validateEmail.validate(verificationToken);
+    const verificationEmail = new Email(email);
+    const validatedEmail = await this.validateEmail.validate(verificationToken, verificationEmail);
     return {
       id: validatedEmail.id,
       email: validatedEmail.email,

@@ -1,3 +1,4 @@
+import { Email } from "@/src/domain/Email";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
@@ -43,7 +44,10 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const verifyEmail = new ValidateVerificationEmail(mockedRepo);
 
     expect(async () => {
-      await verifyEmail.validate(new VerificationTokenId("0"));
+      await verifyEmail.validate(
+        new VerificationTokenId("0"),
+        new Email(faker.internet.email())
+      );
     }).rejects.toThrowError(ErrorLogIn);
   });
 
@@ -57,7 +61,10 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const verifyEmail = new ValidateVerificationEmail(mockedRepo);
 
     await expect(async () => {
-      await verifyEmail.validate(new VerificationTokenId("0"));
+      await verifyEmail.validate(
+        new VerificationTokenId("0"),
+        new Email(faker.internet.email())
+      );
     }).rejects.toThrowError(ErrorLogIn);
   });
 
@@ -71,7 +78,8 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const validateEmail = new ValidateVerificationEmail(mockRepo);
 
     const validatedEmail = await validateEmail.validate(
-      new VerificationTokenId(validEmailTimer.id)
+      new VerificationTokenId(validEmailTimer.id),
+      new Email(validEmailTimer.email)
     );
 
     expect(mockRepo.findById).toBeCalledWith(validEmailTimer.id);

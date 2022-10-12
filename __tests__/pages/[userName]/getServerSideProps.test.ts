@@ -37,14 +37,15 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     ]);
   }, 8000);
 
-  it(`WHEN send an url with a non existing token, 
+  it(`WHEN send an url with a not valid token, 
   THEN return redirect to home page '/'`, async () => {
     const resp = (await getServerSideProps({
       req,
       res,
       resolvedUrl: "",
-      params: { userName: "fernandisco" },
+      params: {},
       query: {
+        userName: "fernandisco",
         email: verificationEmails[0].email,
         verificationToken: "1234-1243-1234",
       },
@@ -53,14 +54,37 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     expect(resp.redirect.destination).toBe("/");
   }, 12000);
 
+  it(`WHEN send an url with a not valid email, 
+  THEN return redirect to home page '/' and verification email should be removed`, async () => {
+    const resp = (await getServerSideProps({
+      req,
+      res,
+      resolvedUrl: "",
+      params: {},
+      query: {
+        userName: "fernandisco",
+        email: faker.internet.email(),
+        verificationToken: verificationEmails[0].id,
+      },
+    })) as IServerSideResponse;
+
+    const verificationEmailFound = await verificationEmailRepo.findById(
+      verificationEmails[0].id
+    );
+
+    expect(resp.redirect.destination).toBe("/");
+    expect(verificationEmailFound).toBe(null);
+  }, 12000);
+
   it(`WHEN send an url with an expired token, 
   THEN return redirect to home page '/' and verification email should be removed`, async () => {
     const resp = (await getServerSideProps({
       req,
       res,
       resolvedUrl: "",
-      params: { userName: "fernandisco" },
+      params: {},
       query: {
+        userName: faker.name.firstName(),
         email: expiredVerificationEmail.email,
         verificationToken: expiredVerificationEmail.id,
       },
@@ -74,20 +98,21 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     expect(verificationEmailFound).toBe(null);
   }, 12000);
 
-  it(`WHEN send a req with the url with valid params of an existing verification email, 
+  it(`WHEN send a req with a url with valid params, 
   THEN verification email should be removed, 
   advertiser should be saved
   and return a valid JWT`, async () => {
-    const verificationEmail = verificationEmails[0].email;
-    const verificationToken = verificationEmails[0].id;
+    const verificationEmail = verificationEmails[1].email;
+    const verificationToken = verificationEmails[1].id;
     const verificationName = faker.name.firstName();
 
     const resp = (await getServerSideProps({
       req,
       res,
       resolvedUrl: "",
-      params: { userName: verificationName },
+      params: {},
       query: {
+        userName: verificationName,
         email: verificationEmail,
         verificationToken: verificationToken,
       },
@@ -97,7 +122,7 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
     const user = resp.props.user;
 
     const verificationEmailFound = await verificationEmailRepo.findById(
-      expiredVerificationEmail.id
+      verificationToken
     );
 
     expect(responseJWT).not.toBe(undefined);

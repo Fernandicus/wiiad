@@ -16,8 +16,7 @@ interface AdvertiserData {
   rol: string;
 }
 
-
-interface LogInQueries{
+interface LogInQueries {
   email: string;
   token: string;
   userName: string;
@@ -32,9 +31,9 @@ export class LogInController {
   static async initSession(
     loginQueries: LogInQueries
   ): Promise<IAdvertiserLogIn | null> {
-
-    const verificationEmail = await validateEmailHandler.validateToken(
-      loginQueries.token
+    const verificationEmail = await validateEmailHandler.validate(
+      loginQueries.token,
+      loginQueries.email
     );
 
     if (verificationEmail.rol !== RolType.USER) {

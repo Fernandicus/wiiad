@@ -3,7 +3,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
-import { verificationEmailHandler, sendEmailHandler } from "@/src/mailing/send-email-verification/email-verification-container";
+import {
+  verificationEmailHandler,
+  sendEmailHandler,
+} from "@/src/mailing/send-email-verification/email-verification-container";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;
@@ -17,7 +20,9 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: ISendVerificationEmailBodyRequest = JSON.parse(req.body);
+  console.log(req.body);
+  
+  const reqBody: ISendVerificationEmailBodyRequest = req.body;
 
   if (
     reqBody.email == undefined ||
@@ -29,20 +34,20 @@ export default async function handler(
   try {
     const id = UniqId.generate();
 
-    await MongoDB.connect()
+    await MongoDB.connect();
 
     console.log({
       email: reqBody.email,
       id,
       rol: reqBody.rol,
-    })
+    });
 
     await verificationEmailHandler.saveWithExpirationIn5min({
       email: reqBody.email,
       id,
       rol: reqBody.rol,
     });
-    
+
     await sendEmailHandler.send({
       id,
       email: reqBody.email,

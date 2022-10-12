@@ -37,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const queryParams = new ValidateLoginQueries(query);
-
     if (!queryParams.email || !queryParams.token) {
       //TODO: CHECK IF THERE IS A SESSION COOKIE
       const authToken = getCookie("authToken", { req, res, httpOnly: true });
@@ -69,7 +68,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       initSession
     );
 
-    setCookie("authToken", resp?.jwt, { req, res, httpOnly: true });
+    //setCookie("authToken", resp?.jwt, { req, res, httpOnly: true });
+
+  
 
     return {
       props: {
