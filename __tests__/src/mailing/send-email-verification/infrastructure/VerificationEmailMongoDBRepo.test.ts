@@ -20,7 +20,7 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
     await TestVerificationEmailMongoDBRepo.disconnectMongoDB();
   });
 
-  it(`WHEN call the VerificationEmailMongoDBRepo save method, 
+  it(`WHEN call the save method, 
   THEN WHEN call the findById method the verification email should be found in MongoDB`, async () => {
     const verificationEmail = FakeVerificationEmailTimer.createWithPrimitives({
       roltype: RolType.BUSINESS,
@@ -38,7 +38,7 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
     );
   });
 
-  it(`WHEN call the VerificationEmailMongoDBRepo findById method for an unexisting ID, 
+  it(`WHEN call the findById method for an unexisting ID, 
   THEN should return null`, async () => {
     const verificationEmailFound = await verificationEmailMongoDBRepo.findById(
       Math.random().toString()
@@ -47,7 +47,7 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
     expect(verificationEmailFound).toBe(null);
   });
 
-  it(`WHEN call the VerificationEmailMongoDBRepo remove method for an ID, 
+  it(`WHEN call the remove method for an ID, 
   THEN the verification email should be removed from MongoDB`, async () => {
     const verificationEmailFound = await verificationEmailMongoDBRepo.findById(
       vertificationEmails[0].id

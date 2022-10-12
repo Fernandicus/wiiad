@@ -1,22 +1,14 @@
-import { LogInQueryParams } from "@/src/domain/LogInQueryParams";
+import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
+import { getCookie, setCookie } from "cookies-next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { UniqId } from "@/src/utils/UniqId";
-import {
-  jwtHandler,
-  validateEmailHandler,
-} from "@/src/mailing/send-email-verification/email-verification-container";
-import {
-  createAdvertiserHandler,
-  findAdvertiserHandler,
-} from "@/src/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
-import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
-import { RolType } from "@/src/domain/Rol";
 import {
   IAdvertiserLogIn,
   LogInController,
 } from "@/src/controllers/LogInController";
+import { jwtHandler } from "@/src/mailing/send-email-verification/email-verification-container";
+import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 
 export interface ILogInSSR {
   props: {
@@ -25,7 +17,7 @@ export interface ILogInSSR {
   };
 }
 
-export default function profilePage(
+export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const user: AdvertiserPropsPrimitives = props.user;
@@ -41,14 +33,43 @@ export default function profilePage(
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query, params } = context;
+  const { query, req, res } = context;
 
   try {
-    const queryParams = new LogInQueryParams(query, params);
-    const logInPromise = async () => await LogInController.verify(queryParams);
+    const queryParams = new ValidateLoginQueries(query);
+
+    if (!queryParams.email || !queryParams.token) {
+      //TODO: CHECK IF THERE IS A SESSION COOKIE
+      const authToken = getCookie("authToken", { req, res, httpOnly: true });
+      if (!authToken) throw new ErrorLogIn("No authToken provided");
+      const tokenData = jwtHandler.decodeToken<AdvertiserPropsPrimitives>(
+        authToken.toString()
+      );
+      return {
+        props: {
+          jwt: authToken,
+          user: {
+            email: tokenData.email,
+            id: tokenData.id,
+            name: tokenData.name,
+            rol: tokenData.rol,
+          } as AdvertiserPropsPrimitives,
+        },
+      };
+    }
+
+    const initSession = async () =>
+      await LogInController.initSession({
+        email: queryParams.email!,
+        token: queryParams.token!,
+        userName: queryParams.userName,
+      });
+
     const resp = await MongoDB.connectAndDisconnect<IAdvertiserLogIn | null>(
-      logInPromise
+      initSession
     );
+
+    setCookie("authToken", resp?.jwt, { req, res, httpOnly: true });
 
     return {
       props: {

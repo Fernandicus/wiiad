@@ -1,15 +1,13 @@
 import { ParsedUrlQuery } from "querystring";
 import { ErrorLogIn } from "./ErrorLogIn";
 
-export class LogInQueryParams {
-  readonly email: string;
-  readonly token: string;
+export class ValidateLoginQueries {
+  readonly email: string | undefined;
+  readonly token: string | undefined;
   readonly userName: string;
 
-  constructor(query: ParsedUrlQuery, params: ParsedUrlQuery) {
-    if (!query["email"]) throw new ErrorLogIn("Missing query param 'email'");
-    if (!query["verificationToken"]) throw new ErrorLogIn("Missing query param 'verificationToken'");
-    if (!params || !params["userName"])
+  constructor(query: ParsedUrlQuery) {
+    if (!query["userName"])
       throw new ErrorLogIn("Missing param /<userName> to login");
 
     if (query["email"] instanceof Array) {
@@ -24,10 +22,10 @@ export class LogInQueryParams {
       this.token = query["verificationToken"];
     }
 
-    if (params["userName"] instanceof Array) {
-      this.userName = params["userName"][0];
+    if (query["userName"] instanceof Array) {
+      this.userName = query["userName"][0];
     } else {
-      this.userName = params["userName"];
+      this.userName = query["userName"];
     }
   }
 }

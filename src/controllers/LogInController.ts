@@ -3,7 +3,6 @@ import {
   findAdvertiserHandler,
 } from "../advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../advertiser/domain/Advertiser";
-import { LogInQueryParams } from "../domain/LogInQueryParams";
 import { RolType } from "../domain/Rol";
 import {
   jwtHandler,
@@ -13,8 +12,15 @@ import {
 import { UniqId } from "../utils/UniqId";
 
 interface AdvertiserData {
-  queryParams: LogInQueryParams;
+  queries: LogInQueries;
   rol: string;
+}
+
+
+interface LogInQueries{
+  email: string;
+  token: string;
+  userName: string;
 }
 
 export interface IAdvertiserLogIn {
@@ -23,16 +29,17 @@ export interface IAdvertiserLogIn {
 }
 
 export class LogInController {
-  static async verify(
-    loginQueryParams: LogInQueryParams
+  static async initSession(
+    loginQueries: LogInQueries
   ): Promise<IAdvertiserLogIn | null> {
+
     const verificationEmail = await validateEmailHandler.validateToken(
-      loginQueryParams.token
+      loginQueries.token
     );
 
     if (verificationEmail.rol !== RolType.USER) {
       const { jwt, advertiser } = await this.advertiserLogIn({
-        queryParams: loginQueryParams,
+        queries: loginQueries,
         rol: verificationEmail.rol,
       });
       return { advertiser, jwt };
@@ -58,14 +65,14 @@ export class LogInController {
     let advertiserId: string;
 
     const advertiserFound = await findAdvertiserHandler.findById(
-      data.queryParams.email
+      data.queries.email
     );
 
     if (!advertiserFound) {
       advertiserId = UniqId.generate();
       await createAdvertiserHandler.create({
-        email: data.queryParams.email,
-        name: data.queryParams.userName,
+        email: data.queries.email,
+        name: data.queries.userName,
         id: advertiserId,
         rol: data.rol,
       });
@@ -73,12 +80,12 @@ export class LogInController {
       advertiserId = advertiserFound.id;
     }
 
-    await removeVerificationEmailHandler.remove(data.queryParams.token);
+    await removeVerificationEmailHandler.remove(data.queries.token);
 
     return {
       id: advertiserId,
-      email: data.queryParams.email,
-      name: data.queryParams.userName,
+      email: data.queries.email,
+      name: data.queries.userName,
       rol: data.rol,
     };
   }
