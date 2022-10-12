@@ -9,22 +9,28 @@ interface IReqAndRes {
   res: ServerResponse;
 }
 
-export class ServerAuth {
+enum Cookie {
+  AUTH_TOKEN = "authToken",
+}
+
+export class ServerUserAuth {
   static getToken(params: IReqAndRes): IUser {
     const { req, res } = params;
-    const authToken = getCookie("authToken", { req, res, httpOnly: true });
+    const authToken = getCookie(Cookie.AUTH_TOKEN, {
+      req,
+      res,
+      httpOnly: true,
+    });
 
-    if (!authToken) throw new ErrorAuthentifying("No authToken provided");
+    if (!authToken)
+      throw new ErrorAuthentifying(`No ${Cookie.AUTH_TOKEN} provided`);
 
     return manageJWT.verifyToken<IUser>(authToken.toString());
   }
 
-  static setToken<T extends IUser>(
-    payload: T,
-    params: IReqAndRes
-  ): void {
+  static setToken<T extends IUser>(payload: T, params: IReqAndRes): void {
     const { req, res } = params;
     const token = manageJWT.createToken(payload);
-    setCookie("authToken", token, { req, res, httpOnly: true });
+    setCookie(Cookie.AUTH_TOKEN, token, { req, res, httpOnly: true });
   }
 }

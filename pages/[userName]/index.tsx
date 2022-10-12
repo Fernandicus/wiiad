@@ -7,7 +7,7 @@ import {
   IAdvertiserLogIn,
   LogInController,
 } from "@/src/controllers/LogInController";
-import { ServerAuth } from "@/src/infrastructure/ServerAuth";
+import { ServerUserAuth } from "@/src/infrastructure/ServerUserAuth";
 import { IUser } from "@/src/domain/IUser";
 
 export default function Profile(
@@ -27,12 +27,11 @@ export default function Profile(
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-
+  const queryParams = new ValidateLoginQueries(query);
+  
   try {
-    const queryParams = new ValidateLoginQueries(query);
-
     if (!queryParams.email || !queryParams.token) {
-      const session = ServerAuth.getToken(context);
+      const session = ServerUserAuth.getToken(context);
       return {
         props: {
           user: { ...session } as IUser,
@@ -49,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
     );
 
-    ServerAuth.setToken(user!, context);
+    ServerUserAuth.setToken(user!, context);
 
     return {
       props: {
