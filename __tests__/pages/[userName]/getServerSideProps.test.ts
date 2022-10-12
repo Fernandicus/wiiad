@@ -1,4 +1,4 @@
-import { getServerSideProps, ILogInSSR } from "@/pages/[userName]/index";
+import { getServerSideProps } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
 import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { FakeVerificationEmailTimer } from "../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { faker } from "@faker-js/faker";
 import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
 import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
+import { IUser } from "@/src/domain/IUser";
 
 interface IServerSideResponse {
   props: {};
@@ -116,16 +117,14 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
         email: verificationEmail,
         verificationToken: verificationToken,
       },
-    })) as ILogInSSR;
+    })) as {props:{user: IUser}};
 
-    const responseJWT = resp.props.jwt;
     const user = resp.props.user;
 
     const verificationEmailFound = await verificationEmailRepo.findById(
       verificationToken
     );
 
-    expect(responseJWT).not.toBe(undefined);
     expect(verificationEmailFound).toBe(null);
     expect(user.email).toBe(verificationEmail);
     expect(user.name).toBe(verificationName);

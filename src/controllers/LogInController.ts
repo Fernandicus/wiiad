@@ -3,9 +3,9 @@ import {
   findAdvertiserHandler,
 } from "../advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../advertiser/domain/Advertiser";
+import { IUser } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import {
-  jwtHandler,
   removeVerificationEmailHandler,
   validateEmailHandler,
 } from "../mailing/send-email-verification/email-verification-container";
@@ -28,34 +28,27 @@ export interface IAdvertiserLogIn {
 }
 
 export class LogInController {
-  static async initSession(
-    loginQueries: LogInQueries
-  ): Promise<IAdvertiserLogIn | null> {
+  static async initSession(loginQueries: LogInQueries): Promise<IUser | null> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.token,
       loginQueries.email
     );
 
     if (verificationEmail.rol !== RolType.USER) {
-      const { jwt, advertiser } = await this.advertiserLogIn({
+      const advertiser = await this.advertiserLogIn({
         queries: loginQueries,
         rol: verificationEmail.rol,
       });
-      return { advertiser, jwt };
+      return advertiser;
     } else {
+      //TODO: USER LOG IN
       return null;
     }
   }
 
-  private static async advertiserLogIn(
-    data: AdvertiserData
-  ): Promise<IAdvertiserLogIn> {
+  private static async advertiserLogIn(data: AdvertiserData): Promise<IUser> {
     const advertiser = await this.findOrCreateNewAdvertiser(data);
-    const jwt = jwtHandler.advertiserToken(advertiser);
-    return {
-      advertiser,
-      jwt,
-    };
+    return advertiser;
   }
 
   private static async findOrCreateNewAdvertiser(

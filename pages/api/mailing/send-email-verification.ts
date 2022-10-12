@@ -20,9 +20,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  console.log(req.body);
-  
-  const reqBody: ISendVerificationEmailBodyRequest = req.body;
+  const reqBody: ISendVerificationEmailBodyRequest = JSON.parse(req.body);
 
   if (
     reqBody.email == undefined ||
@@ -35,12 +33,6 @@ export default async function handler(
     const id = UniqId.generate();
 
     await MongoDB.connect();
-
-    console.log({
-      email: reqBody.email,
-      id,
-      rol: reqBody.rol,
-    });
 
     await verificationEmailHandler.saveWithExpirationIn5min({
       email: reqBody.email,

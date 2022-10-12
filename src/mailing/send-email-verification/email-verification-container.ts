@@ -1,5 +1,4 @@
 import { EmailVerificationTokenHandler } from "./handler/EmailVerificationTokenHandler";
-import { JWTHandler } from "./handler/JWTHandler";
 import { RemoveVerificationEmailHandler } from "./handler/RemoveVerificationEmailHandler";
 import { SendVerificationEmailHandler } from "./handler/SendVerificationEmailHandler";
 import { ValidateEmailHandler } from "./handler/ValidateEmailHandler";
@@ -28,8 +27,7 @@ export const validateEmailHandler = new ValidateEmailHandler(validateEmail);
 
 
 const jwtRepo = new JsonWebTokenNPM();
-const manageJWT = new ManageJWT(jwtRepo);
-export const jwtHandler = new JWTHandler(manageJWT);
+export const manageJWT = new ManageJWT(jwtRepo);
 
 
 const removeVerificationEmail = new RemoveVerificationEmail(verificationEmailRepo);

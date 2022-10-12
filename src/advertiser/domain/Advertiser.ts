@@ -2,6 +2,7 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { AdvertiserId } from "./value-objects/AdvertiserId";
 import { Rol, RolType } from "../../domain/Rol";
+import { IUser } from "@/src/domain/IUser";
 
 export interface AdvertiserProps {
   id: AdvertiserId;
@@ -10,12 +11,7 @@ export interface AdvertiserProps {
   rol: Rol;
 }
 
-export interface AdvertiserPropsPrimitives {
-  id: string;
-  name: string;
-  email: string;
-  rol: string;
-}
+export interface AdvertiserPropsPrimitives extends IUser {}
 
 export class Advertiser {
   readonly id;
