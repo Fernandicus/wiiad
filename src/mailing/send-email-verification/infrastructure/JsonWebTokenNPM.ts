@@ -10,7 +10,7 @@ export class JsonWebTokenNPM implements IJsonWebTokenRepo {
     return jwt.decode(token) as T;
   }
 
-  create<T extends string | object | Buffer >(payload: T): string {
+  create(payload: string | object | Buffer): string {
     return jwt.sign(payload, process.env.JWT_SECRET!);
   }
 }

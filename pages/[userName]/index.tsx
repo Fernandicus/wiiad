@@ -7,8 +7,12 @@ import {
   IAdvertiserLogIn,
   LogInController,
 } from "@/src/controllers/LogInController";
-import { ServerUserAuth } from "@/src/infrastructure/ServerUserAuth";
+import { Auth } from "@/src/infrastructure/Auth";
 import { IUser } from "@/src/domain/IUser";
+import { UserSession } from "@/src/use-case/UserSession";
+import { JsonWebTokenNPM } from "@/src/mailing/send-email-verification/infrastructure/JsonWebTokenNPM";
+import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
+import { userSession } from "@/src/use-case/container";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -28,10 +32,10 @@ export default function Profile(
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const queryParams = new ValidateLoginQueries(query);
-  
   try {
     if (!queryParams.email || !queryParams.token) {
-      const session = ServerUserAuth.getToken(context);
+      const session = userSession.getFromServer(context);
+      if (!session) throw new ErrorLogIn("No existing session");
       return {
         props: {
           user: { ...session } as IUser,
@@ -48,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
     );
 
-    ServerUserAuth.setToken(user!, context);
+    userSession.setFromServer(context, user!);
 
     return {
       props: {

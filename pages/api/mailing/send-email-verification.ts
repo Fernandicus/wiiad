@@ -20,7 +20,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: ISendVerificationEmailBodyRequest = JSON.parse(req.body);
+  const reqBody: ISendVerificationEmailBodyRequest = req.body;//JSON.parse(req.body);
 
   if (
     reqBody.email == undefined ||
