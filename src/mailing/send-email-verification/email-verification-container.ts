@@ -2,10 +2,8 @@ import { EmailVerificationTokenHandler } from "./handler/EmailVerificationTokenH
 import { RemoveVerificationEmailHandler } from "./handler/RemoveVerificationEmailHandler";
 import { SendVerificationEmailHandler } from "./handler/SendVerificationEmailHandler";
 import { ValidateEmailHandler } from "./handler/ValidateEmailHandler";
-import { JsonWebTokenNPM } from "./infrastructure/JsonWebTokenNPM";
 import { NodemailerSendVerificationEmail } from "./infrastructure/NodemailerSendVerificationEmail";
 import { VerificationEmailMongoDBRepo } from "./infrastructure/VerificationEmailMongoDBRepo";
-import { ManageJWT } from "./use-case/ManageJWT";
 import { RemoveVerificationEmail } from "./use-case/RemoveVerificationEmail";
 import { SaveEmailVerification } from "./use-case/SaveEmailVerification";
 import { SendlVerificationEmail } from "./use-case/SendVerificationEmail";
@@ -24,10 +22,6 @@ export const sendEmailHandler = new SendVerificationEmailHandler(sendEmail);
 
 const validateEmail = new ValidateVerificationEmail(verificationEmailRepo);
 export const validateEmailHandler = new ValidateEmailHandler(validateEmail);
-
-
-const jwtRepo = new JsonWebTokenNPM();
-export const manageJWT = new ManageJWT(jwtRepo);
 
 
 const removeVerificationEmail = new RemoveVerificationEmail(verificationEmailRepo);

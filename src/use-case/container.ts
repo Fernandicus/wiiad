@@ -1,5 +1,5 @@
 import { Auth } from "../infrastructure/Auth";
-import { JsonWebTokenNPM } from "../mailing/send-email-verification/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "../infrastructure/JsonWebTokenNPM";
 import { UserSession } from "./UserSession";
 
 const auth = new Auth();

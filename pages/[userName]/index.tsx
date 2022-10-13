@@ -10,7 +10,7 @@ import {
 import { Auth } from "@/src/infrastructure/Auth";
 import { IUser } from "@/src/domain/IUser";
 import { UserSession } from "@/src/use-case/UserSession";
-import { JsonWebTokenNPM } from "@/src/mailing/send-email-verification/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
 

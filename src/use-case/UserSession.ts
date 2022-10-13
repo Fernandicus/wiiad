@@ -1,6 +1,6 @@
 import { IAuth, IReqAndRes } from "../domain/IAuth";
 import { IUser } from "../domain/IUser";
-import { IJsonWebTokenRepo } from "../mailing/send-email-verification/domain/IJsonWebTokenRepo";
+import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
 
 export class UserSession {
   constructor(private auth: IAuth, private jwtRepo: IJsonWebTokenRepo) {}
@@ -14,6 +14,7 @@ export class UserSession {
   }
 
   setFromServer(context: IReqAndRes, payload: IUser): void {
-    this.auth.setServerCookieJWT(context, payload);
+    const token = this.jwtRepo.create(payload);
+    this.auth.setServerCookieJWT(context, token);
   }
 }

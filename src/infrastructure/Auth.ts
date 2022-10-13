@@ -1,7 +1,4 @@
 import { getCookie, setCookie } from "cookies-next";
-import { ErrorAuthentifying } from "../domain/ErrorAuthentifying";
-import { manageJWT } from "../mailing/send-email-verification/email-verification-container";
-import { IncomingMessage, ServerResponse } from "http";
 import { IUser } from "../domain/IUser";
 import { IAuth, IReqAndRes } from "../domain/IAuth";
 
@@ -12,10 +9,9 @@ enum Cookie {
 export class Auth implements IAuth {
   constructor() {}
 
-  setServerCookieJWT(params: IReqAndRes, payload: IUser): void {
+  setServerCookieJWT(params: IReqAndRes, jwt: string): void {
     const { req, res } = params;
-    const token = manageJWT.createToken(payload);
-    setCookie(Cookie.AUTH_TOKEN, token, { req, res, httpOnly: true });
+    setCookie(Cookie.AUTH_TOKEN, jwt, { req, res, httpOnly: true });
   }
 
   getServerCookieJWT(params: IReqAndRes): string | null {

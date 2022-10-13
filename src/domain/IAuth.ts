@@ -1,4 +1,3 @@
-import { IUser } from "./IUser";
 import { IncomingMessage, ServerResponse } from "http";
 
 export interface IReqAndRes {
@@ -8,5 +7,5 @@ export interface IReqAndRes {
 
 export interface IAuth {
   getServerCookieJWT<T extends IReqAndRes>(params: T): string | null;
-  setServerCookieJWT<T extends IReqAndRes, U extends IUser>(params: T, payload: U): void;
+  setServerCookieJWT<T extends IReqAndRes>(params: T, jwt: string): void;
 }
