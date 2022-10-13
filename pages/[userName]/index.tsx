@@ -1,18 +1,14 @@
 import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
-import { getCookie, setCookie } from "cookies-next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
 import {
-  IAdvertiserLogIn,
   LogInController,
 } from "@/src/controllers/LogInController";
-import { Auth } from "@/src/infrastructure/Auth";
 import { IUser } from "@/src/domain/IUser";
-import { UserSession } from "@/src/use-case/UserSession";
-import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
+import { useEffect } from "react";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -45,14 +41,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const user = await MongoDB.connectAndDisconnect<IUser | null>(
       async () =>
-        await LogInController.initSession({
-          email: queryParams.email!,
-          token: queryParams.token!,
-          userName: queryParams.userName,
-        })
+        await LogInController.initSession(
+          {
+            email: queryParams.email!,
+            token: queryParams.token!,
+            userName: queryParams.userName,
+          },
+          context
+        )
     );
-
-    userSession.setFromServer(context, user!);
 
     return {
       props: {

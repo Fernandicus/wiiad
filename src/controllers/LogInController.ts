@@ -3,12 +3,14 @@ import {
   findAdvertiserHandler,
 } from "../advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../advertiser/domain/Advertiser";
+import { IReqAndRes } from "../domain/IAuth";
 import { IUser } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
 } from "../mailing/send-email-verification/email-verification-container";
+import { userSession } from "../use-case/container";
 import { UniqId } from "../utils/UniqId";
 
 interface AdvertiserData {
@@ -28,7 +30,7 @@ export interface IAdvertiserLogIn {
 }
 
 export class LogInController {
-  static async initSession(loginQueries: LogInQueries): Promise<IUser | null> {
+  static async initSession(loginQueries: LogInQueries, context: IReqAndRes): Promise<IUser | null> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.token,
       loginQueries.email
@@ -39,6 +41,7 @@ export class LogInController {
         queries: loginQueries,
         rol: verificationEmail.rol,
       });
+      userSession.setFromServer(context, advertiser);
       return advertiser;
     } else {
       //TODO: USER LOG IN

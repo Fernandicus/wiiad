@@ -9,7 +9,6 @@ export class UserSession {
     const token = this.auth.getServerCookieJWT(context);
     if (!token) return null;
     const session = this.jwtRepo.verify<IUser>(token);
-    if (!session) return null;
     return session;
   }
 
