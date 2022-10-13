@@ -1,12 +1,12 @@
-import { Advertiser } from "@/src/advertiser/domain/Advertiser";
-import { ErrorCreatingAdvertiser } from "@/src/advertiser/domain/ErrorCreatingAdvertiser";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
+import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
+import { ErrorCreatingAdvertiser } from "@/src/modules/advertiser/domain/ErrorCreatingAdvertiser";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   Rol,
   RolType,
 } from "@/src/domain/Rol";
-import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
-import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
+import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
+import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";

@@ -1,4 +1,4 @@
-import { AdvertiserModel } from "@/src/advertiser/infraestructure/AdvertiserModel";
+import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 

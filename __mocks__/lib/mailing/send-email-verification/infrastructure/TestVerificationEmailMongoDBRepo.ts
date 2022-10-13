@@ -2,12 +2,12 @@ import { MongoDB } from "@/src/infrastructure/MongoDB";
 import {
   IVerificationEmailTimerPrimitives,
   VerificationEmailTimer,
-} from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
+} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import {
   VerificationEmailModel,
   VerificationEmailModelProps,
-} from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailModel";
-import { VerificationEmailMongoDBRepo } from "@/src/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
+} from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailModel";
+import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 

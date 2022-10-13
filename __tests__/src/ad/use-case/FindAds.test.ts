@@ -1,8 +1,8 @@
-import { AdRepository } from "@/src/ad/domain/AdRepository";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
+import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { UniqId } from "@/src/utils/UniqId";
-import { FindAds } from "@/src/ad/use-case/FindAds";
-import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
+import { FindAds } from "@/src/modules/ad/use-case/FindAds";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
 
 describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads", () => {

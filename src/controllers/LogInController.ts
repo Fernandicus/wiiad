@@ -1,15 +1,15 @@
 import {
   createAdvertiserHandler,
   findAdvertiserHandler,
-} from "../advertiser/advertiser-container";
-import { AdvertiserPropsPrimitives } from "../advertiser/domain/Advertiser";
+} from "../modules/advertiser/advertiser-container";
+import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
 import { IReqAndRes } from "../domain/IAuth";
 import { IUser } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
-} from "../mailing/send-email-verification/email-verification-container";
+} from "../modules/mailing/send-email-verification/email-verification-container";
 import { userSession } from "../use-case/container";
 import { UniqId } from "../utils/UniqId";
 

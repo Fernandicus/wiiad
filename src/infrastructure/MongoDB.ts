@@ -1,7 +1,7 @@
-import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
+import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
-import { AdMongoDBRepository } from "../ad/infraestructure/AdMongoDBRepository";
-import { VerificationEmailMongoDBRepo } from "../mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
+import { AdMongoDBRepository } from "../modules/ad/infraestructure/AdMongoDBRepository";
+import { VerificationEmailMongoDBRepo } from "../modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 
 export class MongoDB {
   static async connect() {

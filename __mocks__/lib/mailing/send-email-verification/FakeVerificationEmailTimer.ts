@@ -3,10 +3,10 @@ import {
   VerificationEmailTimer,
   IVerificationEmailTimerProps,
   IVerificationEmailTimerPrimitives,
-} from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { ExpirationDate } from "@/src/mailing/send-email-verification/domain/ExpirationDate";
-import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
-import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
+} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
+import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
+import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Rol, RolType } from "@/src/domain/Rol";

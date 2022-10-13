@@ -1,11 +1,11 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserCreatorHandler } from "@/src/advertiser/handler/AdvertiserCreatorHandler";
-import { CreateAdvertiser } from "@/src/advertiser/use-case/CreateAdvertiser";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { AdvertiserCreatorHandler } from "@/src/modules/advertiser/handler/AdvertiserCreatorHandler";
+import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
 import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { RolType } from "@/src/domain/Rol";
-import { createAdvertiserHandler } from "@/src/advertiser/advertiser-container";
+import { createAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export default async function handler(
   req: NextApiRequest,

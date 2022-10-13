@@ -1,12 +1,10 @@
 import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
-import { AdModel } from "@/src/ad/infraestructure/AdModel";
+import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
-import mongoose from "mongoose";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { TestCreateAdController } from "../../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
 describe("On api/ads/remove-ad route", () => {
   beforeAll(async () => {

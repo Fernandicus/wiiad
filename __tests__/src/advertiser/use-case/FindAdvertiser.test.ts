@@ -1,9 +1,9 @@
 import {
   Advertiser,
   AdvertiserPropsPrimitives,
-} from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
-import { FindAdvertiser } from "@/src/advertiser/use-case/FindAdvertiser";
+} from "@/src/modules/advertiser/domain/Advertiser";
+import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
+import { FindAdvertiser } from "@/src/modules/advertiser/use-case/FindAdvertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
 
 describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {

@@ -1,15 +1,15 @@
-import { ErrorCreatingAd } from "@/src/ad/domain/ErrorCreatingAd";
-import { CreateAd } from "@/src/ad/use-case/CreateAd";
+import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
+import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
-import { AdRepository } from "@/src/ad/domain/AdRepository";
+import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
-import { AdDescription } from "@/src/ad/domain/value-objects/AdDescription";
-import { AdId } from "@/src/ad/domain/value-objects/AdId";
-import { AdImage } from "@/src/ad/domain/value-objects/AdImage";
-import { AdRedirectionUrl } from "@/src/ad/domain/value-objects/AdRedirectionUrl";
-import { AdSegments } from "@/src/ad/domain/value-objects/AdSegments";
-import { AdTitle } from "@/src/ad/domain/value-objects/AdTitle";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
+import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
+import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
+import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImage";
+import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
+import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 
 describe("On CreateAd use case, GIVEN a repository and an ad", () => {
   const mockedRepository: AdRepository = {

@@ -1,5 +1,5 @@
-import { VerificationURL } from "@/src/mailing/send-email-verification/domain/VerificationURL";
-import { NodemailerSendVerificationEmail } from "@/src/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
+import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
+import { NodemailerSendVerificationEmail } from "@/src/modules/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
 
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationURL";
 

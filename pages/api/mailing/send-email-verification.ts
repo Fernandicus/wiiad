@@ -1,12 +1,12 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { UniqId } from "@/src/utils/UniqId";
-import { ErrorEmailVerification } from "@/src/mailing/send-email-verification/domain/ErrorEmailVerification";
-import { ErrorSendingEmail } from "@/src/mailing/send-email-verification/domain/ErrorSendingEmail";
+import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
+import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/ErrorSendingEmail";
 import {
   verificationEmailHandler,
   sendEmailHandler,
-} from "@/src/mailing/send-email-verification/email-verification-container";
+} from "@/src/modules/mailing/send-email-verification/email-verification-container";
 
 export interface ISendVerificationEmailBodyRequest {
   email: string;

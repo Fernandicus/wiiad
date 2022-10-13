@@ -1,4 +1,4 @@
-import { Ad } from "@/src/ad/domain/Ad";
+import { Ad } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestAdRepository } from "../domain/TestAdRepository";
 import { FakeAd } from "../FakeAd";

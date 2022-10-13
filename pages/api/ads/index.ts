@@ -1,8 +1,6 @@
-import { AdFinderHandler } from "@/src/ad/handler/AdFinderHandler";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { FindAds } from "@/src/ad/use-case/FindAds";
 import { NextApiRequest, NextApiResponse } from "next";
-import { adFinderHandler } from "@/src/ad/ad-container";
+import { adFinderHandler } from "@/src/modules/ad/ad-container";
 
 export default async function handler(
   req: NextApiRequest,

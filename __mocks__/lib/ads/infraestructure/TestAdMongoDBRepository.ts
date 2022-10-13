@@ -1,4 +1,4 @@
-import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
+import { AdModel, AdModelProps } from "@/src/modules/ad/infraestructure/AdModel";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 

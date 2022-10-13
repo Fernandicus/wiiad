@@ -5,8 +5,8 @@ import { AdImage } from "../domain/value-objects/AdImage";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
-import { UniqId } from "../../utils/UniqId";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
+import { UniqId } from "@/src/utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
 
 export class AdCreatorHandler {

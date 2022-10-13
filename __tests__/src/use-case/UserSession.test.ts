@@ -1,4 +1,4 @@
-import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { Auth } from "@/src/infrastructure/Auth";
 import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/use-case/UserSession";

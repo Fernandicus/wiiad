@@ -1,13 +1,10 @@
 import { getServerSideProps } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
-import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { FakeVerificationEmailTimer } from "../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
 import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
 import { faker } from "@faker-js/faker";
-import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserRepo } from "@/src/advertiser/domain/AdvertiserRepo";
 import { IUser } from "@/src/domain/IUser";
 
 interface IServerSideResponse {

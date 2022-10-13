@@ -1,5 +1,5 @@
-import { Ad, AdPropsPrimitives } from "@/src/ad/domain/Ad";
-import { AdModelProps } from "@/src/ad/infraestructure/AdModel";
+import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { AdModelProps } from "@/src/modules/ad/infraestructure/AdModel";
 import { TestAdRepository } from "../domain/TestAdRepository";
 
 export class TestCreateAd {

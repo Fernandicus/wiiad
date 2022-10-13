@@ -1,9 +1,9 @@
 import { Email } from "@/src/domain/Email";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
-import { IVerificationEmailTimerPrimitives } from "@/src/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
-import { EmailVerificationConstants } from "@/src/mailing/send-email-verification/EmailVerificationConstants";
-import { ValidateVerificationEmail } from "@/src/mailing/send-email-verification/use-case/ValidateVerificationEmail";
+import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
+import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
+import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 

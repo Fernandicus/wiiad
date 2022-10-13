@@ -1,8 +1,7 @@
 import createAdvertiser from "@/pages/api/advertiser/create/index";
 import {
-  Advertiser,
   AdvertiserPropsPrimitives,
-} from "@/src/advertiser/domain/Advertiser";
+} from "@/src/modules/advertiser/domain/Advertiser";
 import { RolType } from "@/src/domain/Rol";
 import { NextApiRequest, NextApiResponse } from "next";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";

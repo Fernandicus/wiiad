@@ -1,7 +1,7 @@
-import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { RolType } from "@/src/domain/Rol";
-import { AdvertiserModel } from "@/src/advertiser/infraestructure/AdvertiserModel";
-import { AdvertiserMongoDBRepo } from "@/src/advertiser/infraestructure/AdvertiserMongoDBRepo";
+import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
+import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
 

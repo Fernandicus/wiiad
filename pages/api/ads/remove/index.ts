@@ -1,8 +1,6 @@
-import { AdRemoverHandler } from "@/src/ad/handler/AdRemoverHandler";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
 import { NextApiRequest, NextApiResponse } from "next";
-import { adRemoverHandler } from "@/src/ad/ad-container";
+import { adRemoverHandler } from "@/src/modules/ad/ad-container";
 
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {

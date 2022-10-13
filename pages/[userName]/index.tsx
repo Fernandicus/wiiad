@@ -1,7 +1,7 @@
 import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { AdvertiserPropsPrimitives } from "@/src/advertiser/domain/Advertiser";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import {
   LogInController,
 } from "@/src/controllers/LogInController";

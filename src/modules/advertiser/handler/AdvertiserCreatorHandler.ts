@@ -2,7 +2,7 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { Advertiser, AdvertiserPropsPrimitives } from "../domain/Advertiser";
 import { AdvertiserId } from "../domain/value-objects/AdvertiserId";
-import { Rol } from "../../domain/Rol";
+import { Rol } from "../../../domain/Rol";
 import { CreateAdvertiser } from "../use-case/CreateAdvertiser";
 
 export class AdvertiserCreatorHandler {

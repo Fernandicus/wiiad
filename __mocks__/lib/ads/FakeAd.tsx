@@ -1,16 +1,16 @@
-import { AdDescription } from "@/src/ad/domain/value-objects/AdDescription";
-import { AdImage } from "@/src/ad/domain/value-objects/AdImage";
-import { AdRedirectionUrl } from "@/src/ad/domain/value-objects/AdRedirectionUrl";
-import { AdTitle } from "@/src/ad/domain/value-objects/AdTitle";
-import { Ad, AdProps, AdPropsPrimitives } from "@/src/ad/domain/Ad";
+import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
+import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImage";
+import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
+import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
+import { Ad, AdProps, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
-import { AdConstants } from "@/src/ad/ad-constants";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
+import { AdConstants } from "@/src/modules/ad/ad-constants";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   AdSegments,
   AdSegmentType,
-} from "@/src/ad/domain/value-objects/AdSegments";
-import { AdId } from "@/src/ad/domain/value-objects/AdId";
+} from "@/src/modules/ad/domain/value-objects/AdSegments";
+import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { UniqId } from "@/src/utils/UniqId";
 
 export class FakeAd extends Ad {

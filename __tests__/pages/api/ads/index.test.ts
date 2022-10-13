@@ -1,13 +1,10 @@
-import { AdModel, AdModelProps } from "@/src/ad/infraestructure/AdModel";
-import mongoose from "mongoose";
+import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import findAd from "@/pages/api/ads";
-import { UniqId } from "@/src/utils/UniqId";
-import { AdPropsPrimitives } from "@/src/ad/domain/Ad";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
-import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
 import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {

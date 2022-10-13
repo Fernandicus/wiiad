@@ -2,8 +2,8 @@ import {
   Advertiser,
   AdvertiserProps,
   AdvertiserPropsPrimitives,
-} from "@/src/advertiser/domain/Advertiser";
-import { AdvertiserId } from "@/src/advertiser/domain/value-objects/AdvertiserId";
+} from "@/src/modules/advertiser/domain/Advertiser";
+import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   Rol,
   RolType,
