@@ -1,6 +1,7 @@
 import { getCookie, setCookie } from "cookies-next";
 import { IUser } from "../domain/IUser";
 import { IAuth, IReqAndRes } from "../domain/IAuth";
+import { EmailVerificationConstants } from "../modules/mailing/send-email-verification/EmailVerificationConstants";
 
 enum Cookie {
   AUTH_TOKEN = "authToken",
@@ -11,7 +12,12 @@ export class Auth implements IAuth {
 
   setServerCookieJWT(params: IReqAndRes, jwt: string): void {
     const { req, res } = params;
-    setCookie(Cookie.AUTH_TOKEN, jwt, { req, res, httpOnly: true });
+    setCookie(Cookie.AUTH_TOKEN, jwt, {
+      req,
+      res,
+      httpOnly: true,
+      expires: new Date(Date.UTC(2032, 11, 1)),
+    });
   }
 
   getServerCookieJWT(params: IReqAndRes): string | null {
@@ -19,6 +25,7 @@ export class Auth implements IAuth {
     const authToken = getCookie(Cookie.AUTH_TOKEN, {
       req,
       res,
+      domain:'http://localhost:3000',
       httpOnly: true,
     });
 

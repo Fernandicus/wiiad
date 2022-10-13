@@ -2,9 +2,7 @@ import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import {
-  LogInController,
-} from "@/src/controllers/LogInController";
+import { LogInController } from "@/src/controllers/LogInController";
 import { IUser } from "@/src/domain/IUser";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
@@ -32,6 +30,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!queryParams.email || !queryParams.token) {
       const session = userSession.getFromServer(context);
       if (!session) throw new ErrorLogIn("No existing session");
+      if (session.name !== queryParams.userName)
+        throw new ErrorLogIn("You cant access to this profile");
       return {
         props: {
           user: { ...session } as IUser,
@@ -57,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (err) {
+    console.error(err);
     return {
       props: {},
       redirect: { destination: "/", permanent: false },

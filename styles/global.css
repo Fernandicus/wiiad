@@ -51,3 +51,28 @@ code {
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
 }
+
+.loginButton {
+  width: 15em;
+  height: 2em;
+  color: white;
+  background-color: blue;
+}
+
+.errorLogin{
+  padding-left:1em;
+  padding-right:1em;
+  padding-top:0.5em;
+  padding-bottom:0.5em;
+  color:red;
+  background-color:pink;
+}
+
+.successLogin{
+  padding-left:1em;
+  padding-right:1em;
+  padding-top:0.5em;
+  padding-bottom:0.5em;
+  color:green;
+  background-color:lime;
+}
