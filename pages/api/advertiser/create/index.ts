@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: AdvertiserPropsPrimitives = req.body;
+  const reqBody: AdvertiserPropsPrimitives = typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
   if (reqBody.rol === RolType.USER || !reqBody.rol) {
     return res.status(400).json({

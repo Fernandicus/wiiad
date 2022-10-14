@@ -6,11 +6,13 @@ import { RolType } from "@/src/domain/Rol";
 import { NextApiRequest, NextApiResponse } from "next";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { TestAdvertiserMongoDBRepo } from "../../../../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 
 describe("On api/advertiser/create, GIVEN an Advertiser ", () => {
   let advertiser: AdvertiserPropsPrimitives;
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    await TestAdvertiserMongoDBRepo.init();
     advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
   });
 

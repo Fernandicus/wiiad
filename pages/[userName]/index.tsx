@@ -6,20 +6,91 @@ import { LogInController } from "@/src/controllers/LogInController";
 import { IUser } from "@/src/domain/IUser";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  const user: AdvertiserPropsPrimitives = props.user;
+  const user: IUser = props.user;
+
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const urlRef = useRef<HTMLInputElement>(null);
+  const segmentsRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let prevUrl = document.referrer;
+    console.log("prevUrl : ", prevUrl);
+  }, []);
 
   return (
-    <div>
-      <h1>{user.id}</h1>
-      <h1>{user.email}</h1>
-      <h1>{user.name}</h1>
-      <h1>{user.rol}</h1>
-    </div>
+    <main>
+      <div className="profileData">
+        <p>
+          Name: <b>{user.name}</b>
+        </p>
+        <p>
+          Email: <b>{user.email}</b>
+        </p>
+        <p>
+          Rol: <b>{user.rol}</b>
+        </p>
+
+        <p>
+          Id: <b>{user.id}</b>
+        </p>
+        <br />
+        <br />
+      </div>
+      <form
+        className="createAdForm"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (
+            !user.id ||
+            !descriptionRef.current ||
+            !imageRef.current ||
+            !urlRef.current ||
+            !segmentsRef.current ||
+            !titleRef.current
+          )
+            return;
+
+          console.log("submited ad TITLE: ", titleRef.current.value);
+
+          const resp = await fetch("/api/ads/create", {
+            method: "POST",
+            body: JSON.stringify({
+              advertiserId: user.id,
+              description: descriptionRef.current.value,
+              image: imageRef.current.value,
+              redirectionUrl: urlRef.current.value,
+              segments: [segmentsRef.current.value],
+              title: titleRef.current.value,
+              id: "",
+            }),
+          });
+          const respData = await resp.json()
+          console.log(resp);
+          console.log(respData);
+        }}
+      >
+        <h2>Create Ad</h2>
+        <label>Title</label>
+        <input ref={titleRef} type="text" placeholder="Title"></input>
+        <label>Image</label>
+        <input ref={imageRef} type="text" placeholder="Image"></input>
+        <label>URL</label>
+        <input ref={urlRef} type="text" placeholder="Url"></input>
+        <label>Segmentos</label>
+        <input ref={segmentsRef} type="text" placeholder="Segmento"></input>
+        <label>Descripcion</label>
+        <textarea ref={descriptionRef} placeholder="Description"></textarea>
+        <button type="submit">Create Ad</button>
+      </form>
+    </main>
   );
 }
 
@@ -57,7 +128,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (err) {
-    console.error(err);
     return {
       props: {},
       redirect: { destination: "/", permanent: false },

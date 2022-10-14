@@ -59,20 +59,58 @@ code {
   background-color: blue;
 }
 
-.errorLogin{
-  padding-left:1em;
-  padding-right:1em;
-  padding-top:0.5em;
-  padding-bottom:0.5em;
-  color:red;
-  background-color:pink;
+.errorLogin {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  color: red;
+  background-color: pink;
 }
 
-.successLogin{
-  padding-left:1em;
-  padding-right:1em;
-  padding-top:0.5em;
-  padding-bottom:0.5em;
-  color:green;
-  background-color:lime;
+.successLogin {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  color: green;
+  background-color: lime;
+}
+
+.profileData {
+  background-color:#34a5fa;
+  color:white;
+  display: flex;
+}
+
+.profileData p {
+  padding: 2em;
+}
+
+.createAdForm label,
+input,
+textarea {
+  width: 30em;
+  height: 3em;
+  font-size: 16px;
+  display: flex;
+}
+
+.createAdForm label {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.createAdForm input {
+  padding-left: 1em;
+}
+
+
+.createAdForm button {
+  align:auto;
+  margin-top:3em;
+  width:25em;
+  background-color:blue;
+  height:3em;
+  color:white;
 }

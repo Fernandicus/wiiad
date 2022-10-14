@@ -20,14 +20,15 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: ISendVerificationEmailBodyRequest = JSON.parse(req.body); //req.body;//
+  const reqBody: ISendVerificationEmailBodyRequest =
+    typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
   if (
     reqBody.email == undefined ||
     reqBody.userName == undefined ||
     reqBody.rol == undefined
   )
-    return res.status(400).json({message:"Missing Data"});
+    return res.status(400).json({ message: "Missing Data" });
 
   try {
     const id = UniqId.generate();

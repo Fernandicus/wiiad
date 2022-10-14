@@ -17,7 +17,7 @@ export default function Home() {
       ) : message.message !== "" ? (
         <h3 className="successLogin">{message.message}</h3>
       ) : (
-        <div></div>
+        <a href="/fer">/fer</a>
       )}
       <h1>LOGIN or SIGNUP</h1>
       <form

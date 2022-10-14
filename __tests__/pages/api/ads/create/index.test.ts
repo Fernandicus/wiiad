@@ -1,8 +1,10 @@
-import httpMock from "node-mocks-http";
+import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import createAdvertise from "@/pages/api/ads/create";
 import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
+import { NextApiRequest, NextApiResponse } from "next";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
   beforeAll(async () => {
@@ -13,13 +15,13 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
     await TestAdMongoDBRepository.disconnectMongoDB();
   }, 8000);
 
-  it(`WHEN sending a 'POST' request with all the required params, 
+  it.only(`WHEN sending a 'POST' request with all the required params, 
   THEN should return a 200 statusCode`, async () => {
     const advertiserId = UniqId.generate();
     const adId = UniqId.generate();
     const ad = FakeAd.createWithGivenIds({ advertiserId, adId });
 
-    const req = httpMock.createRequest({
+    const req: MockRequest<NextApiRequest> = httpMock.createRequest({
       method: "POST",
       body: {
         segments: ad.segments.segments,
@@ -30,7 +32,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository", () => {
         redirectionUrl: ad.redirectionUrl.url,
       },
     });
-    const res = httpMock.createResponse();
+    const res: MockResponse<NextApiResponse> = httpMock.createResponse();
 
     await createAdvertise(req, res);
 

@@ -2,6 +2,7 @@ import { AdPropsPrimitives } from "../../../../src/modules/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { adCreatorHandler } from "@/src/modules/ad/ad-container";
+import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -10,12 +11,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const reqBody: AdPropsPrimitives = req.body;
+    const reqBody: AdPropsPrimitives = typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
     await MongoDB.connect();
     
     await adCreatorHandler.create(reqBody);
-
+    
     await MongoDB.disconnect();
 
     res.status(200);

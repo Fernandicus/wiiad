@@ -1,6 +1,6 @@
-import { AdRepository } from "@/src/ad/domain/AdRepository";
-import { AdId } from "@/src/ad/domain/value-objects/AdId";
-import { RemoveAd } from "@/src/ad/use-case/RemoveAd";
+import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
+import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
+import { RemoveAd } from "@/src/modules/ad/use-case/RemoveAd";
 
 describe("On RemoveAd use case, GIVEN a repository and ad id", () => {
   const repository: AdRepository = {

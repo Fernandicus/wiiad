@@ -1,6 +1,6 @@
-import { IVerificationEmailRepo } from "@/src/mailing/send-email-verification/domain/IVerificationEmailRepo";
-import { VerificationTokenId } from "@/src/mailing/send-email-verification/domain/VerificationTokenId";
-import { RemoveVerificationEmail } from "@/src/mailing/send-email-verification/use-case/RemoveVerificationEmail";
+import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
+import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
+import { RemoveVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/RemoveVerificationEmail";
 
 describe("On RemoveVerificationEmail, GIVEN Verification Email Repo", () => {
   let repo: IVerificationEmailRepo;
