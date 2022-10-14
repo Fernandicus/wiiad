@@ -2,7 +2,7 @@ import { IncomingMessage, ServerResponse } from "http";
 
 export interface IReqAndRes {
   req: IncomingMessage;
-  res: ServerResponse;
+  res?: ServerResponse;
 }
 
 export interface IAuth {
