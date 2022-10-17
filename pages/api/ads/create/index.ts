@@ -11,6 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
+      console.log(req.body)
     const reqBody: AdPropsPrimitives =
       typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
@@ -24,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await MongoDB.disconnect();
 
-    res.status(200);
+    res.status(200).json({});
     return;
   } catch (err) {
     if (err instanceof Error) {

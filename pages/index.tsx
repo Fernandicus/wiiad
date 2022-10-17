@@ -2,14 +2,18 @@ import Head from "next/head";
 import Image from "next/image";
 
 import styles from "@/pages/index.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RolType } from "@/src/domain/Rol";
+import { IUser } from "@/src/domain/IUser";
+import { userSession } from "@/src/use-case/container";
+import { GetServerSideProps } from "next";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 
-export default function Home() {
+export default function Home(props: {session: AdvertiserPropsPrimitives} ) {
   const myEmail = useRef<HTMLInputElement>(null);
   const myName = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState({ message: "", status: 0 });
-
+  
   return (
     <div className={styles.container}>
       {message.status != 0 ? (
@@ -17,7 +21,7 @@ export default function Home() {
       ) : message.message !== "" ? (
         <h3 className="successLogin">{message.message}</h3>
       ) : (
-        <a href="/fer">/fer</a>
+        <a href={`/${props.session?.name}`}>/{props.session?.name}</a>
       )}
       <h1>LOGIN or SIGNUP</h1>
       <form
@@ -64,3 +68,12 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = userSession.getFromServer(context);
+  return {
+    props: {
+      session,
+    },
+  };
+};

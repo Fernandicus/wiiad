@@ -9,8 +9,6 @@ export default async function handler(
 ) {
   if (req.method !== "GET") return res.status(400);
 
-  const reqBody: { id: string } = req.body;
-
   try {
 
     const session = userSession.getFromServer({ req });
@@ -19,7 +17,7 @@ export default async function handler(
 
     await MongoDB.connect();
     
-    const adsFound = await adFinderHandler.findAllToJSON(reqBody.id);
+    const adsFound = await adFinderHandler.findAllToJSON(session.id);
 
     await MongoDB.disconnect();
 

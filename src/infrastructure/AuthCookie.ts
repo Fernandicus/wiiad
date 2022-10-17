@@ -8,7 +8,7 @@ enum Cookie {
 export class AuthCookie implements IAuthCookies {
   constructor() {}
 
-  setServerCookieJWT(params: IReqAndRes, jwt: string): void {
+  setServerJWT(params: IReqAndRes, jwt: string): void {
     const { req, res } = params;
     setCookie(Cookie.AUTH_TOKEN, jwt, {
       req,
@@ -18,7 +18,7 @@ export class AuthCookie implements IAuthCookies {
     });
   }
 
-  getServerCookieJWT(params: IReqAndRes): string | null {
+  getServerJWT(params: IReqAndRes): string | null {
     const { req, res } = params;
     const authToken = getCookie(Cookie.AUTH_TOKEN, {
       req,
@@ -29,7 +29,7 @@ export class AuthCookie implements IAuthCookies {
     return authToken.toString();
   }
 
-  removeServerCookieJWT(params: IReqAndRes): void {
+  removeServerJWT(params: IReqAndRes): void {
     const { req, res } = params;
     deleteCookie(Cookie.AUTH_TOKEN, { req, res });
   }

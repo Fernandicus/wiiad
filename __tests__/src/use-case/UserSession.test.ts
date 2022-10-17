@@ -23,7 +23,6 @@ describe("On UserSession, GIVEN an Advertiser", () => {
 
   it(`WHEN call the setFromServer and pass an advertiser as a payload, 
   THEN when call getFromServer the session should contain the advertiser data`, () => {
-    let hol = httpMock.createResponse();
     userSession.setFromServer({ req, res }, { ...fakeAdvertiser });
     const session = userSession.getFromServer({ req, res });
 
@@ -31,5 +30,13 @@ describe("On UserSession, GIVEN an Advertiser", () => {
     expect(session?.id).toBe(fakeAdvertiser.id);
     expect(session?.name).toBe(fakeAdvertiser.name);
     expect(session?.rol).toBe(fakeAdvertiser.rol);
+  });
+
+  it(`WHEN call the remove, 
+  THEN when call getFromServer the session shouldn't return null`, () => {
+    userSession.remove({ req, res });
+    const session = userSession.getFromServer({ req, res });
+
+    expect(session).toBe(null);
   });
 });

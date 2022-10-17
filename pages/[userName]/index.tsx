@@ -1,13 +1,11 @@
 import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { LogInController } from "@/src/controllers/LogInController";
 import { IUser } from "@/src/domain/IUser";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
-import { useEffect, useRef, useState } from "react";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { useEffect, useRef } from "react";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -58,23 +56,25 @@ export default function Profile(
           )
             return;
 
-          console.log("submited ad TITLE: ", titleRef.current.value);
+          try {
+            const resp = await fetch("/api/ads/create", {
+              method: "POST",
+              body: JSON.stringify({
+                id: "",
+                advertiserId: user.id,
+                description: descriptionRef.current.value,
+                image: imageRef.current.value,
+                redirectionUrl: urlRef.current.value,
+                segments: [segmentsRef.current.value],
+                title: titleRef.current.value,
+              }),
+            });
 
-          const resp = await fetch("/api/ads/create", {
-            method: "POST",
-            body: JSON.stringify({
-              advertiserId: user.id,
-              description: descriptionRef.current.value,
-              image: imageRef.current.value,
-              redirectionUrl: urlRef.current.value,
-              segments: [segmentsRef.current.value],
-              title: titleRef.current.value,
-              id: "",
-            }),
-          });
-          const respData = await resp.json()
-          console.log(resp);
-          console.log(respData);
+            console.log("NEW ADD CREATED");
+          } catch (err) {
+            if (err instanceof Error && err.message === "Failed to fetch")
+              console.error(new Error("DESACTIVA EL AD BLOQUER"));
+          }
         }}
       >
         <h2>Create Ad</h2>

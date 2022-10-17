@@ -6,7 +6,7 @@ export interface IReqAndRes {
 }
 
 export interface IAuthCookies {
-  getServerCookieJWT<T extends IReqAndRes>(params: T): string | null;
-  setServerCookieJWT<T extends IReqAndRes>(params: T, jwt: string): void;
-  removeServerCookieJWT<T extends IReqAndRes>(params: T): void;
+  getServerJWT<T extends IReqAndRes>(params: T): string | null;
+  setServerJWT<T extends IReqAndRes>(params: T, jwt: string): void;
+  removeServerJWT<T extends IReqAndRes>(params: T): void;
 }
