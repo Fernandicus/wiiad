@@ -1,6 +1,7 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { userSession } from "@/src/use-case/container";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,6 +12,11 @@ export default async function handler(
   const reqBody: { id: string } = req.body;
 
   try {
+
+    const session = userSession.getFromServer({ req });
+    
+    if (!session) return res.status(400).json({ message: "No auth" });
+
     await MongoDB.connect();
     
     const adsFound = await adFinderHandler.findAllToJSON(reqBody.id);

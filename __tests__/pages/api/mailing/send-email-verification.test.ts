@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import sendEmailVerification, {
   ISendVerificationEmailBodyRequest,
 } from "@/pages/api/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RolType } from "@/src/domain/Rol";
+import { MockContext } from "../../../../__mocks__/context/Context";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailBodyRequest;
@@ -20,40 +19,28 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request with all the required data,
   THEN return status code 200`, async () => {
-    const request: MockRequest<NextApiRequest> = httpMock.createRequest({
-      method: "POST",
-      body: user,
-    });
-    const response: MockResponse<NextApiResponse> = httpMock.createResponse();
+    const { req, res } = MockContext("POST", user);
 
-    await sendEmailVerification(request, response);
+    await sendEmailVerification(req, res);
 
-    expect(response.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200);
   }, 8000);
 
   it(`WHEN send GET request, 
   THEN return status code 400`, async () => {
-    const request: MockRequest<NextApiRequest> = httpMock.createRequest({
-      method: "GET",
-      body: user,
-    });
-    const response: MockResponse<NextApiResponse> = httpMock.createResponse();
+    const { req, res } = MockContext("GET", user);
 
-    await sendEmailVerification(request, response);
+    await sendEmailVerification(req, res);
 
-    expect(response.statusCode).toBe(400);
+    expect(res.statusCode).toBe(400);
   });
 
   it(`WHEN send POST request without the required data, 
   THEN return status code 400`, async () => {
-    const request: MockRequest<NextApiRequest> = httpMock.createRequest({
-      method: "POST",
-      body: { userName: user.userName },
-    });
-    const response: MockResponse<NextApiResponse> = httpMock.createResponse();
+    const { req, res } = MockContext("POST", { userName: user.userName });
 
-    await sendEmailVerification(request, response);
+    await sendEmailVerification(req, res);
 
-    expect(response.statusCode).toBe(400);
+    expect(res.statusCode).toBe(400);
   });
 });

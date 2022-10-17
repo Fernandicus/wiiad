@@ -25,6 +25,7 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
     advertiserRepoMock = {
       findById: jest.fn(),
       save: jest.fn(),
+      findByEmail: jest.fn(),
     };
   });
 

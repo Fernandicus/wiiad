@@ -17,4 +17,16 @@ export class TestCreateAdController {
       fakeAds,
     };
   }
+
+  async crateManyWithGivenAdvertiserId(
+    advertiserId: string
+  ): Promise<{ advertiserId: string; fakeAds: Ad[] }> {
+    const amount = Math.floor(Math.random() * 5);
+    const fakeAds = FakeAd.createMany(advertiserId, amount);
+    await this.testCreateAd.saveMany(fakeAds);
+    return {
+      advertiserId,
+      fakeAds,
+    };
+  }
 }
