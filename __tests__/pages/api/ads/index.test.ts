@@ -34,7 +34,7 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
     userSession.setFromServer(ctx, advertiser);
     await findAd(ctx.req, ctx.res);
 
-    const adsData: AdPropsPrimitives[] = JSON.parse(ctx.res._getJSONData().ads);
+    const adsData: AdPropsPrimitives[] = JSON.parse(JSON.stringify(ctx.res._getJSONData().ads));
     expect(ctx.res.statusCode).toBe(200);
     expect(adsData.length).toBe(adsInMongoose);
   });
