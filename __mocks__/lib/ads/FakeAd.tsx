@@ -14,24 +14,13 @@ import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { UniqId } from "@/src/utils/UniqId";
 
 export class FakeAd extends Ad {
-  constructor({
-    id,
-    title,
-    description,
-    image,
-    redirectionUrl,
-    advertiserId,
-    segments,
-  }: AdProps) {
-    super({
-      id,
-      title,
-      description,
-      image,
-      redirectionUrl,
-      advertiserId,
-      segments,
-    });
+  constructor(adProps: AdProps) {
+    super(adProps);
+  }
+
+  static createWithPrimitives(): AdPropsPrimitives {
+    return this.generateFakeAdData();
+    
   }
 
   static createMany(advertiserId: string, amount: number): Ad[] {

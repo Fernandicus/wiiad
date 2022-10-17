@@ -20,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await MongoDB.connect();
 
-    await adCreatorHandler.create(reqBody);
+    await adCreatorHandler.create({ ...reqBody, advertiserId: session.id });
 
     await MongoDB.disconnect();
 
