@@ -1,7 +1,7 @@
-import { Auth } from "../infrastructure/Auth";
+import { AuthCookie } from "../infrastructure/AuthCookie";
 import { JsonWebTokenNPM } from "../infrastructure/JsonWebTokenNPM";
 import { UserSession } from "./UserSession";
 
-const auth = new Auth();
+const authCookie = new AuthCookie();
 const jwtRepo = new JsonWebTokenNPM();
-export const userSession = new UserSession(auth, jwtRepo);
+export const userSession = new UserSession(authCookie, jwtRepo);

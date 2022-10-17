@@ -2,7 +2,6 @@ import { AdPropsPrimitives } from "../../../../src/modules/ad/domain/Ad";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { adCreatorHandler } from "@/src/modules/ad/ad-container";
-import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { userSession } from "@/src/use-case/container";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,9 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const session = userSession.getFromServer({ req });
 
-    if (!session) return res.status(400).json({message:"No auth"});
-
-    console.log(session)
+    if (!session) return res.status(400).json({ message: "No auth" });
 
     await MongoDB.connect();
 

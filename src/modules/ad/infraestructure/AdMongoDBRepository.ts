@@ -8,7 +8,6 @@ export class AdMongoDBRepository implements AdRepository {
       _id: ad.id,
       ...ad,
     });
-    console.log("SAVE ADMODEL ,", adModel)
     await adModel.save();
   }
 

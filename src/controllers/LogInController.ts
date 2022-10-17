@@ -3,7 +3,7 @@ import {
   findAdvertiserHandler,
 } from "../modules/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
-import { IReqAndRes } from "../domain/IAuth";
+import { IReqAndRes } from "../domain/IAuthCookies";
 import { IUser } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import {

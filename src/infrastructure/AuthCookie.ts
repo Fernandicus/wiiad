@@ -1,13 +1,11 @@
-import { getCookie, setCookie } from "cookies-next";
-import { IUser } from "../domain/IUser";
-import { IAuth, IReqAndRes } from "../domain/IAuth";
-import { EmailVerificationConstants } from "../modules/mailing/send-email-verification/EmailVerificationConstants";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { IAuthCookies, IReqAndRes } from "../domain/IAuthCookies";
 
 enum Cookie {
   AUTH_TOKEN = "authToken",
 }
 
-export class Auth implements IAuth {
+export class AuthCookie implements IAuthCookies {
   constructor() {}
 
   setServerCookieJWT(params: IReqAndRes, jwt: string): void {
@@ -24,12 +22,15 @@ export class Auth implements IAuth {
     const { req, res } = params;
     const authToken = getCookie(Cookie.AUTH_TOKEN, {
       req,
-      res,
-      domain:'http://localhost:3000',
-      httpOnly: true,
+      res
     });
 
     if (!authToken) return null;
     return authToken.toString();
+  }
+
+  removeServerCookieJWT(params: IReqAndRes): void {
+    const { req, res } = params;
+    deleteCookie(Cookie.AUTH_TOKEN, { req, res });
   }
 }

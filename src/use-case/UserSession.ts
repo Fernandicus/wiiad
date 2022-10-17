@@ -1,9 +1,9 @@
-import { IAuth, IReqAndRes } from "../domain/IAuth";
+import { IAuthCookies, IReqAndRes } from "../domain/IAuthCookies";
 import { IUser } from "../domain/IUser";
 import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
 
 export class UserSession {
-  constructor(private auth: IAuth, private jwtRepo: IJsonWebTokenRepo) {}
+  constructor(private auth: IAuthCookies, private jwtRepo: IJsonWebTokenRepo) {}
 
   getFromServer(context: IReqAndRes): IUser | null {
     const token = this.auth.getServerCookieJWT(context);
@@ -15,5 +15,9 @@ export class UserSession {
   setFromServer(context: IReqAndRes, payload: IUser): void {
     const token = this.jwtRepo.create(payload);
     this.auth.setServerCookieJWT(context, token);
+  }
+
+  remove(context: IReqAndRes):void{
+    this.auth.removeServerCookieJWT(context);
   }
 }

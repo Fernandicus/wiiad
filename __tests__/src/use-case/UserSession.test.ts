@@ -1,9 +1,9 @@
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { Auth } from "@/src/infrastructure/Auth";
+import { AuthCookie } from "@/src/infrastructure/AuthCookie";
 import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/use-case/UserSession";
 import { FakeAdvertiser } from "../../../__mocks__/lib/advertiser/FakeAdvertiser";
-import httpMock, { MockRequest, MockResponse, Cookies } from "node-mocks-http";
+import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import { NextApiRequest, NextApiResponse } from "next";
 
 describe("On UserSession, GIVEN an Advertiser", () => {
@@ -14,15 +14,16 @@ describe("On UserSession, GIVEN an Advertiser", () => {
 
   beforeAll(() => {
     fakeAdvertiser = FakeAdvertiser.createPrimitives();
-    const auth = new Auth();
+    const authCookie = new AuthCookie();
     const jwtRepo = new JsonWebTokenNPM();
-    userSession = new UserSession(auth, jwtRepo);
+    userSession = new UserSession(authCookie, jwtRepo);
     req = httpMock.createRequest();
     res = httpMock.createResponse();
   });
 
   it(`WHEN call the setFromServer and pass an advertiser as a payload, 
   THEN when call getFromServer the session should contain the advertiser data`, () => {
+    let hol = httpMock.createResponse();
     userSession.setFromServer({ req, res }, { ...fakeAdvertiser });
     const session = userSession.getFromServer({ req, res });
 
