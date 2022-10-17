@@ -78,8 +78,8 @@ code {
 }
 
 .profileData {
-  background-color:#34a5fa;
-  color:white;
+  background-color: #34a5fa;
+  color: white;
   display: flex;
 }
 
@@ -105,12 +105,43 @@ textarea {
   padding-left: 1em;
 }
 
-
 .createAdForm button {
-  align:auto;
-  margin-top:3em;
-  width:25em;
-  background-color:blue;
-  height:3em;
-  color:white;
+  align: auto;
+  margin-top: 3em;
+  width: 25em;
+  background-color: blue;
+  height: 3em;
+  color: white;
+}
+
+.createAdForm .removeAds {
+  align: auto;
+  margin-top: 3em;
+  width: 25em;
+  background-color: red;
+  height: 3em;
+  color: white;
+}
+
+.totalAds{
+  padding-top:5em;
+}
+
+.totalAds button {
+  color: white;
+  background-color: green;
+}
+
+.totalAds li {
+  display: flex;
+  padding-top:2em;
+}
+
+.totalAds li button{
+  margin-left:2em;
+}
+
+.totalAds li button {
+  color: white;
+  background-color: red;
 }

@@ -12,26 +12,15 @@ import { FindAds } from "../use-case/FindAds";
 export class AdFinderHandler {
   constructor(private findAds: FindAds) {}
 
-  async findAll(advertiserId: string): Promise<Ad[]> {
+  async findAll(advertiserId: string): Promise<AdPropsPrimitives[]> {
     const id = new AdvertiserId(advertiserId);
     const adsFound = await this.findAds.findAllByAdvertiserId(id);
-    const ads = adsFound.map((ad) => {
-      return new Ad({
-        title: new AdTitle(ad.title),
-        description: new AdDescription(ad.description),
-        image: new AdImage(ad.image),
-        advertiserId: new AdvertiserId(ad.advertiserId),
-        id: new AdId(ad.id),
-        redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
-        segments: new AdSegments(ad.segments),
-      });
-    });
-    return ads;
+    return adsFound;
   }
 
-  async findAllToJSON(advertiserId: string): Promise<string> {
+ /*  async findAllToJSON(advertiserId: string): Promise<string> {
     const id = new AdvertiserId(advertiserId);
     const adsFound = await this.findAds.findAllByAdvertiserId(id);
     return JSON.stringify(adsFound);
-  }
+  } */
 }

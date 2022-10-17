@@ -5,12 +5,15 @@ import { LogInController } from "@/src/controllers/LogInController";
 import { IUser } from "@/src/domain/IUser";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const user: IUser = props.user;
+
+  const [totalAds, setTotalAds] = useState<AdPropsPrimitives[] | null>(null);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -60,7 +63,6 @@ export default function Profile(
             const resp = await fetch("/api/ads/create", {
               method: "POST",
               body: JSON.stringify({
-                id: "",
                 advertiserId: user.id,
                 description: descriptionRef.current.value,
                 image: imageRef.current.value,
@@ -90,6 +92,54 @@ export default function Profile(
         <textarea ref={descriptionRef} placeholder="Description"></textarea>
         <button type="submit">Create Ad</button>
       </form>
+      <div className="totalAds">
+        <button
+          type="button"
+          onClick={async () => {
+            const resp = await fetch("api/ads", {
+              method: "GET",
+            });
+            if (resp.status !== 200) console.error(resp);
+            const data: { ads: AdPropsPrimitives[] } = await resp.json();
+            setTotalAds(data.ads);
+          }}
+        >
+          REFRESH
+        </button>
+        <div>
+          {!totalAds ? (
+            <p>null</p>
+          ) : (
+            <div>
+              <p><b>Total Ads:</b> {`(${totalAds.length})`}</p>
+              <ul>
+                {totalAds.map((ad) => {
+                  return (
+                    <li key={ad.id}>
+                      <p>{ad.title}</p>
+                      <button
+                        className="removeAds"
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const resp = await fetch("api/ads/remove", {
+                              method: "DELETE",
+                              body: JSON.stringify({ adId: ad.id }),
+                            });
+                            if (resp.status !== 200) console.error(resp);
+                          } catch (err) {}
+                        }}
+                      >
+                        Remove {ad.title}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
     </main>
   );
 }

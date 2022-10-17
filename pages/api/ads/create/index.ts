@@ -11,12 +11,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-      console.log(req.body)
     const reqBody: AdPropsPrimitives =
       typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
     const session = userSession.getFromServer({ req });
-    
+
     if (!session) return res.status(400).json({ message: "No auth" });
 
     await MongoDB.connect();

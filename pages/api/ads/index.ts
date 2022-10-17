@@ -17,7 +17,7 @@ export default async function handler(
 
     await MongoDB.connect();
     
-    const adsFound = await adFinderHandler.findAllToJSON(session.id);
+    const adsFound = await adFinderHandler.findAll(session.id);
 
     await MongoDB.disconnect();
 
