@@ -7,11 +7,18 @@ import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { userSession } from "@/src/use-case/container";
 import { useEffect, useRef, useState } from "react";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
+import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import {
+  IVisitProfile,
+  VisitProfileController,
+} from "@/src/controllers/VisitProfileController";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const user: IUser = props.user;
+  const ads: AdPropsPrimitives[] = props.ads;
 
   const [totalAds, setTotalAds] = useState<AdPropsPrimitives[] | null>(null);
 
@@ -25,6 +32,25 @@ export default function Profile(
     let prevUrl = document.referrer;
     console.log("prevUrl : ", prevUrl);
   }, []);
+
+  if (props.isViewingAd) {
+    return (
+      <div>
+        <h1>NO SESSION or NOT YOUR PROFILE</h1>
+        <ul>
+          {ads.map((ad) => {
+            return (
+              <li key={ad.id}>
+                <p>{ad.title}</p>
+                <p>{ad.redirectionUrl}</p>
+                <p>{ad.segments}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <main>
@@ -111,7 +137,9 @@ export default function Profile(
             <p>null</p>
           ) : (
             <div>
-              <p><b>Total Ads:</b> {`(${totalAds.length})`}</p>
+              <p>
+                <b>Total Ads:</b> {`(${totalAds.length})`}
+              </p>
               <ul>
                 {totalAds.map((ad) => {
                   return (
@@ -147,16 +175,19 @@ export default function Profile(
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const queryParams = new ValidateLoginQueries(query);
+  
   try {
     if (!queryParams.email || !queryParams.token) {
-      const session = userSession.getFromServer(context);
-      if (!session) throw new ErrorLogIn("No existing session");
-      if (session.name !== queryParams.userName)
-        throw new ErrorLogIn("You cant access to this profile");
+      const data = await MongoDB.connectAndDisconnect<IVisitProfile>(
+        async () => {
+          return await VisitProfileController.watchAdOrVisitProfile(
+            context,
+            queryParams
+          );
+        }
+      );
       return {
-        props: {
-          user: { ...session } as IUser,
-        },
+        props: data,
       };
     }
 
@@ -178,6 +209,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (err) {
+    console.log(err);
     return {
       props: {},
       redirect: { destination: "/", permanent: false },

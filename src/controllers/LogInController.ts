@@ -30,7 +30,10 @@ export interface IAdvertiserLogIn {
 }
 
 export class LogInController {
-  static async initSession(loginQueries: LogInQueries, context: IReqAndRes): Promise<IUser | null> {
+  static async initSession(
+    loginQueries: LogInQueries,
+    context: IReqAndRes
+  ): Promise<IUser | null> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.token,
       loginQueries.email
@@ -41,6 +44,9 @@ export class LogInController {
         queries: loginQueries,
         rol: verificationEmail.rol,
       });
+      if (userSession.getFromServer(context)) {
+        userSession.remove(context);
+      }
       userSession.setFromServer(context, advertiser);
       return advertiser;
     } else {
@@ -59,7 +65,7 @@ export class LogInController {
   ): Promise<AdvertiserPropsPrimitives> {
     let advertiserId: string;
 
-    const advertiserFound = await findAdvertiserHandler.findById(
+    const advertiserFound = await findAdvertiserHandler.findByEmail(
       data.queries.email
     );
 
