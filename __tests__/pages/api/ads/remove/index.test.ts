@@ -3,44 +3,65 @@ import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
-import { UniqId } from "@/src/utils/UniqId";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { MockContext } from "../../../../../__mocks__/context/Context";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { userSession } from "@/src/use-case/container";
+import { MongoDB } from "@/src/infrastructure/MongoDB";
 
 describe("On api/ads/remove-ad route", () => {
-  beforeAll(async () => {
+  let advertiser: AdvertiserPropsPrimitives;
+  
+  beforeEach(async () => {
+    advertiser = FakeAdvertiser.createPrimitives();
     await TestAdMongoDBRepository.init();
   }, 8000);
 
   afterAll(async () => {
-    await TestAdMongoDBRepository.disconnectMongoDB()
+    await TestAdMongoDBRepository.disconnectMongoDB();
   }, 8000);
 
-  it("When send 'DELETE' method with correct ad id response with status 200", async () => {
-    const advertiserId = UniqId.generate();
-    const adId = UniqId.generate();
-    const adData = FakeAd.createWithGivenIds({ advertiserId, adId });
+  it("WHEN send 'DELETE' method with correct ad id and a user session, THEN response with status 200", async () => {
+    const adData = FakeAd.createWithPrimitives(advertiser.id);
+
     const ad = new AdModel({
-      title: adData.title.title,
-      description: adData.description.description,
-      _id: adData.id.id,
-      advertiserId: adData.advertiserId.id,
-      image: adData.image.image,
-      redirectionUrl: adData.redirectionUrl.url,
-      segments: adData.segments.segments,
+      _id: adData.id,
+      ...adData,
     });
+    
+    await ad.save();
+   
+    const ctx = MockContext("DELETE", {
+      adId: ad.id,
+    });
+
+    userSession.setFromServer(ctx, { ...advertiser });
+
+    await removeAd(ctx.req, ctx.res);
+
+    expect(ctx.res.statusCode).toBe(200);
+  }, 8000);
+
+  it("WHEN send 'DELETE' method with correct ad id but without session, THEN response with status 400", async () => {
+    const adData = FakeAd.createWithPrimitives(advertiser.id);
+
+    const ad = new AdModel({
+      _id: adData.id,
+      ...adData,
+    });
+
     await ad.save();
 
-    const req = httpMock.createRequest({
-      method: "DELETE",
-      body: {
-        adId: ad.id,
-      },
+    const ctx = MockContext("DELETE", {
+      adId: ad.id,
     });
-    const res: NextApiResponse = httpMock.createResponse();
 
-    await removeAd(req, res);
+    userSession.remove(ctx)
 
-    expect(res.statusCode).toBe(200);
+    await removeAd(ctx.req, ctx.res);
+
+    expect(ctx.res.statusCode).toBe(400);
   }, 8000);
 
   it("When send 'DELETE' method without a correct ad id response with status 400", async () => {

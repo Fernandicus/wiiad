@@ -4,7 +4,7 @@ import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoD
 
 export class TestAdMongoDBRepository extends TestMongoDB {
   static async init(): Promise<TestAdMongoDBRepository> {
-    this.connectAndCleanModel(mongoose.model(AdModel.modelName, AdModel.schema));
+    await this.connectAndCleanModel(mongoose.model(AdModel.modelName, AdModel.schema));
     return new TestAdMongoDBRepository();
   }
 

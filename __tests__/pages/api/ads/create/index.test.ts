@@ -23,7 +23,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   THEN should return a 200 statusCode`, async () => {
     const ad = FakeAd.createWithPrimitives();
 
-    const ctx = MockContext(ad, "POST");
+    const ctx = MockContext("POST", ad);
 
     userSession.setFromServer(ctx, advertiser);
 
@@ -36,7 +36,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   THEN should return a 400 statusCode`, async () => {
     const ad = FakeAd.createWithPrimitives();
 
-    const ctx = MockContext(ad, "POST");
+    const ctx = MockContext("POST", ad);
 
     userSession.remove(ctx);
 
@@ -48,7 +48,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   it("WHEN sending a 'POST' request with an invalid params, THEN should return a 400 statusCode", async () => {
     const ad = FakeAd.createWithPrimitives();
 
-    const { req, res } = MockContext({ ...ad, advertiserId: "" }, "POST");
+    const { req, res } = MockContext("POST", { ...ad, advertiserId: "" });
 
     await createAdvertise(req, res);
 
@@ -58,7 +58,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   it("WHEN sending a not 'POST' request, THEN should return a 400 statusCode", async () => {
     const ad = FakeAd.createWithPrimitives();
 
-    const { req, res } = MockContext({ ...ad }, "GET");
+    const { req, res } = MockContext("GET", { ...ad });
 
     await createAdvertise(req, res);
 

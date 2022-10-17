@@ -18,17 +18,24 @@ export class FakeAd extends Ad {
     super(adProps);
   }
 
-  static createWithPrimitives(): AdPropsPrimitives {
-    return this.generateFakeAdData();
-    
+  static createWithPrimitives(advertiserId: string): AdPropsPrimitives {
+    const fakeAd = this.generateFakeAdData();
+    return {
+      ...fakeAd,
+      id: UniqId.generate(),
+    };
   }
 
   static createMany(advertiserId: string, amount: number): Ad[] {
     const fakeAdData = this.generateFakeAdData();
     let ads: Ad[] = [];
-    
+
     for (var i = 0; i <= amount; i++) {
-      const ad = this.getAd({ ...fakeAdData, advertiserId, id: UniqId.generate() });
+      const ad = this.getAd({
+        ...fakeAdData,
+        advertiserId,
+        id: UniqId.generate(),
+      });
       ads.push(ad);
     }
     return ads;
@@ -39,7 +46,7 @@ export class FakeAd extends Ad {
     amount: number
   ): AdPropsPrimitives[] {
     let ads: AdPropsPrimitives[] = [];
-    for (var i = 0; i <= amount -1; i++) {
+    for (var i = 0; i <= amount - 1; i++) {
       ads.push({
         ...this.generateFakeAdData(),
         advertiserId,
