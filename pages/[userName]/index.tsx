@@ -11,8 +11,12 @@ import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-conta
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import {
   IVisitProfile,
-  VisitProfileController,
-} from "@/src/controllers/VisitProfileController";
+  WatchAdController,
+} from "@/src/controllers/WatchAdController";
+import CreateAdForm from "../../components/profile/CreateAdForm";
+import HeaderData from "../../components/profile/HeaderData";
+import TotalAds from "../../components/profile/TotalAds";
+import AdView from "../../components/watch-ad/AdView";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -20,154 +24,15 @@ export default function Profile(
   const user: IUser = props.user;
   const ads: AdPropsPrimitives[] = props.ads;
 
-  const [totalAds, setTotalAds] = useState<AdPropsPrimitives[] | null>(null);
-
-  const titleRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const urlRef = useRef<HTMLInputElement>(null);
-  const segmentsRef = useRef<HTMLInputElement>(null);
-  const imageRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    let prevUrl = document.referrer;
-    console.log("prevUrl : ", prevUrl);
-  }, []);
-
   if (props.isViewingAd) {
-    return (
-      <div>
-        <h1>NO SESSION or NOT YOUR PROFILE</h1>
-        <ul>
-          {ads.map((ad) => {
-            return (
-              <li key={ad.id}>
-                <p>{ad.title}</p>
-                <p>{ad.redirectionUrl}</p>
-                <p>{ad.segments}</p>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
+    return <AdView ads={ads} />;
   }
 
   return (
     <main>
-      <div className="profileData">
-        <p>
-          Name: <b>{user.name}</b>
-        </p>
-        <p>
-          Email: <b>{user.email}</b>
-        </p>
-        <p>
-          Rol: <b>{user.rol}</b>
-        </p>
-
-        <p>
-          Id: <b>{user.id}</b>
-        </p>
-        <br />
-        <br />
-      </div>
-      <form
-        className="createAdForm"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (
-            !user.id ||
-            !descriptionRef.current ||
-            !imageRef.current ||
-            !urlRef.current ||
-            !segmentsRef.current ||
-            !titleRef.current
-          )
-            return;
-
-          try {
-            const resp = await fetch("/api/ads/create", {
-              method: "POST",
-              body: JSON.stringify({
-                advertiserId: user.id,
-                description: descriptionRef.current.value,
-                image: imageRef.current.value,
-                redirectionUrl: urlRef.current.value,
-                segments: [segmentsRef.current.value],
-                title: titleRef.current.value,
-              }),
-            });
-
-            console.log("NEW ADD CREATED");
-          } catch (err) {
-            if (err instanceof Error && err.message === "Failed to fetch")
-              console.error(new Error("DESACTIVA EL AD BLOQUER"));
-          }
-        }}
-      >
-        <h2>Create Ad</h2>
-        <label>Title</label>
-        <input ref={titleRef} type="text" placeholder="Title"></input>
-        <label>Image</label>
-        <input ref={imageRef} type="text" placeholder="Image"></input>
-        <label>URL</label>
-        <input ref={urlRef} type="text" placeholder="Url"></input>
-        <label>Segmentos</label>
-        <input ref={segmentsRef} type="text" placeholder="Segmento"></input>
-        <label>Descripcion</label>
-        <textarea ref={descriptionRef} placeholder="Description"></textarea>
-        <button type="submit">Create Ad</button>
-      </form>
-      <div className="totalAds">
-        <button
-          type="button"
-          onClick={async () => {
-            const resp = await fetch("api/ads", {
-              method: "GET",
-            });
-            if (resp.status !== 200) console.error(resp);
-            const data: { ads: AdPropsPrimitives[] } = await resp.json();
-            setTotalAds(data.ads);
-          }}
-        >
-          REFRESH
-        </button>
-        <div>
-          {!totalAds ? (
-            <p>null</p>
-          ) : (
-            <div>
-              <p>
-                <b>Total Ads:</b> {`(${totalAds.length})`}
-              </p>
-              <ul>
-                {totalAds.map((ad) => {
-                  return (
-                    <li key={ad.id}>
-                      <p>{ad.title}</p>
-                      <button
-                        className="removeAds"
-                        type="button"
-                        onClick={async () => {
-                          try {
-                            const resp = await fetch("api/ads/remove", {
-                              method: "DELETE",
-                              body: JSON.stringify({ adId: ad.id }),
-                            });
-                            if (resp.status !== 200) console.error(resp);
-                          } catch (err) {}
-                        }}
-                      >
-                        Remove {ad.title}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
+      <HeaderData user={user} />
+      <CreateAdForm user={user} />
+      <TotalAds />
     </main>
   );
 }
@@ -175,15 +40,12 @@ export default function Profile(
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const queryParams = new ValidateLoginQueries(query);
-  
+
   try {
     if (!queryParams.email || !queryParams.token) {
       const data = await MongoDB.connectAndDisconnect<IVisitProfile>(
         async () => {
-          return await VisitProfileController.watchAdOrVisitProfile(
-            context,
-            queryParams
-          );
+          return await WatchAdController.check(context, queryParams);
         }
       );
       return {

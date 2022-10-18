@@ -7,13 +7,13 @@ import { findAdvertiserHandler } from "../modules/advertiser/advertiser-containe
 import { userSession } from "../use-case/container";
 
 export interface IVisitProfile {
-  isViewingAd: boolean;
+  isWatchingAd: boolean;
   user: IUser;
   ads: AdPropsPrimitives[];
 }
 
-export class VisitProfileController {
-  static async watchAdOrVisitProfile(
+export class WatchAdController {
+  static async check(
     context: IReqAndRes,
     loginQueries: ValidateLoginQueries
   ): Promise<IVisitProfile> {
@@ -25,13 +25,13 @@ export class VisitProfileController {
       const ads = await adFinderHandler.findAll(advertiser!.id);
       return {
         ads,
-        isViewingAd: true,
+        isWatchingAd: true,
         user: { ...session } as IUser,
       };
     } else {
       return {
         ads: [],
-        isViewingAd: false,
+        isWatchingAd: false,
         user: { ...session } as IUser,
       };
     }
