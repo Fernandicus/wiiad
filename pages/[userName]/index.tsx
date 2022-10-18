@@ -10,7 +10,7 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import {
-  IVisitProfile,
+  IWatchAdData,
   WatchAdController,
 } from "@/src/controllers/WatchAdController";
 import CreateAdForm from "../../components/profile/CreateAdForm";
@@ -22,10 +22,10 @@ export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const user: IUser = props.user;
-  const ads: AdPropsPrimitives[] = props.ads;
+  const watchAds: AdPropsPrimitives[] = props.watchAds;
 
-  if (props.isViewingAd) {
-    return <AdView ads={ads} />;
+  if (watchAds.length > 0) {
+    return <AdView ads={watchAds} />;
   }
 
   return (
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     if (!queryParams.email || !queryParams.token) {
-      const data = await MongoDB.connectAndDisconnect<IVisitProfile>(
+      const data = await MongoDB.connectAndDisconnect<IWatchAdData>(
         async () => {
           return await WatchAdController.check(context, queryParams);
         }
@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return {
       props: {},
       redirect: { destination: "/", permanent: false },
