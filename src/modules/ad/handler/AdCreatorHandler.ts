@@ -10,7 +10,6 @@ import { UniqId } from "@/src/utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
 import { IAdCloudStorageRepo } from "../domain/IAdCloudStorageRepo";
 import { ICreateAdBodyReq } from "@/pages/api/ads/create";
-import { ImageBase64 } from "../domain/value-objects/ImageBase64";
 
 export class AdCreatorHandler {
   constructor(
@@ -42,9 +41,8 @@ export class AdCreatorHandler {
     });
   }
 
-  private async uploadImageAndGetUrl(fileBase64: string): Promise<string> {
-    const imageBase64 = new ImageBase64(fileBase64);
-    const imageURL = await this.cloudStorageRepo.uploadImage(imageBase64);
+  private async uploadImageAndGetUrl(imagePath: string): Promise<string> {
+    const imageURL = await this.cloudStorageRepo.uploadImageAndGetUrl(imagePath);
     return imageURL;
   }
 }

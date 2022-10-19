@@ -6,7 +6,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
-import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
+import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
@@ -29,7 +29,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
         id: new AdId(ad.id),
         advertiserId: new AdvertiserId(ad.advertiserId),
         description: new AdDescription(ad.description),
-        image: new AdImage(ad.image),
+        image: new AdImageUrl(ad.image),
         redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
         segments: new AdSegments(ad.segments),
         title: new AdTitle(ad.title),

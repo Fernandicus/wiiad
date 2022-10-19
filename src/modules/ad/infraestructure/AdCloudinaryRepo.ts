@@ -1,6 +1,5 @@
 import { IAdCloudStorageRepo } from "../domain/IAdCloudStorageRepo";
 import { v2 as cloudinary } from "cloudinary";
-import { ImageBase64 } from "../domain/value-objects/ImageBase64";
 
 export class AdCloudinaryRepo implements IAdCloudStorageRepo {
   private readonly upload_preset = "ml_default";
@@ -13,8 +12,8 @@ export class AdCloudinaryRepo implements IAdCloudStorageRepo {
     });
   }
 
-  async uploadImage(imageBase64: ImageBase64): Promise<string> {
-    const { url } = await cloudinary.uploader.upload_large(imageBase64.image, {
+  async uploadImageAndGetUrl(imagePath: string): Promise<string> {
+    const { url } = await cloudinary.uploader.upload_large(imagePath, {
       upload_preset: this.upload_preset,
     });
     return url;
