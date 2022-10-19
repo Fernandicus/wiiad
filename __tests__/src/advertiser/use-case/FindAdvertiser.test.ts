@@ -26,6 +26,7 @@ describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
       findByEmail: jest.fn().mockResolvedValue(advertiserPrimitives),
       findById: jest.fn(),
       save: jest.fn(),
+      findByName: jest.fn(),
     };
     const findAdvertiser = new FindAdvertiser(mockRepo);
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);
@@ -39,6 +40,7 @@ describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
       findByEmail: jest.fn().mockResolvedValue(null),
       findById: jest.fn(),
       save: jest.fn(),
+      findByName: jest.fn(),
     };
     const findAdvertiser = new FindAdvertiser(mockRepo);
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);

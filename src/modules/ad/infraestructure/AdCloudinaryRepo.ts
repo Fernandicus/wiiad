@@ -13,7 +13,7 @@ export class AdCloudinaryRepo implements IAdCloudStorageRepo {
   }
 
   async uploadImageAndGetUrl(imagePath: string): Promise<string> {
-    const { url } = await cloudinary.uploader.upload_large(imagePath, {
+    const { url } = await cloudinary.uploader.upload(imagePath, {
       upload_preset: this.upload_preset,
     });
     return url;
