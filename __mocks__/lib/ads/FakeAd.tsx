@@ -1,5 +1,5 @@
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImage";
+import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { Ad, AdProps, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
@@ -134,7 +134,7 @@ export class FakeAd extends Ad {
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
-      image: new AdImage(adProps.image),
+      image: new AdImageUrl(adProps.image),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new AdvertiserId(adProps.advertiserId),
     });

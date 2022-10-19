@@ -1,11 +1,13 @@
 import { IUser } from "@/src/domain/IUser";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 export default function CreateAdForm(props: { user: IUser }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
   const segmentsRef = useRef<HTMLInputElement>(null);
+
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>();
   const imageRef = useRef<HTMLInputElement>(null);
   const submitAdUrl: string = "/api/ads/create";
 
@@ -14,7 +16,7 @@ export default function CreateAdForm(props: { user: IUser }) {
     if (
       !props.user.id ||
       !descriptionRef.current ||
-      !imageRef.current ||
+      !imagePreview ||
       !urlRef.current ||
       !segmentsRef.current ||
       !titleRef.current
@@ -22,19 +24,18 @@ export default function CreateAdForm(props: { user: IUser }) {
       return;
 
     try {
-      const resp = await fetch(submitAdUrl, {
+      await fetch(submitAdUrl, {
         method: "POST",
         body: JSON.stringify({
-          advertiserId: props.user.id,
+          title: titleRef.current.value,
           description: descriptionRef.current.value,
-          image: imageRef.current.value,
+          image: imagePreview,
           redirectionUrl: urlRef.current.value,
           segments: [segmentsRef.current.value],
-          title: titleRef.current.value,
         }),
       });
 
-      console.log("NEW ADD CREATED");
+      console.log("NEW ADD CREATED ");
     } catch (err) {
       if (err instanceof Error && err.message === "Failed to fetch")
         console.error(new Error("DESACTIVA EL AD BLOQUER"));
@@ -44,10 +45,25 @@ export default function CreateAdForm(props: { user: IUser }) {
   return (
     <form className="createAdForm" onSubmit={submitAd}>
       <h2>Create Ad</h2>
+      <label>Image</label>
+      <input
+        //ref={imageRef}
+        type="File"
+        placeholder="Image"
+        onChange={(event) => {
+          event.preventDefault();
+          console.log(event.target.files![0]);
+          const reader = new FileReader();
+          reader.readAsDataURL(event.target.files![0]);
+          reader.onloadend = () => {
+            console.log(reader.result);
+            setImagePreview(reader.result)
+          };
+        }}
+      ></input>
+      {imagePreview && <img src={imagePreview.toString()} alt="alt"></img>}
       <label>Title</label>
       <input ref={titleRef} type="text" placeholder="Title"></input>
-      <label>Image</label>
-      <input ref={imageRef} type="text" placeholder="Image"></input>
       <label>URL</label>
       <input ref={urlRef} type="text" placeholder="Url"></input>
       <label>Segmentos</label>

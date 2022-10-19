@@ -6,7 +6,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
-import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImage";
+import { AdImage } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";

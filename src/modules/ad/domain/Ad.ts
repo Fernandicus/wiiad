@@ -1,6 +1,6 @@
 import { AdDescription } from "./value-objects/AdDescription";
 import { AdId } from "./value-objects/AdId";
-import { AdImage } from "./value-objects/AdImage";
+import { AdImageUrl } from "./value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "./value-objects/AdRedirectionUrl";
 import { AdSegments } from "./value-objects/AdSegments";
 import { AdTitle } from "./value-objects/AdTitle";
@@ -20,7 +20,7 @@ export interface AdProps {
   id: AdId;
   title: AdTitle;
   description: AdDescription;
-  image: AdImage;
+  image: AdImageUrl;
   redirectionUrl: AdRedirectionUrl;
   advertiserId: AdvertiserId;
   segments: AdSegments;
@@ -31,7 +31,7 @@ export class Ad {
   public readonly advertiserId: AdvertiserId;
   public readonly title: AdTitle;
   public readonly description: AdDescription;
-  public readonly image: AdImage;
+  public readonly image: AdImageUrl;
   public readonly redirectionUrl: AdRedirectionUrl;
   public readonly segments: AdSegments;
 
