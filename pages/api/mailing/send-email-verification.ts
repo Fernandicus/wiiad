@@ -4,6 +4,7 @@ import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verific
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/ErrorSendingEmail";
 import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/controller/SendVerificationEmailController";
 import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
+import { UniqId } from "@/src/utils/UniqId";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +17,8 @@ export default async function handler(
 
   try {
     await MongoDB.connectAndDisconnect(
-      async () => await SendVerificationEmailController.send(reqBody)
+      async () =>
+        await SendVerificationEmailController.send(reqBody, UniqId.generate())
     );
 
     return res.status(200).json({ message: `Email sent to ${reqBody.email}` });

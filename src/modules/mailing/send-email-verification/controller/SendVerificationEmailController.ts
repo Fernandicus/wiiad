@@ -6,9 +6,7 @@ import {
 } from "../email-verification-container";
 
 export class SendVerificationEmailController {
-  static async send(data: ISendVerificationEmail): Promise<void> {
-    const id = UniqId.generate();
-
+  static async send(data: ISendVerificationEmail, id: string): Promise<void> {
     await verificationEmailHandler.saveWithExpirationIn5min({
       email: data.email,
       id,
