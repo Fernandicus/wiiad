@@ -27,6 +27,16 @@ describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
     expect(res.statusCode).toBe(200);
   });
 
+  it(`WHEN try to launch a campaign without a session, 
+  THEN return status code 400`, async () => {
+    const { req, res } = MockContext("POST", { adId: ad.id });
+
+    userSession.remove({ req, res });
+    await launchCampaign(req, res);
+
+    expect(res.statusCode).toBe(400);
+  });
+
   it(`WHEN send a GET request, 
   THEN return status code 400`, async () => {
     const { req, res } = MockContext("GET", { adId: ad.id });
