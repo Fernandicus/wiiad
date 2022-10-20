@@ -1,4 +1,3 @@
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignId } from "@/src/modules/campaign/domain/value-objects/CampaignId";
@@ -24,7 +23,7 @@ export default async function handler(
 
   const campaign = new Campaign({
     id: new CampaignId(UniqId.generate()),
-    advertiserId: new AdvertiserId(UniqId.generate()),
+    advertiserId:  UniqId.new(),
     adId: UniqId.new(),
     promoters: [UniqId.new()],
     watchers: [UniqId.new()],

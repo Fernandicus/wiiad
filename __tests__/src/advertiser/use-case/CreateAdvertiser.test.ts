@@ -1,10 +1,6 @@
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { ErrorCreatingAdvertiser } from "@/src/modules/advertiser/domain/ErrorCreatingAdvertiser";
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
-import {
-  Rol,
-  RolType,
-} from "@/src/domain/Rol";
+import { Rol, RolType } from "@/src/domain/Rol";
 import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
@@ -17,7 +13,7 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
 
   beforeAll(() => {
     advertiser = new Advertiser({
-      id: new AdvertiserId(UniqId.generate()),
+      id: UniqId.new(),
       name: new Name("NAME"),
       email: new Email("test@test.com"),
       rol: new Rol(RolType.BUSINESS),
@@ -26,6 +22,7 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
       findById: jest.fn(),
       save: jest.fn(),
       findByEmail: jest.fn(),
+      findByName: jest.fn(),
     };
   });
 

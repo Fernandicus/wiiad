@@ -3,7 +3,6 @@ import {
   AdvertiserProps,
   AdvertiserPropsPrimitives,
 } from "@/src/modules/advertiser/domain/Advertiser";
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   Rol,
   RolType,
@@ -51,7 +50,7 @@ export class FakeAdvertiser extends Advertiser {
     primitives: AdvertiserPropsPrimitives
   ): Advertiser {
     return new Advertiser({
-      id: new AdvertiserId(primitives.id),
+      id: new UniqId(primitives.id),
       email: new Email(primitives.email),
       name: new Name(primitives.name),
       rol: new Rol(primitives.rol),

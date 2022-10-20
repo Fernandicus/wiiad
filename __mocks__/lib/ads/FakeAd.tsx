@@ -5,7 +5,6 @@ import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { Ad, AdProps, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
 import { AdConstants } from "@/src/modules/ad/ad-constants";
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   AdSegments,
   AdSegmentType,
@@ -135,7 +134,7 @@ export class FakeAd extends Ad {
       description: new AdDescription(adProps.description),
       image: new AdImageUrl(adProps.image),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
-      advertiserId: new AdvertiserId(adProps.advertiserId),
+      advertiserId: new UniqId(adProps.advertiserId),
     });
   }
 }

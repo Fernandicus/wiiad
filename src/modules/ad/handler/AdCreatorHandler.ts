@@ -4,7 +4,6 @@ import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { UniqId } from "@/src/utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
 import { IAdCloudStorageRepo } from "../domain/IAdCloudStorageRepo";
@@ -30,13 +29,13 @@ export class AdCreatorHandler {
     const { adProps, advertiserId, imageURL } = props;
     const id = UniqId.generate();
     return new Ad({
-      id: UniqId.new(),//new AdId(id),
+      id: UniqId.new(),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
       image: new AdImageUrl(imageURL),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
-      advertiserId: new AdvertiserId(advertiserId),
+      advertiserId: new UniqId(advertiserId),
     });
   }
 

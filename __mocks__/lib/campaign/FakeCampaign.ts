@@ -1,4 +1,3 @@
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   Campaign,
   CampaignProps,
@@ -21,7 +20,7 @@ export class FakeCampaign extends Campaign {
 
     return new Campaign({
       id: new CampaignId(ids[0]),
-      advertiserId: new AdvertiserId(ids[1]),
+      advertiserId: new UniqId(ids[1]),
       adId: UniqId.new(),
       promoters: [UniqId.new()],
       watchers: [UniqId.new()],

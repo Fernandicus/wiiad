@@ -1,11 +1,11 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { AdvertiserId } from "./value-objects/AdvertiserId";
 import { Rol, RolType } from "../../../domain/Rol";
 import { IUser } from "@/src/domain/IUser";
+import { UniqId } from "@/src/utils/UniqId";
 
 export interface AdvertiserProps {
-  id: AdvertiserId;
+  id: UniqId;
   name: Name;
   email: Email;
   rol: Rol;

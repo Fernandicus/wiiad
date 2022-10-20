@@ -3,7 +3,6 @@ import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
 import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
@@ -26,7 +25,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
     await createAd.save(
       new FakeAd({
         id: new UniqId(ad.id),
-        advertiserId: new AdvertiserId(ad.advertiserId),
+        advertiserId: new UniqId(ad.advertiserId),
         description: new AdDescription(ad.description),
         image: new AdImageUrl(ad.image),
         redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
