@@ -1,13 +1,13 @@
 import { Email } from "@/src/domain/Email";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
+import { UniqId } from "@/src/utils/UniqId";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
 import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
-import { VerificationTokenId } from "../domain/VerificationTokenId";
 
 export class ValidateVerificationEmail {
   constructor(private repository: IVerificationEmailRepo) {}
 
-  async validate(tokenId: VerificationTokenId, email: Email): Promise<IVerificationEmailTimerPrimitives> {
+  async validate(tokenId: UniqId, email: Email): Promise<IVerificationEmailTimerPrimitives> {
     const verificationEmail = await this.repository.findById(tokenId.id);
     if (!verificationEmail) throw new ErrorLogIn("Verification Email not found");
     await this.repository.remove(verificationEmail.id);

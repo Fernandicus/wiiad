@@ -5,7 +5,6 @@ import {
   IVerificationEmailTimerPrimitives,
 } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
-import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
 import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
@@ -24,7 +23,7 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
   static create(roltype = RolType.BUSINESS): FakeVerificationEmailTimer {
     const { email, expirationDate, id, rol } = this.generateRandomData(roltype);
     return new FakeVerificationEmailTimer({
-      id: new VerificationTokenId(id),
+      id: new UniqId(id),
       email: new Email(email),
       expirationDate: new ExpirationDate(expirationDate),
       rol: new Rol(rol),
@@ -72,7 +71,7 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     const vertificationEmails = vertificationEmailsPrimitives.map(
       (verificationEmail): FakeVerificationEmailTimer => {
         return {
-          id: new VerificationTokenId(verificationEmail.id),
+          id: new UniqId(verificationEmail.id),
           email: new Email(verificationEmail.email),
           expirationDate: new ExpirationDate(verificationEmail.expirationDate),
           rol: new Rol(verificationEmail.rol),

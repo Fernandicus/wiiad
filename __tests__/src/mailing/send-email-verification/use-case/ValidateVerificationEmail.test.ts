@@ -1,7 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
 import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
@@ -45,7 +44,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
 
     expect(async () => {
       await verifyEmail.validate(
-        new VerificationTokenId("0"),
+        UniqId.new(),
         new Email(faker.internet.email())
       );
     }).rejects.toThrowError(ErrorLogIn);
@@ -62,7 +61,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
 
     await expect(async () => {
       await verifyEmail.validate(
-        new VerificationTokenId("0"),
+        UniqId.new(),
         new Email(faker.internet.email())
       );
     }).rejects.toThrowError(ErrorLogIn);
@@ -78,7 +77,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
     const validateEmail = new ValidateVerificationEmail(mockRepo);
 
     const validatedEmail = await validateEmail.validate(
-      new VerificationTokenId(validEmailTimer.id),
+      new UniqId(validEmailTimer.id),
       new Email(validEmailTimer.email)
     );
 

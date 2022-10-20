@@ -1,7 +1,7 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
+import { UniqId } from "@/src/utils/UniqId";
 import { VerificationURL } from "../domain/VerificationURL";
-import { VerificationTokenId } from "../domain/VerificationTokenId";
 import { SendlVerificationEmail } from "../use-case/SendVerificationEmail";
 
 export class SendVerificationEmailHandler {
@@ -15,7 +15,7 @@ export class SendVerificationEmailHandler {
     const verificationEmail = new VerificationURL({
       userName: new Name(props.userName),
       to: new Email(props.email),
-      token: new VerificationTokenId(props.id),
+      token: new UniqId(props.id),
     });
     await this.sendEmail.send(verificationEmail);
   }

@@ -1,7 +1,7 @@
 import { Email } from "@/src/domain/Email";
-import { Rol, RolType } from "@/src/domain/Rol";
+import { Rol } from "@/src/domain/Rol";
+import { UniqId } from "@/src/utils/UniqId";
 import { ExpirationDate } from "./ExpirationDate";
-import { VerificationTokenId } from "./VerificationTokenId";
 
 export interface IVerificationEmailTimerPrimitives {
   email: string;
@@ -11,7 +11,7 @@ export interface IVerificationEmailTimerPrimitives {
 }
 
 export interface IVerificationEmailTimerProps {
-  id: VerificationTokenId;
+  id: UniqId;
   expirationDate: ExpirationDate;
   email: Email;
   rol: Rol;

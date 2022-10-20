@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
+import { UniqId } from "@/src/utils/UniqId";
 import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
-import { VerificationTokenId } from "../domain/VerificationTokenId";
 import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail";
 
 export class ValidateEmailHandler {
@@ -10,7 +10,7 @@ export class ValidateEmailHandler {
     token: string,
     email: string
   ): Promise<IVerificationEmailTimerPrimitives> {
-    const verificationToken = new VerificationTokenId(token);
+    const verificationToken = new UniqId(token);
     const verificationEmail = new Email(email);
     const validatedEmail = await this.validateEmail.validate(verificationToken, verificationEmail);
     return {
