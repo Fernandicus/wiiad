@@ -18,12 +18,7 @@ export class FakeCampaign extends Campaign {
   }
 
   static create(status = CampaignStatusType.STAND_BY): Campaign {
-    let ids: string[] = [];
-
-    for(let i = 0; i <= 4; i++) {
-      let uniqId = new UniqId();
-      ids.push(uniqId.id);
-    }
+    let ids: string[] = this.generateIds();
 
     return new Campaign({
       id: new CampaignId(ids[0]),
@@ -46,12 +41,7 @@ export class FakeCampaign extends Campaign {
   static createWithPrimitives(
     status = CampaignStatusType.STAND_BY
   ): ICampaignPrimitives {
-    let ids: string[] = [];
-
-    for(let i = 0; i <= 4; i++) {
-      let uniqId = new UniqId();
-      ids.push(uniqId.id);
-    }
+    let ids: string[] = this.generateIds();
 
     return {
       id: ids[0],
@@ -69,5 +59,44 @@ export class FakeCampaign extends Campaign {
         totalClicks: 10,
       },
     };
+  }
+
+  static createManyWithPrimitives(
+    amount = 5,
+    status = CampaignStatusType.STAND_BY
+  ): ICampaignPrimitives[] {
+    let campaigns: ICampaignPrimitives[] = [];
+
+    for (let i = 1; i <= amount; i++) {
+      let campaign: ICampaignPrimitives = {
+        id: UniqId.generate(),
+        adId: UniqId.generate(),
+        advertiserId: UniqId.generate(),
+        status: status,
+        watchers: this.generateIds(),
+        promoters: this.generateIds(),
+        budget: {
+          maxClicks: Math.floor(Math.random() * 10000),
+          moneyToSpend: Math.floor(Math.random() * 10000),
+        },
+        metrics: {
+          totalClicks: Math.floor(Math.random() * 10000),
+          totalViews: Math.floor(Math.random() * 10000),
+        },
+      };
+      campaigns.push(campaign);
+    }
+
+    return campaigns;
+  }
+
+  private static generateIds(amount = 5): string[] {
+    let ids: string[] = [];
+
+    for (let i = 1; i <= amount; i++) {
+      let uniqId = new UniqId();
+      ids.push(uniqId.id);
+    }
+    return ids;
   }
 }

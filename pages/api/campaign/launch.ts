@@ -24,9 +24,9 @@ export default async function handler(
   const createCampaign = new CreateCampaign(campaignRepo);
 
   const campaign = new Campaign({
-    id: new CampaignId(""),
-    advertiserId: new AdvertiserId(""),
-    adId: new AdId(""),
+    id: new CampaignId(UniqId.generate()),
+    advertiserId: new AdvertiserId(UniqId.generate()),
+    adId: new AdId(UniqId.generate()),
     promoters: [new UniqId()],
     watchers: [new UniqId()],
     status: CampaignStatusType.STAND_BY,
