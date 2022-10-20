@@ -3,16 +3,15 @@ import { AdImageUrl } from "./value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "./value-objects/AdRedirectionUrl";
 import { AdSegments } from "./value-objects/AdSegments";
 import { AdTitle } from "./value-objects/AdTitle";
-import { AdvertiserId } from "../../advertiser/domain/value-objects/AdvertiserId";
 import { UniqId } from "@/src/utils/UniqId";
 
 export interface AdPropsPrimitives {
   id: string;
+  advertiserId: string;
   title: string;
   description: string;
   image: string;
   redirectionUrl: string;
-  advertiserId: string;
   segments: string[];
 }
 
@@ -22,13 +21,13 @@ export interface AdProps {
   description: AdDescription;
   image: AdImageUrl;
   redirectionUrl: AdRedirectionUrl;
-  advertiserId: AdvertiserId;
+  advertiserId: UniqId;
   segments: AdSegments;
 }
 
 export class Ad {
   public readonly id: UniqId;
-  public readonly advertiserId: AdvertiserId;
+  public readonly advertiserId: UniqId;
   public readonly title: AdTitle;
   public readonly description: AdDescription;
   public readonly image: AdImageUrl;

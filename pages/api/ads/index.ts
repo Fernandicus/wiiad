@@ -1,7 +1,5 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
-import { userSession } from "@/src/use-case/container";
 import { FindAdController } from "@/src/modules/ad/controller/FindAdController";
 
 export default async function handler(

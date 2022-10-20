@@ -1,18 +1,9 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/ErrorSendingEmail";
-import {
-  verificationEmailHandler,
-  sendEmailHandler,
-} from "@/src/modules/mailing/send-email-verification/email-verification-container";
-
-export interface ISendVerificationEmailBodyRequest {
-  email: string;
-  userName: string;
-  rol: string;
-}
+import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/controller/SendVerificationEmailController";
+import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,34 +11,14 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: ISendVerificationEmailBodyRequest =
+  const reqBody: ISendVerificationEmail =
     typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
-  if (
-    reqBody.email == undefined ||
-    reqBody.userName == undefined ||
-    reqBody.rol == undefined
-  )
-    return res.status(400).json({ message: "Missing Data" });
-
   try {
-    const id = UniqId.generate();
+    await MongoDB.connectAndDisconnect(
+      async () => await SendVerificationEmailController.send(reqBody)
+    );
 
-    await MongoDB.connect();
-
-    await verificationEmailHandler.saveWithExpirationIn5min({
-      email: reqBody.email,
-      id,
-      rol: reqBody.rol,
-    });
-
-    await sendEmailHandler.send({
-      id,
-      email: reqBody.email,
-      userName: reqBody.userName,
-    });
-
-    await MongoDB.disconnect();
     return res.status(200).json({ message: `Email sent to ${reqBody.email}` });
   } catch (err) {
     const errorWithVerification = err instanceof ErrorEmailVerification;

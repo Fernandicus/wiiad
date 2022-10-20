@@ -3,12 +3,12 @@ import { IReqAndRes } from "@/src/domain/IAuthCookies";
 import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
 import { RolType } from "@/src/domain/Rol";
 import { adCreatorHandler } from "../ad-container";
-import { ICreateAdBodyReq } from "@/pages/api/ads/create";
+import { AdPropsPrimitives } from "../domain/Ad";
 
 export class CreateAdController {
   static async create(
     context: IReqAndRes,
-    body: ICreateAdBodyReq
+    adProps: AdPropsPrimitives
   ): Promise<void> {
     const session = userSession.getFromServer(context);
 
@@ -18,6 +18,6 @@ export class CreateAdController {
         `This rol cant do this operation ${session.rol}`
       );
 
-    await adCreatorHandler.create(body, session.id);
+    await adCreatorHandler.create(adProps, session.id);
   }
 }

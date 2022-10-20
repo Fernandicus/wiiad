@@ -1,14 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { CreateAdController } from "@/src/modules/ad/controller/CreateAdController";
-
-export interface ICreateAdBodyReq {
-  title: string;
-  description: string;
-  image: string;
-  redirectionUrl: string;
-  segments: string[];
-}
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -17,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const reqBody: ICreateAdBodyReq =
+    const reqBody: AdPropsPrimitives =
       typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
     await MongoDB.connectAndDisconnect(

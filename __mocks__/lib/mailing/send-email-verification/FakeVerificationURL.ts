@@ -1,6 +1,5 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { VerificationTokenId } from "@/src/modules/mailing/send-email-verification/domain/VerificationTokenId";
 import {
   IVerificationURLProps,
   VerificationURL,
@@ -15,7 +14,7 @@ export class FakeVerificationURL extends VerificationURL {
 
   static create(): FakeVerificationURL {
     const to = new Email(faker.internet.email());
-    const token = new VerificationTokenId(UniqId.generate());
+    const token = UniqId.new();
     const userName = new Name(faker.name.firstName());
 
     return new FakeVerificationURL({ to, token, userName });

@@ -1,8 +1,6 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { createCampaignHandler } from "@/src/modules/campaign/container";
 import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
-import { userSession } from "@/src/use-case/container";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

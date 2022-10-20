@@ -1,11 +1,11 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { VerificationTokenId } from "./VerificationTokenId";
+import { UniqId } from "@/src/utils/UniqId";
 
 export interface IVerificationURLProps {
   userName: Name;
   to: Email;
-  token: VerificationTokenId;
+  token: UniqId;
 }
 
 export class VerificationURL {
