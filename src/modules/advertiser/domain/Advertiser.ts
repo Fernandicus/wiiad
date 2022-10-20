@@ -1,17 +1,13 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { Rol, RolType } from "../../../domain/Rol";
-import { IUser } from "@/src/domain/IUser";
+import { IGenericUser, IGenericUserPrimitives } from "@/src/domain/IUser";
 import { UniqId } from "@/src/utils/UniqId";
+import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
 
-export interface AdvertiserProps {
-  id: UniqId;
-  name: Name;
-  email: Email;
-  rol: Rol;
-}
+export interface AdvertiserProps extends IGenericUser {}
 
-export interface AdvertiserPropsPrimitives extends IUser {}
+export interface AdvertiserPropsPrimitives extends IGenericUserPrimitives {}
 
 export class Advertiser {
   readonly id;
@@ -20,6 +16,8 @@ export class Advertiser {
   readonly rol;
 
   constructor({ id, name, email, rol }: AdvertiserProps) {
+    if (rol.rol === RolType.USER)
+      throw new ErrorCreatingAdvertiser("Rol cant be user");
     this.id = id;
     this.name = name;
     this.email = email;
