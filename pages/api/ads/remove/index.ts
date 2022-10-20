@@ -1,6 +1,7 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { RemoveAdController } from "@/src/modules/ad/controller/RemoveAdController";
+import { ErrorRemovingAd } from "@/src/modules/ad/domain/ErrorRemovingAd";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "DELETE") return res.status(400);
@@ -8,6 +9,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     const adId: string =
       typeof req.body !== "object" ? JSON.parse(req.body).adId : req.body.adId;
+    if (!adId) throw new ErrorRemovingAd("Ad id is mandatory");
 
     await MongoDB.connectAndDisconnect(
       async () => await RemoveAdController.remove({ req, res }, adId)

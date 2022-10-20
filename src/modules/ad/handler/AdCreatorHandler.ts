@@ -27,7 +27,6 @@ export class AdCreatorHandler {
     imageURL: string;
   }): Ad {
     const { adProps, advertiserId, imageURL } = props;
-    const id = UniqId.generate();
     return new Ad({
       id: UniqId.new(),
       segments: new AdSegments(adProps.segments),
