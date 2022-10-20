@@ -4,7 +4,7 @@ import { ErrorCreatingAd } from "../ErrorCreatingAd";
 export class AdId {
   readonly id;
   constructor(id: string) {
-    if (id.length == 0) {
+    if (id == "") {
       throw new ErrorCreatingAd("Ad id is mandatory");
     }
 
