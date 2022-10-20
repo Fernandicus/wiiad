@@ -1,6 +1,5 @@
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { CampaignId } from "@/src/modules/campaign/domain/value-objects/CampaignId";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/CampaignMongoDBRepo";
@@ -22,7 +21,7 @@ export default async function handler(
   const createCampaign = new CreateCampaign(campaignRepo);
 
   const campaign = new Campaign({
-    id: new CampaignId(UniqId.generate()),
+    id: UniqId.new(),
     advertiserId:  UniqId.new(),
     adId: UniqId.new(),
     promoters: [UniqId.new()],

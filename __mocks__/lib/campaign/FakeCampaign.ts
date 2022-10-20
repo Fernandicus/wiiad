@@ -4,7 +4,6 @@ import {
   ICampaignPrimitives,
 } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { CampaignId } from "@/src/modules/campaign/domain/value-objects/CampaignId";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
@@ -16,11 +15,9 @@ export class FakeCampaign extends Campaign {
   }
 
   static create(status = CampaignStatusType.STAND_BY): Campaign {
-    let ids: string[] = this.generateIds();
-
     return new Campaign({
-      id: new CampaignId(ids[0]),
-      advertiserId: new UniqId(ids[1]),
+      id: UniqId.new(),
+      advertiserId: UniqId.new(),
       adId: UniqId.new(),
       promoters: [UniqId.new()],
       watchers: [UniqId.new()],
@@ -39,14 +36,12 @@ export class FakeCampaign extends Campaign {
   static createWithPrimitives(
     status = CampaignStatusType.STAND_BY
   ): ICampaignPrimitives {
-    let ids: string[] = this.generateIds();
-
     return {
-      id: ids[0],
-      advertiserId: ids[1],
-      adId: ids[2],
-      promoters: [ids[3]],
-      watchers: [ids[4]],
+      id: UniqId.generate(),
+      advertiserId: UniqId.generate(),
+      adId: UniqId.generate(),
+      promoters: [UniqId.generate()],
+      watchers: [UniqId.generate()],
       status: status,
       budget: {
         moneyToSpend: 5,
@@ -92,8 +87,7 @@ export class FakeCampaign extends Campaign {
     let ids: string[] = [];
 
     for (let i = 1; i <= amount; i++) {
-      let uniqId = UniqId.new();
-      ids.push(uniqId.id);
+      ids.push(UniqId.generate());
     }
     return ids;
   }

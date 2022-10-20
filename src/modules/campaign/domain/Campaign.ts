@@ -1,8 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { AdvertiserId } from "../../advertiser/domain/value-objects/AdvertiserId";
 import { User } from "../../user/domain/User";
 import { CampaignBudget } from "./value-objects/Budget";
-import { CampaignId } from "./value-objects/CampaignId";
 import { CampaignMetrics } from "./value-objects/CampaignMetrics";
 import { CampaignStatusType } from "./value-objects/CampaignStatus";
 
@@ -24,8 +22,8 @@ export interface ICampaignPrimitives {
 }
 
 export interface CampaignProps {
-  id: CampaignId;
-  advertiserId: AdvertiserId;
+  id: UniqId;
+  advertiserId: UniqId;
   adId: UniqId;
   promoters: UniqId[];
   watchers: UniqId[];
@@ -35,8 +33,8 @@ export interface CampaignProps {
 }
 
 export class Campaign {
-  readonly id: CampaignId;
-  readonly advertiserId: AdvertiserId;
+  readonly id: UniqId;
+  readonly advertiserId: UniqId;
   readonly adId: UniqId;
   readonly promoters: UniqId[];
   readonly watchers: UniqId[];
