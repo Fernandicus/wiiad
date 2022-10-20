@@ -1,3 +1,4 @@
+import { UniqId } from "@/src/utils/UniqId";
 import { Campaign } from "../domain/Campaign";
 import { CreateCampaign } from "../use-case/CreateCampaign";
 
@@ -7,13 +8,14 @@ export class CreateCampaignHandler {
   async launch(props: {
     advertiserId: string;
     adId: string;
+    id: string;
   }): Promise<void> {
-
-    const { advertiserId, adId } = props;
+    const { advertiserId, adId, id } = props;
 
     const campaign = Campaign.new({
-      advertiserId,
-      adId,
+      id: new UniqId(id),
+      advertiserId: new UniqId(advertiserId),
+      adId: new UniqId(adId),
     });
 
     await this.createCampaign.launch(campaign);

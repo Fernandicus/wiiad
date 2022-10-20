@@ -13,8 +13,6 @@ export default async function handler(
       async () => await FindAdController.findAll({ req, res })
     );
 
-    await MongoDB.disconnect();
-
     return res.status(200).json({ ads: adsFound });
   } catch (err) {
     return res.status(400);

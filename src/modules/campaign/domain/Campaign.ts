@@ -53,11 +53,15 @@ export class Campaign {
     this.metrics = props.metrics;
   }
 
-  static new(props: { advertiserId: string; adId: string }): Campaign {
+  static new(props: {
+    advertiserId: UniqId;
+    adId: UniqId;
+    id: UniqId;
+  }): Campaign {
     return new Campaign({
-      id: UniqId.new(),
-      advertiserId: new UniqId(props.advertiserId),
-      adId: new UniqId(props.adId),
+      id: props.id,
+      advertiserId: props.advertiserId,
+      adId: props.adId,
       promoters: [],
       watchers: [],
       status: CampaignStatusType.STAND_BY,

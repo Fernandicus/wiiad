@@ -1,6 +1,7 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
+import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -14,7 +15,11 @@ export default async function handler(
     if (!adId) throw new ErrorCreatingCampaign("Missing ad id");
 
     await MongoDB.connectAndDisconnect(async () =>
-      LaunchCampaignController.launch({ req, res }, adId)
+      LaunchCampaignController.launch({
+        context: { req, res },
+        adId,
+        id: UniqId.generate(),
+      })
     );
 
     return res.status(200).json({});
