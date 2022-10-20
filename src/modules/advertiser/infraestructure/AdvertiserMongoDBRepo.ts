@@ -25,7 +25,6 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
   async findById(id: string): Promise<AdvertiserPropsPrimitives | null> {
     const advertiserModel =
       await AdvertiserModel.findById<AdvertiserModelProps>(id);
-      console.log(advertiserModel)
     return this.returnAdvertiser(advertiserModel);
     /* if (!advertiserModel) return null;
     return {

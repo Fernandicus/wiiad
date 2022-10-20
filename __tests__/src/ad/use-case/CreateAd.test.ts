@@ -5,7 +5,6 @@ import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
@@ -26,7 +25,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
     const createAd = new CreateAd(mockedRepository);
     await createAd.save(
       new FakeAd({
-        id: new AdId(ad.id),
+        id: new UniqId(ad.id),
         advertiserId: new AdvertiserId(ad.advertiserId),
         description: new AdDescription(ad.description),
         image: new AdImageUrl(ad.image),

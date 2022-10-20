@@ -1,4 +1,3 @@
-import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import {
   Campaign,
@@ -23,9 +22,9 @@ export class FakeCampaign extends Campaign {
     return new Campaign({
       id: new CampaignId(ids[0]),
       advertiserId: new AdvertiserId(ids[1]),
-      adId: new AdId(ids[2]),
-      promoters: [new UniqId()],
-      watchers: [new UniqId()],
+      adId: UniqId.new(),
+      promoters: [UniqId.new()],
+      watchers: [UniqId.new()],
       status: CampaignStatusType.STAND_BY,
       budget: new CampaignBudget({
         moneyToSpend: 5,
@@ -94,7 +93,7 @@ export class FakeCampaign extends Campaign {
     let ids: string[] = [];
 
     for (let i = 1; i <= amount; i++) {
-      let uniqId = new UniqId();
+      let uniqId = UniqId.new();
       ids.push(uniqId.id);
     }
     return ids;

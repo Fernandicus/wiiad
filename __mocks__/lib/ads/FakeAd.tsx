@@ -10,7 +10,6 @@ import {
   AdSegments,
   AdSegmentType,
 } from "@/src/modules/ad/domain/value-objects/AdSegments";
-import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { UniqId } from "@/src/utils/UniqId";
 
 export class FakeAd extends Ad {
@@ -130,7 +129,7 @@ export class FakeAd extends Ad {
 
   private static getAd(adProps: AdPropsPrimitives): Ad {
     return new Ad({
-      id: new AdId(adProps.id),
+      id: UniqId.new(),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),

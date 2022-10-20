@@ -1,6 +1,5 @@
 import { Ad } from "../domain/Ad";
 import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdId } from "../domain/value-objects/AdId";
 import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
@@ -31,7 +30,7 @@ export class AdCreatorHandler {
     const { adProps, advertiserId, imageURL } = props;
     const id = UniqId.generate();
     return new Ad({
-      id: new AdId(id),
+      id: UniqId.new(),//new AdId(id),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),

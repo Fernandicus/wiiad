@@ -1,4 +1,3 @@
-import { AdId } from "@/src/modules/ad/domain/value-objects/AdId";
 import { AdvertiserId } from "@/src/modules/advertiser/domain/value-objects/AdvertiserId";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
@@ -26,9 +25,9 @@ export default async function handler(
   const campaign = new Campaign({
     id: new CampaignId(UniqId.generate()),
     advertiserId: new AdvertiserId(UniqId.generate()),
-    adId: new AdId(UniqId.generate()),
-    promoters: [new UniqId()],
-    watchers: [new UniqId()],
+    adId: UniqId.new(),
+    promoters: [UniqId.new()],
+    watchers: [UniqId.new()],
     status: CampaignStatusType.STAND_BY,
     budget: new CampaignBudget({
       moneyToSpend: 5,

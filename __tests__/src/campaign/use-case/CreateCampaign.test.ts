@@ -12,7 +12,11 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
   let campaign: Campaign;
 
   beforeAll(() => {
-    campaignRepo = { launch: jest.fn() };
+    campaignRepo = {
+      launch: jest.fn(),
+      findByAdvertiserId: jest.fn(),
+      findByStatus: jest.fn(),
+    };
     createCampaign = new CreateCampaign(campaignRepo);
     campaign = FakeCampaign.create();
   });
