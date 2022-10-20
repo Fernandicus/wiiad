@@ -3,7 +3,7 @@ import { ErrorCreatingAdvertiser } from "../modules/advertiser/domain/ErrorCreat
 export class Name {
   readonly name;
   constructor(name: string) {
-    if (name == "") throw new ErrorCreatingAdvertiser("Name cant be empty");
+    if (!name) throw new ErrorCreatingAdvertiser("Name cant be empty");
     this.name = name;
   }
 }

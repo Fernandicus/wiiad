@@ -8,13 +8,6 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
       { name }
     );
     return this.returnAdvertiser(advertiserModel);
-    /* if (!advertiserModel) return null;
-    return {
-      id: advertiserModel._id,
-      name: advertiserModel.name,
-      email: advertiserModel.email,
-      rol: advertiserModel.rol,
-    }; */
   }
 
   async save(model: AdvertiserPropsPrimitives): Promise<void> {
@@ -26,13 +19,6 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
     const advertiserModel =
       await AdvertiserModel.findById<AdvertiserModelProps>(id);
     return this.returnAdvertiser(advertiserModel);
-    /* if (!advertiserModel) return null;
-    return {
-      id: advertiserModel._id,
-      name: advertiserModel.name,
-      email: advertiserModel.email,
-      rol: advertiserModel.rol,
-    }; */
   }
 
   async findByEmail(email: string): Promise<AdvertiserPropsPrimitives | null> {
@@ -40,13 +26,6 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
       { email }
     );
     return this.returnAdvertiser(advertiserModel);
-    /* if (!advertiserModel) return null;
-    return {
-      id: advertiserModel._id,
-      name: advertiserModel.name,
-      email: advertiserModel.email,
-      rol: advertiserModel.rol,
-    }; */
   }
 
   private returnAdvertiser(

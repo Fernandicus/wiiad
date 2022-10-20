@@ -2,6 +2,7 @@ import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import { userSession } from "@/src/use-case/container";
+import { FindAdController } from "@/src/modules/ad/controller/FindAdController";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,14 +11,9 @@ export default async function handler(
   if (req.method !== "GET") return res.status(400);
 
   try {
-
-    const session = userSession.getFromServer({ req });
-    
-    if (!session) return res.status(400).json({ message: "No auth" });
-
-    await MongoDB.connect();
-    
-    const adsFound = await adFinderHandler.findAll(session.id);
+    const adsFound = await MongoDB.connectAndDisconnect(
+      async () => await FindAdController.findAll({ req, res })
+    );
 
     await MongoDB.disconnect();
 
