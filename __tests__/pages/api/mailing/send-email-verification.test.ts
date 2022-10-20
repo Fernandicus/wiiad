@@ -6,7 +6,7 @@ import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/mail
 import { RolType } from "@/src/domain/Rol";
 import { MockContext } from "../../../../__mocks__/context/Context";
 
-describe.skip("On api/mailing/send-email-verification, GIVEN an user", () => {
+describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailBodyRequest;
   beforeAll(async () => {
     await TestVerificationEmailMongoDBRepo.init();

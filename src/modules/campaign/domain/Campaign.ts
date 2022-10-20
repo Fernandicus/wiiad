@@ -52,4 +52,42 @@ export class Campaign {
     this.budget = props.budget;
     this.metrics = props.metrics;
   }
+
+  static new(props: { advertiserId: string; adId: string }): Campaign {
+    return new Campaign({
+      id: UniqId.new(),
+      advertiserId: new UniqId(props.advertiserId),
+      adId: new UniqId(props.adId),
+      promoters: [],
+      watchers: [],
+      status: CampaignStatusType.STAND_BY,
+      budget: new CampaignBudget({
+        moneyToSpend: 0,
+        maxClicks: 0,
+      }),
+      metrics: new CampaignMetrics({
+        totalViews: 0,
+        totalClicks: 0,
+      }),
+    });
+  }
+
+  toPrimitives(): ICampaignPrimitives {
+    return {
+      id: this.id.id,
+      adId: this.adId.id,
+      advertiserId: this.advertiserId.id,
+      promoters: this.promoters.map((promoter) => promoter.id),
+      watchers: this.watchers.map((watcher) => watcher.id),
+      budget: {
+        maxClicks: this.budget.maxClicks,
+        moneyToSpend: this.budget.moneyToSpend,
+      },
+      metrics: {
+        totalClicks: this.metrics.totalClicks,
+        totalViews: this.metrics.totalViews,
+      },
+      status: this.status,
+    };
+  }
 }

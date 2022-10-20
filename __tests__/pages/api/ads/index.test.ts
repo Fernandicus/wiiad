@@ -1,7 +1,6 @@
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import findAd from "@/pages/api/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { NextApiRequest, NextApiResponse } from "next";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
 import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
