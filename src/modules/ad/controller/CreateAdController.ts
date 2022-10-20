@@ -6,10 +6,12 @@ import { adCreatorHandler } from "../ad-container";
 import { AdPropsPrimitives } from "../domain/Ad";
 
 export class CreateAdController {
-  static async create(
-    context: IReqAndRes,
-    adProps: AdPropsPrimitives
-  ): Promise<void> {
+  static async create(props: {
+    context: IReqAndRes;
+    adProps: AdPropsPrimitives;
+    adId: string;
+  }): Promise<void> {
+    const {adId, adProps, context} = props;
     const session = userSession.getFromServer(context);
 
     if (!session) throw new ErrorCreatingAd("No auth");
@@ -18,6 +20,6 @@ export class CreateAdController {
         `This rol cant do this operation ${session.rol}`
       );
 
-    await adCreatorHandler.create(adProps, session.id);
+    await adCreatorHandler.create(adProps, session.id, adId);
   }
 }

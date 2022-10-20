@@ -14,9 +14,9 @@ export class AdCreatorHandler {
     private cloudStorageRepo: IAdCloudStorageRepo
   ) {}
 
-  async create(adProps: AdPropsPrimitives, advertiserId: string): Promise<void> {
+  async create(adProps: AdPropsPrimitives, advertiserId: string, adId: string): Promise<void> {
     const imageURL = await this.uploadImageAndGetUrl(adProps.image);
-    const ad = this.createAdObject({ adProps, advertiserId, imageURL });
+    const ad = this.createAdObject({ adProps, advertiserId, imageURL, adId});
     await this.createAd.save(ad);
   }
 
@@ -24,10 +24,11 @@ export class AdCreatorHandler {
     adProps: AdPropsPrimitives;
     advertiserId: string;
     imageURL: string;
+    adId: string;
   }): Ad {
     const { adProps, advertiserId, imageURL } = props;
     return new Ad({
-      id: UniqId.new(),
+      id: new UniqId(props.adId),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
