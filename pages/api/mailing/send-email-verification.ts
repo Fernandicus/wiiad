@@ -23,6 +23,7 @@ export default async function handler(
 
     return res.status(200).json({ message: `Email sent to ${reqBody.email}` });
   } catch (err) {
+    console.error(err)
     const errorWithVerification = err instanceof ErrorEmailVerification;
     const errorSendingEmail = err instanceof ErrorSendingEmail;
     const errorUnkown = err instanceof Error;

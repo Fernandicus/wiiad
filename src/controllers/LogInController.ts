@@ -4,7 +4,7 @@ import {
 } from "../modules/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
 import { IReqAndRes } from "../domain/IAuthCookies";
-import { IUser } from "../domain/IUser";
+import { IGenericUserPrimitives } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import {
   removeVerificationEmailHandler,
@@ -24,16 +24,11 @@ interface LogInQueries {
   userName: string;
 }
 
-export interface IAdvertiserLogIn {
-  advertiser: AdvertiserPropsPrimitives;
-  jwt: string;
-}
-
 export class LogInController {
   static async initSession(
     loginQueries: LogInQueries,
     context: IReqAndRes
-  ): Promise<IUser | null> {
+  ): Promise<IGenericUserPrimitives | null> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.token,
       loginQueries.email
@@ -55,7 +50,9 @@ export class LogInController {
     }
   }
 
-  private static async advertiserLogIn(data: AdvertiserData): Promise<IUser> {
+  private static async advertiserLogIn(
+    data: AdvertiserData
+  ): Promise<AdvertiserPropsPrimitives> {
     const advertiser = await this.findOrCreateNewAdvertiser(data);
     return advertiser;
   }

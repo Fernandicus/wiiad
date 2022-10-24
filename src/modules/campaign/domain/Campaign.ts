@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { User } from "../../user/domain/User";
-import { CampaignBudget } from "./value-objects/Budget";
+import { CampaignBudget, CampaignBudgetProps } from "./value-objects/Budget";
 import { CampaignMetrics } from "./value-objects/CampaignMetrics";
 import { CampaignStatusType } from "./value-objects/CampaignStatus";
 
@@ -57,6 +57,7 @@ export class Campaign {
     advertiserId: UniqId;
     adId: UniqId;
     id: UniqId;
+    budget: CampaignBudget,
   }): Campaign {
     return new Campaign({
       id: props.id,
@@ -65,10 +66,7 @@ export class Campaign {
       promoters: [],
       watchers: [],
       status: CampaignStatusType.STAND_BY,
-      budget: new CampaignBudget({
-        moneyToSpend: 0,
-        maxClicks: 0,
-      }),
+      budget:props.budget,
       metrics: new CampaignMetrics({
         totalViews: 0,
         totalClicks: 0,

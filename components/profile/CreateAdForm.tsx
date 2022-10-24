@@ -1,7 +1,7 @@
-import { IUser } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IUser";
 import { FormEvent, useRef, useState } from "react";
 
-export default function CreateAdForm(props: { user: IUser }) {
+export default function CreateAdForm(props: { user: IGenericUserPrimitives }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);

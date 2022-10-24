@@ -1,27 +1,22 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
-import { Rol, RolType } from "../../../domain/Rol";
-import { IGenericUser, IGenericUserPrimitives } from "@/src/domain/IUser";
-import { UniqId } from "@/src/utils/UniqId";
+import { RolType } from "../../../domain/Rol";
+import { GenericUser, IGenericUserProps, IGenericUserPrimitives } from "@/src/domain/IUser";
 import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
-
-export interface AdvertiserProps extends IGenericUser {}
 
 export interface AdvertiserPropsPrimitives extends IGenericUserPrimitives {}
 
-export class Advertiser {
+export class Advertiser implements GenericUser{
   readonly id;
   readonly name;
   readonly email;
   readonly rol;
 
-  constructor({ id, name, email, rol }: AdvertiserProps) {
-    if (rol.rol === RolType.USER)
-      throw new ErrorCreatingAdvertiser("Rol cant be user");
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.rol = rol;
+  constructor(props: IGenericUserProps) {
+    if (props.rol.rol === RolType.USER)
+      throw new ErrorCreatingAdvertiser("Advertiser Rol is not valid");
+    this.id = props.id;
+    this.name = props.name;
+    this.email = props.email;
+    this.rol = props.rol;
   }
 
   toPrimitives(): AdvertiserPropsPrimitives {

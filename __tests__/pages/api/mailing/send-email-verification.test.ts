@@ -1,13 +1,13 @@
-import sendEmailVerification, {
-  ISendVerificationEmailBodyRequest,
-} from "@/pages/api/mailing/send-email-verification";
+import sendEmailVerification from "@/pages/api/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RolType } from "@/src/domain/Rol";
 import { MockContext } from "../../../../__mocks__/context/Context";
+import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
-  let user: ISendVerificationEmailBodyRequest;
+  let user: ISendVerificationEmail;
+
   beforeAll(async () => {
     await TestVerificationEmailMongoDBRepo.init();
     user = {

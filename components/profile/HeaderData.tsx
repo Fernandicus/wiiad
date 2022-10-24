@@ -1,6 +1,6 @@
-import { IUser } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IUser";
 
-export default function HeaderData(props:{user:IUser}){
+export default function HeaderData(props:{user:IGenericUserPrimitives}){
     return <div className="profileData">
     <p>
       Name: <b>{props.user.name}</b>

@@ -118,13 +118,16 @@ textarea {
   align: auto;
   margin-top: 3em;
   width: 25em;
+}
+
+.removeAds {
   background-color: red;
   height: 3em;
   color: white;
 }
 
-.totalAds{
-  padding-top:5em;
+.totalAds {
+  padding-top: 5em;
 }
 
 .totalAds button {
@@ -134,14 +137,36 @@ textarea {
 
 .totalAds li {
   display: flex;
-  padding-top:2em;
+  padding-top: 2em;
 }
 
-.totalAds li button{
-  margin-left:2em;
+.totalAds li button {
+  margin-left: 2em;
 }
 
 .totalAds li button {
   color: white;
   background-color: red;
+}
+
+.Ads li {
+  background-color:rgba(242,242,242);
+  display: flex;
+}
+
+.Ads p {
+  padding: 2em;
+}
+
+.Ads button {
+  height: 3em;
+}
+
+.Ads img{
+  background-color:white;
+  width:50px;
+  height:50px;
+  border:1px solid rgba(0,0,0);
+  border-radius:100%;
+  padding:0.5em;
 }

@@ -2,13 +2,8 @@ import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { LogInController } from "@/src/controllers/LogInController";
-import { IUser } from "@/src/domain/IUser";
-import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
-import { userSession } from "@/src/use-case/container";
-import { useEffect, useRef, useState } from "react";
+import { IGenericUserPrimitives } from "@/src/domain/IUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import {
   IWatchAdData,
   WatchAdController,
@@ -17,11 +12,12 @@ import CreateAdForm from "../../components/profile/CreateAdForm";
 import HeaderData from "../../components/profile/HeaderData";
 import TotalAds from "../../components/profile/TotalAds";
 import AdView from "../../components/watch-ad/AdView";
+import { RolType } from "@/src/domain/Rol";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  const user: IUser = props.user;
+  const user: IGenericUserPrimitives = props.user;
   const watchAds: AdPropsPrimitives[] = props.watchAds;
 
   if (watchAds.length > 0) {
@@ -30,6 +26,11 @@ export default function Profile(
 
   return (
     <main>
+      {user.rol != RolType.USER && (
+        <div>
+          <a href={`${user.name}/ads`}>Create Campaign</a>
+        </div>
+      )}
       <HeaderData user={user} />
       <CreateAdForm user={user} />
       <TotalAds />
@@ -53,21 +54,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
 
-    const user = await MongoDB.connectAndDisconnect<IUser | null>(
-      async () =>
-        await LogInController.initSession(
-          {
-            email: queryParams.email!,
-            token: queryParams.token!,
-            userName: queryParams.userName,
-          },
-          context
-        )
-    );
+    const user =
+      await MongoDB.connectAndDisconnect<IGenericUserPrimitives | null>(
+        async () =>
+          await LogInController.initSession(
+            {
+              email: queryParams.email!,
+              token: queryParams.token!,
+              userName: queryParams.userName,
+            },
+            context
+          )
+      );
 
     return {
       props: {
-        user: { ...user } as IUser,
+        user: { ...user } as IGenericUserPrimitives,
       },
     };
   } catch (err) {
