@@ -14,12 +14,8 @@ export class FindCampaignHandler {
         budget: {
           ...campaigns.budget,
         },
-        watchers: {
-          ...campaigns.watchers,
-        },
-        promoters: {
-          ...campaigns.promoters,
-        },
+        watchers: [...campaigns.watchers],
+        promoters: [...campaigns.promoters],
         metrics: {
           ...campaigns.metrics,
         },

@@ -58,11 +58,12 @@ export class FakeCampaign extends Campaign {
     };
   }
 
-  static createManyWithPrimitives({
-    amount = 5,
-    status = CampaignStatusType.STAND_BY,
-    advertiserId = UniqId.generate(),
+  static createManyWithPrimitives(props: {
+    amount: number;
+    status: CampaignStatusType;
+    advertiserId: string;
   }): ICampaignPrimitives[] {
+    const {advertiserId, amount, status} = props;
     let campaigns: ICampaignPrimitives[] = [];
 
     for (let i = 1; i <= amount; i++) {

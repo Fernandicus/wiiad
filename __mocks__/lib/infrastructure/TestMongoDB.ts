@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const { Model } = mongoose;
 
 export class TestMongoDB {
-
   static async connectAndCleanModel<M extends typeof Model>(
     model: M
   ): Promise<void> {
@@ -17,7 +16,7 @@ export class TestMongoDB {
     await model.deleteMany({});
   }
 
-static async disconnectMongoDB(): Promise<void> {
+  static async disconnectMongoDB(): Promise<void> {
     await mongoose.disconnect();
   }
 }
