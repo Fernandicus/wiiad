@@ -65,7 +65,7 @@ export class Campaign {
       adId: props.adId,
       promoters: [],
       watchers: [],
-      status: CampaignStatusType.STAND_BY,
+      status: CampaignStatusType.ACTIVE,
       budget:props.budget,
       metrics: new CampaignMetrics({
         totalViews: 0,

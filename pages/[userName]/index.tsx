@@ -1,4 +1,4 @@
-import { ValidateLoginQueries } from "@/src/domain/ValidateLoginQueries";
+import { LoginQueries } from "@/src/domain/LoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { LogInController } from "@/src/controllers/LogInController";
@@ -6,22 +6,23 @@ import { IGenericUserPrimitives } from "@/src/domain/IUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   IWatchAdData,
-  WatchAdController,
-} from "@/src/controllers/WatchAdController";
+  WatchCampaignsController,
+} from "@/src/controllers/WatchCampaignsController";
 import CreateAdForm from "../../components/profile/CreateAdForm";
 import HeaderData from "../../components/profile/HeaderData";
 import TotalAds from "../../components/profile/TotalAds";
 import AdView from "../../components/watch-ad/AdView";
 import { RolType } from "@/src/domain/Rol";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 
 export default function Profile(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const user: IGenericUserPrimitives = props.user;
-  const watchAds: AdPropsPrimitives[] = props.watchAds;
+  const activeCampaigns: ICampaignPrimitives[] = props.activeCampaigns;
 
-  if (watchAds.length > 0) {
-    return <AdView ads={watchAds} />;
+  if (activeCampaigns && activeCampaigns.length > 0) {
+    return <AdView campaigns={activeCampaigns} />;
   }
 
   return (
@@ -40,13 +41,13 @@ export default function Profile(
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-  const queryParams = new ValidateLoginQueries(query);
+  const queryParams = new LoginQueries(query);
 
   try {
     if (!queryParams.email || !queryParams.token) {
       const data = await MongoDB.connectAndDisconnect<IWatchAdData>(
         async () => {
-          return await WatchAdController.check(context, queryParams);
+          return await WatchCampaignsController.verify(context, queryParams);
         }
       );
       return {

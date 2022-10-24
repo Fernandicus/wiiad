@@ -16,7 +16,7 @@ export default async function handler(
       typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
 
     await MongoDB.connectAndDisconnect(async () =>
-      LaunchCampaignController.launch({
+      await LaunchCampaignController.launch({
         context: { req, res },
         adId: ad.id,
         id: UniqId.generate(),

@@ -1,18 +1,24 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 
-export default function AdView(props:{ads: AdPropsPrimitives[]}){
-    return <div>
-    <h1>NO SESSION or NOT YOUR PROFILE</h1>
-    <ul>
-      {!props.ads ? <p>This advertiser has no ads</p> : props.ads.map((ad) => {
-        return (
-          <li key={ad.id}>
-            <p>{ad.title}</p>
-            <p>{ad.redirectionUrl}</p>
-            <p>{ad.segments}</p>
-          </li>
-        );
-      })}
-    </ul>
-  </div>
+export default function AdView(props: { campaigns: ICampaignPrimitives[] }) {
+  return (
+    <div>
+      <h1>NO SESSION or NOT YOUR PROFILE</h1>
+      <ul>
+        {!props.campaigns ? (
+          <p>This advertiser has no ads</p>
+        ) : (
+          props.campaigns.map((campaign) => {
+            return (
+              <li key={campaign.id}>
+                <p>AD ID: {campaign.adId}</p>
+                <p>ADVERTISER ID: {campaign.advertiserId}</p>
+              </li>
+            );
+          })
+        )}
+      </ul>
+    </div>
+  );
 }

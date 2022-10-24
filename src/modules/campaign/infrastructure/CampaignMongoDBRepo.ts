@@ -17,24 +17,61 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
 
   async findByStatus(
     status: CampaignStatusType
-  ): Promise<ICampaignPrimitives | null> {
-    throw new Error("Method not implemented.");
+  ): Promise<ICampaignPrimitives[]> {
+    const campaignModels = await CampaignModel.find<ICampaignModel>({
+      status,
+    });
+    const campaigns = this.mapToPrimitives(campaignModels);
+    /* ICampaignPrimitives[] = campaignModels.map((campaign) => {
+      return {
+        id: campaign._id,
+        adId: campaign.adId,
+        advertiserId: campaign.advertiserId,
+        status: campaign.status,
+        promoters: campaign.promoters,
+        watchers: campaign.watchers,
+        budget: campaign.budget,
+        metrics: campaign.metrics,
+      };
+    }); */
+    return campaigns;
   }
 
-  async findByAdvertiserId(id: string): Promise<ICampaignPrimitives | null> {
-    const campaign = await CampaignModel.findOne<ICampaignModel>({
+  async findAllByAdvertiserId(id: string): Promise<ICampaignPrimitives[]> {
+    const campaignModels = await CampaignModel.find<ICampaignModel>({
       advertiserId: id,
     });
-    if (!campaign) return null;
-    return {
-      id: campaign._id,
-      adId: campaign.adId,
-      advertiserId: campaign.advertiserId,
-      status: campaign.status,
-      promoters: campaign.promoters,
-      watchers: campaign.watchers,
-      budget: campaign.budget,
-      metrics: campaign.metrics,
-    };
+    const campaigns = this.mapToPrimitives(campaignModels);
+    /* ICampaignPrimitives[] = campaignModels.map((campaign) => {
+      return {
+        id: campaign._id,
+        adId: campaign.adId,
+        advertiserId: campaign.advertiserId,
+        status: campaign.status,
+        promoters: campaign.promoters,
+        watchers: campaign.watchers,
+        budget: campaign.budget,
+        metrics: campaign.metrics,
+      };
+    }); */
+    return campaigns;
+  }
+
+  private mapToPrimitives(
+    campaignModels: ICampaignModel[]
+  ): ICampaignPrimitives[] {
+    const campaigns = campaignModels.map((campaign) => {
+      return {
+        id: campaign._id,
+        adId: campaign.adId,
+        advertiserId: campaign.advertiserId,
+        status: campaign.status,
+        promoters: campaign.promoters,
+        watchers: campaign.watchers,
+        budget: campaign.budget,
+        metrics: campaign.metrics,
+      };
+    });
+    return campaigns;
   }
 }

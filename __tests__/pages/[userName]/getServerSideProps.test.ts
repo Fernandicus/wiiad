@@ -5,7 +5,7 @@ import { FakeVerificationEmailTimer } from "../../../__mocks__/lib/mailing/send-
 import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
-import { IUser } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IUser";
 
 interface IServerSideResponse {
   props: {};
@@ -114,7 +114,7 @@ describe("On getServerSideProps, GIVEN some verification emails in MongoDB", () 
         email: verificationEmail,
         verificationToken: verificationToken,
       },
-    })) as {props:{user: IUser}};
+    })) as {props:{user: IGenericUserPrimitives}};
 
     const user = resp.props.user;
 

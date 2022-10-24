@@ -1,7 +1,7 @@
 import { ParsedUrlQuery } from "querystring";
 import { ErrorLogIn } from "./ErrorLogIn";
 
-export class ValidateLoginQueries {
+export class LoginQueries {
   readonly email: string | undefined;
   readonly token: string | undefined;
   readonly userName: string;

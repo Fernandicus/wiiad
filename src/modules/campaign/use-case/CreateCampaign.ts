@@ -1,5 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
-import { Campaign, ICampaignPrimitives } from "../domain/Campaign";
+import { Campaign } from "../domain/Campaign";
 import { ICampaignRepo } from "../domain/ICampaignRepo";
 
 export class CreateCampaign {

@@ -4,7 +4,6 @@ import Image from "next/image";
 import styles from "@/pages/index.module.css";
 import { useEffect, useRef, useState } from "react";
 import { RolType } from "@/src/domain/Rol";
-import { IUser } from "@/src/domain/IUser";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
@@ -13,7 +12,8 @@ export default function Home(props: {session: AdvertiserPropsPrimitives} ) {
   const myEmail = useRef<HTMLInputElement>(null);
   const myName = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState({ message: "", status: 0 });
-  
+  const [rol, setRol] = useState<RolType>();
+
   return (
     <div className={styles.container}>
       {message.status != 0 ? (
@@ -34,7 +34,7 @@ export default function Home(props: {session: AdvertiserPropsPrimitives} ) {
             body: JSON.stringify({
               email: valueEmail,
               userName: valueName,
-              rol: RolType.BUSINESS,
+              rol: rol,
             }),
           });
           const jsonResp = await resp.json();
@@ -58,6 +58,14 @@ export default function Home(props: {session: AdvertiserPropsPrimitives} ) {
         <label htmlFor="myEmail">NAME</label>
         <br />
         <input ref={myName} type="text" placeholder="Your NAME"></input>
+        <br />
+        <br />
+        <button type="button" onClick={()=>{
+          setRol(RolType.BUSINESS) ;
+        }}>New Business</button>
+        <button type="button" onClick={()=>{
+           setRol(RolType.USER) ;
+        }}>New User</button>
         <br />
         <br />
         <br />

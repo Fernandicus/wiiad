@@ -14,14 +14,17 @@ export class FakeCampaign extends Campaign {
     super(params);
   }
 
-  static create(status = CampaignStatusType.STAND_BY): Campaign {
+  static create(props: {
+    status: CampaignStatusType;
+    advertiserId: UniqId;
+  }): Campaign {
     return new Campaign({
       id: UniqId.new(),
-      advertiserId: UniqId.new(),
+      advertiserId: props.advertiserId,
       adId: UniqId.new(),
       promoters: [UniqId.new()],
       watchers: [UniqId.new()],
-      status: CampaignStatusType.STAND_BY,
+      status: props.status,
       budget: new CampaignBudget({
         moneyToSpend: 5,
         maxClicks: 5,
@@ -33,16 +36,17 @@ export class FakeCampaign extends Campaign {
     });
   }
 
-  static createWithPrimitives(
-    status = CampaignStatusType.STAND_BY
-  ): ICampaignPrimitives {
+  static createWithPrimitives(props: {
+    status: CampaignStatusType;
+    advertiserId: string;
+  }): ICampaignPrimitives {
     return {
       id: UniqId.generate(),
-      advertiserId: UniqId.generate(),
+      advertiserId: props.advertiserId,
       adId: UniqId.generate(),
       promoters: [UniqId.generate()],
       watchers: [UniqId.generate()],
-      status: status,
+      status: props.status,
       budget: {
         moneyToSpend: 5,
         maxClicks: 5,
@@ -54,18 +58,19 @@ export class FakeCampaign extends Campaign {
     };
   }
 
-  static createManyWithPrimitives(
+  static createManyWithPrimitives({
     amount = 5,
-    status = CampaignStatusType.STAND_BY
-  ): ICampaignPrimitives[] {
+    status = CampaignStatusType.STAND_BY,
+    advertiserId = UniqId.generate(),
+  }): ICampaignPrimitives[] {
     let campaigns: ICampaignPrimitives[] = [];
 
     for (let i = 1; i <= amount; i++) {
       let campaign: ICampaignPrimitives = {
         id: UniqId.generate(),
         adId: UniqId.generate(),
-        advertiserId: UniqId.generate(),
-        status: status,
+        advertiserId,
+        status,
         watchers: this.generateIds(),
         promoters: this.generateIds(),
         budget: {
