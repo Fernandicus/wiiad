@@ -1,19 +1,19 @@
 import { GenericUser, IGenericUserPrimitives, IGenericUserProps } from "@/src/domain/IUser";
 import { RolType } from "@/src/domain/Rol";
-import { BancAccount } from "./BankAccount";
+import { BankAccount } from "./BankAccount";
 import { ErrorCreatingUser } from "./ErrorCreatingUser";
 
 export interface IUserPrimitives extends IGenericUserPrimitives {
-  bancAccount?: string;
+  bankAccount?: string;
 }
 
 export interface IUserProps extends IGenericUserProps {
-  bancAccount?: BancAccount;
+  bankAccount?: BankAccount;
 }
 
 export class User implements GenericUser{
   readonly id;
-  readonly bancAccount;
+  readonly bankAccount;
   readonly name;
   readonly email;
   readonly rol;
@@ -26,6 +26,16 @@ export class User implements GenericUser{
     this.name = props.name;
     this.email = props.email;
     this.rol = props.rol;
-    this.bancAccount = props.bancAccount;
+    this.bankAccount = props.bankAccount;
+  }
+
+  toPrimitives():IUserPrimitives{
+    return {
+      id: this.id.id,
+      email: this.email.email,
+      name: this.name.name,
+      rol: this.rol.rol,
+      bankAccount: this.bankAccount?.number,
+    }
   }
 }
