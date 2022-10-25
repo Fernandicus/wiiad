@@ -15,6 +15,8 @@ import AdView from "../../components/watch-ad/AdView";
 import { RolType } from "@/src/domain/Rol";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
+import { findUserHandler } from "@/src/modules/user/container";
+import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -28,10 +30,13 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
   }
 
   if (user.rol === RolType.USER) {
-    return <div><h1>HELLO USER</h1>
-      <h3>{user.name}</h3>
-      <h2>{user.email}</h2>
-    </div> ;
+    return (
+      <div>
+        <h1>HELLO USER</h1>
+        <h3>{user.name}</h3>
+        <h2>{user.email}</h2>
+      </div>
+    );
   }
 
   return (
@@ -60,10 +65,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           props: { user: session } as IUserNamePage,
         };
 
-      //TODO: SEARCH IF USER 'QueryParams.userName' EXISTS
       const { ad, activeCampaign } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
-          return await WatchCampaignsController.randomActiveCampaign();
+          return await WatchCampaignsController.forInfluencer(queryParams.userName);
         });
 
       return {

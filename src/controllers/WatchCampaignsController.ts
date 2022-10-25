@@ -11,6 +11,7 @@ import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
 import { adFinderHandler } from "../modules/ad/ad-container";
 import { ErrorFindingAd } from "../modules/ad/domain/ErrorFindingAd";
 import { ErrorFindingCampaign } from "../modules/campaign/domain/ErrorFindingCampaign";
+import { findUserHandler } from "../modules/user/container";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
@@ -18,6 +19,21 @@ export interface IWatchCampaignData {
 }
 
 export class WatchCampaignsController {
+  static async forInfluencer(
+    influencerName: string
+  ): Promise<IWatchCampaignData> {
+    const urlUserNameFound = await findUserHandler.findByUserName(
+      influencerName
+    );
+
+    if (!urlUserNameFound)
+      throw new ErrorWatchingCampaign(
+        `User profile ${influencerName} do not exist`
+      );
+    const campaignData = await this.randomActiveCampaign();
+    return campaignData;
+  }
+
   static async randomActiveCampaign(): Promise<IWatchCampaignData> {
     const activeCampaigns = await findCampaignHandler.allActives();
     const randomCampaign = this.randomCampaign(activeCampaigns);

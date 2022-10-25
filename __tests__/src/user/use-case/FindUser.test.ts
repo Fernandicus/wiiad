@@ -26,6 +26,7 @@ describe("On FindUser, GIVEN a user", () => {
     userRepo = {
       save: jest.fn(),
       findByEmail: jest.fn().mockResolvedValue(user.toPrimitives()),
+      findByUserName: jest.fn().mockResolvedValue(user.toPrimitives()),
     };
     findUser = new FindUser(userRepo);
   });
@@ -33,6 +34,12 @@ describe("On FindUser, GIVEN a user", () => {
   it(`WHEN call create, THEN user repo save method should be called with user email`, async () => {
     const userFound = await findUser.findByEmail(user.email);
     expect(userRepo.findByEmail).toBeCalledWith(user.email.email);
+    expect(userFound).toEqual(user);
+  });
+
+  it(`WHEN call findByUserName, THEN user repo findByUserName method should be called with user name`, async () => {
+    const userFound = await findUser.findUserName(user.name);
+    expect(userRepo.findByUserName).toBeCalledWith(user.name.name);
     expect(userFound).toEqual(user);
   });
 });

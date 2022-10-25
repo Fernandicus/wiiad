@@ -22,4 +22,18 @@ export class FindUser {
         : undefined,
     });
   }
+
+  async findUserName(userName: Name): Promise<User | null> {
+    const userFound = await this.userRepo.findByUserName(userName.name);
+    if (!userFound) return null;
+    return new User({
+      email: new Email(userFound.email),
+      id: new UniqId(userFound.id),
+      name: new Name(userFound.name),
+      rol: new Rol(userFound.rol),
+      bankAccount: userFound.bankAccount
+        ? new BankAccount(userFound.bankAccount!)
+        : undefined,
+    });
+  }
 }

@@ -28,4 +28,20 @@ export class UserMongoDBRepo implements IUserRepo {
       bankAccount: userModel.bankAccount,
     };
   }
+
+  async findByUserName(name: string): Promise<IUserPrimitives | null> {
+    const userModel = await UserModel.findOne<UserModelProps>({
+      name,
+    });
+
+    if (!userModel) return null;
+
+    return {
+      id: userModel._id,
+      email: userModel.email,
+      name: userModel.name,
+      rol: userModel.rol,
+      bankAccount: userModel.bankAccount,
+    };
+  }
 }

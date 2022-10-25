@@ -1,5 +1,6 @@
-import { UserModel } from "@/src/modules/user/infrastructure/UserMode";
-import mongoose from "mongoose";
+import { IUserPrimitives } from "@/src/modules/user/domain/User";
+import { UserModel, UserModelProps } from "@/src/modules/user/infrastructure/UserMode";
+import mongoose, { HydratedDocument } from "mongoose";
 import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
 export class TestUserMongoDBRepo extends TestMongoDB {
@@ -8,5 +9,13 @@ export class TestUserMongoDBRepo extends TestMongoDB {
       mongoose.model(UserModel.modelName, UserModel.schema)
     );
     return new TestUserMongoDBRepo();
+  }
+
+  async save(user: IUserPrimitives):Promise<void>{
+    const userModel: HydratedDocument<UserModelProps> = new UserModel<UserModelProps>({
+      _id: user.id,
+      ...user,
+    })
+    await userModel.save();
   }
 }

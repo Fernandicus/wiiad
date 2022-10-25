@@ -17,6 +17,10 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { TestAdMongoDBRepository } from "../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
 import { FakeAd } from "../../../__mocks__/lib/ads/FakeAd";
 import { AdModelProps } from "@/src/modules/ad/infraestructure/AdModel";
+import { FakeUser } from "../../../__mocks__/lib/user/FakeUser";
+import { UniqId } from "@/src/utils/UniqId";
+import { TestUserMongoDBRepo } from "../../../__mocks__/lib/user/infrastructure/TestUserMongoDBRepo";
+import { IUserPrimitives } from "@/src/modules/user/domain/User";
 
 interface IServerSideResponse {
   props: {};
@@ -141,16 +145,22 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
 });
 
 //! TODO
-describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
+describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
   let activeCampaigns: ICampaignPrimitives[];
+  let influencer: IUserPrimitives;
+  let myUser: IUserPrimitives;
 
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
     userSession.remove({ req, res });
     const advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
+    myUser = FakeUser.createWithPrimitives(UniqId.generate());
+    influencer = FakeUser.createWithPrimitives(UniqId.generate());
+    const userRepo = await TestUserMongoDBRepo.init();
+    await userRepo.save(influencer);
     const campaignRepo = await TestCampaignMongoDBRepo.init();
     const adsRepo = await TestAdMongoDBRepository.init();
     const ads = FakeAd.createManyWithPrimitives(advertiser.id, 5);
@@ -181,7 +191,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       resolvedUrl: "",
       params: {},
       query: {
-        userName: faker.name.firstName(),
+        userName: influencer.name,
       },
     })) as { props: IUserNamePage };
 
@@ -190,47 +200,55 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   });
 
   //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
-  it(`WHEN access to the url with my user session name,
+  it(`WHEN access to my user name url,
   THEN response should be a null active campaign and ad`, async () => {
-    const user = {
-      email: faker.internet.email(),
-      name: faker.name.firstName(),
-      id: "2134",
-      rol: RolType.USER,
-    };
     userSession.remove({ req, res });
-    userSession.setFromServer({ req, res }, user);
+    userSession.setFromServer({ req, res }, myUser);
+
     const resp = (await getServerSideProps({
       req,
       res,
       resolvedUrl: "",
       params: {},
       query: {
-        userName: user.name,
+        userName: myUser.name,
       },
     })) as { props: IUserNamePage };
 
     const userResponse: AdvertiserPropsPrimitives = resp.props.user;
 
-    expect(userResponse.name).toEqual(user.name);
-    expect(userResponse.id).toEqual(user.id);
-    expect(userResponse.email).toEqual(user.email);
-    expect(userResponse.rol).toEqual(user.rol);
+    expect(userResponse.name).toEqual(myUser.name);
+    expect(userResponse.id).toEqual(myUser.id);
+    expect(userResponse.email).toEqual(myUser.email);
+    expect(userResponse.rol).toEqual(myUser.rol);
     expect(resp.props.campaign).toBe(undefined);
     expect(resp.props.ad).toBe(undefined);
   });
 
   //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
-  it(`WHEN access to the url with other user session name,
+  it.only(`WHEN access to an influencer url,
   THEN response should have an active campaign and ad`, async () => {
-    const user = {
-      email: faker.internet.email(),
-      name: faker.name.firstName(),
-      id: "2134",
-      rol: RolType.USER,
-    };
     userSession.remove({ req, res });
-    userSession.setFromServer({ req, res }, user);
+    userSession.setFromServer({ req, res }, myUser);
+    const resp = (await getServerSideProps({
+      req,
+      res,
+      resolvedUrl: "",
+      params: {},
+      query: {
+        userName: influencer.name,
+      },
+    })) as { props: IUserNamePage };
+
+    expect(resp.props.campaign).not.toBe(undefined);
+    expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
+    expect(resp.props.user.id).toBe(myUser.id);
+  });
+
+  it.only(`WHEN access to a not existing influencer url,
+  THEN response should return a redirect address`, async () => {
+    userSession.remove({ req, res });
+    userSession.setFromServer({ req, res }, myUser);
     const resp = (await getServerSideProps({
       req,
       res,
@@ -239,9 +257,8 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       query: {
         userName: faker.name.firstName(),
       },
-    })) as { props: IUserNamePage };
+    })) as IServerSideResponse;
 
-    expect(resp.props.campaign).not.toBe(undefined);
-    expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
+    expect(resp.redirect).not.toBe(undefined);
   });
 });

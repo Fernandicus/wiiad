@@ -10,7 +10,11 @@ describe("On CreateUser, GIVEN a user", () => {
   let createUser: CreateUser;
 
   beforeAll(() => {
-    userRepo = { save: jest.fn(), findByEmail: jest.fn() };
+    userRepo = {
+      save: jest.fn(),
+      findByEmail: jest.fn(),
+      findByUserName: jest.fn(),
+    };
     newUser = FakeUser.create(UniqId.new());
     createUser = new CreateUser(userRepo);
   });
