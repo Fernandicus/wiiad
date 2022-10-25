@@ -1,4 +1,4 @@
-import { getServerSideProps } from "@/pages/[userName]/index";
+import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { FakeVerificationEmailTimer } from "../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
@@ -6,13 +6,14 @@ import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/mailing
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { IWatchAdData } from "@/src/controllers/WatchCampaignsController";
+import { IWatchCampaignData } from "@/src/controllers/WatchCampaignsController";
 import { userSession } from "@/src/use-case/container";
 import { TestCampaignMongoDBRepo } from "../../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
 import { FakeCampaign } from "../../../__mocks__/lib/campaign/FakeCampaign";
 import { UniqId } from "@/src/utils/UniqId";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { FakeAdvertiser } from "../../../__mocks__/lib/advertiser/FakeAdvertiser";
 
 interface IServerSideResponse {
   props: {};
@@ -165,26 +166,9 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       query: {
         userName: faker.name.firstName(),
       },
-    })) as { props: IWatchAdData };
+    })) as { props: IUserNamePage };
 
-    expect(resp.props.activeCampaigns).toEqual(activeCampaigns);
-    expect(resp.props.user).toBe(null);
-  }, 12000);
-
-  //! TODO: ----
-  it(`WHEN access to url with user session with rol type advertiser,
-  THEN response should be ....`, async () => {
-    const resp = (await getServerSideProps({
-      req,
-      res,
-      resolvedUrl: "",
-      params: {},
-      query: {
-        userName: faker.name.firstName(),
-      },
-    })) as { props: IWatchAdData };
-
-    expect(resp.props.activeCampaigns).toEqual(activeCampaigns);
-    expect(resp.props.user).toBe(null);
+    expect(resp.props.campaign).not.toBe(null);
+    expect(resp.props.ad).not.toBe(null);
   }, 12000);
 });

@@ -4,4 +4,5 @@ export interface AdRepository {
   save(model: AdPropsPrimitives): Promise<void>;
   findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]>;
   remove(id: string): Promise<void>;
+  findByAdId(id:string): Promise<AdPropsPrimitives | null>;
 }

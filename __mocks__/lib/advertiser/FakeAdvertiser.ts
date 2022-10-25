@@ -1,6 +1,5 @@
 import {
   Advertiser,
-  AdvertiserProps,
   AdvertiserPropsPrimitives,
 } from "@/src/modules/advertiser/domain/Advertiser";
 import {
@@ -11,9 +10,10 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
+import { IGenericUserProps } from "@/src/domain/IUser";
 
 export class FakeAdvertiser extends Advertiser {
-  constructor(props: AdvertiserProps) {
+  constructor(props: IGenericUserProps) {
     super(props);
   }
 

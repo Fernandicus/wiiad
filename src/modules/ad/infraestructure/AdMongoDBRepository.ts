@@ -30,6 +30,21 @@ export class AdMongoDBRepository implements AdRepository {
     return adPrimitivesArray;
   }
 
+  async findByAdId(id: string): Promise<AdPropsPrimitives | null> {
+    const adModel = await AdModel.findById<AdModelProps>(id);
+    console.log("AD MODEL ", adModel);
+    if (!adModel) return null;
+    return {
+      id: adModel._id,
+      title: adModel.title,
+      description: adModel.description,
+      image: adModel.image,
+      redirectionUrl: adModel.redirectionUrl,
+      segments: adModel.segments,
+      advertiserId: adModel.advertiserId,
+    };
+  }
+
   public async remove(id: string): Promise<void> {
     await AdModel.findByIdAndRemove({ _id: id });
   }

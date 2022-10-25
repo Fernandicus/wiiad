@@ -7,65 +7,45 @@ import { findAdvertiserHandler } from "../modules/advertiser/advertiser-containe
 import { userSession } from "../use-case/container";
 import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
 import { findCampaignHandler } from "../modules/campaign/container";
+import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
+import { adFinderHandler } from "../modules/ad/ad-container";
+import { ErrorFindingAd } from "../modules/ad/domain/ErrorFindingAd";
+import { ErrorFindingCampaign } from "../modules/campaign/domain/ErrorFindingCampaign";
 
-export interface IWatchAdData {
-  user: IGenericUserPrimitives | null;
-  activeCampaigns: ICampaignPrimitives[];
+export interface IWatchCampaignData {
+  activeCampaign: ICampaignPrimitives;
+  ad: AdPropsPrimitives;
 }
 
 export class WatchCampaignsController {
-  static async verify(
-    context: IReqAndRes,
-    loginQueries: LoginQueries
-  ): Promise<IWatchAdData> {
-    const session = userSession.getFromServer(context);
-
-    if (this.canWatchAd(session, loginQueries)) {
-      /* const advertiser = await findAdvertiserHandler.findByUserName(
-        loginQueries.userName
-      );
-
-      if (!advertiser)
-        throw new ErrorWatchingCampaign(
-          `Advertiser not found: ${loginQueries.userName}`
-        ); */
-
-      const activeCampaigns = await findCampaignHandler.allActives();
-
-      /* if (!activeCampaigns || activeCampaigns.length <= 0)
-        throw new ErrorWatchingCampaign(
-          `No ads found for the advertiser: ${loginQueries.userName}`
-        ); */
-
-      return {
-        activeCampaigns: activeCampaigns,
-        user: session,
-      };
-    } else {
-      return {
-        activeCampaigns: [],
-        user: session,
-      };
-    }
+  static async randomActiveCampaign(): Promise<IWatchCampaignData> {
+    const activeCampaigns = await findCampaignHandler.allActives();
+    const randomCampaign = this.randomCampaign(activeCampaigns);
+    const ad = await adFinderHandler.findByAdId(randomCampaign.adId);
+    return {
+      activeCampaign: randomCampaign,
+      ad,
+    };
   }
 
   /**
    * Only no logged users or users with Rol Type User
    * can watch an ad
    */
-  private static canWatchAd(
+  private static canWatchCampaign(
     session: IGenericUserPrimitives | null,
     loginQueries: LoginQueries
   ): boolean {
-    if (!session) {
-      return true;
-    } else if (
-      session.name !== loginQueries.userName &&
-      session.rol === RolType.USER
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return (
+      !session ||
+      (session.name !== loginQueries.userName && session.rol === RolType.USER)
+    );
+  }
+
+  private static randomCampaign(
+    activeCampaigns: ICampaignPrimitives[]
+  ): ICampaignPrimitives {
+    const random = Math.round(Math.random() * activeCampaigns.length);
+    return activeCampaigns[random];
   }
 }

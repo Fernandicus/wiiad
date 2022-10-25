@@ -5,7 +5,7 @@ import { LogInController } from "@/src/controllers/LogInController";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
-  IWatchAdData,
+  IWatchCampaignData,
   WatchCampaignsController,
 } from "@/src/controllers/WatchCampaignsController";
 import CreateAdForm from "../../components/profile/CreateAdForm";
@@ -14,15 +14,17 @@ import TotalAds from "../../components/profile/TotalAds";
 import AdView from "../../components/watch-ad/AdView";
 import { RolType } from "@/src/domain/Rol";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { userSession } from "@/src/use-case/container";
 
-export default function Profile(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
-  const user: IGenericUserPrimitives = props.user;
-  const activeCampaigns: ICampaignPrimitives[] = props.activeCampaigns;
+export interface IUserNamePage {
+  user: IGenericUserPrimitives;
+  campaign: ICampaignPrimitives | null;
+  ad: AdPropsPrimitives | null;
+}
 
-  if (activeCampaigns && activeCampaigns.length > 0) {
-    return <AdView campaigns={activeCampaigns} />;
+export default function Profile({ user, ad, campaign }: IUserNamePage) {
+  if (ad && campaign) {
+    return <AdView campaign={campaign} ad={ad} />;
   }
 
   return (
@@ -45,13 +47,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     if (!queryParams.email || !queryParams.token) {
-      const data = await MongoDB.connectAndDisconnect<IWatchAdData>(
-        async () => {
-          return await WatchCampaignsController.verify(context, queryParams);
-        }
-      );
+      const session = userSession.getFromServer(context);
+      if (session && session.name == queryParams.userName)
+        return {
+          props: { user: session } as IUserNamePage,
+        };
+
+        //TODO: SEARCH IF USER 'QueryParams.userName' EXISTS
+      const { ad, activeCampaign } =
+        await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
+          return await WatchCampaignsController.randomActiveCampaign();
+        });
       return {
-        props: data,
+        props: { user: session, campaign: activeCampaign, ad } as IUserNamePage,
       };
     }
 
@@ -70,8 +78,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        user: { ...user } as IGenericUserPrimitives,
-      },
+        user: { ...user },
+      } as IUserNamePage,
     };
   } catch (err) {
     console.error(err);
