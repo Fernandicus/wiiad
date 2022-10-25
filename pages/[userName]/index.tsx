@@ -27,6 +27,13 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
     return <AdView campaign={campaign} ad={ad} />;
   }
 
+  if (user.rol === RolType.USER) {
+    return <div><h1>HELLO USER</h1>
+      <h3>{user.name}</h3>
+      <h2>{user.email}</h2>
+    </div> ;
+  }
+
   return (
     <main>
       {user.rol != RolType.USER && (

@@ -12,8 +12,10 @@ import {
 } from "../modules/mailing/send-email-verification/email-verification-container";
 import { userSession } from "../use-case/container";
 import { UniqId } from "../utils/UniqId";
+import { createUserHandler, findUserHandler } from "../modules/user/container";
+import { IUserPrimitives } from "../modules/user/domain/User";
 
-interface AdvertiserData {
+interface UserData {
   queries: LogInQueries;
   rol: string;
 }
@@ -28,7 +30,7 @@ export class LogInController {
   static async initSession(
     loginQueries: LogInQueries,
     context: IReqAndRes
-  ): Promise<IGenericUserPrimitives | null> {
+  ): Promise<IGenericUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.token,
       loginQueries.email
@@ -39,27 +41,27 @@ export class LogInController {
         queries: loginQueries,
         rol: verificationEmail.rol,
       });
-      if (userSession.getFromServer(context)) {
-        userSession.remove(context);
-      }
-      userSession.setFromServer(context, advertiser);
+      this.userInitSession(context, advertiser);
       return advertiser;
     } else {
-      //TODO: USER LOG IN
-      // ! =============
-      return null;
+      const user = await this.userLogIn({
+        queries: loginQueries,
+        rol: verificationEmail.rol,
+      });
+      this.userInitSession(context, user);
+      return user;
     }
   }
 
   private static async advertiserLogIn(
-    data: AdvertiserData
+    data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
     const advertiser = await this.findOrCreateNewAdvertiser(data);
     return advertiser;
   }
 
   private static async findOrCreateNewAdvertiser(
-    data: AdvertiserData
+    data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
     let advertiserId: string;
 
@@ -87,5 +89,49 @@ export class LogInController {
       name: data.queries.userName,
       rol: data.rol,
     };
+  }
+
+  private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
+    const user = await this.findOrCreateNewUser(data);
+    return user;
+  }
+
+  private static async findOrCreateNewUser(
+    data: UserData
+  ): Promise<AdvertiserPropsPrimitives> {
+    let userId: string;
+
+    const userFound = await findUserHandler.findByEmail(data.queries.email);
+
+    if (!userFound) {
+      userId = UniqId.generate();
+      await createUserHandler.create({
+        email: data.queries.email,
+        name: data.queries.userName,
+        id: userId,
+        rol: data.rol,
+      });
+    } else {
+      userId = userFound.id;
+    }
+
+    await removeVerificationEmailHandler.remove(data.queries.token);
+
+    return {
+      id: userId,
+      email: data.queries.email,
+      name: data.queries.userName,
+      rol: data.rol,
+    };
+  }
+
+  private static userInitSession(
+    context: IReqAndRes,
+    payload: IGenericUserPrimitives
+  ): void {
+    if (userSession.getFromServer(context)) {
+      userSession.remove(context);
+    }
+    userSession.setFromServer(context, payload);
   }
 }

@@ -1,6 +1,7 @@
 import { Email } from "@/src/domain/Email";
 import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { UniqId } from "@/src/utils/UniqId";
+import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
 import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
 
@@ -9,10 +10,10 @@ export class ValidateVerificationEmail {
 
   async validate(tokenId: UniqId, email: Email): Promise<IVerificationEmailTimerPrimitives> {
     const verificationEmail = await this.repository.findById(tokenId.id);
-    if (!verificationEmail) throw new ErrorLogIn("Verification Email not found");
+    if (!verificationEmail) throw new ErrorEmailVerification("Verification Email not found");
     await this.repository.remove(verificationEmail.id);
     await this.checkExpirationDate(verificationEmail);
-    if(email.email !== verificationEmail.email) throw new ErrorLogIn("The email provided is not valid");
+    if(email.email !== verificationEmail.email) throw new ErrorEmailVerification("The email provided is not valid");
     return verificationEmail;
   }
 
@@ -21,7 +22,7 @@ export class ValidateVerificationEmail {
   ): Promise<void> {
     const emailExpiration = verificationEmail.expirationDate;
     if (this.hasExpired(emailExpiration)) {
-      throw new ErrorLogIn("Verification Token has expired");
+      throw new ErrorEmailVerification("Verification Token has expired");
     }
   }
 

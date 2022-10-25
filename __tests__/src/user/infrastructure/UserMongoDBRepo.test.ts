@@ -15,7 +15,7 @@ describe("On UserMongoDBRepo, GIVEN a user", () => {
     repo = new UserMongoDBRepo();
   });
 
-  it(`WHEN call save, THEN user should be saved in MongoDB`, async () => {
+  it(`WHEN call save, THEN user should be saved and found in MongoDB`, async () => {
     await repo.save(user);
     const userFound = await repo.findByEmail(user.email);
     expect(userFound).toEqual(user);
