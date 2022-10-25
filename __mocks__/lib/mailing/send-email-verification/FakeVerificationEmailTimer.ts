@@ -32,7 +32,7 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
 
   static createWithPrimitives({
     roltype = RolType.BUSINESS,
-    hasExpired = false
+    hasExpired = false,
   }): IVerificationEmailTimerPrimitives {
     const { email, expirationDate, id, rol } = this.generateRandomData(roltype);
     if (!hasExpired) {
@@ -57,9 +57,15 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
 
   static createManyWithPrimitives(
     amount = 5,
-    roltype = RolType.BUSINESS
+    roltype = RolType.BUSINESS,
+    hasExpired = false
   ): IVerificationEmailTimerPrimitives[] {
-    const vertificationEmailsPrimitives = this.generateMany(amount, roltype);
+    let vertificationEmailsPrimitives: IVerificationEmailTimerPrimitives[] = [];
+    for (let i = 0; i < amount -1; i++) {
+      vertificationEmailsPrimitives.push(
+        this.createWithPrimitives({ roltype, hasExpired })
+      );
+    }
     return vertificationEmailsPrimitives;
   }
 

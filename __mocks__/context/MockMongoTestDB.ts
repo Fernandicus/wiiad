@@ -4,22 +4,40 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
-import { IVerificationEmailTimerPrimitives, IVerificationEmailTimerProps } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import {
+  IVerificationEmailTimerPrimitives,
+  IVerificationEmailTimerProps,
+} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeAd } from "__mocks__/lib/ads/FakeAd";
-import { TestAdMongoDBRepository } from "__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { FakeAdvertiser } from "__mocks__/lib/advertiser/FakeAdvertiser";
-import { TestAdvertiserMongoDBRepo } from "__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeCampaign } from "__mocks__/lib/campaign/FakeCampaign";
-import { TestCampaignMongoDBRepo } from "__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
-import { FakeVerificationEmailTimer } from "__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { FakeUser } from "__mocks__/lib/user/FakeUser";
-import { TestUserMongoDBRepo } from "__mocks__/lib/user/infrastructure/TestUserMongoDBRepo";
+import { FakeAd } from "../../__mocks__/lib/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { FakeAdvertiser } from "../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeCampaign } from "../../__mocks__/lib/campaign/FakeCampaign";
+import { TestCampaignMongoDBRepo } from "../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { FakeVerificationEmailTimer } from "../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
+import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
+import { FakeUser } from "../../__mocks__/lib/user/FakeUser";
+import { TestUserMongoDBRepo } from "../../__mocks__/lib/user/infrastructure/TestUserMongoDBRepo";
+
+interface InitializedMongoTestDB {
+  campaigns: {
+    actives: ICampaignPrimitives[];
+    finished: ICampaignPrimitives[];
+    standBy: ICampaignPrimitives[];
+  };
+  advertisers: AdvertiserPropsPrimitives[];
+  ads: AdPropsPrimitives[];
+  users: IUserPrimitives[];
+  verificationEmails: {
+    expired: IVerificationEmailTimerPrimitives[];
+    valids: IVerificationEmailTimerPrimitives[];
+  };
+}
 
 export class MockMongoTestDB {
-  static async setAndInitAll(): Promise<void> {
+  static async setAndInitAll(): Promise<InitializedMongoTestDB> {
     const adRepo = await TestAdMongoDBRepository.init();
     const advertiserRepo = await TestAdvertiserMongoDBRepo.init();
     const campaignRepo = await TestCampaignMongoDBRepo.init();
@@ -27,21 +45,50 @@ export class MockMongoTestDB {
     const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
 
     const advertisers = this.setAdvertisers();
-    const campaigns = this.setCampaigns({
-      advertiserId: advertisers[0].id,
-      amount: 5,
+    const ads = this.setAds(9);
+    const activeCampaigns = this.setCampaigns({
+      ads: ads.slice(0, 3),
       status: CampaignStatusType.ACTIVE,
     });
+    const finishedCampaigns = this.setCampaigns({
+      ads: ads.slice(3, 6),
+      status: CampaignStatusType.FINISHED,
+    });
+    const standByCampaigns = this.setCampaigns({
+      ads: ads.slice(6, 9),
+      status: CampaignStatusType.STAND_BY,
+    });
+    const users = this.setUsers();
+    const verificationEmails = this.setEmailVerification();
 
-    await adRepo.saveMany(this.setAds());
+    await adRepo.saveMany(ads);
     await advertiserRepo.saveMany(advertisers);
-    await campaignRepo.saveMany(campaigns);
-    await userRepo.saveMany(this.setUsers());
-    await emailVerificationRepo.saveMany(this.setEmailVerification())
+    await campaignRepo.saveMany([
+      ...activeCampaigns,
+      ...standByCampaigns,
+      ...finishedCampaigns,
+    ]);
+    await userRepo.saveMany(users);
+    await emailVerificationRepo.saveMany([
+      ...verificationEmails.expired,
+      ...verificationEmails.valids,
+    ]);
+
+    return {
+      campaigns: {
+        actives: activeCampaigns,
+        finished: finishedCampaigns,
+        standBy: standByCampaigns,
+      },
+      advertisers,
+      ads,
+      users,
+      verificationEmails,
+    };
   }
 
-  private static setAds(): AdPropsPrimitives[] {
-    return FakeAd.createManyWithPrimitives(UniqId.generate(), 5);
+  private static setAds(amount: number): AdPropsPrimitives[] {
+    return FakeAd.createManyWithPrimitives(UniqId.generate(), amount);
   }
 
   private static setAdvertisers(): AdvertiserPropsPrimitives[] {
@@ -52,15 +99,30 @@ export class MockMongoTestDB {
     return FakeUser.createManyWithPrimitives(5);
   }
 
-  private static setEmailVerification(): IVerificationEmailTimerPrimitives[] {
-    return FakeVerificationEmailTimer.createManyWithPrimitives(5, RolType.BUSINESS);
+  private static setEmailVerification(): {
+    expired: IVerificationEmailTimerPrimitives[];
+    valids: IVerificationEmailTimerPrimitives[];
+  } {
+    const expiredEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
+      5,
+      RolType.BUSINESS,
+      true
+    );
+    const validEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
+      5,
+      RolType.BUSINESS,
+      false
+    );
+    return {
+      expired: expiredEmails,
+      valids: validEmails,
+    };
   }
 
   private static setCampaigns(props: {
-    amount: number;
+    ads: AdPropsPrimitives[];
     status: CampaignStatusType;
-    advertiserId: string;
   }): ICampaignPrimitives[] {
-    return FakeCampaign.createManyWithPrimitives(props);
+    return FakeCampaign.createManyFromGivenAds(props.ads, props.status);
   }
 }
