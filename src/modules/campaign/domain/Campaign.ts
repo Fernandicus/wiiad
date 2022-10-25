@@ -2,7 +2,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { User } from "../../user/domain/User";
 import { CampaignBudget, CampaignBudgetProps } from "./value-objects/Budget";
 import { CampaignMetrics } from "./value-objects/CampaignMetrics";
-import { CampaignStatusType } from "./value-objects/CampaignStatus";
+import { CampaignStatus, CampaignStatusType } from "./value-objects/CampaignStatus";
 
 export interface ICampaignPrimitives {
   id: string;
@@ -27,7 +27,7 @@ export interface CampaignProps {
   adId: UniqId;
   promoters: UniqId[];
   watchers: UniqId[];
-  status: CampaignStatusType;
+  status: CampaignStatus;
   budget: CampaignBudget;
   metrics: CampaignMetrics;
 }
@@ -38,7 +38,7 @@ export class Campaign {
   readonly adId: UniqId;
   readonly promoters: UniqId[];
   readonly watchers: UniqId[];
-  readonly status: CampaignStatusType;
+  readonly status: CampaignStatus;
   readonly budget: CampaignBudget;
   readonly metrics: CampaignMetrics;
 
@@ -57,7 +57,7 @@ export class Campaign {
     advertiserId: UniqId;
     adId: UniqId;
     id: UniqId;
-    budget: CampaignBudget,
+    budget: CampaignBudget;
   }): Campaign {
     return new Campaign({
       id: props.id,
@@ -65,8 +65,8 @@ export class Campaign {
       adId: props.adId,
       promoters: [],
       watchers: [],
-      status: CampaignStatusType.ACTIVE,
-      budget:props.budget,
+      status: new CampaignStatus(CampaignStatusType.ACTIVE),
+      budget: props.budget,
       metrics: new CampaignMetrics({
         totalViews: 0,
         totalClicks: 0,
@@ -89,7 +89,7 @@ export class Campaign {
         totalClicks: this.metrics.totalClicks,
         totalViews: this.metrics.totalViews,
       },
-      status: this.status,
+      status: this.status.status,
     };
   }
 }

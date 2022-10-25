@@ -6,7 +6,7 @@ import { CampaignStatusType } from "../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
-  async launch(campaign: ICampaignPrimitives): Promise<void> {
+  async save(campaign: ICampaignPrimitives): Promise<void> {
     const campaignModel: HydratedDocument<ICampaignModel> =
       new CampaignModel<ICampaignModel>({
         _id: campaign.id,
@@ -16,24 +16,12 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async findByStatus(
-    status: CampaignStatusType
+    status: string
   ): Promise<ICampaignPrimitives[]> {
     const campaignModels = await CampaignModel.find<ICampaignModel>({
       status,
     });
     const campaigns = this.mapToPrimitives(campaignModels);
-    /* ICampaignPrimitives[] = campaignModels.map((campaign) => {
-      return {
-        id: campaign._id,
-        adId: campaign.adId,
-        advertiserId: campaign.advertiserId,
-        status: campaign.status,
-        promoters: campaign.promoters,
-        watchers: campaign.watchers,
-        budget: campaign.budget,
-        metrics: campaign.metrics,
-      };
-    }); */
     return campaigns;
   }
 
@@ -42,18 +30,6 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
       advertiserId: id,
     });
     const campaigns = this.mapToPrimitives(campaignModels);
-    /* ICampaignPrimitives[] = campaignModels.map((campaign) => {
-      return {
-        id: campaign._id,
-        adId: campaign.adId,
-        advertiserId: campaign.advertiserId,
-        status: campaign.status,
-        promoters: campaign.promoters,
-        watchers: campaign.watchers,
-        budget: campaign.budget,
-        metrics: campaign.metrics,
-      };
-    }); */
     return campaigns;
   }
 

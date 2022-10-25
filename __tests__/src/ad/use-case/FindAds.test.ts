@@ -21,9 +21,9 @@ describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads
     const adsFound =  await findAds.findAllByAdvertiserId(new UniqId(advertiserId));
 
     expect(repository.findAllByAdvertiserId).toHaveBeenCalledWith(advertiserId);
-    expect(adsFound.length).toBe(amount);
-    adsFound.forEach(ad=>{
-      expect(ad.advertiserId).toBe(advertiserId);
+    expect(adsFound?.length).toBe(amount);
+    adsFound?.forEach(ad=>{
+      expect(ad.advertiserId.id).toBe(advertiserId);
     })
   });
 });

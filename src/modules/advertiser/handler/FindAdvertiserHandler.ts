@@ -9,12 +9,26 @@ export class FindAdvertiserHandler {
   async findByEmail(email: string): Promise<AdvertiserPropsPrimitives | null> {
     const mail = new Email(email);
     const advertiserFound = await this.findAdvertiser.byEmail(mail);
-    return advertiserFound;
+    if (!advertiserFound) return null;
+    return {
+      email: advertiserFound.email.email,
+      id: advertiserFound.id.id,
+      name: advertiserFound.name.name,
+      rol: advertiserFound.rol.rol,
+    };
   }
 
-  async findByUserName(name:string): Promise<AdvertiserPropsPrimitives | null> {
+  async findByUserName(
+    name: string
+  ): Promise<AdvertiserPropsPrimitives | null> {
     const userName = new Name(name);
     const advertiserFound = await this.findAdvertiser.byUserName(userName);
-    return advertiserFound;
+    if (!advertiserFound) return null;
+    return {
+      email: advertiserFound.email.email,
+      id: advertiserFound.id.id,
+      name: advertiserFound.name.name,
+      rol: advertiserFound.rol.rol,
+    };
   }
 }

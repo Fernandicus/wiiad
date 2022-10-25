@@ -26,13 +26,14 @@ describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () =>
     newCampaign = FakeCampaign.createWithPrimitives({
       advertiserId,
       status: CampaignStatusType.STAND_BY,
+      adId: UniqId.generate(),
     });
     campaignRepo = new CampaignMongoDBRepo();
   }, 8000);
 
   it(`WHEN call launch method with a valid advertiser id, 
   THEN the launched campaign should be saved in MongoDB`, async () => {
-    await campaignRepo.launch(newCampaign);
+    await campaignRepo.save(newCampaign);
     const campaignsFound = await campaignRepo.findAllByAdvertiserId(
       newCampaign.advertiserId
     );

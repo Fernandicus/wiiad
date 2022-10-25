@@ -6,11 +6,9 @@ import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/mailing
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { IWatchCampaignData } from "@/src/controllers/WatchCampaignsController";
 import { userSession } from "@/src/use-case/container";
 import { TestCampaignMongoDBRepo } from "../../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
 import { FakeCampaign } from "../../../__mocks__/lib/campaign/FakeCampaign";
-import { UniqId } from "@/src/utils/UniqId";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { FakeAdvertiser } from "../../../__mocks__/lib/advertiser/FakeAdvertiser";
@@ -192,7 +190,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   });
 
   //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
-  it.only(`WHEN access to the url with my user session name,
+  it(`WHEN access to the url with my user session name,
   THEN response should be a null active campaign and ad`, async () => {
     const user = {
       email: faker.internet.email(),
@@ -223,7 +221,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   });
 
   //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
-  it.only(`WHEN access to the url with other user session name,
+  it(`WHEN access to the url with other user session name,
   THEN response should have an active campaign and ad`, async () => {
     const user = {
       email: faker.internet.email(),

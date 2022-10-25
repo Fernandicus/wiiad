@@ -1,12 +1,40 @@
+import { UniqId } from "@/src/utils/UniqId";
 import { Campaign, ICampaignPrimitives } from "../domain/Campaign";
 import { ICampaignRepo } from "../domain/ICampaignRepo";
-import { CampaignStatusType } from "../domain/value-objects/CampaignStatus";
+import { CampaignBudget } from "../domain/value-objects/Budget";
+import { CampaignMetrics } from "../domain/value-objects/CampaignMetrics";
+import {
+  CampaignStatus,
+  CampaignStatusType,
+} from "../domain/value-objects/CampaignStatus";
 
 export class FindCampaign {
   constructor(private campaignRepo: ICampaignRepo) {}
 
-  async allActives(): Promise<ICampaignPrimitives[]> {
-    const activeCampaigns = await this.campaignRepo.findByStatus(CampaignStatusType.ACTIVE);
-    return activeCampaigns;
+  async allActives(): Promise<Campaign[] | null> {
+    const activeCampaigns = await this.campaignRepo.findByStatus(
+      CampaignStatusType.ACTIVE
+    );
+    if (activeCampaigns.length == 0) return null;
+    return this.toCampaign(activeCampaigns);
+  }
+
+  private toCampaign(campaignsPrimitives: ICampaignPrimitives[]): Campaign[] {
+    return campaignsPrimitives.map((campaign): Campaign => {
+      return new Campaign({
+        id: new UniqId(campaign.id),
+        adId: new UniqId(campaign.adId),
+        advertiserId: new UniqId(campaign.advertiserId),
+        status: new CampaignStatus(campaign.status),
+        budget: new CampaignBudget(campaign.budget),
+        metrics: new CampaignMetrics(campaign.metrics),
+        promoters: campaign.promoters.map((promoter): UniqId => {
+          return new UniqId(promoter);
+        }),
+        watchers: campaign.watchers.map((watcher): UniqId => {
+          return new UniqId(watcher);
+        }),
+      });
+    });
   }
 }

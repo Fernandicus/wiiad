@@ -6,7 +6,7 @@ import {
 } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
-import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { CampaignStatus, CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
 import { v4 } from "uuid";
 
@@ -25,7 +25,7 @@ export class FakeCampaign extends Campaign {
       adId: UniqId.new(),
       promoters: [UniqId.new()],
       watchers: [UniqId.new()],
-      status: props.status,
+      status: new CampaignStatus(props.status) ,
       budget: new CampaignBudget({
         moneyToSpend: 5,
         maxClicks: 5,

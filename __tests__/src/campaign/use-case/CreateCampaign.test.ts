@@ -27,22 +27,6 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
   THEN the repo should be called with the campaign primitives`, async () => {
     await createCampaign.launch(campaign);
 
-    let campaignPrimitives: ICampaignPrimitives = {
-      id: campaign.id.id,
-      advertiserId: campaign.advertiserId.id,
-      adId: campaign.adId.id,
-      promoters: campaign.promoters.map((promoter) => promoter.id),
-      watchers: campaign.watchers.map((watcher) => watcher.id),
-      status: campaign.status,
-      budget: {
-        maxClicks: campaign.budget.maxClicks,
-        moneyToSpend: campaign.budget.moneyToSpend,
-      },
-      metrics: {
-        totalClicks: campaign.metrics.totalClicks,
-        totalViews: campaign.metrics.totalViews,
-      },
-    };
-    expect(campaignRepo.save).toBeCalledWith(campaignPrimitives);
+    expect(campaignRepo.save).toBeCalledWith(campaign.toPrimitives());
   });
 });

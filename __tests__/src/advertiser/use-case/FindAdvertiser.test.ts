@@ -31,7 +31,7 @@ describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
     const findAdvertiser = new FindAdvertiser(mockRepo);
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);
     expect(mockRepo.findByEmail).toBeCalledWith(advertiser.email.email);
-    expect(advertiserFound).toBe(advertiserPrimitives);
+    expect(advertiserFound?.toPrimitives()).toEqual(advertiserPrimitives);
   });
 
   it(`WHEN try to find a non existing advertiser,

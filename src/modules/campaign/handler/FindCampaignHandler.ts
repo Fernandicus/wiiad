@@ -9,25 +9,10 @@ export class FindCampaignHandler {
 
   async allActives(): Promise<ICampaignPrimitives[]> {
     const activeCampaigns = await this.findCampaign.allActives();
-    if (activeCampaigns.length == 0)
+    if (!activeCampaigns)
       throw new ErrorFindingCampaign("There are no active campaigns");
-    const campaigns = activeCampaigns.map((campaigns): ICampaignPrimitives => {
-      return {
-        id: campaigns.id,
-        adId: campaigns.adId,
-        advertiserId: campaigns.advertiserId,
-        status: campaigns.status,
-        budget: {
-          maxClicks: campaigns.budget.maxClicks,
-          moneyToSpend: campaigns.budget.moneyToSpend
-        },
-        watchers: [...campaigns.watchers],
-        promoters: [...campaigns.promoters],
-        metrics: {
-          totalClicks: campaigns.metrics.totalClicks,
-          totalViews: campaigns.metrics.totalViews,
-        },
-      };
+    const campaigns = activeCampaigns.map((campaign): ICampaignPrimitives => {
+      return campaign.toPrimitives();
     });
     return campaigns;
   }
