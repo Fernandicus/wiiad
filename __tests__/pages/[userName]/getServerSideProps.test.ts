@@ -27,7 +27,6 @@ interface IServerSideResponse {
   redirect: { destination: string };
 }
 
-//!: Mock VerificationEmail.remove, FindAdvertiser, CreateAdvertiser
 
 describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
   let verificationEmailRepo: TestVerificationEmailMongoDBRepo;
@@ -145,7 +144,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
 });
 
 //! TODO
-describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
+describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
   let activeCampaigns: ICampaignPrimitives[];
@@ -169,18 +168,7 @@ describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
       CampaignStatusType.ACTIVE
     );
     await campaignRepo.saveMany(activeCampaigns);
-    const adsModels = ads.map((ad): AdModelProps => {
-      return {
-        _id: ad.id,
-        advertiserId: ad.advertiserId,
-        description: ad.description,
-        image: ad.image,
-        redirectionUrl: ad.redirectionUrl,
-        segments: ad.segments,
-        title: ad.title,
-      };
-    });
-    await adsRepo.saveMany(adsModels);
+    await adsRepo.saveMany(ads);
   });
 
   it(`WHEN access to url without user session,
@@ -226,7 +214,7 @@ describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
   });
 
   //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
-  it.only(`WHEN access to an influencer url,
+  it(`WHEN access to an influencer url,
   THEN response should have an active campaign and ad`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);
@@ -245,7 +233,7 @@ describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
     expect(resp.props.user.id).toBe(myUser.id);
   });
 
-  it.only(`WHEN access to a not existing influencer url,
+  it(`WHEN access to a not existing influencer url,
   THEN response should return a redirect address`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);

@@ -31,14 +31,11 @@ export class FakeUser extends User {
     return userPrimitives;
   }
 
-  static createManyWithPrimitives(props: {
-    amount: number;
-    id: string;
-  }): IUserPrimitives[] {
+  static createManyWithPrimitives(amount: number): IUserPrimitives[] {
     let userPrimitives: IUserPrimitives[] = [];
 
-    for (let i = 1; i < props.amount; i++) {
-      userPrimitives.push(this.generateRandom(props.id));
+    for (let i = 1; i < amount; i++) {
+      userPrimitives.push(this.generateRandom(UniqId.generate()));
     }
 
     return userPrimitives;

@@ -2,10 +2,7 @@ import {
   Advertiser,
   AdvertiserPropsPrimitives,
 } from "@/src/modules/advertiser/domain/Advertiser";
-import {
-  Rol,
-  RolType,
-} from "@/src/domain/Rol";
+import { Rol, RolType } from "@/src/domain/Rol";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
@@ -34,13 +31,26 @@ export class FakeAdvertiser extends Advertiser {
     };
   }
 
+  static createManyWithPrimitives(
+    rol = RolType.BUSINESS,
+    amount = 5
+  ): AdvertiserPropsPrimitives[] {
+    let advertisers: AdvertiserPropsPrimitives[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      advertisers.push(this.createPrimitives(rol));
+    }
+
+    return advertisers;
+  }
+
   private static generateFakeData(): {
     email: string;
     name: string;
     id: string;
   } {
     return {
-      email: faker.internet.email() ,
+      email: faker.internet.email(),
       name: faker.company.name(),
       id: UniqId.generate(),
     };

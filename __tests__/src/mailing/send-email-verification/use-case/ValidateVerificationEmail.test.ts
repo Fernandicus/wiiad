@@ -1,5 +1,5 @@
 import { Email } from "@/src/domain/Email";
-import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
+import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
@@ -47,7 +47,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
         UniqId.new(),
         new Email(faker.internet.email())
       );
-    }).rejects.toThrowError(ErrorLogIn);
+    }).rejects.toThrowError(ErrorEmailVerification);
   });
 
   test(`WHEN call the validate method for an expired date, 
@@ -64,7 +64,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
         UniqId.new(),
         new Email(faker.internet.email())
       );
-    }).rejects.toThrowError(ErrorLogIn);
+    }).rejects.toThrowError(ErrorEmailVerification);
   });
 
   test(`WHEN call the validate method for a non expired date, 
