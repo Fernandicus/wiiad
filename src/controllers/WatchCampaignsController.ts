@@ -28,20 +28,6 @@ export class WatchCampaignsController {
     };
   }
 
-  /**
-   * Only no logged users or users with Rol Type User
-   * can watch an ad
-   */
-  private static canWatchCampaign(
-    session: IGenericUserPrimitives | null,
-    loginQueries: LoginQueries
-  ): boolean {
-    return (
-      !session ||
-      (session.name !== loginQueries.userName && session.rol === RolType.USER)
-    );
-  }
-
   private static randomCampaign(
     activeCampaigns: ICampaignPrimitives[]
   ): ICampaignPrimitives {

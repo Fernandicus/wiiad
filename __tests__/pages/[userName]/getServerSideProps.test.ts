@@ -14,6 +14,11 @@ import { UniqId } from "@/src/utils/UniqId";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { FakeAdvertiser } from "../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { RolType } from "@/src/domain/Rol";
+import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { TestAdMongoDBRepository } from "../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { FakeAd } from "../../../__mocks__/lib/ads/FakeAd";
+import { AdModelProps } from "@/src/modules/ad/infraestructure/AdModel";
 
 interface IServerSideResponse {
   props: {};
@@ -147,13 +152,27 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     req = httpMock.createRequest();
     res = httpMock.createResponse();
     userSession.remove({ req, res });
+    const advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
     const campaignRepo = await TestCampaignMongoDBRepo.init();
-    activeCampaigns = FakeCampaign.createManyWithPrimitives({
-      status: CampaignStatusType.ACTIVE,
-      amount: 5,
-      advertiserId: UniqId.generate(),
-    });
+    const adsRepo = await TestAdMongoDBRepository.init();
+    const ads = FakeAd.createManyWithPrimitives(advertiser.id, 5);
+    activeCampaigns = FakeCampaign.createManyFromGivenAds(
+      ads,
+      CampaignStatusType.ACTIVE
+    );
     await campaignRepo.saveMany(activeCampaigns);
+    const adsModels = ads.map((ad): AdModelProps => {
+      return {
+        _id: ad.id,
+        advertiserId: ad.advertiserId,
+        description: ad.description,
+        image: ad.image,
+        redirectionUrl: ad.redirectionUrl,
+        segments: ad.segments,
+        title: ad.title,
+      };
+    });
+    await adsRepo.saveMany(adsModels);
   });
 
   it(`WHEN access to url without user session,
@@ -170,5 +189,61 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
 
     expect(resp.props.campaign).not.toBe(null);
     expect(resp.props.ad).not.toBe(null);
-  }, 12000);
+  });
+
+  //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
+  it.only(`WHEN access to the url with my user session name,
+  THEN response should be a null active campaign and ad`, async () => {
+    const user = {
+      email: faker.internet.email(),
+      name: faker.name.firstName(),
+      id: "2134",
+      rol: RolType.USER,
+    };
+    userSession.remove({ req, res });
+    userSession.setFromServer({ req, res }, user);
+    const resp = (await getServerSideProps({
+      req,
+      res,
+      resolvedUrl: "",
+      params: {},
+      query: {
+        userName: user.name,
+      },
+    })) as { props: IUserNamePage };
+
+    const userResponse: AdvertiserPropsPrimitives = resp.props.user;
+
+    expect(userResponse.name).toEqual(user.name);
+    expect(userResponse.id).toEqual(user.id);
+    expect(userResponse.email).toEqual(user.email);
+    expect(userResponse.rol).toEqual(user.rol);
+    expect(resp.props.campaign).toBe(undefined);
+    expect(resp.props.ad).toBe(undefined);
+  });
+
+  //! TODO: SAVE USER SESSION AND TRY TO ENTER TO THE SAME USER NAME URL
+  it.only(`WHEN access to the url with other user session name,
+  THEN response should have an active campaign and ad`, async () => {
+    const user = {
+      email: faker.internet.email(),
+      name: faker.name.firstName(),
+      id: "2134",
+      rol: RolType.USER,
+    };
+    userSession.remove({ req, res });
+    userSession.setFromServer({ req, res }, user);
+    const resp = (await getServerSideProps({
+      req,
+      res,
+      resolvedUrl: "",
+      params: {},
+      query: {
+        userName: faker.name.firstName(),
+      },
+    })) as { props: IUserNamePage };
+
+    expect(resp.props.campaign).not.toBe(undefined);
+    expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
+  });
 });

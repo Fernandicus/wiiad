@@ -13,14 +13,19 @@ export class FindCampaignHandler {
       throw new ErrorFindingCampaign("There are no active campaigns");
     const campaigns = activeCampaigns.map((campaigns): ICampaignPrimitives => {
       return {
-        ...campaigns,
+        id: campaigns.id,
+        adId: campaigns.adId,
+        advertiserId: campaigns.advertiserId,
+        status: campaigns.status,
         budget: {
-          ...campaigns.budget,
+          maxClicks: campaigns.budget.maxClicks,
+          moneyToSpend: campaigns.budget.moneyToSpend
         },
         watchers: [...campaigns.watchers],
         promoters: [...campaigns.promoters],
         metrics: {
-          ...campaigns.metrics,
+          totalClicks: campaigns.metrics.totalClicks,
+          totalViews: campaigns.metrics.totalViews,
         },
       };
     });

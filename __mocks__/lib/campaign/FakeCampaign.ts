@@ -1,3 +1,4 @@
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   Campaign,
   CampaignProps,
@@ -39,13 +40,14 @@ export class FakeCampaign extends Campaign {
   static createWithPrimitives(props: {
     status: CampaignStatusType;
     advertiserId: string;
+    adId: string;
   }): ICampaignPrimitives {
     return {
       id: UniqId.generate(),
       advertiserId: props.advertiserId,
-      adId: UniqId.generate(),
-      promoters: [UniqId.generate()],
-      watchers: [UniqId.generate()],
+      adId: props.adId,
+      promoters: this.generateIds(),
+      watchers: this.generateIds(),
       status: props.status,
       budget: {
         moneyToSpend: 5,
@@ -63,28 +65,32 @@ export class FakeCampaign extends Campaign {
     status: CampaignStatusType;
     advertiserId: string;
   }): ICampaignPrimitives[] {
-    const {advertiserId, amount, status} = props;
+    const { advertiserId, amount, status } = props;
     let campaigns: ICampaignPrimitives[] = [];
 
     for (let i = 1; i <= amount; i++) {
-      let campaign: ICampaignPrimitives = {
-        id: UniqId.generate(),
-        adId: UniqId.generate(),
-        advertiserId,
+      let campaign = this.createWithPrimitives({
+        advertiserId: advertiserId,
         status,
-        watchers: this.generateIds(),
-        promoters: this.generateIds(),
-        budget: {
-          maxClicks: Math.floor(Math.random() * 10000),
-          moneyToSpend: Math.floor(Math.random() * 10000),
-        },
-        metrics: {
-          totalClicks: Math.floor(Math.random() * 10000),
-          totalViews: Math.floor(Math.random() * 10000),
-        },
-      };
+        adId: UniqId.generate(),
+      });
       campaigns.push(campaign);
     }
+
+    return campaigns;
+  }
+
+  static createManyFromGivenAds(
+    ads: AdPropsPrimitives[],
+    status: CampaignStatusType
+  ): ICampaignPrimitives[] {
+    const campaigns = ads.map((ad) => {
+      return this.createWithPrimitives({
+        advertiserId: ad.advertiserId,
+        adId: ad.id,
+        status,
+      });
+    });
 
     return campaigns;
   }

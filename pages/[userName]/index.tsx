@@ -53,11 +53,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           props: { user: session } as IUserNamePage,
         };
 
-        //TODO: SEARCH IF USER 'QueryParams.userName' EXISTS
+      //TODO: SEARCH IF USER 'QueryParams.userName' EXISTS
       const { ad, activeCampaign } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
           return await WatchCampaignsController.randomActiveCampaign();
         });
+
       return {
         props: { user: session, campaign: activeCampaign, ad } as IUserNamePage,
       };

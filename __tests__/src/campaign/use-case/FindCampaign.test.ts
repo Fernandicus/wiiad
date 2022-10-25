@@ -9,7 +9,7 @@ describe("On FindCampaign use case, GIVEN some active campaigns", () => {
     mockedRepo = {
       findAllByAdvertiserId: jest.fn(),
       findByStatus: jest.fn(),
-      launch: jest.fn(),
+      save: jest.fn(),
     };
   });
 

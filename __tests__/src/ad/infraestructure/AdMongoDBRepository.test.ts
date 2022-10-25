@@ -5,6 +5,7 @@ import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestr
 import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
 import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
 import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {
   let fakeAds: FakeAd[];
@@ -13,7 +14,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
 
   beforeAll(async () => {
     const testAdRepo = await TestAdMongoDBRepository.init();
-    const testCreateAd = new TestCreateAd(testAdRepo)
+    const testCreateAd = new TestCreateAd(testAdRepo);
     const testCreateAdController = new TestCreateAdController(testCreateAd);
     const createdAdsData = await testCreateAdController.crateMany();
     fakeAds = createdAdsData.fakeAds;
@@ -50,6 +51,18 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     const count = await AdModel.count({ advertiserId });
 
     expect(count).toBe(adsFound.length);
+  }, 8000);
+
+  it(`WHEN call findByAdId method, THEN the selected ad should be returned from the DB`, async () => {
+    const adFound = await adMongoDBRepo.findByAdId(fakeAds[0].id.id);
+    const ad = {...adFound}
+    expect(adFound).toEqual(ad);
+  }, 8000);
+
+  it(`WHEN call findByAdId method with a not existing ad, THEN null should be returned from the DB`, async () => {
+    const adFound = await adMongoDBRepo.findByAdId("123");
+    
+    expect(adFound).toBe(null);
   }, 8000);
 
   it("WHEN call the repository remove method, THEN the selected ad should be deleted it from the DB", async () => {

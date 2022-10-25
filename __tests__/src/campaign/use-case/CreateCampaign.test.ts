@@ -15,7 +15,7 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
 
   beforeAll(() => {
     campaignRepo = {
-      launch: jest.fn(),
+      save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
       findByStatus: jest.fn(),
     };
@@ -43,6 +43,6 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
         totalViews: campaign.metrics.totalViews,
       },
     };
-    expect(campaignRepo.launch).toBeCalledWith(campaignPrimitives);
+    expect(campaignRepo.save).toBeCalledWith(campaignPrimitives);
   });
 });

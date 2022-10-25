@@ -12,6 +12,7 @@ describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads
     findAllByAdvertiserId: jest.fn().mockResolvedValue(adsPrimitives),
     remove: jest.fn(),
     save: jest.fn(),
+    findByAdId: jest.fn(),
   };
 
   it(`WHEN call FindAds findAllByAdvertiserId, 

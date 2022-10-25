@@ -32,7 +32,6 @@ export class AdMongoDBRepository implements AdRepository {
 
   async findByAdId(id: string): Promise<AdPropsPrimitives | null> {
     const adModel = await AdModel.findById<AdModelProps>(id);
-    console.log("AD MODEL ", adModel);
     if (!adModel) return null;
     return {
       id: adModel._id,
