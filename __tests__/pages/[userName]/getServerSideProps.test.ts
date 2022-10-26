@@ -11,7 +11,7 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { MockMongoTestDB } from "../../../__mocks__/context/MockMongoTestDB";
+import { MockTestDB } from "../../../__mocks__/context/MockTestDB";
 
 interface IServerSideResponse {
   props: {};
@@ -28,11 +28,11 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
+    const { verificationEmails } = await MockTestDB.setAndInitAll();
     verificationEmailRepo = await TestVerificationEmailMongoDBRepo.init();
-    const { verificationEmails } = await MockMongoTestDB.setAndInitAll();
     validVerificationEmails = verificationEmails.valids;
     expiredVerificationEmail = verificationEmails.expired[0];
-  }, 8000);
+  }, 20000);
 
   it(`WHEN send an url with a not valid token, 
   THEN return redirect to home page '/'`, async () => {
@@ -138,7 +138,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     req = httpMock.createRequest();
     res = httpMock.createResponse();
     userSession.remove({ req, res });
-    const { users } = await MockMongoTestDB.setAndInitAll();
+    const { users } = await MockTestDB.setAndInitAll();
     influencer = users[0];
     myUser = FakeUser.createWithPrimitives(UniqId.generate());
   });

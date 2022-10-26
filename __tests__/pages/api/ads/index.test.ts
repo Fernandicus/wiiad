@@ -16,9 +16,9 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let advertiser: AdvertiserPropsPrimitives;
   let fakeAds: AdPropsPrimitives[];
   beforeAll(async () => {
-    const mockedAdDB = await mockedAdRepo();
+    const mockedAdDB = await mockedAdRepo(5);
     advertiser = FakeAdvertiser.createPrimitives();
-    fakeAds = FakeAd.createManyWithPrimitives(advertiser.id);
+    fakeAds = FakeAd.createManyWithPrimitives(advertiser.id, 3);
     await mockedAdDB.saveMany(fakeAds);
   }, 8000);
 

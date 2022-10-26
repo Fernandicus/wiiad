@@ -40,9 +40,10 @@ export class FakeAd extends Ad {
     return ads;
   }
 
-  static createManyWithPrimitives(advertiserId: string): AdPropsPrimitives[] {
-
-  const amount = Math.round(Math.random() * 5);
+  static createManyWithPrimitives(
+    advertiserId: string,
+    amount: number
+  ): AdPropsPrimitives[] {
     let ads: AdPropsPrimitives[] = [];
     for (var i = 0; i <= amount - 1; i++) {
       ads.push({

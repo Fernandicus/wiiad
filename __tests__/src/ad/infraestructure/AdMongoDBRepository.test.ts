@@ -12,9 +12,9 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   let advertiserId: string;
 
   beforeAll(async () => {
-    const mockedAdDB = await mockedAdRepo();
+    const mockedAdDB = await mockedAdRepo(5);
     advertiserId = UniqId.generate()
-    fakeAds = FakeAd.createManyWithPrimitives(advertiserId);
+    fakeAds = FakeAd.createManyWithPrimitives(advertiserId, 5);
     await mockedAdDB.saveMany(fakeAds)
     adMongoDBRepo = new AdMongoDBRepository();
   }, 8000);

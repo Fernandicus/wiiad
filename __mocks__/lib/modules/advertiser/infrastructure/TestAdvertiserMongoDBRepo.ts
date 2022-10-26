@@ -26,7 +26,9 @@ export class TestAdvertiserMongoDBRepo
       (advertiser): AdvertiserModelProps => {
         return {
           _id: advertiser.id,
-          ...advertiser,
+          email: advertiser.email,
+          name: advertiser.name,
+          rol: advertiser.rol,
         };
       }
     );
@@ -40,7 +42,9 @@ export class TestAdvertiserMongoDBRepo
       (advertiser): AdvertiserPropsPrimitives => {
         return {
           id: advertiser._id,
-          ...advertiser,
+          email: advertiser.email,
+          name: advertiser.name,
+          rol: advertiser.rol,
         };
       }
     );

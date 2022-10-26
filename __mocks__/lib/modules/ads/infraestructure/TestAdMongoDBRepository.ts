@@ -11,7 +11,6 @@ export class TestAdMongoDBRepository
   extends TestMongoDB
   implements TestAdRepository
 {
-
   static async init(): Promise<TestAdMongoDBRepository> {
     await this.connectAndCleanModel(
       mongoose.model(AdModel.modelName, AdModel.schema)
@@ -19,8 +18,8 @@ export class TestAdMongoDBRepository
     return new TestAdMongoDBRepository();
   }
 
-  static async disconnect():Promise<void>{
-    await this.disconnectMongoDB(); 
+  static async disconnect(): Promise<void> {
+    await this.disconnectMongoDB();
   }
 
   async saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void> {
@@ -39,7 +38,12 @@ export class TestAdMongoDBRepository
     const adsPrimitives = ads.map((ad): AdPropsPrimitives => {
       return {
         id: ad._id,
-        ...ad,
+        advertiserId: ad.advertiserId,
+        description: ad.description,
+        image: ad.image,
+        redirectionUrl: ad.redirectionUrl,
+        segments: ad.segments,
+        title: ad.title,
       };
     });
     return adsPrimitives;

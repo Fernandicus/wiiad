@@ -1,4 +1,3 @@
-import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import {
   CampaignModel,
@@ -6,8 +5,12 @@ import {
 } from "@/src/modules/campaign/infrastructure/CampaignModel";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
+import { TestCampaignRepository } from "../domain/TestCampaignRepository";
 
-export class TestCampaignMongoDBRepo extends TestMongoDB {
+export class TestCampaignMongoDBRepo
+  extends TestMongoDB
+  implements TestCampaignRepository
+{
   static async init(): Promise<TestCampaignMongoDBRepo> {
     await this.connectAndCleanModel(
       mongoose.model(CampaignModel.modelName, CampaignModel.schema)
@@ -23,5 +26,29 @@ export class TestCampaignMongoDBRepo extends TestMongoDB {
       };
     });
     await CampaignModel.insertMany(campaignModels);
+  }
+
+  async getByStatus(status: string): Promise<ICampaignPrimitives[] | null> {
+    const campaignModel = await CampaignModel.find<ICampaignModel>({ status });
+    if (campaignModel.length == 0) return null;
+    const campaigns = campaignModel.map((campaign): ICampaignPrimitives => {
+      return {
+        id: campaign._id,
+        adId: campaign.adId,
+        advertiserId: campaign.advertiserId,
+        promoters: [...campaign.promoters],
+        status: campaign.status,
+        watchers: [...campaign.watchers],
+        budget: {
+          maxClicks: campaign.budget.maxClicks,
+          moneyToSpend: campaign.budget.moneyToSpend,
+        },
+        metrics: {
+          totalClicks: campaign.metrics.totalClicks,
+          totalViews: campaign.metrics.totalViews,
+        }
+      };
+    });
+    return campaigns;
   }
 }

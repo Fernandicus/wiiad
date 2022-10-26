@@ -12,7 +12,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   let advertiser: AdvertiserPropsPrimitives;
 
   beforeAll(async () => {
-    await mockedAdRepo();
+    await mockedAdRepo(5);
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 

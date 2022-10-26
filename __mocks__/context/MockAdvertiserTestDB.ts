@@ -21,7 +21,7 @@ class MockAdvertiserTestDB {
     return new MockAdvertiserTestDB(advertiserRepo);
   }
 
-  async getAllAds(): Promise<AdvertiserPropsPrimitives[] | null> {
+  async getAllAdvertisers(): Promise<AdvertiserPropsPrimitives[] | null> {
     const allAdvertisers = await this.advertiserRepo.getAllAdvertisers();
     return allAdvertisers;
   }

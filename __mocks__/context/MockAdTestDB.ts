@@ -4,9 +4,9 @@ import { TestAdRepository } from "__mocks__/lib/modules/ads/domain/TestAdReposit
 import { FakeAd } from "../../__mocks__/lib/modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 
-export const mockedAdRepo = async (): Promise<MockAdTestDB> => {
+export const mockedAdRepo = async (amount: number): Promise<MockAdTestDB> => {
   const testAdRepo = await TestAdMongoDBRepository.init();
-  return MockAdTestDB.setAndInit(testAdRepo);
+  return MockAdTestDB.setAndInit(testAdRepo, amount);
 };
 
 export class MockAdTestDB {
@@ -16,9 +16,13 @@ export class MockAdTestDB {
     this.adRepo = adRepo;
   }
 
-  static async setAndInit(adRepo: TestAdRepository): Promise<MockAdTestDB> {
-    const ads = this.setAds();
+  static async setAndInit(
+    adRepo: TestAdRepository,
+    amount: number
+  ): Promise<MockAdTestDB> {
+    const ads = this.setAds(amount);
     await adRepo.saveMany(ads);
+
     return new MockAdTestDB(adRepo);
   }
 
@@ -31,7 +35,7 @@ export class MockAdTestDB {
     await this.adRepo.saveMany(adsPrimitives);
   }
 
-  private static setAds(): AdPropsPrimitives[] {
-    return FakeAd.createManyWithPrimitives(UniqId.generate());
+  private static setAds(amount: number): AdPropsPrimitives[] {
+    return FakeAd.createManyWithPrimitives(UniqId.generate(), amount);
   }
 }

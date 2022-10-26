@@ -29,7 +29,9 @@ export class TestVerificationEmailMongoDBRepo extends TestMongoDB {
       (model): VerificationEmailModelProps => {
         return {
           _id: model.id,
-          ...model,
+          email: model.email,
+          expirationDate: model.expirationDate,
+          rol: model.rol,
         };
       }
     );

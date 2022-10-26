@@ -14,7 +14,7 @@ describe("On api/ads/remove-ad route", () => {
   let advertiser: AdvertiserPropsPrimitives;
   
   beforeEach(async () => {
-    await mockedAdRepo();
+    await mockedAdRepo(5);
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 

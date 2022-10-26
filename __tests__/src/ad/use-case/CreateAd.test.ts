@@ -14,6 +14,7 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
     save: jest.fn(),
     findAllByAdvertiserId: jest.fn(),
     remove: jest.fn(),
+    findByAdId: jest.fn()
   };
   const advertiserId = UniqId.generate();
   const adId = UniqId.generate();

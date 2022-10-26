@@ -7,6 +7,7 @@ describe("On RemoveAd use case, GIVEN a repository and ad id", () => {
     save: jest.fn(),
     findAllByAdvertiserId: jest.fn(),
     remove: jest.fn(),
+    findByAdId: jest.fn(),
   };
   const adId = UniqId.new();
 

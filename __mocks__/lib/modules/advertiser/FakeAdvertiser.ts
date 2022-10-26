@@ -40,7 +40,6 @@ export class FakeAdvertiser extends Advertiser {
     for (let i = 0; i < amount; i++) {
       advertisers.push(this.createPrimitives(rol));
     }
-
     return advertisers;
   }
 

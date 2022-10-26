@@ -14,6 +14,7 @@ import { FakeUser } from "../lib/modules/user/FakeUser";
 import { TestUserMongoDBRepo } from "../lib/modules/user/infrastructure/TestUserMongoDBRepo";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
+import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
 
 interface InitializedMongoTestDB {
   campaigns: {
@@ -32,36 +33,35 @@ interface InitializedMongoTestDB {
 
 export class MockTestDB {
   static async setAndInitAll(): Promise<InitializedMongoTestDB> {
-    const mockedAdDB = await mockedAdRepo();
+    const totalAds = 9;
+    const mockedAdDB = await mockedAdRepo(totalAds);
     const mockedAds = await mockedAdDB.getAllAds();
-    
-    const advertiserRepo = await mockedAdvertiserRepo();
-    const campaignRepo = await TestCampaignMongoDBRepo.init();
+
+    const mockedAdvertisers = await mockedAdvertiserRepo();
+    const advertisers = await mockedAdvertisers.getAllAdvertisers();
+
+    const mockedCampaigns = await mockedCampaignRepo({
+      activeAds: mockedAds!.slice(0, 3),
+      finishedAds: mockedAds!.slice(3, 6),
+      standByAds: mockedAds!.slice(6, 9),
+    });
+
     const userRepo = await TestUserMongoDBRepo.init();
     const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
 
-    const advertisers = this.setAdvertisers();
-    const activeCampaigns = this.setCampaigns({
-      ads: mockedAds!.slice(0, 3),
-      status: CampaignStatusType.ACTIVE,
-    });
-    const finishedCampaigns = this.setCampaigns({
-      ads: mockedAds!.slice(3, 6),
-      status: CampaignStatusType.FINISHED,
-    });
-    const standByCampaigns = this.setCampaigns({
-      ads: mockedAds!.slice(6, 9),
-      status: CampaignStatusType.STAND_BY,
-    });
+    const activeCampaigns = await mockedCampaigns.findByStatus(
+      CampaignStatusType.ACTIVE
+    );
+    const finishedCampaigns = await mockedCampaigns.findByStatus(
+      CampaignStatusType.FINISHED
+    );
+    const standByCampaigns = await mockedCampaigns.findByStatus(
+      CampaignStatusType.STAND_BY
+    );
+
     const users = this.setUsers();
     const verificationEmails = this.setEmailVerification();
 
-    await advertiserRepo.saveMany(advertisers);
-    await campaignRepo.saveMany([
-      ...activeCampaigns,
-      ...standByCampaigns,
-      ...finishedCampaigns,
-    ]);
     await userRepo.saveMany(users);
     await emailVerificationRepo.saveMany([
       ...verificationEmails.expired,
@@ -70,19 +70,15 @@ export class MockTestDB {
 
     return {
       campaigns: {
-        actives: activeCampaigns,
-        finished: finishedCampaigns,
-        standBy: standByCampaigns,
+        actives: activeCampaigns!,
+        finished: finishedCampaigns!,
+        standBy: standByCampaigns!,
       },
-      advertisers,
+      advertisers: advertisers!,
       ads: mockedAds!,
       users,
       verificationEmails,
     };
-  }
-
-  private static setAdvertisers(): AdvertiserPropsPrimitives[] {
-    return FakeAdvertiser.createManyWithPrimitives();
   }
 
   private static setUsers(): IUserPrimitives[] {
@@ -107,12 +103,5 @@ export class MockTestDB {
       expired: expiredEmails,
       valids: validEmails,
     };
-  }
-
-  private static setCampaigns(props: {
-    ads: AdPropsPrimitives[];
-    status: CampaignStatusType;
-  }): ICampaignPrimitives[] {
-    return FakeCampaign.createManyFromGivenAds(props.ads, props.status);
   }
 }
