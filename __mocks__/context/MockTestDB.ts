@@ -5,16 +5,12 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { FakeAdvertiser } from "../lib/modules/advertiser/FakeAdvertiser";
-import { FakeCampaign } from "../lib/modules/campaign/FakeCampaign";
-import { TestCampaignMongoDBRepo } from "../lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import { FakeVerificationEmailTimer } from "../lib/modules/send-email-verification/FakeVerificationEmailTimer";
 import { TestVerificationEmailMongoDBRepo } from "../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { FakeUser } from "../lib/modules/user/FakeUser";
-import { TestUserMongoDBRepo } from "../lib/modules/user/infrastructure/TestUserMongoDBRepo";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
-import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
+import { mockedCampaignRepo } from "./MockCampaignTestDB";
+import { mockedUserRepo } from "./MockUserTestDB";
 
 interface InitializedMongoTestDB {
   campaigns: {
@@ -46,7 +42,9 @@ export class MockTestDB {
       standByAds: mockedAds!.slice(6, 9),
     });
 
-    const userRepo = await TestUserMongoDBRepo.init();
+    const mockedUsers = await mockedUserRepo(3);
+    const users = await mockedUsers.getAll();
+
     const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
 
     const activeCampaigns = await mockedCampaigns.findByStatus(
@@ -59,10 +57,9 @@ export class MockTestDB {
       CampaignStatusType.STAND_BY
     );
 
-    const users = this.setUsers();
     const verificationEmails = this.setEmailVerification();
 
-    await userRepo.saveMany(users);
+    //await userRepo.saveMany(users);
     await emailVerificationRepo.saveMany([
       ...verificationEmails.expired,
       ...verificationEmails.valids,
@@ -76,13 +73,9 @@ export class MockTestDB {
       },
       advertisers: advertisers!,
       ads: mockedAds!,
-      users,
+      users: users!,
       verificationEmails,
     };
-  }
-
-  private static setUsers(): IUserPrimitives[] {
-    return FakeUser.createManyWithPrimitives(5);
   }
 
   private static setEmailVerification(): {

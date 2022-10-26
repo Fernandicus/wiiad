@@ -4,13 +4,14 @@ import { CreateUser } from "@/src/modules/user/use-case/CreateUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestUserMongoDBRepo } from "../../../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
+import { mockedUserRepo } from "../../../../__mocks__/context/MockUserTestDB";
 
 describe("On UserMongoDBRepo, GIVEN a user", () => {
   let user: IUserPrimitives;
   let repo: UserMongoDBRepo;
   
   beforeAll(async () => {
-    await TestUserMongoDBRepo.init();
+    await mockedUserRepo(3) ;
     user = FakeUser.createWithPrimitives(UniqId.generate());
     repo = new UserMongoDBRepo();
   });

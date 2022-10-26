@@ -5,8 +5,12 @@ import {
 } from "@/src/modules/user/infrastructure/UserMode";
 import mongoose, { HydratedDocument } from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
+import { TestUserRepository } from "../domain/TestUserRepository";
 
-export class TestUserMongoDBRepo extends TestMongoDB {
+export class TestUserMongoDBRepo
+  extends TestMongoDB
+  implements TestUserRepository
+{
   static async init(): Promise<TestUserMongoDBRepo> {
     await this.connectAndCleanModel(
       mongoose.model(UserModel.modelName, UserModel.schema)
@@ -31,5 +35,20 @@ export class TestUserMongoDBRepo extends TestMongoDB {
       };
     });
     await UserModel.insertMany(userModels);
+  }
+
+  async getAll(): Promise<IUserPrimitives[] | null> {
+    const usersModel = await UserModel.find<UserModelProps>();
+    if(usersModel.length == 0) return null;
+    const users = usersModel.map((user): IUserPrimitives => {
+      return {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        rol: user.rol,
+        bankAccount: user.bankAccount,
+      };
+    });
+    return users;
   }
 }

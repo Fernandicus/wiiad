@@ -8,7 +8,7 @@ import { CreateUser } from "@/src/modules/user/use-case/CreateUser";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-import { FakeUser } from "../../../../__mocks__/lib/user/FakeUser";
+import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
 describe("On FindUser, GIVEN a user", () => {
   let userRepo: IUserRepo;

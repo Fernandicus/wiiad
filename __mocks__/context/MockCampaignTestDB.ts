@@ -2,7 +2,6 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestCampaignRepository } from "../../__mocks__/lib/modules/campaign/domain/TestCampaignRepository";
 import { FakeAd } from "../../__mocks__/lib/modules/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { TestCampaignMongoDBRepo } from "../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
