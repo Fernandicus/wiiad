@@ -16,10 +16,6 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 
-  afterAll(async () => {
-    await TestAdMongoDBRepository.disconnectMongoDB();
-  }, 8000);
-
   it(`WHEN sending a 'POST' request with all the required params and a valid user session, 
   THEN should return a 200 statusCode`, async () => {
     const ad = FakeAd.createWithPrimitives(advertiser.id);

@@ -16,10 +16,6 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
     verificationEmailMongoDBRepo = new VerificationEmailMongoDBRepo();
   });
 
-  afterAll(async () => {
-    await TestVerificationEmailMongoDBRepo.disconnectMongoDB();
-  });
-
   it(`WHEN call the save method, 
   THEN WHEN call the findById method the verification email should be found in MongoDB`, async () => {
     const verificationEmail = FakeVerificationEmailTimer.createWithPrimitives({

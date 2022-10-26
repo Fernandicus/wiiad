@@ -16,10 +16,6 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);
 
-  afterAll(async () => {
-    await TestAdvertiserMongoDBRepo.disconnectMongoDB();
-  }, 8000);
-
   it("WHEN call advertiser repository save method, THEN advertiser is saved in MongoDB", async () => {
     await advertiserRepo.save(advertiser);
     const advertiserFound = await AdvertiserModel.findById(advertiser.id);

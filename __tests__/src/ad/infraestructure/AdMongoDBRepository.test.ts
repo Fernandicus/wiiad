@@ -19,10 +19,6 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     adMongoDBRepo = new AdMongoDBRepository();
   }, 8000);
 
-  afterAll(async () => {
-    await TestAdMongoDBRepository.disconnectMongoDB();
-  }, 8000);
-
   it(`WHEN create a new ad and call repository save method, 
   THEN it should be saved in MongoDB`, async () => {
     const adId = UniqId.generate();

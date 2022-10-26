@@ -9,7 +9,7 @@ export class TestMongoDB {
     await model.deleteMany({});
   }
 
-  static async disconnectMongoDB(): Promise<void> {
+  async disconnectMongoDB(): Promise<void> {
     await mongoose.disconnect();
   }
 

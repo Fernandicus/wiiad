@@ -200,6 +200,8 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       },
     })) as { props: IUserNamePage };
 
+    //console.log(resp.props.campaign)
+
     expect(resp.props.campaign).not.toBe(undefined);
     expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
     expect(resp.props.user.id).toBe(myUser.id);

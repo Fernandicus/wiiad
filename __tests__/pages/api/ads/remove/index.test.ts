@@ -18,10 +18,6 @@ describe("On api/ads/remove-ad route", () => {
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 
-  afterAll(async () => {
-    await TestAdMongoDBRepository.disconnectMongoDB();
-  }, 8000);
-
   it("WHEN send 'DELETE' method with correct ad id and a user session, THEN response with status 200", async () => {
     const adData = FakeAd.createWithPrimitives(advertiser.id);
 

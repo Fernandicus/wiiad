@@ -22,15 +22,8 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
     await mockedAdDB.saveMany(fakeAds);
   }, 8000);
 
-  afterAll(async () => {
-    await TestAdMongoDBRepository.disconnect();
-  }, 8000);
-
   it(`WHEN send a 'GET' request with a user session, 
   THEN receive a statusCode 200 and same amount of ads that in the DB`, async () => {
-    //const adsInMongoose = await AdModel.count({ advertiserId: advertiser.id });
-
-    //const adsInMongoose = mockedAdDB.findByAdvertiserId(advertiser.id);
     const ctx = MockContext("GET", { id: advertiser.id });
     userSession.setFromServer(ctx, advertiser);
     await findAd(ctx.req, ctx.res);
