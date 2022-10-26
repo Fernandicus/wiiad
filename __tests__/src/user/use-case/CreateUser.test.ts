@@ -2,7 +2,7 @@ import { IUserRepo } from "@/src/modules/user/domain/IUserRepo";
 import { User } from "@/src/modules/user/domain/User";
 import { CreateUser } from "@/src/modules/user/use-case/CreateUser";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeUser } from "../../../../__mocks__/lib/user/FakeUser";
+import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
 describe("On CreateUser, GIVEN a user", () => {
   let userRepo: IUserRepo;

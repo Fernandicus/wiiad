@@ -1,7 +1,7 @@
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
 import { IVerificationEmailTimerPrimitives, IVerificationEmailTimerProps } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { SaveEmailVerification } from "@/src/modules/mailing/send-email-verification/use-case/SaveEmailVerification";
-import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
+import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
 
 describe("On SaveEmailVerification, GIVEN a VerificationURLRepo and a VerificationEmailTimer", () => {
   let verificationURLRepo: IVerificationEmailRepo;

@@ -1,11 +1,11 @@
 import createAdvertise from "@/pages/api/ads/create";
-import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
+import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { userSession } from "@/src/use-case/container";
-import { FakeAdvertiser } from "../../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { MockContext } from "../../../../../__mocks__/context/Context";
+import { MockContext } from "../../../../../__mocks__/context/MockContext";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
   let advertiser: AdvertiserPropsPrimitives;

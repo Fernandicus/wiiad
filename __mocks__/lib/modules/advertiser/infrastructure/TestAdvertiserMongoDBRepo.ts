@@ -4,7 +4,7 @@ import {
   AdvertiserModelProps,
 } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import mongoose from "mongoose";
-import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
+import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
 export class TestAdvertiserMongoDBRepo extends TestMongoDB {
   static async init(): Promise<TestAdvertiserMongoDBRepo> {

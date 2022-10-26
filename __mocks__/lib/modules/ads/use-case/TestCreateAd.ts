@@ -7,8 +7,8 @@ export class TestCreateAd {
 
   async saveMany(ads: Ad[]): Promise<void> {
     const adsPrimitves = this.toPrimitives(ads);
-    const adsModel = this.toModelProps(adsPrimitves);
-    await this.repository.saveMany(adsModel);
+   
+    await this.repository.saveMany(adsPrimitves);
   }
 
   private toPrimitives(ads: Ad[]): AdPropsPrimitives[] {
@@ -24,12 +24,5 @@ export class TestCreateAd {
       };
     });
     return primitives;
-  }
-
-  private toModelProps(adsPrimitves: AdPropsPrimitives[]): AdModelProps[] {
-    const modelProps = adsPrimitves.map((ad): AdModelProps => {
-      return { ...ad, _id: ad.id };
-    });
-    return modelProps;
   }
 }

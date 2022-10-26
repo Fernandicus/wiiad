@@ -1,10 +1,10 @@
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
-import { MockContext } from "../../../../__mocks__/context/Context";
+import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/use-case/container";
-import { TestCampaignMongoDBRepo } from "../../../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { TestCampaignMongoDBRepo } from "../../../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import launchCampaign from "@/pages/api/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 

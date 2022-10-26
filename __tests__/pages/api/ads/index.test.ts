@@ -1,22 +1,23 @@
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import findAd from "@/pages/api/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
-import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
-import { MockContext } from "../../../../__mocks__/context/Context";
+import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
+import { TestCreateAd } from "../../../../__mocks__/lib/modules/ads/use-case/TestCreateAd";
+import { TestCreateAdController } from "../../../../__mocks__/lib/modules/ads/controller/TestCreateAdController";
+import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/use-case/container";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let advertiser: AdvertiserPropsPrimitives;
 
   beforeAll(async () => {
     const testAdRepo = await TestAdMongoDBRepository.init();
-    advertiser = FakeAdvertiser.createPrimitives();
     const testCreateAd = new TestCreateAd(testAdRepo);
     const controller = new TestCreateAdController(testCreateAd);
+
+    advertiser = FakeAdvertiser.createPrimitives();
 
     await controller.crateManyWithGivenAdvertiserId(advertiser.id);
   }, 8000);

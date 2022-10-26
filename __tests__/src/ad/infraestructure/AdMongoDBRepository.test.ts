@@ -1,10 +1,10 @@
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
+import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
-import { TestCreateAd } from "../../../../__mocks__/lib/ads/use-case/TestCreateAd";
-import { TestCreateAdController } from "../../../../__mocks__/lib/ads/controller/TestCreateAdController";
+import { TestCreateAd } from "../../../../__mocks__/lib/modules/ads/use-case/TestCreateAd";
+import { TestCreateAdController } from "../../../../__mocks__/lib/modules/ads/controller/TestCreateAdController";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {

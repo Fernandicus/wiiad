@@ -2,8 +2,8 @@ import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
 import { UserMongoDBRepo } from "@/src/modules/user/infrastructure/UserMongoDBRepo";
 import { CreateUser } from "@/src/modules/user/use-case/CreateUser";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestUserMongoDBRepo } from "../../../../__mocks__/lib/user/infrastructure/TestUserMongoDBRepo";
-import { FakeUser } from "../../../../__mocks__/lib/user/FakeUser";
+import { TestUserMongoDBRepo } from "../../../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
+import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
 describe("On UserMongoDBRepo, GIVEN a user", () => {
   let user: IUserPrimitives;

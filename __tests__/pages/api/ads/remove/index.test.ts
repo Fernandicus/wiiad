@@ -2,11 +2,11 @@ import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
-import { FakeAd } from "../../../../../__mocks__/lib/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { MockContext } from "../../../../../__mocks__/context/Context";
+import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
+import { MockContext } from "../../../../../__mocks__/context/MockContext";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { userSession } from "@/src/use-case/container";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 

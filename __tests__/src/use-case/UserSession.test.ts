@@ -2,7 +2,7 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { AuthCookie } from "@/src/infrastructure/AuthCookie";
 import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/use-case/UserSession";
-import { FakeAdvertiser } from "../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
 import { NextApiRequest, NextApiResponse } from "next";
 

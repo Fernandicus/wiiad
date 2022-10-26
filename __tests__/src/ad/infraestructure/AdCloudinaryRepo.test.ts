@@ -1,5 +1,5 @@
 import { AdCloudinaryRepo } from "@/src/modules/ad/infraestructure/AdCloudinaryRepo";
-import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
+import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 
 describe("On AdCloudinaryRepo, GIVEN an image url", () => {
   let cloudinary: AdCloudinaryRepo;

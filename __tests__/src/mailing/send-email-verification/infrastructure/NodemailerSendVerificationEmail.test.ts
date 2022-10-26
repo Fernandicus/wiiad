@@ -1,7 +1,7 @@
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
 import { NodemailerSendVerificationEmail } from "@/src/modules/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
 
-import { FakeVerificationURL } from "../../../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationURL";
+import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
 
 describe("On NodemailerSendVerificationEmail, GIVEN a SMTP service", () => {
   let nodemailer: NodemailerSendVerificationEmail;

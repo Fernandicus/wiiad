@@ -1,6 +1,6 @@
 import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
-import { FakeAd } from "../../../../__mocks__/lib/ads/FakeAd";
+import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";

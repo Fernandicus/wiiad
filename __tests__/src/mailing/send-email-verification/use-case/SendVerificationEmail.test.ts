@@ -1,7 +1,7 @@
 import { IEmailSender } from "@/src/modules/mailing/send-email-verification/domain/IEmailSender";
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
 import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SendVerificationEmail";
-import { FakeVerificationURL } from "../../../../../__mocks__/lib/mailing/send-email-verification/FakeVerificationURL";
+import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
 
 describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verification", () => {
   let emailSender: IEmailSender;

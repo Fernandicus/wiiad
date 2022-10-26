@@ -5,7 +5,7 @@ import {
   ICampaignModel,
 } from "@/src/modules/campaign/infrastructure/CampaignModel";
 import mongoose from "mongoose";
-import { TestMongoDB } from "../../../../__mocks__/lib/infrastructure/TestMongoDB";
+import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 
 export class TestCampaignMongoDBRepo extends TestMongoDB {
   static async init(): Promise<TestCampaignMongoDBRepo> {

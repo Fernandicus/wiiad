@@ -2,8 +2,8 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { RolType } from "@/src/domain/Rol";
 import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
-import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/advertiser/FakeAdvertiser";
+import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoDB Repo", () => {
   let advertiser: AdvertiserPropsPrimitives;

@@ -1,25 +1,21 @@
 import { RolType } from "@/src/domain/Rol";
-import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
-import {
-  IVerificationEmailTimerPrimitives,
-  IVerificationEmailTimerProps,
-} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeAd } from "../../__mocks__/lib/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../__mocks__/lib/ads/infraestructure/TestAdMongoDBRepository";
-import { FakeAdvertiser } from "../../__mocks__/lib/advertiser/FakeAdvertiser";
-import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeCampaign } from "../../__mocks__/lib/campaign/FakeCampaign";
-import { TestCampaignMongoDBRepo } from "../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
-import { FakeVerificationEmailTimer } from "../../__mocks__/lib/mailing/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/mailing/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { FakeUser } from "../../__mocks__/lib/user/FakeUser";
-import { TestUserMongoDBRepo } from "../../__mocks__/lib/user/infrastructure/TestUserMongoDBRepo";
+import { FakeAd } from "../lib/modules/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../lib/modules/ads/infraestructure/TestAdMongoDBRepository";
+import { FakeAdvertiser } from "../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeCampaign } from "../../__mocks__/lib/modules/campaign/FakeCampaign";
+import { TestCampaignMongoDBRepo } from "../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
+import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
+import { FakeUser } from "../../__mocks__/lib/modules/user/FakeUser";
+import { TestUserMongoDBRepo } from "../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
 
 interface InitializedMongoTestDB {
   campaigns: {

@@ -1,8 +1,8 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/CampaignMongoDBRepo";
 import { CreateCampaign } from "@/src/modules/campaign/use-case/CreateCampaign";
-import { TestCampaignMongoDBRepo } from "../../../../__mocks__/lib/campaign/infrastructure/TestCampaignMongoDBRepo";
-import { FakeCampaign } from "../../../../__mocks__/lib/campaign/FakeCampaign";
+import { TestCampaignMongoDBRepo } from "../../../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
 

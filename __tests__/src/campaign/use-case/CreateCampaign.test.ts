@@ -6,7 +6,7 @@ import { ICampaignRepo } from "@/src/modules/campaign/domain/ICampaignRepo";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { CreateCampaign } from "@/src/modules/campaign/use-case/CreateCampaign";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeCampaign } from "../../../../__mocks__/lib/campaign/FakeCampaign";
+import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 
 describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
   let campaignRepo: ICampaignRepo;
