@@ -10,8 +10,12 @@ import {
 import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
+import { TestVerificationEmailRepo } from "../domain/TestVerificationEmailRepo";
 
-export class TestVerificationEmailMongoDBRepo extends TestMongoDB {
+export class TestVerificationEmailMongoDBRepo
+  extends TestMongoDB
+  implements TestVerificationEmailRepo
+{
   static async init(): Promise<TestVerificationEmailMongoDBRepo> {
     await this.connectAndCleanModel(
       mongoose.model(
@@ -41,8 +45,33 @@ export class TestVerificationEmailMongoDBRepo extends TestMongoDB {
   async findById(
     id: string
   ): Promise<IVerificationEmailTimerPrimitives | null> {
-    const mongoDB = await MongoDB.verificationEmailRepo();
-    const found = await mongoDB.findById(id);
-    return found;
+    const emailFound =
+      await VerificationEmailModel.findById<VerificationEmailModelProps>({
+        id,
+      });
+    if (!emailFound) return null;
+    return {
+      id: emailFound._id,
+      email: emailFound.email,
+      expirationDate: emailFound.expirationDate,
+      rol: emailFound.rol,
+    };
+  }
+
+  async getAll(): Promise<IVerificationEmailTimerPrimitives[] | null> {
+    const emailsFound =
+      await VerificationEmailModel.find<VerificationEmailModelProps>();
+    if (emailsFound.length == 0) return null;
+    const emails = emailsFound.map(
+      (mailFound): IVerificationEmailTimerPrimitives => {
+        return {
+          id: mailFound._id,
+          email: mailFound.email,
+          expirationDate: mailFound.expirationDate,
+          rol: mailFound.rol,
+        };
+      }
+    );
+    return emails;
   }
 }

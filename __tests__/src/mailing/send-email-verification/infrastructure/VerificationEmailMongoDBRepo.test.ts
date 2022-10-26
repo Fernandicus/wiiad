@@ -3,16 +3,16 @@ import { TestVerificationEmailMongoDBRepo } from "../../../../../__mocks__/lib/m
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import { RolType } from "@/src/domain/Rol";
+import { mockedVerificationEmailRepo } from "../../../../../__mocks__/context/MockVerificationEmailDB";
 
 describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in MongoDB", () => {
-  let verificationEmailMongoRepo: TestVerificationEmailMongoDBRepo;
   let vertificationEmails: IVerificationEmailTimerPrimitives[];
   let verificationEmailMongoDBRepo: VerificationEmailMongoDBRepo;
 
   beforeAll(async () => {
-    verificationEmailMongoRepo = await TestVerificationEmailMongoDBRepo.init();
-    vertificationEmails = FakeVerificationEmailTimer.createManyWithPrimitives(2);
-    await verificationEmailMongoRepo.saveMany(vertificationEmails);
+    const mockedVerificationEmailsDB = await mockedVerificationEmailRepo(2, 2);
+    const emails = await mockedVerificationEmailsDB.getAll();
+    vertificationEmails = emails!.valid;
     verificationEmailMongoDBRepo = new VerificationEmailMongoDBRepo();
   });
 
@@ -24,7 +24,7 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
   THEN WHEN call the findById method the verification email should be found in MongoDB`, async () => {
     const verificationEmail = FakeVerificationEmailTimer.createWithPrimitives({
       roltype: RolType.BUSINESS,
-      hasExpired: false
+      hasExpired: false,
     });
     await verificationEmailMongoDBRepo.save(verificationEmail);
     const verificationEmailFound = await verificationEmailMongoDBRepo.findById(

@@ -9,8 +9,9 @@ import { FakeVerificationEmailTimer } from "../lib/modules/send-email-verificati
 import { TestVerificationEmailMongoDBRepo } from "../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
-import { mockedCampaignRepo } from "./MockCampaignTestDB";
+import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
 import { mockedUserRepo } from "./MockUserTestDB";
+import { mockedVerificationEmailRepo } from "./MockVerificationEmailDB";
 
 interface InitializedMongoTestDB {
   campaigns: {
@@ -41,60 +42,46 @@ export class MockTestDB {
       finishedAds: mockedAds!.slice(3, 6),
       standByAds: mockedAds!.slice(6, 9),
     });
+    const campaigns = await this.findCampaignsByStatus(mockedCampaigns);
 
     const mockedUsers = await mockedUserRepo(3);
     const users = await mockedUsers.getAll();
 
-    const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
-
-    const activeCampaigns = await mockedCampaigns.findByStatus(
-      CampaignStatusType.ACTIVE
-    );
-    const finishedCampaigns = await mockedCampaigns.findByStatus(
-      CampaignStatusType.FINISHED
-    );
-    const standByCampaigns = await mockedCampaigns.findByStatus(
-      CampaignStatusType.STAND_BY
-    );
-
-    const verificationEmails = this.setEmailVerification();
-
-    //await userRepo.saveMany(users);
-    await emailVerificationRepo.saveMany([
-      ...verificationEmails.expired,
-      ...verificationEmails.valids,
-    ]);
+    const mockedVerificationEmails = await mockedVerificationEmailRepo(2, 2);
+    const verificationEmails = await mockedVerificationEmails.getAll();
 
     return {
       campaigns: {
-        actives: activeCampaigns!,
-        finished: finishedCampaigns!,
-        standBy: standByCampaigns!,
+        actives: campaigns.actives!,
+        finished: campaigns.finished!,
+        standBy: campaigns.standBy!,
       },
       advertisers: advertisers!,
       ads: mockedAds!,
       users: users!,
-      verificationEmails,
+      verificationEmails: {
+        expired: verificationEmails!.expired,
+        valids: verificationEmails!.valid,
+      },
     };
   }
 
-  private static setEmailVerification(): {
-    expired: IVerificationEmailTimerPrimitives[];
-    valids: IVerificationEmailTimerPrimitives[];
-  } {
-    const expiredEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
-      5,
-      RolType.BUSINESS,
-      true
+  private static async findCampaignsByStatus(
+    mockedCampaigns: MockCampaignTestDB
+  ): Promise<{
+    actives: ICampaignPrimitives[] | null;
+    finished: ICampaignPrimitives[] | null;
+    standBy: ICampaignPrimitives[] | null;
+  }> {
+    const actives = await mockedCampaigns.findByStatus(
+      CampaignStatusType.ACTIVE
     );
-    const validEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
-      5,
-      RolType.BUSINESS,
-      false
+    const finished = await mockedCampaigns.findByStatus(
+      CampaignStatusType.FINISHED
     );
-    return {
-      expired: expiredEmails,
-      valids: validEmails,
-    };
+    const standBy = await mockedCampaigns.findByStatus(
+      CampaignStatusType.STAND_BY
+    );
+    return { actives, finished, standBy };
   }
 }

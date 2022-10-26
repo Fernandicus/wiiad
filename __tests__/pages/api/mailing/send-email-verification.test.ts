@@ -4,12 +4,13 @@ import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modu
 import { RolType } from "@/src/domain/Rol";
 import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
+import { mockedVerificationEmailRepo } from "../../../../__mocks__/context/MockVerificationEmailDB";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmail;
 
   beforeAll(async () => {
-    await TestVerificationEmailMongoDBRepo.init();
+    await mockedVerificationEmailRepo(2,2); //await TestVerificationEmailMongoDBRepo.init();
     user = {
       email: faker.internet.email(),
       userName: faker.name.firstName(),
