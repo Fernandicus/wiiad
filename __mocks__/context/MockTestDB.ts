@@ -8,14 +8,15 @@ import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../lib/modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../lib/modules/ads/infraestructure/TestAdMongoDBRepository";
-import { FakeAdvertiser } from "../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeCampaign } from "../../__mocks__/lib/modules/campaign/FakeCampaign";
-import { TestCampaignMongoDBRepo } from "../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
-import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { FakeUser } from "../../__mocks__/lib/modules/user/FakeUser";
-import { TestUserMongoDBRepo } from "../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
+import { FakeAdvertiser } from "../lib/modules/advertiser/FakeAdvertiser";
+import { TestAdvertiserMongoDBRepo } from "../lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeCampaign } from "../lib/modules/campaign/FakeCampaign";
+import { TestCampaignMongoDBRepo } from "../lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { FakeVerificationEmailTimer } from "../lib/modules/send-email-verification/FakeVerificationEmailTimer";
+import { TestVerificationEmailMongoDBRepo } from "../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
+import { FakeUser } from "../lib/modules/user/FakeUser";
+import { TestUserMongoDBRepo } from "../lib/modules/user/infrastructure/TestUserMongoDBRepo";
+import { mockedAdRepo } from "./MockAdTestDB";
 
 interface InitializedMongoTestDB {
   campaigns: {
@@ -32,32 +33,32 @@ interface InitializedMongoTestDB {
   };
 }
 
-export class MockMongoTestDB {
+export class MockTestDB {
   static async setAndInitAll(): Promise<InitializedMongoTestDB> {
-    const adRepo = await TestAdMongoDBRepository.init();
+    const mockedAdDB = await mockedAdRepo();
+    const mockedAds = await mockedAdDB.getAllAds();
+    
     const advertiserRepo = await TestAdvertiserMongoDBRepo.init();
     const campaignRepo = await TestCampaignMongoDBRepo.init();
     const userRepo = await TestUserMongoDBRepo.init();
     const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
 
     const advertisers = this.setAdvertisers();
-    const ads = this.setAds(9);
     const activeCampaigns = this.setCampaigns({
-      ads: ads.slice(0, 3),
+      ads: mockedAds!.slice(0, 3),
       status: CampaignStatusType.ACTIVE,
     });
     const finishedCampaigns = this.setCampaigns({
-      ads: ads.slice(3, 6),
+      ads: mockedAds!.slice(3, 6),
       status: CampaignStatusType.FINISHED,
     });
     const standByCampaigns = this.setCampaigns({
-      ads: ads.slice(6, 9),
+      ads: mockedAds!.slice(6, 9),
       status: CampaignStatusType.STAND_BY,
     });
     const users = this.setUsers();
     const verificationEmails = this.setEmailVerification();
 
-    await adRepo.saveMany(ads);
     await advertiserRepo.saveMany(advertisers);
     await campaignRepo.saveMany([
       ...activeCampaigns,
@@ -77,14 +78,10 @@ export class MockMongoTestDB {
         standBy: standByCampaigns,
       },
       advertisers,
-      ads,
+      ads: mockedAds!,
       users,
       verificationEmails,
     };
-  }
-
-  private static setAds(amount: number): AdPropsPrimitives[] {
-    return FakeAd.createManyWithPrimitives(UniqId.generate(), amount);
   }
 
   private static setAdvertisers(): AdvertiserPropsPrimitives[] {

@@ -7,12 +7,19 @@ import mongoose from "mongoose";
 import { TestMongoDB } from "../../../infrastructure/TestMongoDB";
 import { TestAdRepository } from "../domain/TestAdRepository";
 
-export class TestAdMongoDBRepository extends TestMongoDB implements TestAdRepository {
+export class TestAdMongoDBRepository
+  extends TestMongoDB
+  implements TestAdRepository
+{
   static async init(): Promise<TestAdMongoDBRepository> {
     await this.connectAndCleanModel(
       mongoose.model(AdModel.modelName, AdModel.schema)
     );
     return new TestAdMongoDBRepository();
+  }
+
+  static async disconnect():Promise<void>{
+    await this.disconnectMongoDB(); 
   }
 
   async saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void> {
@@ -23,5 +30,17 @@ export class TestAdMongoDBRepository extends TestMongoDB implements TestAdReposi
       };
     });
     await AdModel.insertMany(models);
+  }
+
+  async getAllAds(): Promise<AdPropsPrimitives[] | null> {
+    const ads = await AdModel.find<AdModelProps>();
+    if (ads.length == 0) return null;
+    const adsPrimitives = ads.map((ad): AdPropsPrimitives => {
+      return {
+        id: ad._id,
+        ...ad,
+      };
+    });
+    return adsPrimitives;
   }
 }

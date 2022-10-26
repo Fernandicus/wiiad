@@ -6,12 +6,13 @@ import { userSession } from "@/src/use-case/container";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { MockContext } from "../../../../../__mocks__/context/MockContext";
+import { mockedAdRepo } from "../../../../../__mocks__/context/MockAdTestDB";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
   let advertiser: AdvertiserPropsPrimitives;
 
   beforeAll(async () => {
-    await TestAdMongoDBRepository.init();
+    await mockedAdRepo();
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 

@@ -6,8 +6,7 @@ import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 
 describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads", () => {
   const advertiserId = UniqId.generate();
-  const amount = Math.floor(Math.random() * 5);
-  const adsPrimitives: AdPropsPrimitives[] = FakeAd.createManyWithPrimitives(advertiserId, amount);
+  const adsPrimitives: AdPropsPrimitives[] = FakeAd.createManyWithPrimitives(advertiserId);
   const repository: AdRepository = {
     findAllByAdvertiserId: jest.fn().mockResolvedValue(adsPrimitives),
     remove: jest.fn(),
@@ -21,7 +20,7 @@ describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads
     const adsFound =  await findAds.findAllByAdvertiserId(new UniqId(advertiserId));
 
     expect(repository.findAllByAdvertiserId).toHaveBeenCalledWith(advertiserId);
-    expect(adsFound?.length).toBe(amount);
+    expect(adsFound?.length).toBe(adsPrimitives.length);
     adsFound?.forEach(ad=>{
       expect(ad.advertiserId.id).toBe(advertiserId);
     })

@@ -1,14 +1,14 @@
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdModelProps } from "@/src/modules/ad/infraestructure/AdModel";
+import { MockAdTestDB } from "__mocks__/context/MockAdTestDB";
 import { TestAdRepository } from "../domain/TestAdRepository";
 
 export class TestCreateAd {
-  constructor(private repository: TestAdRepository) {}
+  constructor(private mockedDB: MockAdTestDB) {}
 
   async saveMany(ads: Ad[]): Promise<void> {
     const adsPrimitves = this.toPrimitives(ads);
-   
-    await this.repository.saveMany(adsPrimitves);
+    await this.mockedDB.saveMany(adsPrimitves);
   }
 
   private toPrimitives(ads: Ad[]): AdPropsPrimitives[] {

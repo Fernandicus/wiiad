@@ -8,14 +8,14 @@ import { MockContext } from "../../../../../__mocks__/context/MockContext";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { userSession } from "@/src/use-case/container";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { mockedAdRepo } from "../../../../../__mocks__/context/MockAdTestDB";
 
 describe("On api/ads/remove-ad route", () => {
   let advertiser: AdvertiserPropsPrimitives;
   
   beforeEach(async () => {
+    await mockedAdRepo();
     advertiser = FakeAdvertiser.createPrimitives();
-    await TestAdMongoDBRepository.init();
   }, 8000);
 
   afterAll(async () => {

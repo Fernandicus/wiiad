@@ -3,22 +3,19 @@ import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
-import { TestCreateAd } from "../../../../__mocks__/lib/modules/ads/use-case/TestCreateAd";
-import { TestCreateAdController } from "../../../../__mocks__/lib/modules/ads/controller/TestCreateAdController";
+import { mockedAdRepo } from "../../../../__mocks__/context/MockAdTestDB";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {
-  let fakeAds: FakeAd[];
+  let fakeAds: AdPropsPrimitives[];
   let adMongoDBRepo: AdMongoDBRepository;
   let advertiserId: string;
 
   beforeAll(async () => {
-    const testAdRepo = await TestAdMongoDBRepository.init();
-    const testCreateAd = new TestCreateAd(testAdRepo);
-    const testCreateAdController = new TestCreateAdController(testCreateAd);
-    const createdAdsData = await testCreateAdController.crateMany();
-    fakeAds = createdAdsData.fakeAds;
-    advertiserId = createdAdsData.advertiserId;
+    const mockedAdDB = await mockedAdRepo();
+    advertiserId = UniqId.generate()
+    fakeAds = FakeAd.createManyWithPrimitives(advertiserId);
+    await mockedAdDB.saveMany(fakeAds)
     adMongoDBRepo = new AdMongoDBRepository();
   }, 8000);
 
@@ -54,7 +51,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   }, 8000);
 
   it(`WHEN call findByAdId method, THEN the selected ad should be returned from the DB`, async () => {
-    const adFound = await adMongoDBRepo.findByAdId(fakeAds[0].id.id);
+    const adFound = await adMongoDBRepo.findByAdId(fakeAds[0].id);
     const ad = {...adFound}
     expect(adFound).toEqual(ad);
   }, 8000);
@@ -66,8 +63,8 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   }, 8000);
 
   it("WHEN call the repository remove method, THEN the selected ad should be deleted it from the DB", async () => {
-    await adMongoDBRepo.remove(fakeAds[0].id.id);
-    const adFound = await AdModel.findById(fakeAds[0].id.id);
+    await adMongoDBRepo.remove(fakeAds[0].id);
+    const adFound = await AdModel.findById(fakeAds[0].id);
     expect(adFound).toBe(null);
   }, 8000);
 });

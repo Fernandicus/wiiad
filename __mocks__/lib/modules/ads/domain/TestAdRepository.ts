@@ -1,5 +1,6 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 
 export interface TestAdRepository {
-  saveMany(adsModel: AdPropsPrimitives[]): Promise<void>;
+  saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void>;
+  getAllAds(): Promise<AdPropsPrimitives[] | null>;
 }
