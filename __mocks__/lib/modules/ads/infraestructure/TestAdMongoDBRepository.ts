@@ -18,11 +18,8 @@ export class TestAdMongoDBRepository
     return new TestAdMongoDBRepository();
   }
 
-  static async disconnect(): Promise<void> {
-    await this.disconnectMongoDB();
-  }
-
   async saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     const models = adsPrimitives.map((ad): AdModelProps => {
       return {
         _id: ad.id,
@@ -33,6 +30,7 @@ export class TestAdMongoDBRepository
   }
 
   async getAllAds(): Promise<AdPropsPrimitives[] | null> {
+    await TestMongoDB.connectMongoDB();
     const ads = await AdModel.find<AdModelProps>();
     if (ads.length == 0) return null;
     const adsPrimitives = ads.map((ad): AdPropsPrimitives => {

@@ -29,6 +29,7 @@ export class TestVerificationEmailMongoDBRepo
   async saveMany(
     verificationEmailProps: IVerificationEmailTimerPrimitives[]
   ): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     const models = verificationEmailProps.map(
       (model): VerificationEmailModelProps => {
         return {
@@ -45,9 +46,10 @@ export class TestVerificationEmailMongoDBRepo
   async findById(
     id: string
   ): Promise<IVerificationEmailTimerPrimitives | null> {
+    await TestMongoDB.connectMongoDB();
     const emailFound =
       await VerificationEmailModel.findById<VerificationEmailModelProps>({
-        id,
+        _id: id,
       });
     if (!emailFound) return null;
     return {
@@ -59,6 +61,7 @@ export class TestVerificationEmailMongoDBRepo
   }
 
   async getAll(): Promise<IVerificationEmailTimerPrimitives[] | null> {
+    await TestMongoDB.connectMongoDB();
     const emailsFound =
       await VerificationEmailModel.find<VerificationEmailModelProps>();
     if (emailsFound.length == 0) return null;

@@ -19,6 +19,7 @@ export class TestCampaignMongoDBRepo
   }
 
   async saveMany(campaigns: ICampaignPrimitives[]): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     const campaignModels = campaigns.map((campaign): ICampaignModel => {
       return {
         ...campaign,
@@ -29,6 +30,7 @@ export class TestCampaignMongoDBRepo
   }
 
   async getByStatus(status: string): Promise<ICampaignPrimitives[] | null> {
+    await TestMongoDB.connectMongoDB();
     const campaignModel = await CampaignModel.find<ICampaignModel>({ status });
     if (campaignModel.length == 0) return null;
     const campaigns = campaignModel.map((campaign): ICampaignPrimitives => {

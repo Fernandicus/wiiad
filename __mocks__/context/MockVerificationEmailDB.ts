@@ -54,6 +54,14 @@ export class MockVerificationEmailDB {
     return filteredEmails;
   }
 
+  async findById(
+    id: string
+  ): Promise<IVerificationEmailTimerPrimitives | null> {
+    const emailFound = await this.verificationEmailRepo.findById(id);
+    console.log(emailFound?.id);
+    return emailFound;
+  }
+
   private static setEmailVerification(
     expiredAmount: number,
     validAmount: number

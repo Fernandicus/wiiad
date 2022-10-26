@@ -95,6 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } catch (err) {
     console.error(err);
+    await MongoDB.disconnect();
     return {
       props: {},
       redirect: { destination: "/", permanent: false },

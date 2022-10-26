@@ -22,6 +22,7 @@ export class TestAdvertiserMongoDBRepo
   async saveMany(
     advertiserPrimitives: AdvertiserPropsPrimitives[]
   ): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     const models = advertiserPrimitives.map(
       (advertiser): AdvertiserModelProps => {
         return {
@@ -36,6 +37,7 @@ export class TestAdvertiserMongoDBRepo
   }
 
   async getAllAdvertisers(): Promise<AdvertiserPropsPrimitives[] | null> {
+    await TestMongoDB.connectMongoDB();
     const advertisers = await AdvertiserModel.find<AdvertiserModelProps>();
     if (advertisers.length == 0) return null;
     const advertisersPrimitives = advertisers.map(

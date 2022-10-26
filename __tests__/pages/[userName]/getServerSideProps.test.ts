@@ -12,6 +12,8 @@ import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { MockTestDB } from "../../../__mocks__/context/MockTestDB";
+import { MockVerificationEmailDB } from "__mocks__/context/MockVerificationEmailDB";
+import { MongoDB } from "@/src/infrastructure/MongoDB";
 
 interface IServerSideResponse {
   props: {};
@@ -19,7 +21,7 @@ interface IServerSideResponse {
 }
 
 describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
-  let verificationEmailRepo: TestVerificationEmailMongoDBRepo;
+  let verificationMock: MockVerificationEmailDB;
   let validVerificationEmails: IVerificationEmailTimerPrimitives[];
   let expiredVerificationEmail: IVerificationEmailTimerPrimitives;
   let req: MockRequest<NextApiRequest>;
@@ -28,8 +30,8 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
-    const { verificationEmails } = await MockTestDB.setAndInitAll();
-    verificationEmailRepo = await TestVerificationEmailMongoDBRepo.init();
+    const { mock, verificationEmails } = await MockTestDB.setAndInitAll();
+    verificationMock = mock.verificationEmailsDB;
     validVerificationEmails = verificationEmails.valids;
     expiredVerificationEmail = verificationEmails.expired[0];
   }, 20000);
@@ -65,7 +67,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       },
     })) as IServerSideResponse;
 
-    const verificationEmailFound = await verificationEmailRepo.findById(
+    const verificationEmailFound = await verificationMock.findById(
       validVerificationEmails[0].id
     );
 
@@ -87,7 +89,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       },
     })) as IServerSideResponse;
 
-    const verificationEmailFound = await verificationEmailRepo.findById(
+    const verificationEmailFound = await verificationMock.findById(
       expiredVerificationEmail.id
     );
 
@@ -99,9 +101,9 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   THEN verification email should be removed, 
   new advertiser should be saved
   and return a valid JWT`, async () => {
-    const verificationEmail = validVerificationEmails[1].email;
+    const emailVerificationEmail = validVerificationEmails[1].email;
     const verificationToken = validVerificationEmails[1].id;
-    const verificationName = faker.name.firstName();
+    const nameVerificationEmail = faker.name.firstName();
 
     const resp = (await getServerSideProps({
       req,
@@ -109,21 +111,21 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       resolvedUrl: "",
       params: {},
       query: {
-        userName: verificationName,
-        email: verificationEmail,
+        userName: nameVerificationEmail,
+        email: emailVerificationEmail,
         verificationToken: verificationToken,
       },
     })) as { props: { user: IGenericUserPrimitives } };
 
     const user = resp.props.user;
 
-    const verificationEmailFound = await verificationEmailRepo.findById(
+    const verificationEmailFound = await verificationMock.findById(
       verificationToken
     );
 
     expect(verificationEmailFound).toBe(null);
-    expect(user.email).toBe(verificationEmail);
-    expect(user.name).toBe(verificationName);
+    expect(user.email).toBe(emailVerificationEmail);
+    expect(user.name).toBe(nameVerificationEmail);
     expect(user.rol).not.toBe(null);
   }, 12000);
 });

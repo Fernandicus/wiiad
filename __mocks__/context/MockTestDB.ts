@@ -5,15 +5,18 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { FakeVerificationEmailTimer } from "../lib/modules/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
 import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
 import { mockedUserRepo } from "./MockUserTestDB";
-import { mockedVerificationEmailRepo } from "./MockVerificationEmailDB";
+import {
+  mockedVerificationEmailRepo, MockVerificationEmailDB
+} from "./MockVerificationEmailDB";
 
 interface InitializedMongoTestDB {
+  mock: {
+    verificationEmailsDB: MockVerificationEmailDB;
+  },
   campaigns: {
     actives: ICampaignPrimitives[];
     finished: ICampaignPrimitives[];
@@ -31,6 +34,7 @@ interface InitializedMongoTestDB {
 export class MockTestDB {
   static async setAndInitAll(): Promise<InitializedMongoTestDB> {
     const totalAds = 9;
+
     const mockedAdDB = await mockedAdRepo(totalAds);
     const mockedAds = await mockedAdDB.getAllAds();
 
@@ -47,10 +51,13 @@ export class MockTestDB {
     const mockedUsers = await mockedUserRepo(3);
     const users = await mockedUsers.getAll();
 
-    const mockedVerificationEmails = await mockedVerificationEmailRepo(2, 2);
+    const mockedVerificationEmails = await mockedVerificationEmailRepo(2, 4);
     const verificationEmails = await mockedVerificationEmails.getAll();
 
     return {
+      mock:{
+        verificationEmailsDB: mockedVerificationEmails,
+      },
       campaigns: {
         actives: campaigns.actives!,
         finished: campaigns.finished!,

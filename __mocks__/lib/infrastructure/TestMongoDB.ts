@@ -5,6 +5,15 @@ export class TestMongoDB {
   static async connectAndCleanModel<M extends typeof Model>(
     model: M
   ): Promise<void> {
+    await this.connectMongoDB();
+    await model.deleteMany({});
+  }
+
+  static async disconnectMongoDB(): Promise<void> {
+    await mongoose.disconnect();
+  }
+
+  static async connectMongoDB(): Promise<void> {
     const mongoIsDisonnected =
       mongoose.connection.readyState === mongoose.ConnectionStates.disconnected;
 
@@ -13,10 +22,5 @@ export class TestMongoDB {
       if (!mongoDBUrl) throw new Error("DB url doesn't provided");
       await mongoose.connect(mongoDBUrl);
     }
-    await model.deleteMany({});
-  }
-
-  static async disconnectMongoDB(): Promise<void> {
-    await mongoose.disconnect();
   }
 }
