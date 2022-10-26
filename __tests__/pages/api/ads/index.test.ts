@@ -2,22 +2,24 @@ import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import findAd from "@/pages/api/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
-import { TestCreateAd } from "../../../../__mocks__/lib/modules/ads/use-case/TestCreateAd";
 import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/use-case/container";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { mockedAdRepo } from "../../../../__mocks__/context/MockAdTestDB";
+import {
+  mockedAdRepo,
+  MockAdTestDB,
+} from "../../../../__mocks__/context/MockAdTestDB";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
   let advertiser: AdvertiserPropsPrimitives;
-
+  let fakeAds: AdPropsPrimitives[];
   beforeAll(async () => {
-    const mockedDB = await mockedAdRepo();
+    const mockedAdDB = await mockedAdRepo();
     advertiser = FakeAdvertiser.createPrimitives();
-    const fakeAds = FakeAd.createManyWithPrimitives(advertiser.id);
-    await mockedDB.saveMany(fakeAds);
+    fakeAds = FakeAd.createManyWithPrimitives(advertiser.id);
+    await mockedAdDB.saveMany(fakeAds);
   }, 8000);
 
   afterAll(async () => {
@@ -26,15 +28,19 @@ describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
 
   it(`WHEN send a 'GET' request with a user session, 
   THEN receive a statusCode 200 and same amount of ads that in the DB`, async () => {
-    const adsInMongoose = await AdModel.count({ advertiserId: advertiser.id });
+    //const adsInMongoose = await AdModel.count({ advertiserId: advertiser.id });
 
+    //const adsInMongoose = mockedAdDB.findByAdvertiserId(advertiser.id);
     const ctx = MockContext("GET", { id: advertiser.id });
     userSession.setFromServer(ctx, advertiser);
     await findAd(ctx.req, ctx.res);
 
-    const adsData: AdPropsPrimitives[] = JSON.parse(JSON.stringify(ctx.res._getJSONData().ads));
+    const adsData: AdPropsPrimitives[] = JSON.parse(
+      JSON.stringify(ctx.res._getJSONData().ads)
+    );
+
     expect(ctx.res.statusCode).toBe(200);
-    expect(adsData.length).toBe(adsInMongoose);
+    expect(adsData.length).toBe(fakeAds.length);
   });
 
   it(`WHEN send a 'GET' request without a user session, 

@@ -11,6 +11,7 @@ export class TestAdMongoDBRepository
   extends TestMongoDB
   implements TestAdRepository
 {
+
   static async init(): Promise<TestAdMongoDBRepository> {
     await this.connectAndCleanModel(
       mongoose.model(AdModel.modelName, AdModel.schema)

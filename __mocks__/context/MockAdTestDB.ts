@@ -9,7 +9,7 @@ export const mockedAdRepo = async (): Promise<MockAdTestDB> => {
   return MockAdTestDB.setAndInit(testAdRepo);
 };
 
-class MockAdTestDB {
+export class MockAdTestDB {
   readonly adRepo;
 
   private constructor(adRepo: TestAdRepository) {
@@ -28,7 +28,7 @@ class MockAdTestDB {
   }
 
   async saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void> {
-    this.adRepo.saveMany(adsPrimitives);
+    await this.adRepo.saveMany(adsPrimitives);
   }
 
   private static setAds(): AdPropsPrimitives[] {

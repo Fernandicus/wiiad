@@ -4,14 +4,14 @@ import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/Advert
 import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { mockedAdvertiserRepo } from "../../../../__mocks__/context/MockAdvertiserTestDB";
 
 describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoDB Repo", () => {
   let advertiser: AdvertiserPropsPrimitives;
   let advertiserRepo: AdvertiserMongoDBRepo;
 
   beforeAll(async () => {
-    await TestAdvertiserMongoDBRepo.init();
-
+    await mockedAdvertiserRepo();
     advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);

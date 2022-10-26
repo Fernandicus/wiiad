@@ -5,11 +5,7 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
-import { FakeAd } from "../lib/modules/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { FakeAdvertiser } from "../lib/modules/advertiser/FakeAdvertiser";
-import { TestAdvertiserMongoDBRepo } from "../lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeCampaign } from "../lib/modules/campaign/FakeCampaign";
 import { TestCampaignMongoDBRepo } from "../lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import { FakeVerificationEmailTimer } from "../lib/modules/send-email-verification/FakeVerificationEmailTimer";
@@ -17,6 +13,7 @@ import { TestVerificationEmailMongoDBRepo } from "../lib/modules/send-email-veri
 import { FakeUser } from "../lib/modules/user/FakeUser";
 import { TestUserMongoDBRepo } from "../lib/modules/user/infrastructure/TestUserMongoDBRepo";
 import { mockedAdRepo } from "./MockAdTestDB";
+import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
 
 interface InitializedMongoTestDB {
   campaigns: {
@@ -38,7 +35,7 @@ export class MockTestDB {
     const mockedAdDB = await mockedAdRepo();
     const mockedAds = await mockedAdDB.getAllAds();
     
-    const advertiserRepo = await TestAdvertiserMongoDBRepo.init();
+    const advertiserRepo = await mockedAdvertiserRepo();
     const campaignRepo = await TestCampaignMongoDBRepo.init();
     const userRepo = await TestUserMongoDBRepo.init();
     const emailVerificationRepo = await TestVerificationEmailMongoDBRepo.init();
