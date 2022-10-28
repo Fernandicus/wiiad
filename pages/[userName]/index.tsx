@@ -8,15 +8,17 @@ import {
   IWatchCampaignData,
   WatchCampaignsController,
 } from "@/src/controllers/WatchCampaignsController";
-import CreateAdForm from "../../components/profile/CreateAdForm";
-import HeaderData from "../../components/profile/HeaderData";
-import TotalAds from "../../components/profile/TotalAds";
-import AdView from "../../components/watch-ad/AdView";
+import CreateAdForm from "../../components/ui/profile/CreateAdForm";
+import HeaderData from "../../components/ui/profile/HeaderData";
+import TotalAds from "../../components/ui/profile/TotalAds";
+import AdView from "../../components/ui/watch-ad/AdView";
 import { RolType } from "@/src/domain/Rol";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
 import { findUserHandler } from "@/src/modules/user/container";
 import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
+import { ProfileCard } from "../../components/ui/profile/user/ProfileCard";
+import { DataCard } from "../../components/ui/profile/user/DataCard";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -31,10 +33,15 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
 
   if (user.rol === RolType.USER) {
     return (
-      <div>
-        <h1>HELLO USER</h1>
-        <h3>{user.name}</h3>
-        <h2>{user.email}</h2>
+      <div className=" bg-slate-100 h-screen p-10 w-full ">
+        <div className="flex justify-center h-full items-center">
+          <div className="h-28 space-x-4 inline-flex items-center">
+            <ProfileCard user={user} />
+            <DataCard title="Dinero acumulado" data="3,75€" />
+            <DataCard title="Anuncios vistos" data="155" />
+            <DataCard title="Clicks en tus enlaces" data="533" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -67,7 +74,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       const { ad, activeCampaign } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
-          return await WatchCampaignsController.forInfluencer(queryParams.userName);
+          return await WatchCampaignsController.forInfluencer(
+            queryParams.userName
+          );
         });
 
       return {
