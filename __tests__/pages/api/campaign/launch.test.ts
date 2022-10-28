@@ -5,7 +5,7 @@ import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/Fak
 import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/use-case/container";
 import { TestCampaignMongoDBRepo } from "../../../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
-import launchCampaign from "@/pages/api/campaign/launch";
+import launchCampaign from "@/pages/api/v1/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { autoMockedCampaigns } from "../../../../__mocks__/context/MockCampaignTestDB";
 

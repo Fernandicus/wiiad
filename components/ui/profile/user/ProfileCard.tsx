@@ -1,7 +1,11 @@
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
 
-export function ProfileCard(props: { user: IGenericUserPrimitives }) {
-  const { user } = props;
+interface Props {
+  user: IGenericUserPrimitives;
+  children?: JSX.Element;
+}
+
+export function ProfileCard({ user, children }: Props) {
   const imageProfileUrl =
     "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80";
 

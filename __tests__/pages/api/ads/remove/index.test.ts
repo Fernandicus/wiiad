@@ -1,5 +1,5 @@
 import httpMock from "node-mocks-http";
-import removeAd from "@/pages/api/ads/remove";
+import removeAd from "@/pages/api/v1/ads/remove";
 import { NextApiResponse } from "next";
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";

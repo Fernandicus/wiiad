@@ -1,76 +1,126 @@
+import { SelectImage } from "../profile/advertiser/create-ad-form/SelectImage";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { FormEvent, useRef, useState } from "react";
+import { Routes } from "@/src/utils/routes";
+import React, { FormEvent, useRef, useState } from "react";
+import {
+  NotificationData,
+  Notifications,
+} from "../notifications/Notifications";
 
-export default function CreateAdForm(props: { user: IGenericUserPrimitives }) {
+export default function CreateAdForm(props: {
+  user: IGenericUserPrimitives;
+  handleResponse: (data: NotificationData) => void;
+}) {
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const urlRef = useRef<HTMLInputElement>(null);
   const segmentsRef = useRef<HTMLInputElement>(null);
 
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>();
+  const [imagePreview, setImagePreview] = useState<
+    string | ArrayBuffer | null
+  >();
+
   const imageRef = useRef<HTMLInputElement>(null);
-  const submitAdUrl: string = "/api/ads/create";
 
   const submitAd = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      !props.user.id ||
-      !descriptionRef.current ||
-      !imagePreview ||
-      !urlRef.current ||
-      !segmentsRef.current ||
-      !titleRef.current
-    )
-      return;
-
     try {
-      await fetch(submitAdUrl, {
+      const resp = await fetch(Routes.createAd, {
         method: "POST",
         body: JSON.stringify({
-          title: titleRef.current.value,
-          description: descriptionRef.current.value,
+          title: titleRef.current!.value,
+          description: descriptionRef.current!.value,
           image: imagePreview,
-          redirectionUrl: urlRef.current.value,
-          segments: [segmentsRef.current.value],
+          redirectionUrl: urlRef.current!.value,
+          segments: [segmentsRef.current!.value],
         }),
       });
 
-      console.log("NEW ADD CREATED ");
+      if (resp.status === 200) {
+        props.handleResponse({
+          message: "Anuncio creado!",
+          status: 0,
+        });
+      } else {
+        const respJSON = await resp.json();
+        props.handleResponse({
+          message: respJSON["info"],
+          status: resp.status,
+        });
+      }
     } catch (err) {
-      if (err instanceof Error && err.message === "Failed to fetch")
-        console.error(new Error("DESACTIVA EL AD BLOQUER"));
+      if (err instanceof Error) {
+        if (err.message === "Failed to fetch") {
+          props.handleResponse({
+            message: "Desactiva el bloqueador de anuncios",
+            status: 400,
+          });
+        } else {
+          props.handleResponse({
+            message: err.message,
+            status: 400,
+          });
+        }
+      }
     }
   };
 
   return (
-    <form className="createAdForm" onSubmit={submitAd}>
-      <h2>Create Ad</h2>
-      <label>Image</label>
-      <input
-        //ref={imageRef}
-        type="File"
-        placeholder="Image"
-        onChange={(event) => {
-          event.preventDefault();
-          console.log(event.target.files![0]);
-          const reader = new FileReader();
-          reader.readAsDataURL(event.target.files![0]);
-          reader.onloadend = () => {
-            console.log(reader.result);
-            setImagePreview(reader.result)
-          };
-        }}
-      ></input>
-      {imagePreview && <img src={imagePreview.toString()} alt="alt"></img>}
-      <label>Title</label>
-      <input ref={titleRef} type="text" placeholder="Title"></input>
-      <label>URL</label>
-      <input ref={urlRef} type="text" placeholder="Url"></input>
-      <label>Segmentos</label>
-      <input ref={segmentsRef} type="text" placeholder="Segmento"></input>
-      <label>Descripcion</label>
-      <textarea ref={descriptionRef} placeholder="Description"></textarea>
-      <button type="submit">Create Ad</button>
-    </form>
+    <div className="max-w-xl w-full py-10">
+      <h1 className="font-bold text-xl pb-5">Crea tu anuncio</h1>
+      <form className="w-full  space-y-5" onSubmit={submitAd}>
+        <SelectImage
+          onSelectImage={setImagePreview}
+          imagePreview={imagePreview}
+        />
+        <div className="space-y-2">
+          <label className="font-bold">Titulo</label>
+          <input
+            required
+            ref={titleRef}
+            type="text"
+            placeholder="Title"
+            className="border border-gray-300 rounded-md px-2 block w-full h-10"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="font-bold">URL</label>
+          <input
+            required
+            ref={urlRef}
+            type="text"
+            placeholder="Url"
+            className="border border-gray-300 rounded-md px-2 block w-full h-10"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="font-bold">Segmentos</label>
+          <input
+            required
+            ref={segmentsRef}
+            type="text"
+            placeholder="Segmento"
+            className="border border-gray-300 rounded-md px-2 block w-full h-10"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="font-bold">Descripcion</label>
+          <textarea
+            required
+            ref={descriptionRef}
+            placeholder="Description"
+            className="p-2 border border-gray-300 rounded-md px-2 block w-full h-10"
+          ></textarea>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-sky-500 text-white p-2 rounded-md hover:bg-sky-400 "
+          >
+            Crear anuncio
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

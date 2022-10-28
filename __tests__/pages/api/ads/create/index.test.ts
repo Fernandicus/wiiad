@@ -1,4 +1,4 @@
-import createAdvertise from "@/pages/api/ads/create";
+import createAdvertise from "@/pages/api/v1/ads/create";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";

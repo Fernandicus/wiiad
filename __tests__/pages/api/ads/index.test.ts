@@ -1,5 +1,5 @@
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
-import findAd from "@/pages/api/ads";
+import findAd from "@/pages/api/v1/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { MockContext } from "../../../../__mocks__/context/MockContext";

@@ -3,6 +3,7 @@ import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { CreateAdController } from "@/src/modules/ad/controller/CreateAdController";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
+import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -27,7 +28,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   } catch (err) {
     console.error(err);
+    if (err instanceof ErrorCreatingAd) {
+      console.error(" ERROR instance of ErrorCreatingAd")
+      res.status(400).json({ message: err.message, info: err.info });
+      return;
+    }
     if (err instanceof Error) {
+      console.error(" ERROR instance of Error")
       res.status(400).json({ message: err.message });
       return;
     }

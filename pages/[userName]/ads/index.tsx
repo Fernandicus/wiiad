@@ -1,3 +1,4 @@
+import CreateAdForm from "../../../components/ui/profile/CreateAdForm";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
 import { RolType } from "@/src/domain/Rol";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
@@ -10,74 +11,51 @@ import {
 } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useEffect, useRef, useState } from "react";
+import { EmptyAds } from "../../../components/ui/profile/advertiser/EmptyAds";
+import { AdsList } from "../../../components/ui/profile/advertiser/AdsList";
+import {
+  NotificationData,
+  Notifications,
+} from "../../../components/ui/notifications/Notifications";
 
 export default function NewCampaign(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const advertiser: AdvertiserPropsPrimitives = props.advertiser;
   const ads: AdPropsPrimitives[] = props.ads;
-  const budget: CampaignBudgetProps = {
-    maxClicks: 1000,
-    moneyToSpend: 50,
-  };
-  const launchCampaignURL = "/api/campaign/launch";
-
-  const deleteAd = async (id: string) => {
-    try {
-      const resp = await fetch("api/ads/remove", {
-        method: "DELETE",
-        body: JSON.stringify({ adId: id }),
-      });
-      if (resp.status !== 200) console.error(resp);
-    } catch (err) {}
-  };
-
-  const launchCampaign = async (ad: AdPropsPrimitives) => {
-    console.log("LAUNCH ", ad.id);
-    try {
-      const resp = await fetch(launchCampaignURL, {
-        method: "POST",
-        body: JSON.stringify({
-          id: ad.id,
-          budget,
-        }),
-      });
-      if (resp.status === 200) {
-        console.log("NEW CAMPAIGN LAUNCHED");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const [createAd, setCreateAd] = useState<boolean>(false);
+  const notificationsRef = useRef({
+    showNotification: (data: { status: number; message: string }) => {},
+  });
 
   return (
-    <div>
-      <h1>Ads</h1>
-      <ul className="Ads">
-        {ads &&
-          ads.map((ad) => {
-            return (
-              <li key={ad.id}>
-                <img src={ad.image} ></img>
-                <p>{ad.title}</p>
-                <p>{`${ad.description.slice(0, 25)}...`}</p>
-                <p>{ad.redirectionUrl}</p>
-                <button type="button" onClick={() => launchCampaign(ad)}>
-                  Create new campaign
-                </button>
-                <button
-                  className="removeAds"
-                  type="button"
-                  onClick={() => deleteAd(ad.id)}
-                >
-                  Remove
-                </button>
-              </li>
-            );
-          })}
-      </ul>
-      <form></form>
-    </div>
+    <main className="flex items-center justify-center bg-slate-100 w-full min-h-screen">
+      <Notifications ref={notificationsRef} />
+      {!createAd && (
+        <div className="w-full">
+          {ads.length == 0 ? (
+            <EmptyAds onTapCreateAd={setCreateAd} />
+          ) : (
+            <AdsList
+              ads={ads}
+              createAd={setCreateAd}
+              handleResponse={(data: NotificationData) => {
+                notificationsRef.current!.showNotification(data);
+              }}
+            />
+          )}
+        </div>
+      )}
+      {createAd && (
+        <CreateAdForm
+          user={advertiser}
+          handleResponse={(data: NotificationData) => {
+            notificationsRef.current!.showNotification(data);
+          }}
+        />
+      )}
+    </main>
   );
 }
 
@@ -85,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const session = userSession.getFromServer(context);
     if (!session || session.rol === RolType.USER)
-      throw new Error("Wrong session provided");
+      throw new Error("The session do not have access");
 
     const ads = await MongoDB.connectAndDisconnect(
       async () => await adFinderHandler.findAll(session.id)

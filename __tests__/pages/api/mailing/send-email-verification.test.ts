@@ -1,4 +1,4 @@
-import sendEmailVerification from "@/pages/api/mailing/send-email-verification";
+import sendEmailVerification from "@/pages/api/v1/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RolType } from "@/src/domain/Rol";

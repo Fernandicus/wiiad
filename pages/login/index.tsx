@@ -7,7 +7,9 @@ import { RolType } from "@/src/domain/Rol";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { APISendEmailVerification } from "../api/mailing/send-email-verification";
+import { APISendEmailVerification } from "../api/v1/mailing/send-email-verification";
+import { Routes } from "@/src/utils/routes";
+import { Notifications } from "../../components/ui/notifications/Notifications";
 
 export default function Home(props: { session: AdvertiserPropsPrimitives }) {
   const myEmail = useRef<HTMLInputElement>(null);
@@ -21,7 +23,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
     const valueEmail = myEmail.current?.value;
     const valueName = myName.current?.value;
 
-    const resp = await fetch("/api/mailing/send-email-verification", {
+    const resp = await fetch(Routes.sendVerificationEmail, {
       method: "POST",
       body: JSON.stringify({
         isNewUser,
@@ -91,7 +93,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                         placeholder={
                           isUserRol ? `Paquito_Chocolatero` : "Coca-Cola"
                         }
-                        className="border border-gray-200 rounded-md px-2 block w-full h-10"
+                        className="border border-gray-300 rounded-md px-2 block w-full h-10"
                         required={isNewUser ? true : undefined}
                       ></input>
                     </div>
@@ -108,7 +110,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                           ? `paco_jimenez@email.com`
                           : "info@coca-cola.com"
                       }
-                      className="border border-gray-200 rounded-md px-2 block w-full h-10"
+                      className="border border-gray-300 rounded-md px-2 block w-full h-10"
                       required
                     ></input>
                   </div>
@@ -167,9 +169,13 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                 setRol(!isUserRol);
               }}
             >
-              {isUserRol
-                ? <p><span className=" text-lg">🙀 </span>Quiero anunciarme!</p> 
-                : `Soy influencer!`}
+              {isUserRol ? (
+                <p>
+                  <span className=" text-lg">🙀 </span>Quiero anunciarme!
+                </p>
+              ) : (
+                `Soy influencer!`
+              )}
             </button>
           </div>
         </div>

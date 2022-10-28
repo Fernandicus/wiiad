@@ -3,6 +3,7 @@ import { LaunchCampaignController } from "@/src/modules/campaign/controller/Laun
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
 import { UniqId } from "@/src/utils/UniqId";
+import { reqBodyParse } from "@/src/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,8 +13,7 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400).json({});
 
   try {
-    const ad: { id: string; budget: CampaignBudgetProps } =
-      typeof req.body !== "object" ? JSON.parse(req.body) : req.body;
+    const ad: { id: string; budget: CampaignBudgetProps } = reqBodyParse(req)
 
     await MongoDB.connectAndDisconnect(async () =>
       await LaunchCampaignController.launch({
