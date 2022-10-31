@@ -1,6 +1,6 @@
 import { SelectImage } from "../profile/advertiser/create-ad-form/SelectImage";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { Routes } from "@/src/utils/ApiRoutes";
+import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import React, { FormEvent, useRef, useState } from "react";
 import {
   NotificationData,
@@ -25,7 +25,7 @@ export default function CreateAdForm(props: {
   const submitAd = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const resp = await fetch(Routes.createAd, {
+      const resp = await fetch(ApiRoutes.createAd, {
         method: "POST",
         body: JSON.stringify({
           title: titleRef.current!.value,

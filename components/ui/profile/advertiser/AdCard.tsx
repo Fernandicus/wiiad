@@ -62,9 +62,19 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
     <div className="w-full max-w-sm rounded-lg bg-white shadow-xl shadow-slate-200">
       <img
         src={ad.image}
-        className="h-64 w-full object-cover bg-white/70 rounded-lg"
+        className="h-64 w-full object-cover bg-white/70 rounded-t-lg"
       ></img>
-      <div className="p-3">
+      <div className="p-3 space-y-2">
+        <div className=" flex justify-center space-x-5 rounded-md bg-sky-50 py-4">
+          <div className="w-full text-center">
+            <p>Visualizaciones</p>
+            <p>106 </p>
+          </div>
+          <div className="w-full text-center">
+            <p>Redirecciones</p>
+            <p>81 </p>
+          </div>
+        </div>
         <div className="space-y-2">
           <h3 className="font-medium text-gray-600">{ad.title}</h3>
           <p className="text-gray-500">{`${ad.description.slice(0, 70)}...`}</p>

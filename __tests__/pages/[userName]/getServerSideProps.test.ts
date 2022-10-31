@@ -115,7 +115,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
         email: emailVerificationEmail,
         verificationToken: verificationToken,
       },
-    })) as { props: { user: IGenericUserPrimitives } };
+    })) as { props: IUserNamePage};
 
     const user = resp.props.user;
 
@@ -130,7 +130,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   }, 12000);
 });
 
-describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
+describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
   let influencer: IUserPrimitives;
@@ -186,7 +186,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(resp.props.ad).toBe(undefined);
   });
 
-  it(`WHEN access to an influencer url,
+  it.only(`WHEN access to an influencer url,
   THEN response should have an active campaign and ad`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);
@@ -205,6 +205,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(resp.props.campaign).not.toBe(undefined);
     expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
     expect(resp.props.user.id).toBe(myUser.id);
+    expect(resp.props.referral?.id).toBe(resp.props.campaign?.advertiserId);
   });
 
   it(`WHEN access to a not existing influencer url,

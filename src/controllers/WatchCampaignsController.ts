@@ -1,6 +1,6 @@
 import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
 import { IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/IUser";
+import { IGenericUserPrimitives, IGenericUserProps } from "../domain/IUser";
 import { RolType } from "../domain/Rol";
 import { LoginQueries } from "../domain/LoginQueries";
 import { findAdvertiserHandler } from "../modules/advertiser/advertiser-container";
@@ -16,6 +16,7 @@ import { findUserHandler } from "../modules/user/container";
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
+  referral: IGenericUserPrimitives;
 }
 
 export class WatchCampaignsController {
@@ -31,10 +32,13 @@ export class WatchCampaignsController {
         `User profile ${influencerName} do not exist`
       );
     const campaignData = await this.randomActiveCampaign();
-    return campaignData;
+    return { ...campaignData, referral: urlUserNameFound };
   }
 
-  static async randomActiveCampaign(): Promise<IWatchCampaignData> {
+  static async randomActiveCampaign(): Promise<{
+    activeCampaign: ICampaignPrimitives;
+    ad: AdPropsPrimitives;
+  }> {
     const activeCampaigns = await findCampaignHandler.allActives();
     const randomCampaign = this.randomCampaign(activeCampaigns);
     const ad = await adFinderHandler.findByAdId(randomCampaign.adId);

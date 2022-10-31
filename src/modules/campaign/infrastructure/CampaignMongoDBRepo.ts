@@ -15,9 +15,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
     await campaignModel.save();
   }
 
-  async findByStatus(
-    status: string
-  ): Promise<ICampaignPrimitives[]> {
+  async findByStatus(status: string): Promise<ICampaignPrimitives[]> {
     const campaignModels = await CampaignModel.find<ICampaignModel>({
       status,
     });
@@ -31,6 +29,23 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
     });
     const campaigns = this.mapToPrimitives(campaignModels);
     return campaigns;
+  }
+
+  async byId(id: string): Promise<ICampaignPrimitives | null> {
+    const campaignModel = await CampaignModel.findById<ICampaignModel>({
+      id,
+    });
+    if (!campaignModel) return null;
+    return {
+      id: campaignModel._id,
+      adId: campaignModel.adId,
+      advertiserId: campaignModel.advertiserId,
+      status: campaignModel.status,
+      promoters: campaignModel.promoters,
+      watchers: campaignModel.watchers,
+      budget: campaignModel.budget,
+      metrics: campaignModel.metrics,
+    };
   }
 
   private mapToPrimitives(

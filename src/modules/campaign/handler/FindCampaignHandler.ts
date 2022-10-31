@@ -26,6 +26,13 @@ export class FindCampaignHandler {
     return campaigns;
   }
 
+  async byId(id:string):Promise<ICampaignPrimitives>{
+    const uniqId = new UniqId(id)
+    const campaignFound = await this.findCampaign.byId(uniqId);
+    if (!campaignFound) throw new ErrorFindingCampaign(`No campaign found for the id ${id}`);
+    return campaignFound.toPrimitives();
+  }
+
   private mapToCampaignsPrimitives(
     campaigns: Campaign[]
   ): ICampaignPrimitives[] {

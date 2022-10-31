@@ -16,31 +16,43 @@ export class FindCampaign {
       CampaignStatusType.ACTIVE
     );
     if (activeCampaigns.length == 0) return null;
-    return this.toCampaign(activeCampaigns);
+    return this.mapToCampaign(activeCampaigns);
   }
 
   async findAllByAdvertiserId(id: UniqId): Promise<Campaign[] | null> {
     const campaignsFound = await this.campaignRepo.findAllByAdvertiserId(id.id);
     if (campaignsFound.length == 0) return null;
-    return this.toCampaign(campaignsFound);
+    return this.mapToCampaign(campaignsFound);
   }
 
-  private toCampaign(campaignsPrimitives: ICampaignPrimitives[]): Campaign[] {
+  async byId(id: UniqId): Promise<Campaign | null> {
+    const campaignFound = await this.campaignRepo.byId(id.id);
+    if (!campaignFound) return null;
+    return this.toCampaign(campaignFound);
+  }
+
+  private toCampaign(campaignPrimitives: ICampaignPrimitives): Campaign {
+    return new Campaign({
+      id: new UniqId(campaignPrimitives.id),
+      adId: new UniqId(campaignPrimitives.adId),
+      advertiserId: new UniqId(campaignPrimitives.advertiserId),
+      status: new CampaignStatus(campaignPrimitives.status),
+      budget: new CampaignBudget(campaignPrimitives.budget),
+      metrics: new CampaignMetrics(campaignPrimitives.metrics),
+      promoters: campaignPrimitives.promoters.map((promoter): UniqId => {
+        return new UniqId(promoter);
+      }),
+      watchers: campaignPrimitives.watchers.map((watcher): UniqId => {
+        return new UniqId(watcher);
+      }),
+    });
+  }
+
+  private mapToCampaign(
+    campaignsPrimitives: ICampaignPrimitives[]
+  ): Campaign[] {
     return campaignsPrimitives.map((campaign): Campaign => {
-      return new Campaign({
-        id: new UniqId(campaign.id),
-        adId: new UniqId(campaign.adId),
-        advertiserId: new UniqId(campaign.advertiserId),
-        status: new CampaignStatus(campaign.status),
-        budget: new CampaignBudget(campaign.budget),
-        metrics: new CampaignMetrics(campaign.metrics),
-        promoters: campaign.promoters.map((promoter): UniqId => {
-          return new UniqId(promoter);
-        }),
-        watchers: campaign.watchers.map((watcher): UniqId => {
-          return new UniqId(watcher);
-        }),
-      });
+      return this.toCampaign(campaign);
     });
   }
 }

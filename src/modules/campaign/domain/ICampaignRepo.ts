@@ -6,4 +6,5 @@ export interface ICampaignRepo {
   save(campaign: ICampaignPrimitives): Promise<void>;
   findByStatus(status: string):Promise<ICampaignPrimitives[]>;
   findAllByAdvertiserId(id: string):Promise<ICampaignPrimitives[]>;
+  byId(id:string):Promise<ICampaignPrimitives | null>;
 }

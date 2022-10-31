@@ -27,15 +27,21 @@ export interface IUserNamePage {
   user: IGenericUserPrimitives;
   campaign: ICampaignPrimitives | null;
   ad: AdPropsPrimitives | null;
+  referral: IGenericUserPrimitives | null;
 }
 
-export default function Profile({ user, ad, campaign }: IUserNamePage) {
+export default function Profile({
+  user,
+  ad,
+  campaign,
+  referral,
+}: IUserNamePage) {
   const notificationHandler = useRef<RefNotifications>({
     showNotification: (data: NotificationData) => {},
   });
 
   if (ad && campaign) {
-    return <AdView campaign={campaign} ad={ad} />;
+    return <AdView campaign={campaign} ad={ad} referral={referral!} />;
   }
 
   if (user.rol === RolType.USER) {
@@ -46,15 +52,17 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
   const [campaigns, setCampaigns] = useState<number>(0);
 
   const totalAds = async () => {
-    fetch(ApiRoutes.allAds)
+    console.log("ADS ")
+    await fetch(ApiRoutes.allAds)
       .then(async (response) => {
-        console.log(response);
+        console.log("ADS ", response);
         if (response.status === 200) {
           const respJSON = (await response.json()) as {
             ads: AdPropsPrimitives[];
           };
           setAds(respJSON.ads.length);
         } else {
+          console.log("ADS ", response);
           setAds(0);
         }
       })
@@ -70,7 +78,8 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
   };
 
   const totalCampaigns = async () => {
-    fetch(ApiRoutes.advertiserCampaigns)
+    console.log("CAMPAIGNS ")
+    await fetch(ApiRoutes.advertiserCampaigns)
       .then(async (response) => {
         console.log("CAMPAINGS ", response);
         if (response.status === 200) {
@@ -93,9 +102,13 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
       });
   };
 
+  const findAdsAndCampaigns = async () => {
+    await totalAds();
+    await totalCampaigns();
+  };
+
   useEffect(() => {
-    totalAds();
-    totalCampaigns();
+    findAdsAndCampaigns();
   }, []);
 
   return (
@@ -124,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           props: { user: session } as IUserNamePage,
         };
 
-      const { ad, activeCampaign } =
+      const { ad, activeCampaign, referral } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
           return await WatchCampaignsController.forInfluencer(
             queryParams.userName
@@ -132,7 +145,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         });
 
       return {
-        props: { user: session, campaign: activeCampaign, ad } as IUserNamePage,
+        props: {
+          user: session,
+          campaign: activeCampaign,
+          ad,
+          referral,
+        } as IUserNamePage,
       };
     }
 

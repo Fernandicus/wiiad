@@ -1,5 +1,6 @@
 export class ApiRoutes{
     static launchCampaign = "/api/v1/campaign/launch";
+    static watchCampaign = "/api/v1/campaign/watch";
     static removeAds = "/api/v1/ads/remove";
     static allAds = "/api/v1/ads/";
     static advertiserCampaigns = "/api/v1/campaign";
