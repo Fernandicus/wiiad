@@ -19,6 +19,12 @@ export class FindCampaign {
     return this.toCampaign(activeCampaigns);
   }
 
+  async findAllByAdvertiserId(id: UniqId): Promise<Campaign[] | null> {
+    const campaignsFound = await this.campaignRepo.findAllByAdvertiserId(id.id);
+    if (campaignsFound.length == 0) return null;
+    return this.toCampaign(campaignsFound);
+  }
+
   private toCampaign(campaignsPrimitives: ICampaignPrimitives[]): Campaign[] {
     return campaignsPrimitives.map((campaign): Campaign => {
       return new Campaign({

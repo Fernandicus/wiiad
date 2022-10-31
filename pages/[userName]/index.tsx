@@ -14,9 +14,14 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
-import { Routes } from "@/src/utils/routes";
+import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import {
+  NotificationData,
+  Notifications,
+  RefNotifications,
+} from "../../components/ui/notifications/Notifications";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -25,6 +30,10 @@ export interface IUserNamePage {
 }
 
 export default function Profile({ user, ad, campaign }: IUserNamePage) {
+  const notificationHandler = useRef<RefNotifications>({
+    showNotification: (data: NotificationData) => {},
+  });
+
   if (ad && campaign) {
     return <AdView campaign={campaign} ad={ad} />;
   }
@@ -34,30 +43,72 @@ export default function Profile({ user, ad, campaign }: IUserNamePage) {
   }
 
   const [ads, setAds] = useState<number>(0);
+  const [campaigns, setCampaigns] = useState<number>(0);
 
   const totalAds = async () => {
-    fetch(Routes.allAds)
+    fetch(ApiRoutes.allAds)
       .then(async (response) => {
+        console.log(response);
         if (response.status === 200) {
-          const respJSON = await response.json();
+          const respJSON = (await response.json()) as {
+            ads: AdPropsPrimitives[];
+          };
           setAds(respJSON.ads.length);
         } else {
           setAds(0);
         }
       })
       .catch((error) => {
+        if (error.message === "Failed to fetch") {
+          notificationHandler.current.showNotification({
+            message: "Desactiva el bloqueador de anuncios",
+            status: 400,
+          });
+        }
         setAds(0);
+      });
+  };
+
+  const totalCampaigns = async () => {
+    fetch(ApiRoutes.advertiserCampaigns)
+      .then(async (response) => {
+        console.log("CAMPAINGS ", response);
+        if (response.status === 200) {
+          const respJSON = (await response.json()) as {
+            campaigns: ICampaignPrimitives[];
+          };
+          setCampaigns(respJSON.campaigns.length);
+        } else {
+          setCampaigns(0);
+        }
+      })
+      .catch((error) => {
+        if (error.message === "Failed to fetch") {
+          notificationHandler.current.showNotification({
+            message: "Desactiva el bloqueador de anuncios",
+            status: 400,
+          });
+        }
+        setCampaigns(0);
       });
   };
 
   useEffect(() => {
     totalAds();
+    totalCampaigns();
   }, []);
 
   return (
-    <main className="h-screen bg-slate-100 p-10 w-full ">
-      <AdvertiserHeader user={user} totalAds={ads} totalCampaigns={0} />
-    </main>
+    <div>
+      <Notifications ref={notificationHandler} />
+      <main className="h-screen bg-slate-100 p-10 w-full ">
+        <AdvertiserHeader
+          user={user}
+          totalAds={ads}
+          totalCampaigns={campaigns}
+        />
+      </main>
+    </div>
   );
 }
 

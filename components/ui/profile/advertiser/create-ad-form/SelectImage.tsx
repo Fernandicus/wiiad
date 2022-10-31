@@ -11,7 +11,7 @@ export function SelectImage({ onSelectImage, imagePreview }: Props) {
   return (
     <div className="space-y-5">
       <label className="font-bold">
-        Banner <span className="text-sm text-gray-500 font-medium">(aspect ratio 2:4)</span>
+        Sube una imagen <span className="text-sm text-gray-500 font-medium">(aspect ratio 2:4)</span>
       </label>
       <div>
         {imagePreview ? (

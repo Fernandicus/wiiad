@@ -8,7 +8,7 @@ import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { APISendEmailVerification } from "../api/v1/mailing/send-email-verification";
-import { Routes } from "@/src/utils/routes";
+import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { Notifications } from "../../components/ui/notifications/Notifications";
 
 export default function Home(props: { session: AdvertiserPropsPrimitives }) {
@@ -23,7 +23,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
     const valueEmail = myEmail.current?.value;
     const valueName = myName.current?.value;
 
-    const resp = await fetch(Routes.sendVerificationEmail, {
+    const resp = await fetch(ApiRoutes.sendVerificationEmail, {
       method: "POST",
       body: JSON.stringify({
         isNewUser,

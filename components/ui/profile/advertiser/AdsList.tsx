@@ -1,7 +1,6 @@
 import { AdCard } from "./AdCard";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Routes } from "@/src/utils/routes";
 import { Dispatch, SetStateAction } from "react";
 import { NotificationData } from "../../notifications/Notifications";
 
@@ -15,7 +14,7 @@ export function AdsList({ ads, createAd, handleResponse }: Props) {
   return (
     <div className="w-full py-10">
       <div className="flex justify-center space-x-3">
-        <h1 className="font-bold text-center">Hey, estos son tus anuncios</h1>
+        <h1 className="font-bold text-center">Estos son tus anuncios</h1>
         <button
           className="text-sky-500 hover:text-sky-400 w-5"
           onClick={() => createAd(true)}

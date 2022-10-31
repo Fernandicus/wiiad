@@ -1,6 +1,6 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Routes } from "@/src/utils/routes";
+import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { NotificationData } from "../../notifications/Notifications";
 
 interface Props {
@@ -16,18 +16,33 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
 
   const deleteAd = async (id: string) => {
     try {
-      const resp = await fetch(Routes.removeAds, {
+      const resp = await fetch(ApiRoutes.removeAds, {
         method: "DELETE",
         body: JSON.stringify({ adId: id }),
       });
-      if (resp.status !== 200) console.error(resp);
-    } catch (err) {}
+      if (resp.status !== 200) {
+        handleResponse({
+          message: "No se pudo eliminar el anuncio",
+          status: 400,
+        });
+      } else {
+        handleResponse({
+          message: "Anuncio eliminado",
+          status: 0,
+        });
+      }
+    } catch (err) {
+      handleResponse({
+        message: "No se pudo eliminar el anuncio",
+        status: 400,
+      });
+    }
   };
 
   const launchCampaign = async (ad: AdPropsPrimitives) => {
     console.log("LAUNCH ", ad.id);
     try {
-      const resp = await fetch(Routes.launchCampaign, {
+      const resp = await fetch(ApiRoutes.launchCampaign, {
         method: "POST",
         body: JSON.stringify({
           id: ad.id,
@@ -39,7 +54,7 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
         handleResponse({ message: "Nueva campaña lanzada!", status: 0 });
       }
     } catch (err) {
-      console.error(err);
+      handleResponse({ message: "No se pudo lanzar la campaña", status: 400 });
     }
   };
 
@@ -59,14 +74,14 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
         </div>
         <div className="space-x-5 flex justify-center pt-3">
           <button
-            className=" bg-red-100 text-red-500 p-2 rounded-md font-medium w-full"
+            className=" bg-red-100 hover:bg-red-500 text-red-500 hover:text-white p-2 rounded-md font-medium w-full"
             type="button"
             onClick={() => deleteAd(ad.id)}
           >
             Eliminar anuncio
           </button>
           <button
-            className=" bg-sky-500 text-white p-2 rounded-md font-medium w-full"
+            className=" bg-sky-500 hover:bg-sky-400 text-white p-2 rounded-md font-medium w-full"
             type="button"
             onClick={() => launchCampaign(ad)}
           >

@@ -1,6 +1,6 @@
 import { SelectImage } from "../profile/advertiser/create-ad-form/SelectImage";
 import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { Routes } from "@/src/utils/routes";
+import { Routes } from "@/src/utils/ApiRoutes";
 import React, { FormEvent, useRef, useState } from "react";
 import {
   NotificationData,

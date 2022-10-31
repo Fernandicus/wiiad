@@ -17,6 +17,7 @@ import { AdsList } from "../../../components/ui/profile/advertiser/AdsList";
 import {
   NotificationData,
   Notifications,
+  RefNotifications,
 } from "../../../components/ui/notifications/Notifications";
 
 export default function NewCampaign(
@@ -25,7 +26,7 @@ export default function NewCampaign(
   const advertiser: AdvertiserPropsPrimitives = props.advertiser;
   const ads: AdPropsPrimitives[] = props.ads;
   const [createAd, setCreateAd] = useState<boolean>(false);
-  const notificationsRef = useRef({
+  const notificationsRef = useRef<RefNotifications>({
     showNotification: (data: { status: number; message: string }) => {},
   });
 
