@@ -9,11 +9,11 @@ export interface ICampaignPrimitives {
   advertiserId: string;
   adId: string;
   referrals: string[];
-  watchers: string[];
+  /* watchers: string[]; */
   status: string;
   budget: {
-    moneyToSpend: number;
-    maxClicks: number;
+    balance: number;
+    clicks: number;
   };
   metrics: {
     totalViews: number;
@@ -26,7 +26,7 @@ export interface CampaignProps {
   advertiserId: UniqId;
   adId: UniqId;
   referrals: UniqId[];
-  watchers: UniqId[];
+  /* watchers: UniqId[]; */
   status: CampaignStatus;
   budget: CampaignBudget;
   metrics: CampaignMetrics;
@@ -37,7 +37,7 @@ export class Campaign {
   readonly advertiserId: UniqId;
   readonly adId: UniqId;
   readonly referrals: UniqId[];
-  readonly watchers: UniqId[];
+  /* readonly watchers: UniqId[]; */
   readonly status: CampaignStatus;
   readonly budget: CampaignBudget;
   readonly metrics: CampaignMetrics;
@@ -47,7 +47,7 @@ export class Campaign {
     this.advertiserId = props.advertiserId;
     this.adId = props.adId;
     this.referrals = props.referrals;
-    this.watchers = props.watchers;
+    /* this.watchers = props.watchers; */
     this.status = props.status;
     this.budget = props.budget;
     this.metrics = props.metrics;
@@ -64,7 +64,7 @@ export class Campaign {
       advertiserId: props.advertiserId,
       adId: props.adId,
       referrals: [],
-      watchers: [],
+     /*  watchers: [], */
       status: new CampaignStatus(CampaignStatusType.ACTIVE),
       budget: props.budget,
       metrics: new CampaignMetrics({
@@ -80,10 +80,10 @@ export class Campaign {
       adId: this.adId.id,
       advertiserId: this.advertiserId.id,
       referrals: this.referrals.map((referral) => referral.id),
-      watchers: this.watchers.map((watcher) => watcher.id),
+      /* watchers: this.watchers.map((watcher) => watcher.id), */
       budget: {
-        maxClicks: this.budget.maxClicks,
-        moneyToSpend: this.budget.moneyToSpend,
+        clicks: this.budget.clicks,
+        balance: this.budget.balance.total,
       },
       metrics: {
         totalClicks: this.metrics.totalClicks,

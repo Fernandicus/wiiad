@@ -7,9 +7,13 @@ describe("On FindCampaign use case, GIVEN some active campaigns", () => {
 
   beforeAll(async () => {
     mockedRepo = {
+      save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
       findByStatus: jest.fn().mockResolvedValue([]),
-      save: jest.fn(),
+      addReferral: jest.fn(),
+      byId: jest.fn(),
+      increaseClicks:jest.fn(),
+      increaseViews:jest.fn(),
     };
   });
 

@@ -1,3 +1,4 @@
+import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
 import { Campaign, ICampaignPrimitives } from "../domain/Campaign";
 import { ICampaignRepo } from "../domain/ICampaignRepo";
@@ -37,13 +38,13 @@ export class FindCampaign {
       adId: new UniqId(campaignPrimitives.adId),
       advertiserId: new UniqId(campaignPrimitives.advertiserId),
       status: new CampaignStatus(campaignPrimitives.status),
-      budget: new CampaignBudget(campaignPrimitives.budget),
+      budget: new CampaignBudget({
+        balance: new Balance(campaignPrimitives.budget.balance),
+        clicks: campaignPrimitives.budget.clicks,
+      }),
       metrics: new CampaignMetrics(campaignPrimitives.metrics),
       referrals: campaignPrimitives.referrals.map((referral): UniqId => {
         return new UniqId(referral);
-      }),
-      watchers: campaignPrimitives.watchers.map((watcher): UniqId => {
-        return new UniqId(watcher);
       }),
     });
   }

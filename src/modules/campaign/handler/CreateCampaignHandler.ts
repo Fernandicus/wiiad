@@ -17,8 +17,8 @@ export class CreateCampaignHandler {
   }): Promise<void> {
     const { advertiserId, adId, id, budget } = props;
     const campaignBudget = new CampaignBudget({
-      moneyToSpend: budget.moneyToSpend,
-      maxClicks: budget.maxClicks,
+      balance: budget.balance,
+      clicks: budget.clicks,
     });
     const campaign = Campaign.new({
       id: new UniqId(id),

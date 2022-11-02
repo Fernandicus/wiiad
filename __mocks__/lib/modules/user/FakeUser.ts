@@ -26,6 +26,15 @@ export class FakeUser extends User {
     });
   }
 
+  static createMany(amount: number): User[] {
+    let users: User[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      users.push(this.create(UniqId.new()));
+    }
+    return users;
+  }
+
   static createWithPrimitives(id: string): IUserPrimitives {
     const userPrimitives = this.generateRandom(id);
     return userPrimitives;

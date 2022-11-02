@@ -30,10 +30,10 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
-    const { mock, verificationEmails } = await MockTestDB.setAndInitAll();
-    verificationMock = mock.verificationEmailsDB;
-    validVerificationEmails = verificationEmails.valids;
-    expiredVerificationEmail = verificationEmails.expired[0];
+    const mockTest = await MockTestDB.setAndInitAll();
+    verificationMock = mockTest.mocks.verificationEmailsDB;
+    validVerificationEmails = mockTest.verificationEmails.valids;
+    expiredVerificationEmail = mockTest.verificationEmails.expired[0];
   }, 20000);
 
   it(`WHEN send an url with a not valid token, 
@@ -130,7 +130,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   }, 12000);
 });
 
-describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
+describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
   let influencer: IUserPrimitives;
@@ -186,7 +186,7 @@ describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
     expect(resp.props.ad).toBe(undefined);
   });
 
-  it.only(`WHEN access to an influencer url,
+  it(`WHEN access to an influencer url,
   THEN response should have an active campaign and ad`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);

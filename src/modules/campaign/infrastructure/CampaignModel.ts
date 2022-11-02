@@ -9,10 +9,9 @@ const campaignSchema = new Schema(
     adId: { type: String, required: true },
     status: { type: String, required: true },
     referrals: { type: Array, of: String, default: [] },
-    watchers: { type: Array, of: String, default: [] },
     budget: {
-      moneyToSpend: { type: Number, default: 0 },
-      maxClicks: { type: Number, default: 0 },
+      balance: { type: Number, default: 0 },
+      clicks: { type: Number, default: 0 },
     },
     metrics: {
       totalViews: { type: Number, default: 0 },
@@ -28,10 +27,9 @@ export interface ICampaignModel {
   adId: string;
   status: string;
   referrals: string[];
-  watchers: string[];
   budget: {
-    moneyToSpend: number;
-    maxClicks: number;
+    balance: number;
+    clicks: number;
   };
   metrics: {
     totalViews: number;

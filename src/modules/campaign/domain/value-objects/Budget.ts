@@ -1,18 +1,19 @@
+import { Balance } from "@/src/domain/Balance";
 import { ErrorCreatingCampaign } from "./ErrorCreatingCampaign";
 
 export interface CampaignBudgetProps {
-  moneyToSpend: number;
-  maxClicks: number;
+  balance: Balance;
+  clicks: number;
 }
 
 export class CampaignBudget {
-  readonly maxClicks;
-  readonly moneyToSpend;
+  readonly clicks;
+  readonly balance;
 
   constructor(props: CampaignBudgetProps) {
-    if (props.maxClicks <= 0 || props.moneyToSpend <= 0)
-      throw new ErrorCreatingCampaign("MaxClicks and MoneyToSpend must be > 0");
-    this.maxClicks = props.maxClicks;
-    this.moneyToSpend = props.moneyToSpend;
+    if (props.clicks <= 0 || props.balance.total <= 0)
+      throw new ErrorCreatingCampaign("MaxClicks and balance must be > 0");
+    this.clicks = props.clicks;
+    this.balance = props.balance;
   }
 }

@@ -8,6 +8,7 @@ import { TestCampaignMongoDBRepo } from "../../../../../__mocks__/lib/modules/ca
 import launchCampaign from "@/pages/api/v1/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { autoMockedCampaigns } from "../../../../../__mocks__/context/MockCampaignTestDB";
+import { Balance } from "@/src/domain/Balance";
 
 describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
   let ad: AdPropsPrimitives;
@@ -18,10 +19,10 @@ describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
     await autoMockedCampaigns();
     advertiser = FakeAdvertiser.createPrimitives();
     ad = FakeAd.createWithPrimitives(advertiser.id);
-    budget = {
-      maxClicks: 1000,
-      moneyToSpend: 50,
-    };
+    budget = new CampaignBudget({
+      clicks: 1000,
+      balance: new Balance(50),
+    });
   }, 20000);
 
   it(`WHEN send a POST request with a valid ad id and a, 

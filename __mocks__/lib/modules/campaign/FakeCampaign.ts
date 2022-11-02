@@ -1,3 +1,4 @@
+import { Balance } from "@/src/domain/Balance";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   Campaign,
@@ -6,7 +7,10 @@ import {
 } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
-import { CampaignStatus, CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import {
+  CampaignStatus,
+  CampaignStatusType,
+} from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
 import { v4 } from "uuid";
 
@@ -24,11 +28,10 @@ export class FakeCampaign extends Campaign {
       advertiserId: props.advertiserId,
       adId: UniqId.new(),
       referrals: [UniqId.new()],
-      watchers: [UniqId.new()],
-      status: new CampaignStatus(props.status) ,
+      status: new CampaignStatus(props.status),
       budget: new CampaignBudget({
-        moneyToSpend: 5,
-        maxClicks: 5,
+        balance: new Balance(5),
+        clicks: 5,
       }),
       metrics: new CampaignMetrics({
         totalViews: 3,
@@ -47,11 +50,10 @@ export class FakeCampaign extends Campaign {
       advertiserId: props.advertiserId,
       adId: props.adId,
       referrals: this.generateIds(),
-      watchers: this.generateIds(),
       status: props.status,
       budget: {
-        moneyToSpend: 5,
-        maxClicks: 5,
+        balance: 5,
+        clicks: 5,
       },
       metrics: {
         totalViews: 3,

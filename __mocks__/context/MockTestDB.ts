@@ -4,35 +4,61 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
 import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
+import { mockedReferralRepo } from "./MockReferralTestDB";
 import { mockedUserRepo } from "./MockUserTestDB";
 import {
-  mockedVerificationEmailRepo, MockVerificationEmailDB
+  mockedVerificationEmailRepo,
+  MockVerificationEmailDB,
 } from "./MockVerificationEmailDB";
 
+interface IMockedDB {
+  verificationEmailsDB: MockVerificationEmailDB;
+}
+
+interface ICampaignsByStatus {
+  actives: ICampaignPrimitives[];
+  finished: ICampaignPrimitives[];
+  standBy: ICampaignPrimitives[];
+}
+
+interface IVerificationEmailsByStatus {
+  expired: IVerificationEmailTimerPrimitives[];
+  valids: IVerificationEmailTimerPrimitives[];
+}
+
 interface InitializedMongoTestDB {
-  mock: {
-    verificationEmailsDB: MockVerificationEmailDB;
-  },
-  campaigns: {
-    actives: ICampaignPrimitives[];
-    finished: ICampaignPrimitives[];
-    standBy: ICampaignPrimitives[];
-  };
+  mocks: IMockedDB;
+  campaigns: ICampaignsByStatus;
   advertisers: AdvertiserPropsPrimitives[];
   ads: AdPropsPrimitives[];
   users: IUserPrimitives[];
-  verificationEmails: {
-    expired: IVerificationEmailTimerPrimitives[];
-    valids: IVerificationEmailTimerPrimitives[];
-  };
+  verificationEmails: IVerificationEmailsByStatus;
+  referrals: IReferralPrimitives[];
 }
 
 export class MockTestDB {
-  static async setAndInitAll(): Promise<InitializedMongoTestDB> {
+  readonly mocks: IMockedDB;
+  readonly campaigns: ICampaignsByStatus;
+  readonly advertisers: AdvertiserPropsPrimitives[];
+  readonly ads: AdPropsPrimitives[];
+  readonly users: IUserPrimitives[];
+  readonly verificationEmails: IVerificationEmailsByStatus;
+
+  constructor(params: InitializedMongoTestDB) {
+    this.mocks = params.mocks;
+    this.campaigns = params.campaigns;
+    this.advertisers = params.advertisers;
+    this.ads = params.ads;
+    this.users = params.users;
+    this.verificationEmails = params.verificationEmails;
+  }
+
+  static async setAndInitAll(): Promise<MockTestDB> {
     const totalAds = 9;
 
     const mockedAdDB = await mockedAdRepo(totalAds);
@@ -54,8 +80,13 @@ export class MockTestDB {
     const mockedVerificationEmails = await mockedVerificationEmailRepo(2, 4);
     const verificationEmails = await mockedVerificationEmails.getAll();
 
-    return {
-      mock:{
+    const mockedReferrals = await mockedReferralRepo(
+      users!.map((user) => user.id)
+    );
+    const referrals = await mockedReferrals.getAll();
+
+    return new MockTestDB({
+      mocks: {
         verificationEmailsDB: mockedVerificationEmails,
       },
       campaigns: {
@@ -64,13 +95,14 @@ export class MockTestDB {
         standBy: campaigns.standBy!,
       },
       advertisers: advertisers!,
-      ads: mockedAds!,
       users: users!,
+      ads: mockedAds!,
       verificationEmails: {
         expired: verificationEmails!.expired,
         valids: verificationEmails!.valid,
       },
-    };
+      referrals: referrals!,
+    });
   }
 
   private static async findCampaignsByStatus(

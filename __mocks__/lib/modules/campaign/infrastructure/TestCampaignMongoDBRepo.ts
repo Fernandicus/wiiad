@@ -40,10 +40,9 @@ export class TestCampaignMongoDBRepo
         advertiserId: campaign.advertiserId,
         referrals: [...campaign.referrals],
         status: campaign.status,
-        watchers: [...campaign.watchers],
         budget: {
-          maxClicks: campaign.budget.maxClicks,
-          moneyToSpend: campaign.budget.moneyToSpend,
+          clicks: campaign.budget.clicks,
+          balance: campaign.budget.balance,
         },
         metrics: {
           totalClicks: campaign.metrics.totalClicks,

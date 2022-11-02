@@ -41,22 +41,9 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
       advertiserId: campaignModel.advertiserId,
       status: campaignModel.status,
       referrals: campaignModel.referrals,
-      watchers: campaignModel.watchers,
       budget: campaignModel.budget,
       metrics: campaignModel.metrics,
     };
-  }
-
-  async addWatcher(params: {
-    campaignId: string;
-    watcherId: string;
-  }): Promise<void> {
-    const campaign: HydratedDocument<ICampaignModel> | null =
-      await CampaignModel.findById(params.campaignId);
-    if (campaign) {
-      campaign.watchers.push(params.watcherId);
-      await campaign.save();
-    }
   }
 
   async addReferral(params: {
@@ -89,7 +76,6 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
         advertiserId: campaign.advertiserId,
         status: campaign.status,
         referrals: campaign.referrals,
-        watchers: campaign.watchers,
         budget: campaign.budget,
         metrics: campaign.metrics,
       };

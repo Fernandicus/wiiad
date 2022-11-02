@@ -7,7 +7,6 @@ export interface ICampaignRepo {
   findByStatus(status: string): Promise<ICampaignPrimitives[]>;
   findAllByAdvertiserId(id: string): Promise<ICampaignPrimitives[]>;
   byId(id: string): Promise<ICampaignPrimitives | null>;
-  addWatcher(params: { campaignId: string; watcherId: string }): Promise<void>;
   addReferral(params: {
     campaignId: string;
     referralId: string;
