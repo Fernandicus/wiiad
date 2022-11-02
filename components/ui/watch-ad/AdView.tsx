@@ -28,7 +28,7 @@ export default function AdView(props: {
 
   const watchAd = async () => {
     fetch(ApiRoutes.watchCampaign, {
-      method:"GET",
+      method:"POST",
       body:JSON.stringify({
         referralId: referral.id,
         campaignId: campaign.id,
@@ -37,7 +37,9 @@ export default function AdView(props: {
       .then((resp) => {})
       .catch((err) => {});
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    watchAd();
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center">

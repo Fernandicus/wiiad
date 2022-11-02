@@ -18,6 +18,11 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
       findByStatus: jest.fn(),
+      addReferral: jest.fn(),
+      addWatcher: jest.fn(),
+      byId: jest.fn(),
+      increaseClicks:jest.fn(),
+      increaseViews:jest.fn(),
     };
     createCampaign = new CreateCampaign(campaignRepo);
     campaign = FakeCampaign.create({advertiserId: UniqId.new(), status: CampaignStatusType.ACTIVE});

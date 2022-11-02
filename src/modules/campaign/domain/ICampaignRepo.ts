@@ -4,7 +4,14 @@ import { CampaignStatusType } from "./value-objects/CampaignStatus";
 
 export interface ICampaignRepo {
   save(campaign: ICampaignPrimitives): Promise<void>;
-  findByStatus(status: string):Promise<ICampaignPrimitives[]>;
-  findAllByAdvertiserId(id: string):Promise<ICampaignPrimitives[]>;
-  byId(id:string):Promise<ICampaignPrimitives | null>;
+  findByStatus(status: string): Promise<ICampaignPrimitives[]>;
+  findAllByAdvertiserId(id: string): Promise<ICampaignPrimitives[]>;
+  byId(id: string): Promise<ICampaignPrimitives | null>;
+  addWatcher(params: { campaignId: string; watcherId: string }): Promise<void>;
+  addReferral(params: {
+    campaignId: string;
+    referralId: string;
+  }): Promise<void>;
+  increaseViews(id: string): Promise<void>;
+  increaseClicks(id: string): Promise<void>;
 }

@@ -205,7 +205,7 @@ describe.only("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
     expect(resp.props.campaign).not.toBe(undefined);
     expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
     expect(resp.props.user.id).toBe(myUser.id);
-    expect(resp.props.referral?.id).toBe(resp.props.campaign?.advertiserId);
+    expect(resp.props.referral?.id).toBe(influencer.id);
   });
 
   it(`WHEN access to a not existing influencer url,

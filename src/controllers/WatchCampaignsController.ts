@@ -12,6 +12,7 @@ import { adFinderHandler } from "../modules/ad/ad-container";
 import { ErrorFindingAd } from "../modules/ad/domain/ErrorFindingAd";
 import { ErrorFindingCampaign } from "../modules/campaign/domain/ErrorFindingCampaign";
 import { findUserHandler } from "../modules/user/container";
+import { IUserPrimitives } from "../modules/user/domain/User";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
@@ -51,7 +52,9 @@ export class WatchCampaignsController {
   private static randomCampaign(
     activeCampaigns: ICampaignPrimitives[]
   ): ICampaignPrimitives {
-    const random = Math.round(Math.random() * activeCampaigns.length);
+    const random = Math.round(Math.random() * (activeCampaigns.length - 1));
+    console.log(" WATCH CAMPAIGN CONTROLLER ", activeCampaigns.length);
+    console.log(" WATCH CAMPAIGN CONTROLLER ", random);
     return activeCampaigns[random];
   }
 }

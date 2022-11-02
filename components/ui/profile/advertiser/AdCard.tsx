@@ -1,4 +1,5 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { NotificationData } from "../../notifications/Notifications";
@@ -6,9 +7,10 @@ import { NotificationData } from "../../notifications/Notifications";
 interface Props {
   ad: AdPropsPrimitives;
   handleResponse: (data: NotificationData) => void;
+  campaign: ICampaignPrimitives | null;
 }
 
-export const AdCard = ({ ad, handleResponse }: Props) => {
+export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
   const budget: CampaignBudgetProps = {
     maxClicks: 1000,
     moneyToSpend: 50,
@@ -65,16 +67,18 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
         className="h-64 w-full object-cover bg-white/70 rounded-t-lg"
       ></img>
       <div className="p-3 space-y-2">
-        <div className=" flex justify-center space-x-5 rounded-md bg-sky-50 py-4">
-          <div className="w-full text-center">
-            <p>Visualizaciones</p>
-            <p>106 </p>
+        {campaign && (
+          <div className=" flex justify-center space-x-5 rounded-md bg-sky-50 py-4">
+            <div className="w-full text-center">
+              <p>Visualizaciones</p>
+              <p>{campaign?.watchers.length}</p>
+            </div>
+            <div className="w-full text-center">
+              <p>Redirecciones</p>
+              <p>0</p>
+            </div>
           </div>
-          <div className="w-full text-center">
-            <p>Redirecciones</p>
-            <p>81 </p>
-          </div>
-        </div>
+        )}
         <div className="space-y-2">
           <h3 className="font-medium text-gray-600">{ad.title}</h3>
           <p className="text-gray-500">{`${ad.description.slice(0, 70)}...`}</p>
@@ -91,11 +95,19 @@ export const AdCard = ({ ad, handleResponse }: Props) => {
             Eliminar anuncio
           </button>
           <button
-            className=" bg-sky-500 hover:bg-sky-400 text-white p-2 rounded-md font-medium w-full"
+            className={`${
+              campaign
+                ? "bg-slate-200 text-slate-400"
+                : "bg-sky-500 hover:bg-sky-400 text-white"
+            }   p-2 rounded-md font-medium w-full`}
             type="button"
-            onClick={() => launchCampaign(ad)}
+            onClick={campaign ? () => launchCampaign(ad) : undefined}
           >
-            Lanzar campaña
+            {!campaign ? (
+              <span>Lanzar campaña</span>
+            ) : (
+              <span>Campaña lanzada</span>
+            )}
           </button>
         </div>
       </div>

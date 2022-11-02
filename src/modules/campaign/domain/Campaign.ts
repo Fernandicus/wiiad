@@ -8,7 +8,7 @@ export interface ICampaignPrimitives {
   id: string;
   advertiserId: string;
   adId: string;
-  promoters: string[];
+  referrals: string[];
   watchers: string[];
   status: string;
   budget: {
@@ -25,7 +25,7 @@ export interface CampaignProps {
   id: UniqId;
   advertiserId: UniqId;
   adId: UniqId;
-  promoters: UniqId[];
+  referrals: UniqId[];
   watchers: UniqId[];
   status: CampaignStatus;
   budget: CampaignBudget;
@@ -36,7 +36,7 @@ export class Campaign {
   readonly id: UniqId;
   readonly advertiserId: UniqId;
   readonly adId: UniqId;
-  readonly promoters: UniqId[];
+  readonly referrals: UniqId[];
   readonly watchers: UniqId[];
   readonly status: CampaignStatus;
   readonly budget: CampaignBudget;
@@ -46,7 +46,7 @@ export class Campaign {
     this.id = props.id;
     this.advertiserId = props.advertiserId;
     this.adId = props.adId;
-    this.promoters = props.promoters;
+    this.referrals = props.referrals;
     this.watchers = props.watchers;
     this.status = props.status;
     this.budget = props.budget;
@@ -63,7 +63,7 @@ export class Campaign {
       id: props.id,
       advertiserId: props.advertiserId,
       adId: props.adId,
-      promoters: [],
+      referrals: [],
       watchers: [],
       status: new CampaignStatus(CampaignStatusType.ACTIVE),
       budget: props.budget,
@@ -79,7 +79,7 @@ export class Campaign {
       id: this.id.id,
       adId: this.adId.id,
       advertiserId: this.advertiserId.id,
-      promoters: this.promoters.map((promoter) => promoter.id),
+      referrals: this.referrals.map((referral) => referral.id),
       watchers: this.watchers.map((watcher) => watcher.id),
       budget: {
         maxClicks: this.budget.maxClicks,

@@ -38,7 +38,7 @@ export class TestCampaignMongoDBRepo
         id: campaign._id,
         adId: campaign.adId,
         advertiserId: campaign.advertiserId,
-        promoters: [...campaign.promoters],
+        referrals: [...campaign.referrals],
         status: campaign.status,
         watchers: [...campaign.watchers],
         budget: {

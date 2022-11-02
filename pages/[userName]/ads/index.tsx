@@ -19,12 +19,15 @@ import {
   Notifications,
   RefNotifications,
 } from "../../../components/ui/notifications/Notifications";
+import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 
-export default function NewCampaign(
+export default function Ads(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const advertiser: AdvertiserPropsPrimitives = props.advertiser;
   const ads: AdPropsPrimitives[] = props.ads;
+  const campaigns: ICampaignPrimitives[] = props.campaigns;
   const [createAd, setCreateAd] = useState<boolean>(false);
   const notificationsRef = useRef<RefNotifications>({
     showNotification: (data: { status: number; message: string }) => {},
@@ -39,6 +42,7 @@ export default function NewCampaign(
             <EmptyAds onTapCreateAd={setCreateAd} />
           ) : (
             <AdsList
+              campaigns={campaigns}
               ads={ads}
               createAd={setCreateAd}
               handleResponse={(data: NotificationData) => {
@@ -66,14 +70,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session || session.rol === RolType.USER)
       throw new Error("The session do not have access");
 
-    const ads = await MongoDB.connectAndDisconnect(
-      async () => await adFinderHandler.findAll(session.id)
-    );
+    const { ads, campaigns } = await MongoDB.connectAndDisconnect(async () => {
+      const ads = await adFinderHandler.findAll(session.id);
+      const campaigns = await findCampaignHandler.byAdvertiserId(session.id);
+      return { ads, campaigns };
+    });
 
     return {
       props: {
         advertiser: { ...session } as IGenericUserPrimitives,
         ads,
+        campaigns,
       },
     };
   } catch (err) {

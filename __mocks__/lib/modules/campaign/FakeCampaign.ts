@@ -23,7 +23,7 @@ export class FakeCampaign extends Campaign {
       id: UniqId.new(),
       advertiserId: props.advertiserId,
       adId: UniqId.new(),
-      promoters: [UniqId.new()],
+      referrals: [UniqId.new()],
       watchers: [UniqId.new()],
       status: new CampaignStatus(props.status) ,
       budget: new CampaignBudget({
@@ -46,7 +46,7 @@ export class FakeCampaign extends Campaign {
       id: UniqId.generate(),
       advertiserId: props.advertiserId,
       adId: props.adId,
-      promoters: this.generateIds(),
+      referrals: this.generateIds(),
       watchers: this.generateIds(),
       status: props.status,
       budget: {

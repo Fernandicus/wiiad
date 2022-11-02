@@ -3,14 +3,16 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { Dispatch, SetStateAction } from "react";
 import { NotificationData } from "../../notifications/Notifications";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 
 interface Props {
   ads: AdPropsPrimitives[];
+  campaigns: ICampaignPrimitives[];
   createAd: Dispatch<SetStateAction<boolean>>;
-  handleResponse: (data: NotificationData)=>void
+  handleResponse: (data: NotificationData) => void;
 }
 
-export function AdsList({ ads, createAd, handleResponse }: Props) {
+export function AdsList({ ads, createAd, handleResponse, campaigns }: Props) {
   return (
     <div className="w-full py-10">
       <div className="flex justify-center space-x-3">
@@ -36,9 +38,16 @@ export function AdsList({ ads, createAd, handleResponse }: Props) {
       <div className="w-full flex justify-center">
         <ul className="py-5 space-y-5  w-full max-w-md ">
           {ads.map((ad) => {
+            const campaign = campaigns.find(
+              (campaign) => campaign.adId == ad.id
+            );
             return (
               <li key={ad.id} className="flex justify-center">
-                <AdCard ad={ad} handleResponse={handleResponse}/>
+                <AdCard
+                  ad={ad}
+                  handleResponse={handleResponse}
+                  campaign={!campaign ? null : campaign}
+                />
               </li>
             );
           })}

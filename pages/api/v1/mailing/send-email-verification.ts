@@ -9,6 +9,8 @@ import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
 import { ErrorCreatingUser } from "@/src/modules/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/utils";
+import { RolType } from "@/src/domain/Rol";
+import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export interface APISendEmailVerification {
   data: ISendVerificationEmail;
@@ -29,32 +31,30 @@ export default async function handler(
 
   try {
     await MongoDB.connectAndDisconnect(async () => {
-      if (isNewUser) {
-        const userNameFoundByName = await findUserHandler.findByUserName(
-          data.userName
-        );
-        if (userNameFoundByName)
-          throw new ErrorEmailVerification(
-            `El nombre de ususario '${data.userName}' ya existe`
+      if (data.rol === RolType.USER) {
+        if (isNewUser) {
+          await SendVerificationEmailController.sendToNewUser(
+            data,
+            UniqId.generate()
           );
-        const userFoundByEmail = await findUserHandler.findByEmail(data.email);
-        if (userFoundByEmail)
-          throw new ErrorEmailVerification(
-            `El email '${data.email}' ya está asignado a un usuario`
+        } else {
+          await SendVerificationEmailController.sendToUser(
+            data,
+            UniqId.generate()
           );
-        await SendVerificationEmailController.send(data, UniqId.generate());
+        }
       } else {
-        const userFoundByEmail = await findUserHandler.findByEmail(data.email);
-        if (!userFoundByEmail)
-          throw new ErrorEmailVerification(
-            `El email '${data.email}' no existe`
+        if (isNewUser) {
+          await SendVerificationEmailController.sendToNewAdvertiser(
+            data,
+            UniqId.generate()
           );
-        const user: ISendVerificationEmail = {
-          email: userFoundByEmail.email,
-          userName: userFoundByEmail.name,
-          rol: userFoundByEmail.rol,
-        };
-        await SendVerificationEmailController.send(user, UniqId.generate());
+        } else {
+          await SendVerificationEmailController.sendToAdvertiser(
+            data,
+            UniqId.generate()
+          );
+        }
       }
     });
 

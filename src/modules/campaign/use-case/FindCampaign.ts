@@ -39,8 +39,8 @@ export class FindCampaign {
       status: new CampaignStatus(campaignPrimitives.status),
       budget: new CampaignBudget(campaignPrimitives.budget),
       metrics: new CampaignMetrics(campaignPrimitives.metrics),
-      promoters: campaignPrimitives.promoters.map((promoter): UniqId => {
-        return new UniqId(promoter);
+      referrals: campaignPrimitives.referrals.map((referral): UniqId => {
+        return new UniqId(referral);
       }),
       watchers: campaignPrimitives.watchers.map((watcher): UniqId => {
         return new UniqId(watcher);

@@ -22,6 +22,7 @@ import {
   Notifications,
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
+import { IUserPrimitives } from "@/src/modules/user/domain/User";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -52,7 +53,7 @@ export default function Profile({
   const [campaigns, setCampaigns] = useState<number>(0);
 
   const totalAds = async () => {
-    console.log("ADS ")
+    console.log("ADS ");
     await fetch(ApiRoutes.allAds)
       .then(async (response) => {
         console.log("ADS ", response);
@@ -78,7 +79,7 @@ export default function Profile({
   };
 
   const totalCampaigns = async () => {
-    console.log("CAMPAIGNS ")
+    console.log("CAMPAIGNS ");
     await fetch(ApiRoutes.advertiserCampaigns)
       .then(async (response) => {
         console.log("CAMPAINGS ", response);
@@ -149,7 +150,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           user: session,
           campaign: activeCampaign,
           ad,
-          referral,
+          referral: {
+            email: referral.email,
+            id: referral.id,
+            name: referral.name,
+            rol: referral.rol,
+          },
         } as IUserNamePage,
       };
     }

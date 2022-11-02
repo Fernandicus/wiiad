@@ -6,6 +6,7 @@ import { CampaignStatusType } from "../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
+
   async save(campaign: ICampaignPrimitives): Promise<void> {
     const campaignModel: HydratedDocument<ICampaignModel> =
       new CampaignModel<ICampaignModel>({
@@ -32,20 +33,50 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async byId(id: string): Promise<ICampaignPrimitives | null> {
-    const campaignModel = await CampaignModel.findById<ICampaignModel>({
-      id,
-    });
+    const campaignModel = await CampaignModel.findById<ICampaignModel>(id);
     if (!campaignModel) return null;
     return {
       id: campaignModel._id,
       adId: campaignModel.adId,
       advertiserId: campaignModel.advertiserId,
       status: campaignModel.status,
-      promoters: campaignModel.promoters,
+      referrals: campaignModel.referrals,
       watchers: campaignModel.watchers,
       budget: campaignModel.budget,
       metrics: campaignModel.metrics,
     };
+  }
+
+  async addWatcher(params: {
+    campaignId: string;
+    watcherId: string;
+  }): Promise<void> {
+    const campaign: HydratedDocument<ICampaignModel> | null =
+      await CampaignModel.findById(params.campaignId);
+    if (campaign) {
+      campaign.watchers.push(params.watcherId);
+      await campaign.save();
+    }
+  }
+
+  async addReferral(params: {
+    campaignId: string;
+    referralId: string;
+  }): Promise<void> {
+    const campaign: HydratedDocument<ICampaignModel> | null =
+      await CampaignModel.findById(params.campaignId);
+    if (campaign) {
+      campaign.referrals.push(params.referralId);
+      await campaign.save();
+    }
+  }
+
+  async increaseViews(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  async increaseClicks(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   private mapToPrimitives(
@@ -57,7 +88,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
         adId: campaign.adId,
         advertiserId: campaign.advertiserId,
         status: campaign.status,
-        promoters: campaign.promoters,
+        referrals: campaign.referrals,
         watchers: campaign.watchers,
         budget: campaign.budget,
         metrics: campaign.metrics,

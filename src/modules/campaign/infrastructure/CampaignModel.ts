@@ -8,7 +8,7 @@ const campaignSchema = new Schema(
     advertiserId: { type: String, required: true },
     adId: { type: String, required: true },
     status: { type: String, required: true },
-    promoters: { type: Array, of: String, default: [] },
+    referrals: { type: Array, of: String, default: [] },
     watchers: { type: Array, of: String, default: [] },
     budget: {
       moneyToSpend: { type: Number, default: 0 },
@@ -27,7 +27,7 @@ export interface ICampaignModel {
   advertiserId: string;
   adId: string;
   status: string;
-  promoters: string[];
+  referrals: string[];
   watchers: string[];
   budget: {
     moneyToSpend: number;
