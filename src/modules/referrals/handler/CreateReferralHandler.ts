@@ -7,12 +7,18 @@ import { CreateReferral } from "../use-case/CreateReferral";
 export class CreateReferralHandler {
   constructor(private createReferral: CreateReferral) {}
 
-  async createEmpty(params: { id: string; userId: string }): Promise<void> {
-    const uniqId = new UniqId(params.id);
-    const uniqUserId = new UniqId(params.userId);
-    const newReferral = Referral.empty({
-      id: uniqId,
-      userId: uniqUserId,
+  async create(params: {
+    id: string;
+    userId: string;
+    referral: IReferralPrimitives;
+  }): Promise<void> {
+    const newReferral = new Referral({
+      id: new UniqId(params.id),
+      userId: new UniqId(params.userId),
+      refereeBalance: new Balance(params.referral.refereeBalance),
+      referrerBalance: new Balance(params.referral.referrerBalance),
+      referees: new ReferralCounter(params.referral.referees),
+      referrers: new ReferralCounter(params.referral.referrers),
     });
     await this.createReferral.create(newReferral);
   }

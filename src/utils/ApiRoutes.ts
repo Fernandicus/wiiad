@@ -7,4 +7,5 @@ export class ApiRoutes{
     static createAd = "/api/v1/ads/create";
     static sendVerificationEmail = "/api/v1/mailing/send-email-verification";
     static addReferral = "/api/v1/referral/add";
+    static getUserReferralData = "/api/v1/referral/"
 }

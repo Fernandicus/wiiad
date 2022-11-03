@@ -14,17 +14,16 @@ import {
 } from "@/src/modules/referrals/referral-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ReferralController } from "@/src/modules/referrals/controllers/ReferralController";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
+import { ErrorFindingReferral } from "@/src/modules/referrals/domain/ErrorFindingReferral";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") return res.status(400);
+  if (req.method !== "GET") return res.status(400);
 
   try {
-    const reqBody: { referrerId: string; campaign: ICampaignPrimitives } =
-      reqBodyParse(req);
-
     const session = userSession.getFromServer({ req, res });
 
     if (!session) throw new ErrorCreatingReferral("There is no session");
@@ -32,24 +31,27 @@ export default async function handler(
     if (session?.role !== RoleType.USER)
       throw new ErrorCreatingReferral("Rol type has no permits");
 
-    if (session.role === reqBody.referrerId)
-      throw new ErrorCreatingReferral("Cant referee to yourself");
+    const referralFound = await MongoDB.connectAndDisconnect(async () => {
+      const referralFound = await findReferralHandler.byUserId(session.id);
 
-    const increasedBalance = await MongoDB.connectAndDisconnect(async () => {
-      const campaignBalance = reqBody.campaign.budget.balance;
-      const clicks = reqBody.campaign.budget.clicks;
-      const balanceToAdd = Math.floor(campaignBalance / clicks);
+      if (!referralFound) {
+        const newReferral = Referral.empty({
+          id: UniqId.new(),
+          userId: new UniqId(session.id),
+        }).toPrimitives();
 
-      await ReferralController.updateBalanceAndCounters({
-        balance: balanceToAdd,
-        refereeId: session.id,
-        referrerId: reqBody.referrerId,
-      });
+        await createReferralHandler.create({
+          id: UniqId.generate(),
+          userId: UniqId.generate(),
+          referral: newReferral,
+        });
+        return newReferral;
+      }
 
-      return balanceToAdd;
+      return referralFound;
     });
 
-    return res.status(200).json({ increasedBalance });
+    return res.status(200).json({ referral: referralFound });
   } catch (err) {
     if (err instanceof ErrorCreatingReferral)
       return res.status(401).json({ message: err.info });
