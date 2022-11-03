@@ -20,13 +20,7 @@ export class UserMongoDBRepo implements IUserRepo {
 
     if (!userModel) return null;
 
-    return {
-      id: userModel._id,
-      email: userModel.email,
-      name: userModel.name,
-      role: userModel.role,
-      bankAccount: userModel.bankAccount,
-    };
+    return this.getUserPrimitives(userModel);
   }
 
   async findByUserName(name: string): Promise<IUserPrimitives | null> {
@@ -36,12 +30,17 @@ export class UserMongoDBRepo implements IUserRepo {
 
     if (!userModel) return null;
 
+    return this.getUserPrimitives(userModel);
+  }
+
+  private getUserPrimitives(userModel: UserModelProps): IUserPrimitives {
     return {
       id: userModel._id,
       email: userModel.email,
       name: userModel.name,
       role: userModel.role,
       bankAccount: userModel.bankAccount,
+      profilePic: userModel.profilePic,
     };
   }
 }

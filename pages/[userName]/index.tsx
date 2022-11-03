@@ -151,7 +151,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           user: session,
           campaign: activeCampaign,
           ad,
-          referrer: { ...referrer },
+          referrer: {
+            email: referrer.email,
+            id: referrer.id,
+            name: referrer.name,
+            role: referrer.role,
+            profilePic: referrer.profilePic,
+          },
         } as IUserNamePage,
       };
     }

@@ -7,23 +7,16 @@ import { FindAdvertiser } from "@/src/modules/advertiser/use-case/FindAdvertiser
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
-  let advertiserPrimitives: AdvertiserPropsPrimitives;
   let advertiser: Advertiser;
 
   beforeAll(() => {
     advertiser = FakeAdvertiser.create();
-    advertiserPrimitives = {
-      id: advertiser.id.id,
-      email: advertiser.email.email,
-      name: advertiser.name.name,
-      role: advertiser.role.role,
-    };
   });
 
   it(`WHEN try to find an existing advertiser,
   THEN FindAdvertiser byEmail should return advertiser with primitives`, async () => {
     const mockRepo: AdvertiserRepo = {
-      findByEmail: jest.fn().mockResolvedValue(advertiserPrimitives),
+      findByEmail: jest.fn().mockResolvedValue(advertiser.toPrimitives()),
       findById: jest.fn(),
       save: jest.fn(),
       findByName: jest.fn(),
@@ -31,7 +24,7 @@ describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
     const findAdvertiser = new FindAdvertiser(mockRepo);
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);
     expect(mockRepo.findByEmail).toBeCalledWith(advertiser.email.email);
-    expect(advertiserFound?.toPrimitives()).toEqual(advertiserPrimitives);
+    expect(advertiserFound?.toPrimitives()).toEqual(advertiser.toPrimitives());
   });
 
   it(`WHEN try to find a non existing advertiser,

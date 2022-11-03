@@ -10,12 +10,7 @@ export class FindAdvertiserHandler {
     const mail = new Email(email);
     const advertiserFound = await this.findAdvertiser.byEmail(mail);
     if (!advertiserFound) return null;
-    return {
-      email: advertiserFound.email.email,
-      id: advertiserFound.id.id,
-      name: advertiserFound.name.name,
-      rol: advertiserFound.rol.rol,
-    };
+    return advertiserFound.toPrimitives();
   }
 
   async findByUserName(
@@ -24,11 +19,6 @@ export class FindAdvertiserHandler {
     const userName = new Name(name);
     const advertiserFound = await this.findAdvertiser.byUserName(userName);
     if (!advertiserFound) return null;
-    return {
-      email: advertiserFound.email.email,
-      id: advertiserFound.id.id,
-      name: advertiserFound.name.name,
-      rol: advertiserFound.rol.rol,
-    };
+    return advertiserFound.toPrimitives();
   }
 }

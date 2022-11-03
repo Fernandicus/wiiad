@@ -16,13 +16,7 @@ describe("On FindUser, GIVEN a user", () => {
   let findUser: FindUser;
 
   beforeAll(() => {
-    user = new User({
-      id: UniqId.new(),
-      email: new Email(faker.internet.email()),
-      name: new Name(faker.name.firstName()),
-      role: new Role(RoleType.USER),
-      bankAccount: new BankAccount("ES123123123"),
-    });
+    user = FakeUser.create(UniqId.new());
     userRepo = {
       save: jest.fn(),
       findByEmail: jest.fn().mockResolvedValue(user.toPrimitives()),

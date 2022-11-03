@@ -30,7 +30,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
         data: {
           email: valueEmail,
           userName: valueName,
-          rol: isUserRole ? RoleType.USER : RoleType.BUSINESS,
+          role: isUserRole ? RoleType.USER : RoleType.BUSINESS,
         },
       }),
     });

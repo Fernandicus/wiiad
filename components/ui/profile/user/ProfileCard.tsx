@@ -6,9 +6,6 @@ interface Props {
 }
 
 export function ProfileCard({ user, children }: Props) {
-  const imageProfileUrl =
-    "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80";
-
   return (
     <div className=" inline-flex items-center p-5 h-full space-x-5 bg-white rounded-lg shadow-lg shadow-slate-200">
       <img

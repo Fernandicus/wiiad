@@ -1,23 +1,14 @@
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { ErrorCreatingAdvertiser } from "@/src/modules/advertiser/domain/ErrorCreatingAdvertiser";
-import { Role, RoleType } from "@/src/domain/Role";
 import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
-import { UniqId } from "@/src/utils/UniqId";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser repo", () => {
   let advertiser: Advertiser;
   let advertiserRepoMock: AdvertiserRepo;
 
   beforeAll(() => {
-    advertiser = new Advertiser({
-      id: UniqId.new(),
-      name: new Name("NAME"),
-      email: new Email("test@test.com"),
-      role: new Role(RoleType.BUSINESS),
-    });
+    advertiser = FakeAdvertiser.create();
     advertiserRepoMock = {
       findById: jest.fn(),
       save: jest.fn(),

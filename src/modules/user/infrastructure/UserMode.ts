@@ -14,6 +14,10 @@ const userSchema = new Schema(
       required: true,
       min: 1,
     },
+    profilePic: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       required: true,
@@ -29,6 +33,7 @@ export interface UserModelProps {
   name: string;
   email: string;
   role: string;
+  profilePic: string;
   bankAccount?: string;
 }
 

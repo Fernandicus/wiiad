@@ -1,5 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
+import { ProfilePic } from "@/src/domain/ProfilePic";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { BankAccount } from "../domain/BankAccount";
@@ -15,6 +16,7 @@ export class CreateUserHandler {
       name: new Name(user.name),
       email: new Email(user.email),
       role: new Role(user.role),
+      profilePic: new ProfilePic(user.profilePic),
       bankAccount: user.bankAccount
         ? new BankAccount(user.bankAccount)
         : undefined,

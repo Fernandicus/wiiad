@@ -23,9 +23,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const reqBody: APISendEmailVerification = reqBodyParse(req);
-
-  const { data, isNewUser } = reqBody;
+  const { data, isNewUser }: APISendEmailVerification = reqBodyParse(req);
 
   console.log({ data, isNewUser });
 

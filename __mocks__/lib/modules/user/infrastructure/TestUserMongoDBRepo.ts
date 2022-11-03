@@ -47,6 +47,7 @@ export class TestUserMongoDBRepo
         name: user.name,
         role: user.role,
         bankAccount: user.bankAccount,
+        profilePic: user.profilePic,
       };
     });
     return users;

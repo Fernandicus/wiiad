@@ -23,8 +23,6 @@ export default function AdView(props: {
   });
 
   const { campaign, ad, referrer } = props;
-  const imageProfileUrl =
-    "https://pbs.twimg.com/profile_images/1540810647604183046/OhYhwdAi_400x400.jpg";
 
   const campaignMetrics = async () => {
     fetch(ApiRoutes.campaignMetrics, {
@@ -48,7 +46,7 @@ export default function AdView(props: {
           <div className="flex items-center w-full p-2 bg-white rounded-full shadow-lg shadow-slate-200">
             <div className="flex w-full items-center h-full space-x-5">
               <img
-                src={imageProfileUrl}
+                src={referrer.profilePic}
                 width={200}
                 height={200}
                 className="rounded-full h-14 w-14 object-cover"
