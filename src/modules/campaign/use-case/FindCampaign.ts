@@ -20,9 +20,8 @@ export class FindCampaign {
     return this.mapToCampaign(activeCampaigns);
   }
 
-  async findAllByAdvertiserId(id: UniqId): Promise<Campaign[] | null> {
+  async findAllByAdvertiserId(id: UniqId): Promise<Campaign[]> {
     const campaignsFound = await this.campaignRepo.findAllByAdvertiserId(id.id);
-    if (campaignsFound.length == 0) return null;
     return this.mapToCampaign(campaignsFound);
   }
 

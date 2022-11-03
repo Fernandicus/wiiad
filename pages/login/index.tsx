@@ -16,7 +16,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
   const myName = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState({ message: "", status: 0 });
   const [isUserRol, setRol] = useState<boolean>(true);
-  const [isNewUser, setIsNewUser] = useState<boolean>(true);
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   const sumbitNewUserForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

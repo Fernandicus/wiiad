@@ -28,21 +28,21 @@ export interface IUserNamePage {
   user: IGenericUserPrimitives;
   campaign: ICampaignPrimitives | null;
   ad: AdPropsPrimitives | null;
-  referral: IGenericUserPrimitives | null;
+  referrer: IGenericUserPrimitives | null;
 }
 
 export default function Profile({
   user,
   ad,
   campaign,
-  referral,
+  referrer,
 }: IUserNamePage) {
   const notificationHandler = useRef<RefNotifications>({
     showNotification: (data: NotificationData) => {},
   });
 
   if (ad && campaign) {
-    return <AdView campaign={campaign} ad={ad} referral={referral!} />;
+    return <AdView campaign={campaign} ad={ad} referrer={referrer!} />;
   }
 
   if (user.rol === RolType.USER) {
@@ -138,7 +138,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           props: { user: session } as IUserNamePage,
         };
 
-      const { ad, activeCampaign, referral } =
+      const { ad, activeCampaign, referrer } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
           return await WatchCampaignsController.forInfluencer(
             queryParams.userName
@@ -150,11 +150,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           user: session,
           campaign: activeCampaign,
           ad,
-          referral: {
-            email: referral.email,
-            id: referral.id,
-            name: referral.name,
-            rol: referral.rol,
+          referrer: {
+            email: referrer.email,
+            id: referrer.id,
+            name: referrer.name,
+            rol: referrer.rol,
           },
         } as IUserNamePage,
       };

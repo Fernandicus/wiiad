@@ -15,4 +15,9 @@ export class UpdateCampaignMetricsHandler {
       referralId: referralUniqId,
     });
   }
+
+  async increaseViews(campaignId: string):Promise<void>{
+    const id = new UniqId(campaignId);
+    await this.updateMetrics.increaseViews(id);
+  }
 }

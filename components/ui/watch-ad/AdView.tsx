@@ -16,29 +16,28 @@ import { ApiRoutes } from "@/src/utils/ApiRoutes";
 export default function AdView(props: {
   campaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
-  referral: IGenericUserPrimitives;
+  referrer: IGenericUserPrimitives;
 }) {
   const notificationRef = useRef<RefNotifications>({
     showNotification: (data: NotificationData) => {},
   });
 
-  const { campaign, ad, referral } = props;
+  const { campaign, ad, referrer } = props;
   const imageProfileUrl =
-    "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80";
+    "https://pbs.twimg.com/profile_images/1540810647604183046/OhYhwdAi_400x400.jpg";
 
-  const watchAd = async () => {
-    fetch(ApiRoutes.watchCampaign, {
-      method:"POST",
-      body:JSON.stringify({
-        referralId: referral.id,
+  const campaignMetrics = async () => {
+    fetch(ApiRoutes.campaignMetrics, {
+      method: "POST",
+      body: JSON.stringify({
+        referrerId: referrer.id,
         campaignId: campaign.id,
-      })
-    })
-      .then((resp) => {})
-      .catch((err) => {});
+      }),
+    });
   };
+
   useEffect(() => {
-    watchAd();
+    campaignMetrics();
   }, []);
 
   return (
@@ -56,23 +55,52 @@ export default function AdView(props: {
               ></img>
               <div className="flex items-center ">
                 <div className=" ">
-                  <p className="">{referral.name}</p>
+                  <p className="">{referrer.name}</p>
                   <p className="italic text-gray-500">
-                    wiiad.com/{referral.name}
+                    wiiad.com/{referrer.name}
                   </p>
                 </div>
               </div>
             </div>
             <button
               onClick={() => {
-                notificationRef.current.showNotification({
-                  message: "Has recibido 0.05€ !",
-                  status: 0,
-                });
+                fetch(ApiRoutes.addReferral, {
+                  method: "POST",
+                  body: JSON.stringify({
+                    referrerId: referrer.id,
+                    campaign,
+                  }),
+                })
+                  .then(async (resp) => {
+                    const respJSON = await resp.json();
+                    if (resp.status === 200) {
+                      notificationRef.current.showNotification({
+                        message: `Has recibido ${respJSON["increasedBalance"]} centimos !`,
+                        status: 0,
+                      });
+                    } else if (resp.status === 401) {
+                      notificationRef.current.showNotification({
+                        message: "Inicia sesion para recibir el pago",
+                        status: 400,
+                      });
+                    } else {
+                      notificationRef.current.showNotification({
+                        message: respJSON["message"],
+                        status: 400,
+                      });
+                    }
+                  })
+                  .catch(async (err) => {
+                    const respJSON = await err.json();
+                    notificationRef.current.showNotification({
+                      message: respJSON["message"],
+                      status: 400,
+                    });
+                  });
               }}
               className="group rounded-full bg-green-400 hover:cursor-pointer hover:bg-white flex items-center justify-center shadow-inner shadow-green-500 hover:shadow-slate-300"
             >
-              <div className="p-2.5 w-14 h-full text-white group-hover:p-1 group-hover:text-green-400">
+              <div className="p-2.5 w-14 h-full text-white group-hover:text-green-400 group-hover:transition ease-out duration-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

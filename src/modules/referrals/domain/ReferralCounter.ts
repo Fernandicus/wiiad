@@ -1,7 +1,7 @@
 import { ErrorCreatingReferral } from "./ErrorCreatingReferral";
 
 export class ReferralCounter {
-  readonly amount;
+  private amount;
 
   constructor(amount: number) {
     if (amount < 0)
@@ -13,7 +13,15 @@ export class ReferralCounter {
     return new ReferralCounter(0);
   }
 
-  increase(): number {
-    return this.amount + 1;
+  static one(): ReferralCounter {
+    return new ReferralCounter(1);
+  }
+
+  getAmount():number{
+    return this.amount;
+  }
+
+  increase(): void {
+    this.amount += 1;
   }
 }

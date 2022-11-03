@@ -44,7 +44,7 @@ export class Referral {
     this.refereeBalance = params.refereeBalance;
   }
 
-  static new(params: { id: UniqId; userId: UniqId }): Referral {
+  static empty(params: { id: UniqId; userId: UniqId }): Referral {
     return new Referral({
       id: params.id,
       userId: params.userId,
@@ -59,8 +59,8 @@ export class Referral {
     return {
       id: this.id.id,
       userId: this.userId.id,
-      referees: this.referees.amount,
-      referrers: this.referrers.amount,
+      referees: this.referees.getAmount(),
+      referrers: this.referrers.getAmount(),
       refereeBalance: this.refereeBalance.total,
       referrerBalance: this.referrerBalance.total,
     };

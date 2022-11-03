@@ -17,7 +17,7 @@ import { IUserPrimitives } from "../modules/user/domain/User";
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
-  referral: IGenericUserPrimitives;
+  referrer: IGenericUserPrimitives;
 }
 
 export class WatchCampaignsController {
@@ -33,7 +33,7 @@ export class WatchCampaignsController {
         `User profile ${influencerName} do not exist`
       );
     const campaignData = await this.randomActiveCampaign();
-    return { ...campaignData, referral: urlUserNameFound };
+    return { ...campaignData, referrer: urlUserNameFound };
   }
 
   static async randomActiveCampaign(): Promise<{

@@ -10,9 +10,8 @@ import { AdTitle } from "../domain/value-objects/AdTitle";
 export class FindAds {
   constructor(private repository: AdRepository) {}
 
-  async findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null> {
+  async findAllByAdvertiserId(id: UniqId): Promise<Ad[]> {
     const adsFound = await this.repository.findAllByAdvertiserId(id.id);
-    if (!adsFound) return null;
     return adsFound.map((ad): Ad => {
       return new Ad({
         id: new UniqId(ad.id),

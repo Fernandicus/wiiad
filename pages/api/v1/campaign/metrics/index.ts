@@ -29,15 +29,7 @@ export default async function handler(
       throw new ErrorFindingCampaign("Rol type has no permits");
 
     await MongoDB.connectAndDisconnect(async () => {
-      await campaignMetricsHandler.addWatcher({
-        campaignId: reqBody.campaignId,
-        watcherId: session.id,
-      });
-
-      await campaignMetricsHandler.addReferral({
-        campaignId: reqBody.campaignId,
-        referralId: reqBody.referralId,
-      });
+      await campaignMetricsHandler.increaseViews(reqBody.campaignId);
     });
 
     return res.status(200).json({});

@@ -1,6 +1,10 @@
+import { Balance } from "@/src/domain/Balance";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
+import {
+  CampaignBudget,
+  CampaignBudgetProps,
+} from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { NotificationData } from "../../notifications/Notifications";
 
@@ -11,10 +15,10 @@ interface Props {
 }
 
 export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
-  const budget: CampaignBudgetProps = {
-    maxClicks: 1000,
-    moneyToSpend: 50,
-  };
+  const budget = new CampaignBudget({
+    clicks: 1000,
+    balance: new Balance(5000),
+  });
 
   const deleteAd = async (id: string) => {
     try {
@@ -71,7 +75,7 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
           <div className=" flex justify-center space-x-5 rounded-md bg-sky-50 py-4">
             <div className="w-full text-center">
               <p>Visualizaciones</p>
-              <p>{campaign?.watchers.length}</p>
+              <p>{campaign.referrals.length}</p>
             </div>
             <div className="w-full text-center">
               <p>Redirecciones</p>
@@ -101,7 +105,7 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
                 : "bg-sky-500 hover:bg-sky-400 text-white"
             }   p-2 rounded-md font-medium w-full`}
             type="button"
-            onClick={campaign ? () => launchCampaign(ad) : undefined}
+            onClick={campaign ?  undefined : () => launchCampaign(ad) }
           >
             {!campaign ? (
               <span>Lanzar campaña</span>

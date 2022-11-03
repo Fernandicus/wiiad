@@ -21,7 +21,6 @@ export class FindCampaignHandler {
     const campaignsFound = await this.findCampaign.findAllByAdvertiserId(
       uniqId
     );
-    if (!campaignsFound) throw new ErrorFindingCampaign("No campaigns found");
     const campaigns = this.mapToCampaignsPrimitives(campaignsFound);
     return campaigns;
   }

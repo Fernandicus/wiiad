@@ -6,7 +6,6 @@ import { CampaignStatusType } from "../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
-
   async save(campaign: ICampaignPrimitives): Promise<void> {
     const campaignModel: HydratedDocument<ICampaignModel> =
       new CampaignModel<ICampaignModel>({
@@ -59,11 +58,15 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async increaseViews(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    await CampaignModel.findByIdAndUpdate(id, {
+      $inc: { "metrics.totalViews": 1 },
+    });
   }
 
   async increaseClicks(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    await CampaignModel.findByIdAndUpdate(id, {
+      $inc: { "metrics.totalClicks": 1 },
+    });
   }
 
   private mapToPrimitives(
