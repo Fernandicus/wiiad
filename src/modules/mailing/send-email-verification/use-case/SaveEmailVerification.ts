@@ -9,7 +9,7 @@ export class SaveEmailVerification {
       id: verificationTimer.id.id,
       email: verificationTimer.email.email,
       expirationDate: verificationTimer.expirationDate.date,
-      rol: verificationTimer.rol.rol,
+      role: verificationTimer.role.role,
     };
     await this.repository.save(verificationTimerPrimitives);
   }

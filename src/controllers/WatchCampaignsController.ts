@@ -1,18 +1,10 @@
 import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
-import { IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives, IGenericUserProps } from "../domain/IUser";
-import { RolType } from "../domain/Rol";
-import { LoginQueries } from "../domain/LoginQueries";
-import { findAdvertiserHandler } from "../modules/advertiser/advertiser-container";
-import { userSession } from "../use-case/container";
+import { IGenericUserPrimitives, IGenericUserProps } from "../domain/IGenericUser";
 import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
 import { findCampaignHandler } from "../modules/campaign/container";
 import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
 import { adFinderHandler } from "../modules/ad/ad-container";
-import { ErrorFindingAd } from "../modules/ad/domain/ErrorFindingAd";
-import { ErrorFindingCampaign } from "../modules/campaign/domain/ErrorFindingCampaign";
 import { findUserHandler } from "../modules/user/container";
-import { IUserPrimitives } from "../modules/user/domain/User";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;

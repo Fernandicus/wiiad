@@ -2,14 +2,14 @@ import { LoginQueries } from "@/src/domain/LoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { LogInController } from "@/src/controllers/LogInController";
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   IWatchCampaignData,
   WatchCampaignsController,
 } from "@/src/controllers/WatchCampaignsController";
 import AdView from "../../components/ui/watch-ad/AdView";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
@@ -45,7 +45,7 @@ export default function Profile({
     return <AdView campaign={campaign} ad={ad} referrer={referrer!} />;
   }
 
-  if (user.rol === RolType.USER) {
+  if (user.role === RoleType.USER) {
     return <UserProfile user={user} />;
   }
 
@@ -128,6 +128,7 @@ export default function Profile({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
+
   const queryParams = new LoginQueries(query);
 
   try {
@@ -154,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             email: referrer.email,
             id: referrer.id,
             name: referrer.name,
-            rol: referrer.rol,
+            role: referrer.role,
           },
         } as IUserNamePage,
       };

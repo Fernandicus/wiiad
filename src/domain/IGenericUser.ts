@@ -1,19 +1,19 @@
 import { UniqId } from "../utils/UniqId";
 import { Email } from "./Email";
 import { Name } from "./Name";
-import { Rol } from "./Rol";
+import { Role } from "./Role";
 
 export abstract class GenericUser {
   readonly id: UniqId;
   readonly name: Name;
   readonly email: Email;
-  readonly rol: Rol;
+  readonly role: Role;
 
   constructor(params: IGenericUserProps) {
     this.id = params.id;
     this.name = params.name;
     this.email = params.email;
-    this.rol = params.rol;
+    this.role = params.role;
   }
 }
 
@@ -21,12 +21,12 @@ export interface IGenericUserProps {
   id: UniqId;
   name: Name;
   email: Email;
-  rol: Rol;
+  role: Role;
 }
 
 export interface IGenericUserPrimitives {
   id: string;
   name: string;
   email: string;
-  rol: string;
+  role: string;
 }

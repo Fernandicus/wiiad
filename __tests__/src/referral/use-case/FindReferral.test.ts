@@ -1,21 +1,8 @@
-import { Balance } from "@/src/domain/Balance";
 import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
-import {
-  IReferralPrimitives,
-  Referral,
-} from "@/src/modules/referrals/domain/Referral";
-import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
-import { CreateReferral } from "@/src/modules/referrals/use-case/CreateReferral";
+import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
-import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
 import { User } from "@/src/modules/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
-import {
-  mockedReferralRepo,
-  MockReferralTestDB,
-} from "../../../../__mocks__/context/MockReferralTestDB";
-import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
-import { TestReferralMongoDBRepo } from "../../../../__mocks__/lib/modules/referral/infrastructure/TestReferralMongoDBRepo";
+import { mockedReferralRepo } from "../../../../__mocks__/context/MockReferralTestDB";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
 describe(`On FindReferral, GIVEN a User id and some Referrals in MongoDB`, () => {

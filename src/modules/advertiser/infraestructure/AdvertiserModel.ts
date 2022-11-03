@@ -14,7 +14,7 @@ const advertiserSchema = new Schema(
       required: true,
       min: 1,
     },
-    rol: {
+    role: {
       type: String,
       required: true,
       min: 1,
@@ -27,7 +27,7 @@ export interface AdvertiserModelProps {
   _id: string;
   name: string;
   email: string;
-  rol: string;
+  role: string;
 }
 
 export const AdvertiserModel = mongoose.models.Advertiser || mongoose.model("Advertiser", advertiserSchema);

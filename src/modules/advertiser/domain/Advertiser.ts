@@ -1,5 +1,5 @@
-import { RolType } from "../../../domain/Rol";
-import { GenericUser, IGenericUserProps, IGenericUserPrimitives } from "@/src/domain/IUser";
+import { RoleType } from "../../../domain/Role";
+import { GenericUser, IGenericUserProps, IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
 
 export interface AdvertiserPropsPrimitives extends IGenericUserPrimitives {}
@@ -8,15 +8,15 @@ export class Advertiser implements GenericUser{
   readonly id;
   readonly name;
   readonly email;
-  readonly rol;
+  readonly role;
 
   constructor(props: IGenericUserProps) {
-    if (props.rol.rol === RolType.USER)
-      throw new ErrorCreatingAdvertiser("Advertiser Rol is not valid");
+    if (props.role.role === RoleType.USER)
+      throw new ErrorCreatingAdvertiser("Advertiser Role is not valid");
     this.id = props.id;
     this.name = props.name;
     this.email = props.email;
-    this.rol = props.rol;
+    this.role = props.role;
   }
 
   toPrimitives(): AdvertiserPropsPrimitives {
@@ -24,7 +24,7 @@ export class Advertiser implements GenericUser{
       id: this.id.id,
       name: this.name.name,
       email: this.email.email,
-      rol: this.rol.rol,
+      role: this.role.role,
     };
   }
 }

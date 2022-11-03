@@ -4,7 +4,7 @@ import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-em
 import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { userSession } from "@/src/use-case/container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
@@ -126,7 +126,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
     expect(verificationEmailFound).toBe(null);
     expect(user.email).toBe(emailVerificationEmail);
     expect(user.name).toBe(nameVerificationEmail);
-    expect(user.rol).not.toBe(null);
+    expect(user.role).not.toBe(null);
   }, 12000);
 });
 
@@ -181,7 +181,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(userResponse.name).toEqual(myUser.name);
     expect(userResponse.id).toEqual(myUser.id);
     expect(userResponse.email).toEqual(myUser.email);
-    expect(userResponse.rol).toEqual(myUser.rol);
+    expect(userResponse.role).toEqual(myUser.role);
     expect(resp.props.campaign).toBe(undefined);
     expect(resp.props.ad).toBe(undefined);
   });
@@ -205,7 +205,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(resp.props.campaign).not.toBe(undefined);
     expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
     expect(resp.props.user.id).toBe(myUser.id);
-    expect(resp.props.referral?.id).toBe(influencer.id);
+    expect(resp.props.referrer?.id).toBe(influencer.id);
   });
 
   it(`WHEN access to a not existing influencer url,

@@ -36,7 +36,7 @@ export class TestVerificationEmailMongoDBRepo
           _id: model.id,
           email: model.email,
           expirationDate: model.expirationDate,
-          rol: model.rol,
+          role: model.role,
         };
       }
     );
@@ -56,7 +56,7 @@ export class TestVerificationEmailMongoDBRepo
       id: emailFound._id,
       email: emailFound.email,
       expirationDate: emailFound.expirationDate,
-      rol: emailFound.rol,
+      role: emailFound.role,
     };
   }
 
@@ -71,7 +71,7 @@ export class TestVerificationEmailMongoDBRepo
           id: mailFound._id,
           email: mailFound.email,
           expirationDate: mailFound.expirationDate,
-          rol: mailFound.rol,
+          role: mailFound.role,
         };
       }
     );

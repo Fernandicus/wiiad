@@ -16,7 +16,7 @@ describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
       id: advertiser.id.id,
       email: advertiser.email.email,
       name: advertiser.name.name,
-      rol: advertiser.rol.rol,
+      role: advertiser.role.role,
     };
   });
 

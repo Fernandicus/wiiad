@@ -24,7 +24,7 @@ export class UserMongoDBRepo implements IUserRepo {
       id: userModel._id,
       email: userModel.email,
       name: userModel.name,
-      rol: userModel.rol,
+      role: userModel.role,
       bankAccount: userModel.bankAccount,
     };
   }
@@ -40,7 +40,7 @@ export class UserMongoDBRepo implements IUserRepo {
       id: userModel._id,
       email: userModel.email,
       name: userModel.name,
-      rol: userModel.rol,
+      role: userModel.role,
       bankAccount: userModel.bankAccount,
     };
   }

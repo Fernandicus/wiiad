@@ -20,7 +20,7 @@ export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
       id: model._id,
       email: model.email,
       expirationDate: model.expirationDate,
-      rol: model.rol,
+      role: model.role,
     };
   }
 

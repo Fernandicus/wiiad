@@ -29,7 +29,7 @@ export class TestAdvertiserMongoDBRepo
           _id: advertiser.id,
           email: advertiser.email,
           name: advertiser.name,
-          rol: advertiser.rol,
+          role: advertiser.role,
         };
       }
     );
@@ -46,7 +46,7 @@ export class TestAdvertiserMongoDBRepo
           id: advertiser._id,
           email: advertiser.email,
           name: advertiser.name,
-          rol: advertiser.rol,
+          role: advertiser.role,
         };
       }
     );

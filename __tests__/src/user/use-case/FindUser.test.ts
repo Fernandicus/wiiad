@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Rol, RolType } from "@/src/domain/Rol";
+import { Role, RoleType } from "@/src/domain/Role";
 import { BankAccount } from "@/src/modules/user/domain/BankAccount";
 import { IUserRepo } from "@/src/modules/user/domain/IUserRepo";
 import { User } from "@/src/modules/user/domain/User";
@@ -20,7 +20,7 @@ describe("On FindUser, GIVEN a user", () => {
       id: UniqId.new(),
       email: new Email(faker.internet.email()),
       name: new Name(faker.name.firstName()),
-      rol: new Rol(RolType.USER),
+      role: new Role(RoleType.USER),
       bankAccount: new BankAccount("ES123123123"),
     });
     userRepo = {

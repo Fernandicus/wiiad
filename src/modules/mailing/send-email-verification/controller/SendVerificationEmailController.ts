@@ -1,4 +1,4 @@
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { findUserHandler } from "@/src/modules/user/container";
 import { UniqId } from "@/src/utils/UniqId";
@@ -31,7 +31,7 @@ export class SendVerificationEmailController {
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
-      rol: data.rol,
+      role: data.role,
     });
   }
 
@@ -46,14 +46,14 @@ export class SendVerificationEmailController {
     await verificationEmailHandler.saveWithExpirationIn5min({
       email: userFoundByEmail.email,
       id,
-      rol: userFoundByEmail.rol,
+      role: userFoundByEmail.role,
     });
 
     await this.send({
       email: userFoundByEmail.email,
       verificationEmailId: id,
       name: userFoundByEmail.name,
-      rol: userFoundByEmail.rol,
+      role: userFoundByEmail.role,
     });
   }
 
@@ -79,7 +79,7 @@ export class SendVerificationEmailController {
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
-      rol: data.rol,
+      role: data.role,
     });
   }
 
@@ -97,21 +97,21 @@ export class SendVerificationEmailController {
       email: advertiserFoundByEmail.email,
       verificationEmailId: id,
       name: advertiserFoundByEmail.name,
-      rol: advertiserFoundByEmail.rol,
+      role: advertiserFoundByEmail.role,
     });
   }
 
   private static async send(params: {
     email: string;
     name: string;
-    rol: string;
+    role: string;
     verificationEmailId: string;
   }): Promise<void> {
-    const { email, verificationEmailId, name, rol } = params;
+    const { email, verificationEmailId, name, role } = params;
     await verificationEmailHandler.saveWithExpirationIn5min({
       email,
       id: verificationEmailId,
-      rol,
+      role,
     });
 
     await sendEmailHandler.send({

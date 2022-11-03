@@ -1,5 +1,5 @@
 import { ProfileCard } from "../../../components/ui/profile/user/ProfileCard";
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import Link from "next/link";

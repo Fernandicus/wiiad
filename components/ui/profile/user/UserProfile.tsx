@@ -1,4 +1,4 @@
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { useEffect, useState } from "react";
 import { DataCard } from "./DataCard";

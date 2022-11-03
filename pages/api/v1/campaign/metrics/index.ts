@@ -1,13 +1,12 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { FindAdController } from "@/src/modules/ad/controller/FindAdController";
 import {
   campaignMetricsHandler,
   findCampaignHandler,
 } from "@/src/modules/campaign/container";
 import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/ErrorFindingCampaign";
 import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
 
@@ -25,8 +24,8 @@ export default async function handler(
 
     if (!session) throw new ErrorFindingCampaign("There is no session");
 
-    if (session?.rol !== RolType.USER)
-      throw new ErrorFindingCampaign("Rol type has no permits");
+    if (session?.role !== RoleType.USER)
+      throw new ErrorFindingCampaign("Role type has no permits");
 
     await MongoDB.connectAndDisconnect(async () => {
       await campaignMetricsHandler.increaseViews(reqBody.campaignId);

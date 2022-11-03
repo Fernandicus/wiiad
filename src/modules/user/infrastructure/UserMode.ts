@@ -14,7 +14,7 @@ const userSchema = new Schema(
       required: true,
       min: 1,
     },
-    rol: {
+    role: {
       type: String,
       required: true,
       min: 1,
@@ -28,7 +28,7 @@ export interface UserModelProps {
   _id: string;
   name: string;
   email: string;
-  rol: string;
+  role: string;
   bankAccount?: string;
 }
 

@@ -1,4 +1,4 @@
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { TestVerificationEmailRepo } from "../../__mocks__/lib/modules/send-email-verification/domain/TestVerificationEmailRepo";
 import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
@@ -71,12 +71,12 @@ export class MockVerificationEmailDB {
   } {
     const expiredEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
       expiredAmount,
-      RolType.BUSINESS,
+      RoleType.BUSINESS,
       true
     );
     const validEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
       validAmount,
-      RolType.BUSINESS,
+      RoleType.BUSINESS,
       false
     );
     return {

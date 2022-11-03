@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Rol } from "@/src/domain/Rol";
+import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { BankAccount } from "../domain/BankAccount";
 import { IUserPrimitives, User } from "../domain/User";
@@ -14,7 +14,7 @@ export class CreateUserHandler {
       id: new UniqId(user.id),
       name: new Name(user.name),
       email: new Email(user.email),
-      rol: new Rol(user.rol),
+      role: new Role(user.role),
       bankAccount: user.bankAccount
         ? new BankAccount(user.bankAccount)
         : undefined,

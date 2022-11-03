@@ -1,4 +1,4 @@
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";

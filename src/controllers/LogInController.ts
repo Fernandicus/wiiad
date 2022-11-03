@@ -4,8 +4,8 @@ import {
 } from "../modules/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
 import { IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/IUser";
-import { RolType } from "../domain/Rol";
+import { IGenericUserPrimitives } from "../domain/IGenericUser";
+import { RoleType } from "../domain/Role";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
@@ -17,7 +17,7 @@ import { IUserPrimitives } from "../modules/user/domain/User";
 
 interface UserData {
   queries: LogInQueries;
-  rol: string;
+  role: string;
 }
 
 interface LogInQueries {
@@ -35,20 +35,23 @@ export class LogInController {
       loginQueries.token,
       loginQueries.email
     );
-
-    if (verificationEmail.rol !== RolType.USER) {
+    
+    if (verificationEmail.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn({
         queries: loginQueries,
-        rol: verificationEmail.rol,
+        role: verificationEmail.role,
       });
+      
       this.userInitSession(context, advertiser);
       return advertiser;
     } else {
       const user = await this.userLogIn({
         queries: loginQueries,
-        rol: verificationEmail.rol,
+        role: verificationEmail.role,
       });
+
       this.userInitSession(context, user);
+
       return user;
     }
   }
@@ -75,7 +78,7 @@ export class LogInController {
         email: data.queries.email,
         name: data.queries.userName,
         id: advertiserId,
-        rol: data.rol,
+        role: data.role,
       });
     } else {
       advertiserId = advertiserFound.id;
@@ -87,7 +90,7 @@ export class LogInController {
       id: advertiserId,
       email: data.queries.email,
       name: data.queries.userName,
-      rol: data.rol,
+      role: data.role,
     };
   }
 
@@ -109,7 +112,7 @@ export class LogInController {
         email: data.queries.email,
         name: data.queries.userName,
         id: userId,
-        rol: data.rol,
+        role: data.role,
       });
     } else {
       userId = userFound.id;
@@ -121,7 +124,7 @@ export class LogInController {
       id: userId,
       email: data.queries.email,
       name: data.queries.userName,
-      rol: data.rol,
+      role: data.role,
     };
   }
 

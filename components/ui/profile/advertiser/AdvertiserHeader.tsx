@@ -1,5 +1,5 @@
 import { DataCardButton } from "../user/DataCardButton";
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { DataCard } from "../user/DataCard";
 import { ProfileCard } from "../user/ProfileCard";
 

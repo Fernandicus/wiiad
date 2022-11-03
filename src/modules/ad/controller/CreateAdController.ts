@@ -1,7 +1,7 @@
 import { userSession } from "@/src/use-case/container";
 import { IReqAndRes } from "@/src/domain/IAuthCookies";
 import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { adCreatorHandler } from "../ad-container";
 import { AdPropsPrimitives } from "../domain/Ad";
 
@@ -15,9 +15,9 @@ export class CreateAdController {
     const session = userSession.getFromServer(context);
 
     if (!session) throw new ErrorCreatingAd("No auth");
-    if (session.rol === RolType.USER)
+    if (session.role === RoleType.USER)
       throw new ErrorCreatingAd(
-        `This rol cant do this operation ${session.rol}`
+        `This rol cant do this operation ${session.role}`
       );
 
     await adCreatorHandler.create(adProps, session.id, adId);

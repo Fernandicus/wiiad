@@ -24,7 +24,7 @@ describe("On SaveEmailVerification, GIVEN a VerificationURLRepo and a Verificati
       email: emailTimer.email.email,
       expirationDate: emailTimer.expirationDate.date,
       id: emailTimer.id.id,
-      rol: emailTimer.rol.rol
+      role: emailTimer.role.role
     };
     expect(verificationURLRepo.save).toBeCalledWith(
       emailTimerPrimitives

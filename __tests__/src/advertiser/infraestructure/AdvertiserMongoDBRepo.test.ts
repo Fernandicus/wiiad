@@ -1,5 +1,5 @@
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
@@ -12,7 +12,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
 
   beforeAll(async () => {
     await mockedAdvertiserRepo();
-    advertiser = FakeAdvertiser.createPrimitives(RolType.BUSINESS);
+    advertiser = FakeAdvertiser.createPrimitives(RoleType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);
 
@@ -21,14 +21,14 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
     const advertiserFound = await AdvertiserModel.findById(advertiser.id);
     expect(advertiserFound?.name).toBe(advertiser.name);
     expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.rol).toBe(advertiser.rol);
+    expect(advertiserFound?.role).toBe(advertiser.role);
   }, 8000);
 
   it("WHEN call advertiser repository findById method, THEN return the saved advertiser in MongoDB", async () => {
     const advertiserFound = await advertiserRepo.findById(advertiser.id);
     expect(advertiserFound?.name).toBe(advertiser.name);
     expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.rol).toBe(advertiser.rol);
+    expect(advertiserFound?.role).toBe(advertiser.role);
   }, 8000);
 
   it("WHEN call findById with a non existing ID, THEN return null", async () => {
@@ -41,7 +41,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
     const advertiserFound = await advertiserRepo.findByEmail(advertiser.email);
     expect(advertiserFound?.name).toBe(advertiser.name);
     expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.rol).toBe(advertiser.rol);
+    expect(advertiserFound?.role).toBe(advertiser.role);
   }, 8000);
 
   it(`WHEN call advertiser repository findByEmail method for a non existing advertiser email, 

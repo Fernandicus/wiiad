@@ -17,7 +17,7 @@ export class ValidateEmailHandler {
       id: validatedEmail.id,
       email: validatedEmail.email,
       expirationDate: validatedEmail.expirationDate,
-      rol: validatedEmail.rol,
+      role: validatedEmail.role,
     };
   }
 }

@@ -2,37 +2,37 @@ import {
   Advertiser,
   AdvertiserPropsPrimitives,
 } from "@/src/modules/advertiser/domain/Advertiser";
-import { Rol, RolType } from "@/src/domain/Rol";
+import { Role, RoleType } from "@/src/domain/Role";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-import { IGenericUserProps } from "@/src/domain/IUser";
+import { IGenericUserProps } from "@/src/domain/IGenericUser";
 
 export class FakeAdvertiser extends Advertiser {
   constructor(props: IGenericUserProps) {
     super(props);
   }
 
-  static create(rol = RolType.BUSINESS): FakeAdvertiser {
+  static create(role = RoleType.BUSINESS): FakeAdvertiser {
     const primaryData = this.generateFakeData();
     const advertiser = this.generateAdvertiser({
       ...primaryData,
-      rol,
+      role,
     });
     return new FakeAdvertiser({ ...advertiser });
   }
 
-  static createPrimitives(rol = RolType.BUSINESS): AdvertiserPropsPrimitives {
+  static createPrimitives(role = RoleType.BUSINESS): AdvertiserPropsPrimitives {
     const primaryData = this.generateFakeData();
     return {
       ...primaryData,
-      rol,
+      role,
     };
   }
 
   static createManyWithPrimitives(
-    rol = RolType.BUSINESS,
+    rol = RoleType.BUSINESS,
     amount = 5
   ): AdvertiserPropsPrimitives[] {
     let advertisers: AdvertiserPropsPrimitives[] = [];
@@ -62,7 +62,7 @@ export class FakeAdvertiser extends Advertiser {
       id: new UniqId(primitives.id),
       email: new Email(primitives.email),
       name: new Name(primitives.name),
-      rol: new Rol(primitives.rol),
+      role: new Role(primitives.role),
     });
   }
 }

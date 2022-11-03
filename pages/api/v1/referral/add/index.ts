@@ -1,23 +1,12 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { FindAdController } from "@/src/modules/ad/controller/FindAdController";
-import {
-  campaignMetricsHandler,
-  findCampaignHandler,
-} from "@/src/modules/campaign/container";
+
 import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
-import { RolType } from "@/src/domain/Rol";
-import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/ErrorFindingCampaign";
-import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
-import { CreateReferral } from "@/src/modules/referrals/use-case/CreateReferral";
-import { ReferralMongoDBRepo } from "@/src/modules/referrals/infrastructure/ReferralMongoDBRepo";
-import { Referral } from "@/src/modules/referrals/domain/Referral";
-import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
+import { RoleType } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/ErrorCreatingReferral";
-import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
-import { Balance } from "@/src/domain/Balance";
+
 import {
   createReferralHandler,
   findReferralHandler,
@@ -39,10 +28,10 @@ export default async function handler(
 
     if (!session) throw new ErrorCreatingReferral("There is no session");
 
-    if (session?.rol !== RolType.USER)
+    if (session?.role !== RoleType.USER)
       throw new ErrorCreatingReferral("Rol type has no permits");
 
-    if (session.rol === reqBody.referrerId)
+    if (session.role === reqBody.referrerId)
       throw new ErrorCreatingReferral("Cant referee to yourself");
 
     const increasedBalance = await MongoDB.connectAndDisconnect(async () => {

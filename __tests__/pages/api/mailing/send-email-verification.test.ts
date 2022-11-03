@@ -1,7 +1,7 @@
 import sendEmailVerification from "@/pages/api/v1/mailing/send-email-verification";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { MockContext } from "../../../../__mocks__/context/MockContext";
 import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
 import { mockedVerificationEmailRepo } from "../../../../__mocks__/context/MockVerificationEmailDB";
@@ -15,7 +15,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
     user = {
       email: faker.internet.email(),
       userName: faker.name.firstName(),
-      rol: RolType.USER,
+      role: RoleType.USER,
     };
   }, 8000);
 

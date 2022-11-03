@@ -1,6 +1,6 @@
 import CreateAdForm from "../../../components/ui/profile/CreateAdForm";
-import { IGenericUserPrimitives } from "@/src/domain/IUser";
-import { RolType } from "@/src/domain/Rol";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { RoleType } from "@/src/domain/Role";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
@@ -67,7 +67,7 @@ export default function Ads(
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const session = userSession.getFromServer(context);
-    if (!session || session.rol === RolType.USER)
+    if (!session || session.role === RoleType.USER)
       throw new Error("The session do not have access");
 
     const { ads, campaigns } = await MongoDB.connectAndDisconnect(async () => {

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import styles from "@/pages/index.module.css";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
@@ -15,7 +15,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
   const myEmail = useRef<HTMLInputElement>(null);
   const myName = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState({ message: "", status: 0 });
-  const [isUserRol, setRol] = useState<boolean>(true);
+  const [isUserRole, setRole] = useState<boolean>(true);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   const sumbitNewUserForm = async (e: FormEvent<HTMLFormElement>) => {
@@ -30,7 +30,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
         data: {
           email: valueEmail,
           userName: valueName,
-          rol: isUserRol ? RolType.USER : RolType.BUSINESS,
+          rol: isUserRole ? RoleType.USER : RoleType.BUSINESS,
         },
       }),
     });
@@ -68,7 +68,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
         <div className="space-y-20 w-full">
           <div className="border  rounded-lg p-14 space-y-10 bg-white shadow-2xl shadow-slate-200">
             <h1 className="text-center text-2xl font-bold text-gray-700">
-              {isUserRol ? (
+              {isUserRole ? (
                 <span>
                   Bienvenido a <span className="text-sky-500">WiiAd</span>
                 </span>
@@ -85,13 +85,13 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                   {isNewUser ? (
                     <div className="space-y-2 mb-4">
                       <label htmlFor="myName">
-                        {isUserRol ? `Elige tu mote!` : "El nombre de tu marca"}
+                        {isUserRole ? `Elige tu mote!` : "El nombre de tu marca"}
                       </label>
                       <input
                         ref={myName}
                         type="text"
                         placeholder={
-                          isUserRol ? `Paquito_Chocolatero` : "Coca-Cola"
+                          isUserRole ? `Paquito_Chocolatero` : "Coca-Cola"
                         }
                         className="border border-gray-300 rounded-md px-2 block w-full h-10"
                         required={isNewUser ? true : undefined}
@@ -106,7 +106,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                       ref={myEmail}
                       type="email"
                       placeholder={
-                        isUserRol
+                        isUserRole
                           ? `paco_jimenez@email.com`
                           : "info@coca-cola.com"
                       }
@@ -165,11 +165,11 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
               className=" text-sky-500"
               type="button"
               onClick={() => {
-                console.log("USER ROL ", isUserRol);
-                setRol(!isUserRol);
+                console.log("USER ROLE ", isUserRole);
+                setRole(!isUserRole);
               }}
             >
-              {isUserRol ? (
+              {isUserRole ? (
                 <p>
                   <span className=" text-lg">🙀 </span>Quiero anunciarme!
                 </p>

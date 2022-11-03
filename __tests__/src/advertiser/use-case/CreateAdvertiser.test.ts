@@ -1,6 +1,6 @@
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { ErrorCreatingAdvertiser } from "@/src/modules/advertiser/domain/ErrorCreatingAdvertiser";
-import { Rol, RolType } from "@/src/domain/Rol";
+import { Role, RoleType } from "@/src/domain/Role";
 import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
 import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
 import { Email } from "@/src/domain/Email";
@@ -16,7 +16,7 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
       id: UniqId.new(),
       name: new Name("NAME"),
       email: new Email("test@test.com"),
-      rol: new Rol(RolType.BUSINESS),
+      role: new Role(RoleType.BUSINESS),
     });
     advertiserRepoMock = {
       findById: jest.fn(),

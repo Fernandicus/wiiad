@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Rol } from "@/src/domain/Rol";
+import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { BankAccount } from "../domain/BankAccount";
 import { IUserRepo } from "../domain/IUserRepo";
@@ -16,7 +16,7 @@ export class FindUser {
       email: new Email(userFound.email),
       id: new UniqId(userFound.id),
       name: new Name(userFound.name),
-      rol: new Rol(userFound.rol),
+      role: new Role(userFound.role),
       bankAccount: userFound.bankAccount
         ? new BankAccount(userFound.bankAccount!)
         : undefined,
@@ -30,7 +30,7 @@ export class FindUser {
       email: new Email(userFound.email),
       id: new UniqId(userFound.id),
       name: new Name(userFound.name),
-      rol: new Rol(userFound.rol),
+      role: new Role(userFound.role),
       bankAccount: userFound.bankAccount
         ? new BankAccount(userFound.bankAccount!)
         : undefined,

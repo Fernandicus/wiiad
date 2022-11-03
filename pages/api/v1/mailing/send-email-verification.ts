@@ -9,7 +9,7 @@ import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
 import { ErrorCreatingUser } from "@/src/modules/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/utils";
-import { RolType } from "@/src/domain/Rol";
+import { RoleType } from "@/src/domain/Role";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export interface APISendEmailVerification {
@@ -31,7 +31,7 @@ export default async function handler(
 
   try {
     await MongoDB.connectAndDisconnect(async () => {
-      if (data.rol === RolType.USER) {
+      if (data.role === RoleType.USER) {
         if (isNewUser) {
           await SendVerificationEmailController.sendToNewUser(
             data,

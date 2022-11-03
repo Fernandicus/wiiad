@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { Rol, RolType } from "@/src/domain/Rol";
+import { Role, RoleType } from "@/src/domain/Role";
 import { BankAccount } from "@/src/modules/user/domain/BankAccount";
 import {
   IUserPrimitives,
@@ -21,7 +21,7 @@ export class FakeUser extends User {
       id,
       email: new Email(userPrimitives.email),
       name: new Name(userPrimitives.name),
-      rol: new Rol(userPrimitives.rol),
+      role: new Role(userPrimitives.role),
       bankAccount: new BankAccount(userPrimitives.bankAccount!),
     });
   }
@@ -55,7 +55,7 @@ export class FakeUser extends User {
       id,
       email: faker.internet.email(),
       name: faker.name.firstName(),
-      rol: RolType.USER,
+      role: RoleType.USER,
       bankAccount: `ES${Math.floor(Math.random() * 1000000)}`,
     };
   }
