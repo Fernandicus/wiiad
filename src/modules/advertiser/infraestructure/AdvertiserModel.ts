@@ -19,6 +19,10 @@ const advertiserSchema = new Schema(
       required: true,
       min: 1,
     },
+    profilePic: {
+      type: String,
+      required: true,
+    },
   },
   { _id: false }
 );
@@ -28,6 +32,7 @@ export interface AdvertiserModelProps {
   name: string;
   email: string;
   role: string;
+  profilePic: string;
 }
 
 export const AdvertiserModel = mongoose.models.Advertiser || mongoose.model("Advertiser", advertiserSchema);

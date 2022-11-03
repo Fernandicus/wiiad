@@ -8,6 +8,7 @@ import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { IGenericUserProps } from "@/src/domain/IGenericUser";
+import { ProfilePic } from "@/src/domain/ProfilePic";
 
 export class FakeAdvertiser extends Advertiser {
   constructor(props: IGenericUserProps) {
@@ -47,22 +48,26 @@ export class FakeAdvertiser extends Advertiser {
     email: string;
     name: string;
     id: string;
+    profilePic:string;
   } {
     return {
       email: faker.internet.email(),
       name: faker.company.name(),
       id: UniqId.generate(),
+      profilePic: ProfilePic.defaultAdvertiserPic,
     };
   }
 
   private static generateAdvertiser(
     primitives: AdvertiserPropsPrimitives
   ): Advertiser {
+  
     return new Advertiser({
       id: new UniqId(primitives.id),
       email: new Email(primitives.email),
       name: new Name(primitives.name),
       role: new Role(primitives.role),
+      profilePic: ProfilePic.withDefaultAdvertiserPic(),
     });
   }
 }

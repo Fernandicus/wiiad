@@ -12,7 +12,7 @@ export function ProfileCard({ user, children }: Props) {
   return (
     <div className=" inline-flex items-center p-5 h-full space-x-5 bg-white rounded-lg shadow-lg shadow-slate-200">
       <img
-        src={imageProfileUrl}
+        src={user.profilePic}
         width={200}
         height={200}
         className="rounded-full h-20 w-20 object-cover"

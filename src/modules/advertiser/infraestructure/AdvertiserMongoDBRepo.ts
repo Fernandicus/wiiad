@@ -37,6 +37,7 @@ export class AdvertiserMongoDBRepo implements AdvertiserRepo {
       name: advertiser.name,
       email: advertiser.email,
       role: advertiser.role,
+      profilePic: advertiser.profilePic
     };
   }
 }

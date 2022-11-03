@@ -30,6 +30,7 @@ export class TestAdvertiserMongoDBRepo
           email: advertiser.email,
           name: advertiser.name,
           role: advertiser.role,
+          profilePic: advertiser.profilePic,
         };
       }
     );
@@ -47,6 +48,7 @@ export class TestAdvertiserMongoDBRepo
           email: advertiser.email,
           name: advertiser.name,
           role: advertiser.role,
+          profilePic: advertiser.profilePic,
         };
       }
     );
