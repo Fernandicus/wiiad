@@ -35,23 +35,29 @@ export function AdsList({ ads, createAd, handleResponse, campaigns }: Props) {
           </svg>
         </button>
       </div>
-      <div className="w-full flex justify-center">
-        <ul className="py-5 space-y-5  w-full max-w-md ">
-          {ads.map((ad) => {
-            const campaign = campaigns.find(
-              (campaign) => campaign.adId == ad.id
-            );
-            return (
-              <li key={ad.id} className="flex justify-center">
-                <AdCard
-                  ad={ad}
-                  handleResponse={handleResponse}
-                  campaign={!campaign ? null : campaign}
-                />
-              </li>
-            );
-          })}
-        </ul>
+      <div className="py-20 w-full inline-flex justify-center">
+        <div
+          className={` grid grid-cols-${
+            ads.length > 4 ? "4" : ads.length.toString()
+          }`}
+        >
+          <div className=" flex rounded-md  py-3 justify-between">
+            {ads.map((ad) => {
+              const campaign = campaigns.find(
+                (campaign) => campaign.adId == ad.id
+              );
+              return (
+                <div key={ad.id} className="p-5 w-96">
+                  <AdCard
+                    ad={ad}
+                    handleResponse={handleResponse}
+                    campaign={!campaign ? null : campaign}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

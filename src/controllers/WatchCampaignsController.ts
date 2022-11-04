@@ -1,7 +1,7 @@
 import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
 import { IGenericUserPrimitives, IGenericUserProps } from "../domain/IGenericUser";
 import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
-import { findCampaignHandler } from "../modules/campaign/container";
+import { campaignMetricsHandler, findCampaignHandler } from "../modules/campaign/container";
 import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
 import { adFinderHandler } from "../modules/ad/ad-container";
 import { findUserHandler } from "../modules/user/container";
@@ -34,6 +34,7 @@ export class WatchCampaignsController {
   }> {
     const activeCampaigns = await findCampaignHandler.allActives();
     const randomCampaign = this.randomCampaign(activeCampaigns);
+    campaignMetricsHandler.increaseViews(randomCampaign.id);
     const ad = await adFinderHandler.findByAdId(randomCampaign.adId);
     return {
       activeCampaign: randomCampaign,

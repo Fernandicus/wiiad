@@ -1,7 +1,9 @@
+import { Logout } from "../../login/Logout";
 import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { RoleType } from "@/src/domain/Role";
 import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DataCard } from "./DataCard";
 import { ProfileCard } from "./ProfileCard";
@@ -21,14 +23,14 @@ export function UserProfile({ user }: Props) {
       if (resp.status === 200) {
         const respJSON = await resp.json();
         console.log(respJSON);
-      
+
         setReferrers(respJSON["referral"]["referrers"]);
         const referrerBalance = respJSON["referral"]["referrerBalance"];
         const refereeBalance = respJSON["referral"]["refereeBalance"];
         const total = referrerBalance + refereeBalance;
         setBalance(total);
         const campaignsWatched = respJSON["referral"]["referees"];
-        setCampaignsWatched(campaignsWatched)
+        setCampaignsWatched(campaignsWatched);
       }
     });
   };
@@ -39,6 +41,7 @@ export function UserProfile({ user }: Props) {
 
   return (
     <div className=" bg-slate-100 h-screen p-10 w-full ">
+      <Logout />
       <div className="flex justify-center h-full items-center">
         <div className="h-28 space-x-4 inline-flex items-center">
           <ProfileCard user={user} />
@@ -50,7 +53,10 @@ export function UserProfile({ user }: Props) {
             title="Anuncios vistos"
             data={totalReferrers ? totalReferrers.toString() : "0"}
           />
-          <DataCard title="Clicks en tus enlaces" data={campaignsWatched ? campaignsWatched.toString() : "0"} />
+          <DataCard
+            title="Clicks en tus enlaces"
+            data={campaignsWatched ? campaignsWatched.toString() : "0"}
+          />
         </div>
       </div>
     </div>

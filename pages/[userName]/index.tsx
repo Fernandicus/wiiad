@@ -23,6 +23,7 @@ import {
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
+import { Logout } from "../../components/ui/login/Logout";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -115,6 +116,7 @@ export default function Profile({
   return (
     <div>
       <Notifications ref={notificationHandler} />
+      <Logout />
       <main className="h-screen bg-slate-100 p-10 w-full ">
         <AdvertiserHeader
           user={user}

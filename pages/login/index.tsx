@@ -7,7 +7,7 @@ import { RoleType } from "@/src/domain/Role";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { APISendEmailVerification } from "../api/v1/mailing/send-email-verification";
+import { APISendEmailVerification } from "../api/v1/auth/login";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { Notifications } from "../../components/ui/notifications/Notifications";
 
@@ -23,7 +23,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
     const valueEmail = myEmail.current?.value;
     const valueName = myName.current?.value;
 
-    const resp = await fetch(ApiRoutes.sendVerificationEmail, {
+    const resp = await fetch(ApiRoutes.login, {
       method: "POST",
       body: JSON.stringify({
         isNewUser,
@@ -171,7 +171,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
             >
               {isUserRole ? (
                 <p>
-                  <span className=" text-lg">🙀 </span>Quiero anunciarme!
+                  <span className=" text-lg">📢 </span>Quiero anunciarme!
                 </p>
               ) : (
                 `Soy influencer!`
