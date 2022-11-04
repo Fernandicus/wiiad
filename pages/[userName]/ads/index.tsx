@@ -34,7 +34,7 @@ export default function Ads(
   });
 
   return (
-    <main className="h-screen bg-slate-100">
+    <main className="min-h-screen bg-slate-100 w-full flex justify-center">
       <Notifications ref={notificationsRef} />
       {!createAd && (
         <div className="w-full">

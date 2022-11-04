@@ -14,7 +14,7 @@ export default function CampaignsPage(props: {
   ads: AdPropsPrimitives[];
 }) {
   return (
-    <div className="h-screen bg-slate-100 p-10">
+    <div className="min-h-screen bg-slate-100 p-10">
       <div className="flex justify-center space-x-3">
         <h1 className="font-bold text-center">Estas son tus campañas</h1>
       </div>
@@ -30,7 +30,6 @@ export default function CampaignsPage(props: {
               return (
                 <div key={campaign.id} className="p-5 w-80 ">
                   <AdCardItem image={ad!.image}>
-                    <p>{campaign.id}</p>
                     <div className=" w-full  inline-flex justify-between ">
                       <p className="text-lg font-semibold">{ad!.title}</p>
                       <button

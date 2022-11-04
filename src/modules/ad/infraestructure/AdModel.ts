@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { AdConstants } from "../ad-constants";
+import { AdDescription } from "../domain/value-objects/AdDescription";
+import { AdTitle } from "../domain/value-objects/AdTitle";
 const { Schema } = mongoose;
 
 const adSchema = new Schema(
@@ -10,13 +11,13 @@ const adSchema = new Schema(
       type: String,
       required: true,
       min: 1,
-      max: AdConstants.titleMaxLength,
+      max: AdTitle.maxLength,
     },
     description: {
       type: String,
       required: true,
       min: 1,
-      max: AdConstants.titleMaxLength,
+      max: AdDescription.maxLength,
     },
     image: { type: String, required: true },
     redirectionUrl: { type: String, required: true },

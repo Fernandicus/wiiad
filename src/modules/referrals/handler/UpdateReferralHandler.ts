@@ -22,4 +22,9 @@ export class UpdateReferralHandler {
     const balance = new Balance(balanceToAdd);
     await this.update.increaseRefereeBalance(uniqUserId, balance);
   }
+
+  async increaseWatchedAds(refereeId:string):Promise<void>{
+    const userId = new UniqId(refereeId);
+    await this.update.increaseWatchedAds(userId)
+  }
 }

@@ -4,7 +4,6 @@ import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedire
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { Ad, AdProps, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { faker } from "@faker-js/faker";
-import { AdConstants } from "@/src/modules/ad/ad-constants";
 import {
   AdSegments,
   AdSegmentType,
@@ -92,10 +91,10 @@ export class FakeAd extends Ad {
   private static generateFakeAdData(): AdPropsPrimitives {
     const title = faker.commerce
       .productName()
-      .substring(0, AdConstants.titleMaxLength);
+      .substring(0, AdTitle.maxLength);
     const description = faker.commerce
       .productDescription()
-      .substring(0, AdConstants.descriptionMaxLength);
+      .substring(0, AdDescription.maxLength);
     const image = faker.image.avatar();
     const redirectionUrl = faker.internet.url();
     const advertiserId = faker.random.numeric(10);

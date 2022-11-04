@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
@@ -11,18 +12,21 @@ export function SelectImage({ onSelectImage, imagePreview }: Props) {
   return (
     <div className="space-y-5">
       <label className="font-bold">
-        Sube una imagen <span className="text-sm text-gray-500 font-medium">(aspect ratio 2:4)</span>
+        Sube una imagen{" "}
+        <span className="text-sm text-gray-500 font-medium">
+          576x324 [16:9]
+        </span>
       </label>
       <div>
         {imagePreview ? (
           <img
             src={imagePreview.toString()}
             alt="alt"
-            className=" h-64 w-full object-cover bg-white/70 rounded-lg"
+            className="w-[576px] h-[324px] object-cover  bg-white rounded-lg"
           ></img>
         ) : (
           <img
-            className="h-64 w-full object-cover bg-white/70 rounded-lg"
+            className="w-[576px] h-[324px] object-cover bg-white rounded-lg"
             src="https://images.unsplash.com/photo-1591254460606-fab865bf82b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2232&q=80"
           ></img>
         )}

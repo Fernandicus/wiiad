@@ -4,6 +4,7 @@ import { ErrorCreatingAd } from "../domain/ErrorCreatingAd";
 import { RoleType } from "@/src/domain/Role";
 import { adCreatorHandler } from "../ad-container";
 import { AdPropsPrimitives } from "../domain/Ad";
+import { uploadFileHandler } from "@/src/utils/generic-container";
 
 export class CreateAdController {
   static async create(props: {
@@ -11,7 +12,7 @@ export class CreateAdController {
     adProps: AdPropsPrimitives;
     adId: string;
   }): Promise<void> {
-    const {adId, adProps, context} = props;
+    const { adId, adProps, context } = props;
     const session = userSession.getFromServer(context);
 
     if (!session) throw new ErrorCreatingAd("No auth");
@@ -20,6 +21,15 @@ export class CreateAdController {
         `This rol cant do this operation ${session.role}`
       );
 
-    await adCreatorHandler.create(adProps, session.id, adId);
+    const imageUrl = await uploadFileHandler.advertiseImage({
+      file: adProps.image,
+      advertiserName: session.name,
+    });
+
+    await adCreatorHandler.create({
+      adProps: { ...adProps, image: imageUrl },
+      advertiserId: session.id,
+      adId,
+    });
   }
 }

@@ -144,7 +144,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const { ad, activeCampaign, referrer } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
           return await WatchCampaignsController.forInfluencer(
-            queryParams.userName
+            queryParams.userName,
+            session
           );
         });
 

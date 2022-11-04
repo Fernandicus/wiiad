@@ -122,8 +122,13 @@ export default function AdView(props: {
             <img
               src={ad.image}
               alt="alt"
-              className="h-64 w-full object-cover bg-white/70 rounded-lg"
+              className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
             ></img>
+            {/* <img
+              src={ad.image}
+              alt="alt"
+              className="h-64 w-full object-cover bg-white/70 rounded-lg"
+            ></img> */}
             <p className=" text-slate-600 text-sm">{ad.description}</p>
             <div>
               <Link href={ad.redirectionUrl} passHref target="_blank">

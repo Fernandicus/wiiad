@@ -6,40 +6,26 @@ import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
 import { UniqId } from "@/src/utils/UniqId";
 import { CreateAd } from "../use-case/CreateAd";
-import { IAdCloudStorageRepo } from "../domain/IAdCloudStorageRepo";
+
+interface CreateAdParams {
+  adProps: AdPropsPrimitives;
+  advertiserId: string;
+  adId: string;
+}
 
 export class AdCreatorHandler {
-  constructor(
-    private createAd: CreateAd,
-    private cloudStorageRepo: IAdCloudStorageRepo
-  ) {}
+  constructor(private createAd: CreateAd) {}
 
-  async create(adProps: AdPropsPrimitives, advertiserId: string, adId: string): Promise<void> {
-    const imageURL = await this.uploadImageAndGetUrl(adProps.image);
-    const ad = this.createAdObject({ adProps, advertiserId, imageURL, adId});
-    await this.createAd.save(ad);
-  }
-
-  private createAdObject(props: {
-    adProps: AdPropsPrimitives;
-    advertiserId: string;
-    imageURL: string;
-    adId: string;
-  }): Ad {
-    const { adProps, advertiserId, imageURL } = props;
-    return new Ad({
-      id: new UniqId(props.adId),
+  async create({ adProps, adId, advertiserId }: CreateAdParams): Promise<void> {
+    const ad = new Ad({
+      id: new UniqId(adId),
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
-      image: new AdImageUrl(imageURL),
+      image: new AdImageUrl(adProps.image),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new UniqId(advertiserId),
     });
-  }
-
-  private async uploadImageAndGetUrl(imagePath: string): Promise<string> {
-    const imageURL = await this.cloudStorageRepo.uploadImageAndGetUrl(imagePath);
-    return imageURL;
+    await this.createAd.save(ad);
   }
 }

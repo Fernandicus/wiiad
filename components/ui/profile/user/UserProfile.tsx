@@ -47,7 +47,7 @@ export function UserProfile({ user }: Props) {
           <ProfileCard user={user} />
           <DataCard
             title="Dinero acumulado"
-            data={totalBalance ? totalBalance.toString() : "0"}
+            data={totalBalance ? (totalBalance/100).toString()+'€' : "0"}
           />
           <DataCard
             title="Anuncios vistos"

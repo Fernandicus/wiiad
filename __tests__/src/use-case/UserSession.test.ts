@@ -29,7 +29,7 @@ describe("On UserSession, GIVEN an Advertiser", () => {
     expect(session?.email).toBe(fakeAdvertiser.email);
     expect(session?.id).toBe(fakeAdvertiser.id);
     expect(session?.name).toBe(fakeAdvertiser.name);
-    expect(session?.rol).toBe(fakeAdvertiser.rol);
+    expect(session?.role).toBe(fakeAdvertiser.role);
   });
 
   it(`WHEN call the remove, 

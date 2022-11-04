@@ -28,4 +28,12 @@ export class UpdateReferral {
       counter: 1,
     });
   }
+
+  async increaseWatchedAds(refereeId: UniqId): Promise<void> {
+    await this.referralRepo.increaseReferrerData({ 
+      userId: refereeId.id,
+      counter: 1,
+      balance: 0,
+    });
+  }
 }

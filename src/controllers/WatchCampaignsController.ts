@@ -1,10 +1,17 @@
 import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
-import { IGenericUserPrimitives, IGenericUserProps } from "../domain/IGenericUser";
+import {
+  IGenericUserPrimitives,
+  IGenericUserProps,
+} from "../domain/IGenericUser";
 import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
-import { campaignMetricsHandler, findCampaignHandler } from "../modules/campaign/container";
+import {
+  campaignMetricsHandler,
+  findCampaignHandler,
+} from "../modules/campaign/container";
 import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
 import { adFinderHandler } from "../modules/ad/ad-container";
 import { findUserHandler } from "../modules/user/container";
+import { updateReferralHandler } from "../modules/referrals/referral-container";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
@@ -14,18 +21,20 @@ export interface IWatchCampaignData {
 
 export class WatchCampaignsController {
   static async forInfluencer(
-    influencerName: string
+    influencerName: string,
+    session: IGenericUserPrimitives | null
   ): Promise<IWatchCampaignData> {
-    const urlUserNameFound = await findUserHandler.findByUserName(
-      influencerName
-    );
+    const referrer = await findUserHandler.findByUserName(influencerName);
 
-    if (!urlUserNameFound)
+    if (!referrer)
       throw new ErrorWatchingCampaign(
         `User profile ${influencerName} do not exist`
       );
     const campaignData = await this.randomActiveCampaign();
-    return { ...campaignData, referrer: urlUserNameFound };
+    if (session) {
+      await updateReferralHandler.increaseWatchedAds(session.id);
+    }
+    return { ...campaignData, referrer };
   }
 
   static async randomActiveCampaign(): Promise<{
@@ -46,8 +55,6 @@ export class WatchCampaignsController {
     activeCampaigns: ICampaignPrimitives[]
   ): ICampaignPrimitives {
     const random = Math.round(Math.random() * (activeCampaigns.length - 1));
-    console.log(" WATCH CAMPAIGN CONTROLLER ", activeCampaigns.length);
-    console.log(" WATCH CAMPAIGN CONTROLLER ", random);
     return activeCampaigns[random];
   }
 }
