@@ -22,13 +22,15 @@ import {
 import { findCampaignHandler } from "@/src/modules/campaign/container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 
+export type AdType = "banner" | "video";
+
 export default function Ads(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const advertiser: AdvertiserPropsPrimitives = props.advertiser;
   const ads: AdPropsPrimitives[] = props.ads;
   const campaigns: ICampaignPrimitives[] = props.campaigns;
-  const [createAd, setCreateAd] = useState<boolean>(false);
+  const [createAd, setCreateAd] = useState<AdType | null>(null);
   const notificationsRef = useRef<RefNotifications>({
     showNotification: (data: { status: number; message: string }) => {},
   });
@@ -44,7 +46,7 @@ export default function Ads(
             <AdsList
               campaigns={campaigns}
               ads={ads}
-              createAd={setCreateAd}
+              onCreateAd={setCreateAd}
               handleResponse={(data: NotificationData) => {
                 notificationsRef.current!.showNotification(data);
               }}
@@ -54,6 +56,7 @@ export default function Ads(
       )}
       {createAd && (
         <CreateAdForm
+          createAd={createAd}
           user={advertiser}
           handleResponse={(data: NotificationData) => {
             notificationsRef.current!.showNotification(data);

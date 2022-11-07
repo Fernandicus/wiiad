@@ -2,9 +2,7 @@ import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 interface Props {
-  onSelectImage: Dispatch<
-    SetStateAction<string | ArrayBuffer | null | undefined>
-  >;
+  onSelectImage(image: string | ArrayBuffer | null | undefined): void;
   imagePreview: string | ArrayBuffer | null | undefined;
 }
 

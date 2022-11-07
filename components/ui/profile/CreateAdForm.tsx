@@ -1,4 +1,5 @@
 import { SelectImage } from "../profile/advertiser/create-ad-form/SelectImage";
+import { SelectVideo } from "../profile/advertiser/create-ad-form/SelectVideo";
 import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import React, { FormEvent, useRef, useState } from "react";
@@ -6,9 +7,11 @@ import {
   NotificationData,
   Notifications,
 } from "../notifications/Notifications";
+import { AdType } from "@/pages/[userName]/ads";
 
 export default function CreateAdForm(props: {
   user: IGenericUserPrimitives;
+  createAd: AdType;
   handleResponse: (data: NotificationData) => void;
 }) {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -16,9 +19,7 @@ export default function CreateAdForm(props: {
   const urlRef = useRef<HTMLInputElement>(null);
   const segmentsRef = useRef<HTMLInputElement>(null);
 
-  const [imagePreview, setImagePreview] = useState<
-    string | ArrayBuffer | null
-  >();
+  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>();
 
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +31,7 @@ export default function CreateAdForm(props: {
         body: JSON.stringify({
           title: titleRef.current!.value,
           description: descriptionRef.current!.value,
-          image: imagePreview,
+          image: filePreview,
           redirectionUrl: urlRef.current!.value,
           segments: [segmentsRef.current!.value],
         }),
@@ -69,10 +70,17 @@ export default function CreateAdForm(props: {
     <div className="max-w-xl w-full py-10">
       <h1 className="font-bold text-xl pb-5">Crea tu anuncio</h1>
       <form className="w-full  space-y-5" onSubmit={submitAd}>
-        <SelectImage
-          onSelectImage={setImagePreview}
-          imagePreview={imagePreview}
-        />
+        {props.createAd == "banner" ? (
+          <SelectImage
+            onSelectImage={(image) => setFilePreview(image)}
+            imagePreview={filePreview}
+          />
+        ) : props.createAd == "video" ? (
+          <SelectVideo
+            onSelectVideo={(video) => setFilePreview(video)}
+            videoPreview={filePreview}
+          />
+        ) : null}
         <div className="space-y-2">
           <label className="font-bold">Titulo</label>
           <input
