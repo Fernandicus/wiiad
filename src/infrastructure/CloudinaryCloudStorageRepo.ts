@@ -52,6 +52,7 @@ export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
         width:720,
         height:405,
         fps:30,
+        quality:"auto",
       },
     });
 
