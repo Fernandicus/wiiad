@@ -82,7 +82,9 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
   useEffect(() => {
     campaignMetrics();
     console.log(videoRef);
-    if (videoRef.current) {
+
+   
+    if (videoRef.current && videoRef.current.duration) {
       /* videoRef.current.muted = false; */
       setTimeout(() => {
         setCanEarnMoney(true);
@@ -94,7 +96,7 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
         setCanEarnMoney(true);
       }, 5 * 1000);
     }
-  }, []);
+  }, [videoRef.current]);
 
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center">
