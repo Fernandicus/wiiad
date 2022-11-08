@@ -70,21 +70,30 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
           status: "error",
         });
       });
-  }
+  };
 
-  const waitToSeeTheAd = ()=>{
-
-    notificationRef.current.showNotification({message: "Termina de ver el anuncio", status:"info"})
-  }
+  const waitToSeeTheAd = () => {
+    notificationRef.current.showNotification({
+      message: "Tienes que terminar de ver el anuncio",
+      status: "info",
+    });
+  };
 
   useEffect(() => {
     campaignMetrics();
-    videoRef.current!.muted = false;
-    setTimeout(() => {
-      setCanEarnMoney(true);
-      console.log("EARN MONEY");
-      console.log(videoRef.current?.duration);
-    }, videoRef.current!.duration * 1000);
+    console.log(videoRef);
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      setTimeout(() => {
+        setCanEarnMoney(true);
+        console.log("EARN MONEY");
+        console.log(videoRef.current?.duration);
+      }, videoRef.current!.duration * 1000);
+    }else{
+      setTimeout(() => {
+        setCanEarnMoney(true);
+      }, 5 * 1000);
+    }
   }, []);
 
   return (

@@ -44,7 +44,7 @@ export default function Profile({
     showNotification: (data: NotificationData) => {},
   });
 
-  if (user.role === RoleType.USER && ad && campaign) {
+  if ((!user || user.role === RoleType.USER) && ad && campaign) {
     return (
       <AdView
         campaign={campaign as ICampaignPrimitives}
