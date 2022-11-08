@@ -4,7 +4,8 @@ export class ApiRoutes{
     static removeAds = "/api/v1/ads/remove";
     static allAds = "/api/v1/ads/";
     static advertiserCampaigns = "/api/v1/campaign";
-    static createAd = "/api/v1/ads/create";
+    static createBannerAd = "/api/v1/ads/create";
+    static createVideoAd = "/api/v1/ads/create/video";
     static login = "/api/v1/auth/login/";
     static logout = "/api/v1/auth/logout/";
     static addReferral = "/api/v1/referral/add";

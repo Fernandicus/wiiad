@@ -10,23 +10,11 @@ export function EmptyAds({ onTapCreateAd }: Props) {
   return (
     <div className="flex items-center justify-center text-center h-32">
       <div className="space-y-5">
-        <p className="font-medium text-gray-800">
-          <span className="normal text-lg">🙀 </span>
-          No tienes ningún anuncio creado!
-        </p>
+        <p className="font-medium text-gray-800">No tienes anuncios creados</p>
         <AdResourceSelector
           onCreateVideoAd={() => onTapCreateAd("video")}
           onCreateImageAd={() => onTapCreateAd("banner")}
         />
-        {/* <button
-          className="text-sm p-2 bg-sky-500 text-white rounded-md hover:bg-sky-400"
-          onClick={(e) => {
-            e.preventDefault();
-            onTapCreateAd("");
-          }}
-        >
-          Crea un anuncio
-        </button> */}
       </div>
     </div>
   );

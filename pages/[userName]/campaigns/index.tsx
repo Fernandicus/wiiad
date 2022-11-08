@@ -20,46 +20,50 @@ export default function CampaignsPage(props: {
       </div>
       <div className="py-20 w-full inline-flex justify-center">
         <div
-          className={` grid grid-cols-${
-            props.campaigns.length > 4 ? "4" : props.campaigns.length.toString()
-          }`}
+          className={` grid ${
+            props.campaigns.length == 1
+              ? "grid-cols-1"
+              : props.campaigns.length == 2
+              ? "grid-cols-2"
+              : "grid-cols-3"
+          } `}
         >
-          <div className=" flex rounded-md  py-3 justify-between">
-            {props.campaigns.map((campaign) => {
-              const ad = props.ads.find((ad) => ad.id == campaign.adId);
-              return (
-                <div key={campaign.id} className="p-5 w-80 ">
-                  <AdCardItem image={ad!.image}>
-                    <div className=" w-full  inline-flex justify-between ">
-                      <p className="text-lg font-semibold">{ad!.title}</p>
-                      <button
-                        className={`w-20 group bg-lime-300  py-1 px-2 rounded-md text-lime-800 text-sm font-medium ${
-                          campaign.status == "active" ? "hover:bg-red-200 hover:text-red-800" : "hover:bg-lime-200"
-                        }`}
-                      >
-                        <div className="group-hover:hidden block">
-                          {campaign.status == "active" ? "activa" : "detenida"}
-                        </div>
-                        <div className="group-hover:block hidden">
-                          {campaign.status == "standby" ? "activar" : "detener"}
-                        </div>
-                      </button>
-                    </div>
-                    <div className=" flex rounded-md  py-3 justify-between text-sm border-t-2 border-sky-100">
-                      <div className="w-full text-center">
-                        <p>Visualizaciones</p>
-                        <p>{campaign.metrics.totalViews}</p>
+          {props.campaigns.map((campaign) => {
+            const ad = props.ads.find((ad) => ad.id == campaign.adId);
+            return (
+              <div key={campaign.id} className="p-5 w-80 ">
+                <AdCardItem image={ad!.image}>
+                  <div className=" w-full  inline-flex justify-between ">
+                    <p className="text-md font-semibold truncate">{ad!.title}</p>
+                    <button
+                      className={`w-16 group bg-lime-300  py-0.5 px-2 rounded-md text-lime-800 text-xs font-medium ${
+                        campaign.status == "active"
+                          ? "hover:bg-red-200 hover:text-red-800"
+                          : "hover:bg-lime-200"
+                      }`}
+                    >
+                      <div className="group-hover:hidden block">
+                        {campaign.status == "active" ? "activa" : "detenida"}
                       </div>
-                      <div className="w-full text-center">
-                        <p>Redirecciones</p>
-                        <p>{campaign.metrics.totalClicks}</p>
+                      <div className="group-hover:block hidden">
+                        {campaign.status == "standby" ? "activar" : "detener"}
                       </div>
+                    </button>
+                  </div>
+                  <div className=" flex rounded-md  py-3 justify-between text-sm border-t-2 border-sky-100">
+                    <div className="w-full text-center">
+                      <p>Visualizaciones</p>
+                      <p>{campaign.metrics.totalViews}</p>
                     </div>
-                  </AdCardItem>
-                </div>
-              );
-            })}
-          </div>
+                    <div className="w-full text-center">
+                      <p>Redirecciones</p>
+                      <p>{campaign.metrics.totalClicks}</p>
+                    </div>
+                  </div>
+                </AdCardItem>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

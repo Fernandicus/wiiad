@@ -8,6 +8,8 @@ import {
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { NotificationData } from "../../notifications/Notifications";
 import { AdCardItem } from "./AdCardItem";
+import { LoadingSpinnerAnimation } from "../../icons/LoadingSpinnerAnimation";
+import { useState } from "react";
 
 interface Props {
   ad: AdPropsPrimitives;
@@ -16,6 +18,8 @@ interface Props {
 }
 
 export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
+  const [isLaunching, setIsLaunching] = useState(false);
+
   const budget = new CampaignBudget({
     clicks: 1000,
     balance: new Balance(5000),
@@ -30,24 +34,29 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
       if (resp.status !== 200) {
         handleResponse({
           message: "No se pudo eliminar el anuncio",
-          status: 400,
+          status: "error",
         });
       } else {
         handleResponse({
           message: "Anuncio eliminado",
-          status: 0,
+          status: "success",
         });
+        window.location.reload();
       }
+      
     } catch (err) {
       handleResponse({
         message: "No se pudo eliminar el anuncio",
-        status: 400,
+        status: "error",
       });
     }
   };
 
   const launchCampaign = async (ad: AdPropsPrimitives) => {
     console.log("LAUNCH ", ad.id);
+    if (isLaunching) return;
+    setIsLaunching(true);
+    handleResponse({ message: "Lanzando campaña ...", status: "info" });
     try {
       const resp = await fetch(ApiRoutes.launchCampaign, {
         method: "POST",
@@ -56,12 +65,21 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
           budget,
         }),
       });
+      setIsLaunching(false);
       if (resp.status === 200) {
         console.log("NEW CAMPAIGN LAUNCHED");
-        handleResponse({ message: "Nueva campaña lanzada!", status: 0 });
+        handleResponse({
+          message: "Nueva campaña lanzada!",
+          status: "success",
+        });
       }
+      window.location.reload();
     } catch (err) {
-      handleResponse({ message: "No se pudo lanzar la campaña", status: 400 });
+      setIsLaunching(false);
+      handleResponse({
+        message: "No se pudo lanzar la campaña",
+        status: "error",
+      });
     }
   };
 
@@ -75,13 +93,15 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
         </a>
       </div>
       <div className="space-x-5 flex justify-center pt-3">
-        <button
-          className="text-sm bg-red-100 hover:bg-red-500 text-red-500 hover:text-white py-1 px-2 rounded-md font-medium w-full"
-          type="button"
-          onClick={() => deleteAd(ad.id)}
-        >
-          Eliminar anuncio
-        </button>
+        {!campaign ? (
+          <button
+            className="text-sm bg-red-100 hover:bg-red-500 text-red-500 hover:text-white py-1 px-2 rounded-md font-medium w-full"
+            type="button"
+            onClick={() => deleteAd(ad.id)}
+          >
+            Eliminar anuncio
+          </button>
+        ) : null}
         <button
           className={`text-sm ${
             campaign
@@ -91,8 +111,12 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
           type="button"
           onClick={campaign ? undefined : () => launchCampaign(ad)}
         >
-          {!campaign ? (
+          {!campaign && !isLaunching ? (
             <span>Lanzar campaña</span>
+          ) : !campaign && isLaunching ? (
+            <div className="w-5 h-5 inline-flex justify-center">
+              <LoadingSpinnerAnimation />
+            </div>
           ) : (
             <span>Campaña lanzada</span>
           )}

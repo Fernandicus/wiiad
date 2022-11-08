@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
 
     form.parse(req, async (err, fields, files) => {
-      
+
       const reqBody: AdPropsPrimitives = {
         id: "",
         advertiserId: "",
@@ -39,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       await MongoDB.connectAndDisconnect(
         async () =>
-          await CreateAdController.create({
+          await CreateAdController.videoAd({
             context: { req, res },
             adProps: reqBody,
             adId: UniqId.generate(),

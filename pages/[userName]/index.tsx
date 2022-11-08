@@ -24,11 +24,13 @@ import {
 } from "../../components/ui/notifications/Notifications";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { Logout } from "../../components/ui/login/Logout";
+import { findCampaignHandler } from "@/src/modules/campaign/container";
+import CampaignsPage from "./campaigns";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
-  campaign: ICampaignPrimitives | null;
-  ad: AdPropsPrimitives | null;
+  campaign: ICampaignPrimitives | ICampaignPrimitives[] | null;
+  ad: AdPropsPrimitives | AdPropsPrimitives[] | null;
   referrer: IGenericUserPrimitives | null;
 }
 
@@ -42,76 +44,22 @@ export default function Profile({
     showNotification: (data: NotificationData) => {},
   });
 
-  if (ad && campaign) {
-    return <AdView campaign={campaign} ad={ad} referrer={referrer!} />;
+  if (user.role === RoleType.USER && ad && campaign) {
+    return (
+      <AdView
+        campaign={campaign as ICampaignPrimitives}
+        ad={ad as AdPropsPrimitives}
+        referrer={referrer!}
+      />
+    );
   }
 
   if (user.role === RoleType.USER) {
     return <UserProfile user={user} />;
   }
 
-  const [ads, setAds] = useState<number>(0);
-  const [campaigns, setCampaigns] = useState<number>(0);
-
-  const totalAds = async () => {
-    console.log("ADS ");
-    await fetch(ApiRoutes.allAds)
-      .then(async (response) => {
-        console.log("ADS ", response);
-        if (response.status === 200) {
-          const respJSON = (await response.json()) as {
-            ads: AdPropsPrimitives[];
-          };
-          setAds(respJSON.ads.length);
-        } else {
-          console.log("ADS ", response);
-          setAds(0);
-        }
-      })
-      .catch((error) => {
-        if (error.message === "Failed to fetch") {
-          notificationHandler.current.showNotification({
-            message: "Desactiva el bloqueador de anuncios",
-            status: 400,
-          });
-        }
-        setAds(0);
-      });
-  };
-
-  const totalCampaigns = async () => {
-    console.log("CAMPAIGNS ");
-    await fetch(ApiRoutes.advertiserCampaigns)
-      .then(async (response) => {
-        console.log("CAMPAINGS ", response);
-        if (response.status === 200) {
-          const respJSON = (await response.json()) as {
-            campaigns: ICampaignPrimitives[];
-          };
-          setCampaigns(respJSON.campaigns.length);
-        } else {
-          setCampaigns(0);
-        }
-      })
-      .catch((error) => {
-        if (error.message === "Failed to fetch") {
-          notificationHandler.current.showNotification({
-            message: "Desactiva el bloqueador de anuncios",
-            status: 400,
-          });
-        }
-        setCampaigns(0);
-      });
-  };
-
-  const findAdsAndCampaigns = async () => {
-    await totalAds();
-    await totalCampaigns();
-  };
-
-  useEffect(() => {
-    findAdsAndCampaigns();
-  }, []);
+  const ads = ad as AdPropsPrimitives[];
+  const campaigns = campaign as ICampaignPrimitives[];
 
   return (
     <div>
@@ -120,8 +68,8 @@ export default function Profile({
       <main className="h-screen bg-slate-100 p-10 w-full ">
         <AdvertiserHeader
           user={user}
-          totalAds={ads}
-          totalCampaigns={campaigns}
+          totalAds={ads.length}
+          totalCampaigns={campaigns.length}
         />
       </main>
     </div>
@@ -136,11 +84,31 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     if (!queryParams.email || !queryParams.token) {
       const session = userSession.getFromServer(context);
-      if (session && session.name == queryParams.userName)
+      if (session && session.name == queryParams.userName) {
+        if (session.role !== RoleType.USER) {
+          const { ads, campaigns } = await MongoDB.connectAndDisconnect<{
+            ads: AdPropsPrimitives[];
+            campaigns: ICampaignPrimitives[];
+          }>(async () => {
+            const campaigns = await findCampaignHandler.byAdvertiserId(
+              session.id
+            );
+            const ads = await adFinderHandler.findAll(session.id);
+            return { campaigns, ads };
+          });
+
+          return {
+            props: {
+              user: session,
+              ad: ads,
+              campaign: campaigns,
+            } as IUserNamePage,
+          };
+        }
         return {
           props: { user: session } as IUserNamePage,
         };
-
+      }
       const { ad, activeCampaign, referrer } =
         await MongoDB.connectAndDisconnect<IWatchCampaignData>(async () => {
           return await WatchCampaignsController.forInfluencer(
@@ -165,22 +133,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
 
-    const user =
-      await MongoDB.connectAndDisconnect<IGenericUserPrimitives | null>(
-        async () =>
-          await LogInController.initSession(
-            {
-              email: queryParams.email!,
-              token: queryParams.token!,
-              userName: queryParams.userName,
-            },
-            context
-          )
+    const {user, ads, campaigns} = await MongoDB.connectAndDisconnect<{
+      user: IGenericUserPrimitives;
+      campaigns?: ICampaignPrimitives[];
+      ads?: AdPropsPrimitives[];
+    }>(async () => {
+      const user = await LogInController.initSession(
+        {
+          email: queryParams.email!,
+          token: queryParams.token!,
+          userName: queryParams.userName,
+        },
+        context
       );
+      if (user.role === RoleType.USER) return { user };
+      const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
+      const ads = await adFinderHandler.findAll(user.id);
+      return { user, campaigns, ads };
+    });
 
     return {
       props: {
-        user: { ...user },
+        user,
+        ad: ads,
+        campaign: campaigns
       } as IUserNamePage,
     };
   } catch (err) {

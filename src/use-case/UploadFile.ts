@@ -7,4 +7,9 @@ export class UploadFile {
     const url = await this.cloudStorageRepo.uploadImageAndGetUrl(filePath, folder);
     return url;
   }
+
+  async video(filePath: string, folder: string): Promise<string> {
+    const url = await this.cloudStorageRepo.uploadVideoAndGetUrl(filePath, folder);
+    return url;
+  }
 }

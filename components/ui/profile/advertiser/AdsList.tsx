@@ -19,37 +19,39 @@ export function AdsList({ ads, onCreateAd, handleResponse, campaigns }: Props) {
     <div className="w-full py-10">
       <div className="space-y-5">
         <div className="space-y-3">
-        <h1 className="font-bold text-center text-slate-600">
-          Crea un anuncio
-        </h1>
-        <AdResourceSelector
-          onCreateVideoAd={() => onCreateAd("video")}
-          onCreateImageAd={() =>  onCreateAd("banner")}
-        />
+          <h1 className="font-bold text-center text-slate-600">
+            Crea un anuncio
+          </h1>
+          <AdResourceSelector
+            onCreateVideoAd={() => onCreateAd("video")}
+            onCreateImageAd={() => onCreateAd("banner")}
+          />
         </div>
       </div>
       <div className="py-14 w-full inline-flex justify-center">
         <div
-          className={` grid grid-cols-${
-            ads.length > 4 ? "4" : ads.length.toString()
+          className={` grid ${
+            ads.length == 1
+              ? "grid-cols-1"
+              : ads.length == 2
+              ? "grid-cols-2"
+              : "grid-cols-3"
           }`}
         >
-          <div className=" flex rounded-md  py-3 justify-between">
-            {ads.map((ad) => {
-              const campaign = campaigns.find(
-                (campaign) => campaign.adId == ad.id
-              );
-              return (
-                <div key={ad.id} className="p-5 w-96">
-                  <AdCard
-                    ad={ad}
-                    handleResponse={handleResponse}
-                    campaign={!campaign ? null : campaign}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          {ads.map((ad) => {
+            const campaign = campaigns.find(
+              (campaign) => campaign.adId == ad.id
+            );
+            return (
+              <div key={ad.id} className="p-5 w-96">
+                <AdCard
+                  ad={ad}
+                  handleResponse={handleResponse}
+                  campaign={!campaign ? null : campaign}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

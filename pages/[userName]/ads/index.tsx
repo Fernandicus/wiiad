@@ -5,10 +5,6 @@ import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import {
-  CampaignBudget,
-  CampaignBudgetProps,
-} from "@/src/modules/campaign/domain/value-objects/Budget";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useRef, useState } from "react";
@@ -32,7 +28,7 @@ export default function Ads(
   const campaigns: ICampaignPrimitives[] = props.campaigns;
   const [createAd, setCreateAd] = useState<AdType | null>(null);
   const notificationsRef = useRef<RefNotifications>({
-    showNotification: (data: { status: number; message: string }) => {},
+    showNotification: (data: NotificationData) => {},
   });
 
   return (
@@ -40,7 +36,7 @@ export default function Ads(
       <Notifications ref={notificationsRef} />
       {!createAd && (
         <div className="w-full">
-          {ads.length == 0 ? (
+          {!ads || ads.length == 0 ? (
             <EmptyAds onTapCreateAd={setCreateAd} />
           ) : (
             <AdsList
@@ -57,6 +53,9 @@ export default function Ads(
       {createAd && (
         <CreateAdForm
           createAd={createAd}
+          onBack={() => {
+            setCreateAd(null);
+          }}
           user={advertiser}
           handleResponse={(data: NotificationData) => {
             notificationsRef.current!.showNotification(data);

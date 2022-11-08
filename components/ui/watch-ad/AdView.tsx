@@ -9,20 +9,22 @@ import {
   Notifications,
   RefNotifications,
 } from "../../../components/ui/notifications/Notifications";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 
-export default function AdView(props: {
+interface AdViewParams {
   campaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
   referrer: IGenericUserPrimitives;
-}) {
+}
+
+export default function AdView({ campaign, ad, referrer }: AdViewParams) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [canEarnMoney, setCanEarnMoney] = useState<boolean>(false);
   const notificationRef = useRef<RefNotifications>({
     showNotification: (data: NotificationData) => {},
   });
-
-  const { campaign, ad, referrer } = props;
 
   const campaignMetrics = async () => {
     fetch(ApiRoutes.campaignMetrics, {
@@ -34,8 +36,55 @@ export default function AdView(props: {
     });
   };
 
+  const pay = () => {
+    fetch(ApiRoutes.addReferral, {
+      method: "POST",
+      body: JSON.stringify({
+        referrerId: referrer.id,
+        campaign,
+      }),
+    })
+      .then(async (resp) => {
+        const respJSON = await resp.json();
+        if (resp.status === 200) {
+          notificationRef.current.showNotification({
+            message: `Has recibido ${respJSON["increasedBalance"]} centimos !`,
+            status: "success",
+          });
+        } else if (resp.status === 401) {
+          notificationRef.current.showNotification({
+            message: "Inicia sesion para recibir el pago",
+            status: "info",
+          });
+        } else {
+          notificationRef.current.showNotification({
+            message: respJSON["message"],
+            status: "error",
+          });
+        }
+      })
+      .catch(async (err) => {
+        const respJSON = await err.json();
+        notificationRef.current.showNotification({
+          message: respJSON["message"],
+          status: "error",
+        });
+      });
+  }
+
+  const waitToSeeTheAd = ()=>{
+
+    notificationRef.current.showNotification({message: "Termina de ver el anuncio", status:"info"})
+  }
+
   useEffect(() => {
     campaignMetrics();
+    videoRef.current!.muted = false;
+    setTimeout(() => {
+      setCanEarnMoney(true);
+      console.log("EARN MONEY");
+      console.log(videoRef.current?.duration);
+    }, videoRef.current!.duration * 1000);
   }, []);
 
   return (
@@ -61,44 +110,20 @@ export default function AdView(props: {
               </div>
             </div>
             <button
-              onClick={() => {
-                fetch(ApiRoutes.addReferral, {
-                  method: "POST",
-                  body: JSON.stringify({
-                    referrerId: referrer.id,
-                    campaign,
-                  }),
-                })
-                  .then(async (resp) => {
-                    const respJSON = await resp.json();
-                    if (resp.status === 200) {
-                      notificationRef.current.showNotification({
-                        message: `Has recibido ${respJSON["increasedBalance"]} centimos !`,
-                        status: 0,
-                      });
-                    } else if (resp.status === 401) {
-                      notificationRef.current.showNotification({
-                        message: "Inicia sesion para recibir el pago",
-                        status: 400,
-                      });
-                    } else {
-                      notificationRef.current.showNotification({
-                        message: respJSON["message"],
-                        status: 400,
-                      });
-                    }
-                  })
-                  .catch(async (err) => {
-                    const respJSON = await err.json();
-                    notificationRef.current.showNotification({
-                      message: respJSON["message"],
-                      status: 400,
-                    });
-                  });
-              }}
-              className="group rounded-full bg-green-400 hover:cursor-pointer hover:bg-white flex items-center justify-center shadow-inner shadow-green-500 hover:shadow-slate-300"
+              onClick={canEarnMoney ? pay : waitToSeeTheAd}
+              className={`${
+                canEarnMoney
+                  ? "group  bg-green-400 hover:cursor-pointer hover:bg-white flex items-center justify-center shadow-inner shadow-green-500 hover:shadow-slate-300"
+                  : "group-hover:text-gray-400 bg-gray-400"
+              } rounded-full`}
             >
-              <div className="p-2.5 w-14 h-full text-white group-hover:text-green-400 group-hover:transition ease-out duration-300">
+              <div
+                className={`p-2.5 w-14 h-full text-white ${
+                  canEarnMoney
+                    ? "group-hover:text-green-400 group-hover:transition ease-out duration-300"
+                    : "group-hover:text-gray-400"
+                }  `}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -119,16 +144,23 @@ export default function AdView(props: {
         <div className="w-full space-y-2">
           <h1 className="text-lg font-bold text-gray-700">{ad.title}</h1>
           <div className="space-y-5">
-            <img
-              src={ad.image}
-              alt="alt"
-              className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
-            ></img>
-            {/* <img
-              src={ad.image}
-              alt="alt"
-              className="h-64 w-full object-cover bg-white/70 rounded-lg"
-            ></img> */}
+            {ad.image.includes(".mp4") ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
+              >
+                <source src={ad.image} type="video/mp4" />
+                Tu navegador no el formato de video mp4
+              </video>
+            ) : (
+              <img
+                src={ad.image}
+                alt="alt"
+                className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
+              ></img>
+            )}
             <p className=" text-slate-600 text-sm">{ad.description}</p>
             <div>
               <Link href={ad.redirectionUrl} passHref target="_blank">
