@@ -28,7 +28,7 @@ export class VerificationEmailTemplate {
                 <tr>
                   <td align="center" style="border-radius: 5px;" bgcolor="${this.color.buttonBackground}"><a href="${url}"
                       target="_blank"
-                      style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${this.color.buttonBackground}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${this.color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
+                      style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${this.color.background}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${this.color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
                       in</a></td>
                 </tr>
               </table>

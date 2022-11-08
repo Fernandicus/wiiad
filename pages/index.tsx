@@ -7,9 +7,9 @@ import { RoleType } from "@/src/domain/Role";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { APISendEmailVerification } from "../api/v1/auth/login";
+import { APISendEmailVerification } from "./api/v1/auth/login";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { Notifications } from "../../components/ui/notifications/Notifications";
+import { Notifications } from "../components/ui/notifications/Notifications";
 
 export default function Home(props: { session: AdvertiserPropsPrimitives }) {
   const myEmail = useRef<HTMLInputElement>(null);

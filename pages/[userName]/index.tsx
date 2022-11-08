@@ -135,8 +135,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const {user, ads, campaigns} = await MongoDB.connectAndDisconnect<{
       user: IGenericUserPrimitives;
-      campaigns?: ICampaignPrimitives[];
-      ads?: AdPropsPrimitives[];
+      campaigns?: ICampaignPrimitives[] | null;
+      ads?: AdPropsPrimitives[] | null;
     }>(async () => {
       const user = await LogInController.initSession(
         {
@@ -146,7 +146,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
         context
       );
-      if (user.role === RoleType.USER) return { user };
+      if (user.role === RoleType.USER) return { user, ads: null, campaigns:null };
       const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
       const ads = await adFinderHandler.findAll(user.id);
       return { user, campaigns, ads };
