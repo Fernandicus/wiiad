@@ -51,11 +51,11 @@ export function UserProfile({ user }: Props) {
           />
           <DataCard
             title="Anuncios vistos"
-            data={totalReferrers ? totalReferrers.toString() : "0"}
+            data={campaignsWatched ? campaignsWatched.toString() : "0"}
           />
           <DataCard
             title="Clicks en tus enlaces"
-            data={campaignsWatched ? campaignsWatched.toString() : "0"}
+            data={ totalReferrers ? totalReferrers.toString() : "0"}
           />
         </div>
       </div>

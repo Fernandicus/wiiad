@@ -83,7 +83,7 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
     campaignMetrics();
     console.log(videoRef);
     if (videoRef.current) {
-      videoRef.current.muted = false;
+      /* videoRef.current.muted = false; */
       setTimeout(() => {
         setCanEarnMoney(true);
         console.log("EARN MONEY");
@@ -158,6 +158,7 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
                 ref={videoRef}
                 autoPlay
                 muted
+                controls
                 className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
               >
                 <source src={ad.image} type="video/mp4" />
