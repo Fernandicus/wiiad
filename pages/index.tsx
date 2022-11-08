@@ -41,7 +41,7 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
         jsonResp.message !== "" ? jsonResp.message : `Algo ha ido mal :(`;
       setMessage({ status: resp.status, message });
     } else {
-      setMessage({ status: 0, message: "Te hemos enviado un email!" });
+      setMessage({ status: 0, message: "Te hemos enviado un email de confirmacion" });
     }
   };
 
