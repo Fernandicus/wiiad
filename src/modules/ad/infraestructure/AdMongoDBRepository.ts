@@ -1,50 +1,54 @@
+import { UniqId } from "@/src/utils/UniqId";
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { AdRepository } from "../domain/AdRepository";
+import { AdDescription } from "../domain/value-objects/AdDescription";
+import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
+import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "../domain/value-objects/AdSegments";
+import { AdTitle } from "../domain/value-objects/AdTitle";
 import { AdModel, AdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements AdRepository {
-  public async save(ad: AdPropsPrimitives): Promise<void> {
-    const adModel = new AdModel({
-      _id: ad.id,
-      ...ad,
-    });
-    await adModel.save();
+  public async save(ad: Ad): Promise<void> {
+    await AdModel.create({
+      ...ad.toPrimitives(),
+      _id: ad.id.id,
+    } as AdModelProps);
   }
 
-  public async findAllByAdvertiserId(id: string): Promise<AdPropsPrimitives[]> {
+  public async findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null> {
     const adModel = await AdModel.find<AdModelProps>({
-      advertiserId: id,
-    });
-    const adPrimitivesArray = adModel.map((model): AdPropsPrimitives => {
-      return {
-        id: model._id,
-        title: model.title,
-        description: model.description,
-        image: model.image,
-        redirectionUrl: model.redirectionUrl,
-        segments: model.segments,
-        advertiserId: model.advertiserId,
-      };
+      advertiserId: id.id,
+    } as AdModelProps);
+
+    const adsArray = adModel.map((model): Ad => {
+      return this.toAd(model);
     });
 
-    return adPrimitivesArray;
+    if (adsArray.length == 0) return null;
+
+    return adsArray;
   }
 
-  async findByAdId(id: string): Promise<AdPropsPrimitives | null> {
-    const adModel = await AdModel.findById<AdModelProps>(id);
+  async findByAdId(id: UniqId): Promise<Ad | null> {
+    const adModel = await AdModel.findById<AdModelProps>(id.id);
     if (!adModel) return null;
-    return {
-      id: adModel._id,
-      title: adModel.title,
-      description: adModel.description,
-      image: adModel.image,
-      redirectionUrl: adModel.redirectionUrl,
-      segments: adModel.segments,
-      advertiserId: adModel.advertiserId,
-    };
+    return this.toAd(adModel);
   }
 
-  public async remove(id: string): Promise<void> {
-    await AdModel.findByIdAndRemove({ _id: id });
+  public async remove(id: UniqId): Promise<void> {
+    await AdModel.findByIdAndRemove({ _id: id.id } as AdModelProps);
+  }
+
+  private toAd(adModel: AdModelProps): Ad {
+    return new Ad({
+      id: new UniqId(adModel._id),
+      title: new AdTitle(adModel.title),
+      description: new AdDescription(adModel.description),
+      image: new AdImageUrl(adModel.image),
+      redirectionUrl: new AdRedirectionUrl(adModel.redirectionUrl),
+      segments: new AdSegments(adModel.segments),
+      advertiserId: new UniqId(adModel.advertiserId),
+    });
   }
 }

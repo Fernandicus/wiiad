@@ -1,9 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { AdDescription } from "../domain/value-objects/AdDescription";
 import { AdTitle } from "../domain/value-objects/AdTitle";
 const { Schema } = mongoose;
 
-const adSchema = new Schema(
+export interface AdModelProps {
+  _id: string;
+  advertiserId: string;
+  title: string;
+  description: string;
+  image: string;
+  redirectionUrl: string;
+  segments: string[];
+}
+
+const adSchema = new Schema<AdModelProps>(
   {
     _id: { type: String, required: true },
     advertiserId: { type: String, required: true },
@@ -21,19 +31,10 @@ const adSchema = new Schema(
     },
     image: { type: String, required: true },
     redirectionUrl: { type: String, required: true },
-    segments: { type: Array, required: true },
+    segments: [{ type: String }],
   },
   { _id: false }
 );
 
-export interface AdModelProps {
-  _id: string;
-  advertiserId: string;
-  title: string;
-  description: string;
-  image: string;
-  redirectionUrl: string;
-  segments: string[];
-}
-
-export const AdModel = mongoose.models.Ad || mongoose.model("Ad", adSchema);
+export const AdModel: Model<AdModelProps> =
+  mongoose.models.Ad || mongoose.model("Ad", adSchema);

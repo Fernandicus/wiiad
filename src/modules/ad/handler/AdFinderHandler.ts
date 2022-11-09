@@ -17,7 +17,6 @@ export class AdFinderHandler {
   async findByAdId(adId: string): Promise<AdPropsPrimitives> {
     const id = new UniqId(adId);
     const adsFound = await this.findAds.findByAdId(id);
-    if (!adsFound) throw new ErrorFindingAd("No ad found");
     return adsFound.toPrimitives();
   }
 }

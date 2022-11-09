@@ -1,41 +1,20 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Ad, AdPropsPrimitives } from "../domain/Ad";
+import { Ad } from "../domain/Ad";
 import { AdRepository } from "../domain/AdRepository";
-import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
-import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
-import { AdSegments } from "../domain/value-objects/AdSegments";
-import { AdTitle } from "../domain/value-objects/AdTitle";
+import { ErrorFindingAd } from "../domain/ErrorFindingAd";
 
 export class FindAds {
   constructor(private repository: AdRepository) {}
 
   async findAllByAdvertiserId(id: UniqId): Promise<Ad[]> {
-    const adsFound = await this.repository.findAllByAdvertiserId(id.id);
-    return adsFound.map((ad): Ad => {
-      return new Ad({
-        id: new UniqId(ad.id),
-        advertiserId: new UniqId(ad.advertiserId),
-        title: new AdTitle(ad.title),
-        description: new AdDescription(ad.description),
-        image: new AdImageUrl(ad.image),
-        redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
-        segments: new AdSegments(ad.segments),
-      });
-    });
+    const adsFound = await this.repository.findAllByAdvertiserId(id);
+    if(!adsFound) throw new ErrorFindingAd(`No ads found for the given advertiser id`)
+    return adsFound;
   }
 
-  async findByAdId(id: UniqId): Promise<Ad | null> {
-    const adFound = await this.repository.findByAdId(id.id);
-    if (!adFound) return null;
-    return new Ad({
-      id: new UniqId(adFound.id),
-      advertiserId: new UniqId(adFound.advertiserId),
-      title: new AdTitle(adFound.title),
-      description: new AdDescription(adFound.description),
-      image: new AdImageUrl(adFound.image),
-      redirectionUrl: new AdRedirectionUrl(adFound.redirectionUrl),
-      segments: new AdSegments(adFound.segments),
-    });
+  async findByAdId(id: UniqId): Promise<Ad> {
+    const adFound = await this.repository.findByAdId(id);
+    if(!adFound) throw new ErrorFindingAd(`No ad found for the given id`)
+    return adFound;
   }
 }

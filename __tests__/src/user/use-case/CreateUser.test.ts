@@ -21,6 +21,6 @@ describe("On CreateUser, GIVEN a user", () => {
 
   it(`WHEN call create, THEN user repo save method should be called with user primitives`, async () => {
     await createUser.create(newUser);
-    expect(userRepo.save).toBeCalledWith(newUser.toPrimitives());
+    expect(userRepo.save).toBeCalledWith(newUser);
   });
 });

@@ -1,4 +1,4 @@
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestAdRepository } from "__mocks__/lib/modules/ads/domain/TestAdRepository";
 import { FakeAd } from "../../__mocks__/lib/modules/ads/FakeAd";
@@ -26,16 +26,16 @@ export class MockAdTestDB {
     return new MockAdTestDB(adRepo);
   }
 
-  async getAllAds(): Promise<AdPropsPrimitives[] | null> {
+  async getAllAds(): Promise<Ad[] | null> {
     const allAds = await this.adRepo.getAllAds();
     return allAds;
   }
 
-  async saveMany(adsPrimitives: AdPropsPrimitives[]): Promise<void> {
-    await this.adRepo.saveMany(adsPrimitives);
+  async saveMany(ads: Ad[]): Promise<void> {
+    await this.adRepo.saveMany(ads);
   }
 
-  private static setAds(amount: number): AdPropsPrimitives[] {
-    return FakeAd.createManyWithPrimitives(UniqId.generate(), amount);
+  private static setAds(amount: number): Ad[] {
+    return FakeAd.createMany(UniqId.new(), amount);
   }
 }

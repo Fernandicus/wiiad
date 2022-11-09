@@ -24,14 +24,14 @@ export class FakeAd extends Ad {
     };
   }
 
-  static createMany(advertiserId: string, amount: number): Ad[] {
+  static createMany(advertiserId: UniqId, amount: number): Ad[] {
     const fakeAdData = this.generateFakeAdData();
     let ads: Ad[] = [];
 
     for (var i = 0; i <= amount; i++) {
       const ad = this.getAd({
         ...fakeAdData,
-        advertiserId,
+        advertiserId: advertiserId.id,
         id: UniqId.generate(),
       });
       ads.push(ad);
@@ -69,11 +69,15 @@ export class FakeAd extends Ad {
     advertiserId,
     adId,
   }: {
-    advertiserId: string;
-    adId: string;
+    advertiserId: UniqId;
+    adId: UniqId;
   }): Ad {
     const fakeAdData = this.generateFakeAdData();
-    return this.getAd({ ...fakeAdData, advertiserId, id: adId });
+    return this.getAd({
+      ...fakeAdData,
+      advertiserId: advertiserId.id,
+      id: adId.id,
+    });
   }
 
   static empty(): Ad {
@@ -89,9 +93,7 @@ export class FakeAd extends Ad {
   }
 
   private static generateFakeAdData(): AdPropsPrimitives {
-    const title = faker.commerce
-      .productName()
-      .substring(0, AdTitle.maxLength);
+    const title = faker.commerce.productName().substring(0, AdTitle.maxLength);
     const description = faker.commerce
       .productDescription()
       .substring(0, AdDescription.maxLength);

@@ -1,5 +1,5 @@
 import { Balance } from "@/src/domain/Balance";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   Campaign,
   CampaignProps,
@@ -27,6 +27,28 @@ export class FakeCampaign extends Campaign {
       id: UniqId.new(),
       advertiserId: props.advertiserId,
       adId: UniqId.new(),
+      referrals: [UniqId.new()],
+      status: new CampaignStatus(props.status),
+      budget: new CampaignBudget({
+        balance: new Balance(5),
+        clicks: 5,
+      }),
+      metrics: new CampaignMetrics({
+        totalViews: 3,
+        totalClicks: 10,
+      }),
+    });
+  }
+
+  static createWithGivenIds(props: {
+    status: CampaignStatusType;
+    advertiserId: UniqId;
+    adId: UniqId;
+  }): Campaign {
+    return new Campaign({
+      id: UniqId.new(),
+      advertiserId: props.advertiserId,
+      adId: props.adId,
       referrals: [UniqId.new()],
       status: new CampaignStatus(props.status),
       budget: new CampaignBudget({
@@ -83,11 +105,11 @@ export class FakeCampaign extends Campaign {
   }
 
   static createManyFromGivenAds(
-    ads: AdPropsPrimitives[],
+    ads: Ad[],
     status: CampaignStatusType
-  ): ICampaignPrimitives[] {
+  ): Campaign[] {
     const campaigns = ads.map((ad) => {
-      return this.createWithPrimitives({
+      return this.createWithGivenIds({
         advertiserId: ad.advertiserId,
         adId: ad.id,
         status,

@@ -1,8 +1,14 @@
 import { RoleType } from "@/src/domain/Role";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import {
+  Campaign,
+  ICampaignPrimitives,
+} from "@/src/modules/campaign/domain/Campaign";
+import {
+  CampaignStatus,
+  CampaignStatusType,
+} from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
@@ -35,7 +41,7 @@ interface InitializedMongoTestDB {
   mocks: IMockedDB;
   campaigns: ICampaignsByStatus;
   advertisers: AdvertiserPropsPrimitives[];
-  ads: AdPropsPrimitives[];
+  ads: Ad[];
   users: IUserPrimitives[];
   verificationEmails: IVerificationEmailsByStatus;
   referrals: IReferralPrimitives[];
@@ -45,7 +51,7 @@ export class MockTestDB {
   readonly mocks: IMockedDB;
   readonly campaigns: ICampaignsByStatus;
   readonly advertisers: AdvertiserPropsPrimitives[];
-  readonly ads: AdPropsPrimitives[];
+  readonly ads: Ad[];
   readonly users: IUserPrimitives[];
   readonly verificationEmails: IVerificationEmailsByStatus;
 
@@ -90,9 +96,9 @@ export class MockTestDB {
         verificationEmailsDB: mockedVerificationEmails,
       },
       campaigns: {
-        actives: campaigns.actives!,
-        finished: campaigns.finished!,
-        standBy: campaigns.standBy!,
+        actives: campaigns.actives!.map(campaign => campaign.toPrimitives()),
+        finished: campaigns.finished!.map(campaign => campaign.toPrimitives()),
+        standBy: campaigns.standBy!.map(campaign => campaign.toPrimitives()),
       },
       advertisers: advertisers!,
       users: users!,
@@ -108,18 +114,18 @@ export class MockTestDB {
   private static async findCampaignsByStatus(
     mockedCampaigns: MockCampaignTestDB
   ): Promise<{
-    actives: ICampaignPrimitives[] | null;
-    finished: ICampaignPrimitives[] | null;
-    standBy: ICampaignPrimitives[] | null;
+    actives: Campaign[] | null;
+    finished: Campaign[] | null;
+    standBy: Campaign[] | null;
   }> {
     const actives = await mockedCampaigns.findByStatus(
-      CampaignStatusType.ACTIVE
+      new CampaignStatus(CampaignStatusType.ACTIVE)
     );
     const finished = await mockedCampaigns.findByStatus(
-      CampaignStatusType.FINISHED
+      new CampaignStatus(CampaignStatusType.FINISHED)
     );
     const standBy = await mockedCampaigns.findByStatus(
-      CampaignStatusType.STAND_BY
+      new CampaignStatus(CampaignStatusType.STAND_BY)
     );
     return { actives, finished, standBy };
   }

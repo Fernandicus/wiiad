@@ -3,10 +3,9 @@ import { Name } from "@/src/domain/Name";
 import { ProfilePic } from "@/src/domain/ProfilePic";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { HydratedDocument } from "mongoose";
 import { BankAccount } from "../domain/BankAccount";
 import { IUserRepo } from "../domain/IUserRepo";
-import { IUserPrimitives, User } from "../domain/User";
+import { User } from "../domain/User";
 import { UserModel, UserModelProps } from "./UserMode";
 
 export class UserMongoDBRepo implements IUserRepo {
