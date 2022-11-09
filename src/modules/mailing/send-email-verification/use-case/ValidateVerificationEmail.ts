@@ -3,24 +3,32 @@ import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
-import { IVerificationEmailTimerPrimitives } from "../domain/VerificationEmailTimer";
+import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
 
 export class ValidateVerificationEmail {
   constructor(private repository: IVerificationEmailRepo) {}
 
-  async validate(tokenId: UniqId, email: Email): Promise<IVerificationEmailTimerPrimitives> {
-    const verificationEmail = await this.repository.findById(tokenId.id);
-    if (!verificationEmail) throw new ErrorEmailVerification("Verification Email not found");
-    await this.repository.remove(verificationEmail.id);
+  async validate(
+    tokenId: UniqId,
+    email: Email
+  ): Promise<VerificationEmailTimer> {
+    const verificationEmail = await this.repository.findById(tokenId);
+    if (!verificationEmail)
+      throw new ErrorEmailVerification("Verification Email not found");
+
+    await this.repository.remove(tokenId);
     await this.checkExpirationDate(verificationEmail);
-    if(email.email !== verificationEmail.email) throw new ErrorEmailVerification("The email provided is not valid");
+
+    if (email.email !== verificationEmail.email.email)
+      throw new ErrorEmailVerification("The email provided is not valid");
+
     return verificationEmail;
   }
 
   private async checkExpirationDate(
-    verificationEmail: IVerificationEmailTimerPrimitives
+    verificationEmail: VerificationEmailTimer
   ): Promise<void> {
-    const emailExpiration = verificationEmail.expirationDate;
+    const emailExpiration = verificationEmail.expirationDate.date;
     if (this.hasExpired(emailExpiration)) {
       throw new ErrorEmailVerification("Verification Token has expired");
     }

@@ -1,89 +1,82 @@
 import { Email } from "@/src/domain/Email";
 import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
-import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
+import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
+import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
+import { RoleType } from "@/src/domain/Role";
+import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
 
 describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () => {
-  let validEmailTimer: IVerificationEmailTimerPrimitives;
-  let expiredEmailTimer: IVerificationEmailTimerPrimitives;
+  let validEmailTimer: VerificationEmailTimer;
+  let expiredEmailTimer: VerificationEmailTimer;
+  let emails: VerificationEmailTimer[] = [];
+  let mockedRepo: IVerificationEmailRepo;
+  let verifyEmail: ValidateVerificationEmail;
 
   beforeAll(() => {
-    const notExpiredDate = new Date(
-      Date.now() + EmailVerificationConstants.fiveMin
+    validEmailTimer = FakeVerificationEmailTimer.create();
+    expiredEmailTimer = FakeVerificationEmailTimer.create(
+      RoleType.BUSINESS,
+      true
     );
-    const expiredDate = new Date(
-      Date.now() - EmailVerificationConstants.fiveMin
-    );
 
-    validEmailTimer = {
-      email: faker.internet.email(),
-      expirationDate: notExpiredDate,
-      id: UniqId.generate(),
-      rol: "business",
-    };
+    emails = [validEmailTimer, expiredEmailTimer];
 
-    expiredEmailTimer = {
-      email: faker.internet.email(),
-      expirationDate: expiredDate,
-      id: UniqId.generate(),
-      rol: "business",
-    };
-  });
-
-  test(`WHEN call the validate method for an non existing email, 
-  THEN the mock findById method should throw an Error`, async () => {
-    const mockedRepo = {
-      findById: jest.fn().mockReturnValueOnce(null),
+    mockedRepo = {
+      findById: jest.fn().mockImplementation((tokenId: UniqId) => {
+        const email = emails.find((email) => email.id.id == tokenId.id);
+        if (!email) return null;
+        return validEmailTimer;
+      }),
       remove: jest.fn(),
       save: jest.fn(),
     };
-    const verifyEmail = new ValidateVerificationEmail(mockedRepo);
-
-    expect(async () => {
-      await verifyEmail.validate(
-        UniqId.new(),
-        new Email(faker.internet.email())
-      );
-    }).rejects.toThrowError(ErrorEmailVerification);
+    verifyEmail = new ValidateVerificationEmail(mockedRepo);
   });
 
-  test(`WHEN call the validate method for an expired date, 
-  THEN the mock findById method should throw an Error`, async () => {
-    const mockedRepo = {
-      findById: jest.fn().mockReturnValueOnce(expiredEmailTimer),
-      remove: jest.fn(),
-      save: jest.fn(),
-    };
-    const verifyEmail = new ValidateVerificationEmail(mockedRepo);
+  it(`WHEN call the validate method for an non existing token, 
+  THEN the mock findById method should throw an ErrorEmailVerification`, async () => {
+    const invalidToken = UniqId.new();
+    expect(
+      verifyEmail.validate(invalidToken, validEmailTimer.email)
+    ).rejects.toThrowError(ErrorEmailVerification);
+  });
 
-    await expect(async () => {
-      await verifyEmail.validate(
-        UniqId.new(),
-        new Email(faker.internet.email())
-      );
-    }).rejects.toThrowError(ErrorEmailVerification);
+  it(`WHEN call the validate method for an non existing email, 
+  THEN the mock findById method should throw an ErrorEmailVerification`, async () => {
+    expect(
+      verifyEmail.validate(validEmailTimer.id, new Email("x@x.com"))
+    ).rejects.toThrowError(ErrorEmailVerification);
+  });
+
+  it(`WHEN call the validate method, 
+  THEN the repo findById and remove method should be called, and a validEmailTimer should be returned`, async () => {
+    const validEmail = await verifyEmail.validate(
+      validEmailTimer.id,
+      validEmailTimer.email
+    );
+    expect(mockedRepo.findById).toBeCalledWith(validEmailTimer.id);
+    expect(mockedRepo.findById).toReturnWith(validEmailTimer);
+    expect(mockedRepo.remove).toBeCalledWith(validEmailTimer.id);
+    expect(validEmail).toEqual(validEmailTimer);
+  });
+
+  it(`WHEN call the validate method for an expired date, 
+  THEN the mock findById method should throw an Error`, async () => {
+    expect(
+      verifyEmail.validate(expiredEmailTimer.id, expiredEmailTimer.email)
+    ).rejects.toThrowError(ErrorEmailVerification);
   });
 
   test(`WHEN call the validate method for a non expired date, 
   THEN the mock findById method should be called with id`, async () => {
-    const mockRepo = {
-      findById: jest.fn().mockReturnValueOnce(validEmailTimer),
-      remove: jest.fn(),
-      save: jest.fn(),
-    };
-    const validateEmail = new ValidateVerificationEmail(mockRepo);
-
-    const validatedEmail = await validateEmail.validate(
-      new UniqId(validEmailTimer.id),
-      new Email(validEmailTimer.email)
+    const validatedEmail = await verifyEmail.validate(
+      validEmailTimer.id,
+      validEmailTimer.email
     );
 
-    expect(mockRepo.findById).toBeCalledWith(validEmailTimer.id);
-    expect(mockRepo.findById).toReturnWith(validEmailTimer);
-    expect(mockRepo.remove).toBeCalledWith(validEmailTimer.id);
     expect(validatedEmail).toBe(validatedEmail);
   });
 });

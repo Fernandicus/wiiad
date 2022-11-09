@@ -4,21 +4,21 @@ import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verific
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
 
 describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verification", () => {
-  let emailSender: IEmailSender;
+  let mockedRepo: IEmailSender;
   let verificationUrl: VerificationURL;
+  let sendVerificationEmail: SendlVerificationEmail;
 
   beforeAll(() => {
-    emailSender = {
+    mockedRepo = {
       send: jest.fn(),
     };
     verificationUrl = FakeVerificationURL.create();
+    sendVerificationEmail = new SendlVerificationEmail(mockedRepo);
   });
 
   it(`WHEN call SendVerificationEmail send method, 
   THEN Email Sender send method should be called with the VerificationEmail data`, async () => {
-    const sendVerificationEmail = new SendlVerificationEmail(emailSender);
     await sendVerificationEmail.send(verificationUrl);
-
-    expect(emailSender.send).toBeCalledWith(verificationUrl);
+    expect(mockedRepo.send).toBeCalledWith(verificationUrl);
   });
 });

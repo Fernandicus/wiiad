@@ -1,5 +1,9 @@
 import { RoleType } from "@/src/domain/Role";
-import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import {
+  IVerificationEmailTimerPrimitives,
+  VerificationEmailTimer,
+} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { UniqId } from "@/src/utils/UniqId";
 import { TestVerificationEmailRepo } from "../../__mocks__/lib/modules/send-email-verification/domain/TestVerificationEmailRepo";
 import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
 import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
@@ -36,15 +40,13 @@ export class MockVerificationEmailDB {
     return new MockVerificationEmailDB(verificationEmailRepo);
   }
 
-  async saveMany(
-    verificationEmailPrimitives: IVerificationEmailTimerPrimitives[]
-  ): Promise<void> {
-    await this.verificationEmailRepo.saveMany(verificationEmailPrimitives);
+  async saveMany(verificationEmail: VerificationEmailTimer[]): Promise<void> {
+    await this.verificationEmailRepo.saveMany(verificationEmail);
   }
 
   async getAll(): Promise<{
-    expired: IVerificationEmailTimerPrimitives[];
-    valid: IVerificationEmailTimerPrimitives[];
+    expired: VerificationEmailTimer[];
+    valid: VerificationEmailTimer[];
   } | null> {
     const emailsFound = await this.verificationEmailRepo.getAll();
     if (!emailsFound) return null;
@@ -54,9 +56,7 @@ export class MockVerificationEmailDB {
     return filteredEmails;
   }
 
-  async findById(
-    id: string
-  ): Promise<IVerificationEmailTimerPrimitives | null> {
+  async findById(id: UniqId): Promise<VerificationEmailTimer | null> {
     const emailFound = await this.verificationEmailRepo.findById(id);
     console.log(emailFound?.id);
     return emailFound;
@@ -66,18 +66,17 @@ export class MockVerificationEmailDB {
     expiredAmount: number,
     validAmount: number
   ): {
-    expired: IVerificationEmailTimerPrimitives[];
-    valids: IVerificationEmailTimerPrimitives[];
+    expired: VerificationEmailTimer[];
+    valids: VerificationEmailTimer[];
   } {
-    const expiredEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
+    const expiredEmails = FakeVerificationEmailTimer.createMany(
       expiredAmount,
       RoleType.BUSINESS,
       true
     );
-    const validEmails = FakeVerificationEmailTimer.createManyWithPrimitives(
+    const validEmails = FakeVerificationEmailTimer.createMany(
       validAmount,
-      RoleType.BUSINESS,
-      false
+      RoleType.BUSINESS
     );
     return {
       expired: expiredEmails,
@@ -85,19 +84,17 @@ export class MockVerificationEmailDB {
     };
   }
 
-  private getExpiredAndValidEmails(
-    emails: IVerificationEmailTimerPrimitives[]
-  ): {
-    expired: IVerificationEmailTimerPrimitives[];
-    valid: IVerificationEmailTimerPrimitives[];
+  private getExpiredAndValidEmails(emails: VerificationEmailTimer[]): {
+    expired: VerificationEmailTimer[];
+    valid: VerificationEmailTimer[];
   } {
     const now = new Date(Date.now());
 
     const expiredMails = emails.filter(
-      (email) => email.expirationDate.getTime() < now.getTime()
+      (email) => email.expirationDate.date.getTime() < now.getTime()
     );
     const validMails = emails.filter(
-      (email) => email.expirationDate.getTime() > now.getTime()
+      (email) => email.expirationDate.date.getTime() > now.getTime()
     );
 
     return {

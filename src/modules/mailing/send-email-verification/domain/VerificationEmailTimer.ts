@@ -4,9 +4,9 @@ import { UniqId } from "@/src/utils/UniqId";
 import { ExpirationDate } from "./ExpirationDate";
 
 export interface IVerificationEmailTimerPrimitives {
-  email: string;
   id: string;
   expirationDate: Date;
+  email: string;
   role: string;
 }
 
@@ -30,4 +30,12 @@ export class VerificationEmailTimer {
     this.role = props.role;
   }
 
+  toPrimitives(): IVerificationEmailTimerPrimitives {
+    return {
+      id: this.id.id,
+      email: this.email.email,
+      role: this.role.role,
+      expirationDate: this.expirationDate.date,
+    };
+  }
 }

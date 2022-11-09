@@ -1,7 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 
-const verificationEmailSchema = new Schema(
+export interface IVerificationEmailModel {
+  _id: string;
+  expirationDate: Date;
+  email: string;
+  role: string;
+}
+
+const verificationEmailSchema = new Schema<IVerificationEmailModel>(
   {
     _id: { type: String, required: true },
     expirationDate: {
@@ -21,14 +28,6 @@ const verificationEmailSchema = new Schema(
   { _id: false }
 );
 
-export interface VerificationEmailModelProps {
-  _id: string;
-  expirationDate: Date;
-  email: string;
-  role: string;
-}
-
-export const VerificationEmailModel = mongoose.models.Verification_Email || mongoose.model(
-  "Verification_Email",
-  verificationEmailSchema
-);
+export const VerificationEmailModel: Model<IVerificationEmailModel> =
+  mongoose.models.Verification_Email ||
+  mongoose.model("Verification_Email", verificationEmailSchema);

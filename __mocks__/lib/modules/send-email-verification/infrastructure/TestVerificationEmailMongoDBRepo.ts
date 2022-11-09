@@ -1,13 +1,15 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { Email } from "@/src/domain/Email";
+import { Role } from "@/src/domain/Role";
+import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
 import {
   IVerificationEmailTimerPrimitives,
   VerificationEmailTimer,
 } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import {
+  IVerificationEmailModel,
   VerificationEmailModel,
-  VerificationEmailModelProps,
 } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailModel";
-import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
+import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 import { TestVerificationEmailRepo } from "../domain/TestVerificationEmailRepo";
@@ -27,54 +29,51 @@ export class TestVerificationEmailMongoDBRepo
   }
 
   async saveMany(
-    verificationEmailProps: IVerificationEmailTimerPrimitives[]
+    verificationEmailProps: VerificationEmailTimer[]
   ): Promise<void> {
     await TestMongoDB.connectMongoDB();
-    const models = verificationEmailProps.map(
-      (model): VerificationEmailModelProps => {
+    const models: IVerificationEmailModel[] = verificationEmailProps.map(
+      (model) => {
         return {
-          _id: model.id,
-          email: model.email,
-          expirationDate: model.expirationDate,
-          role: model.role,
+          _id: model.id.id,
+          ...model.toPrimitives(),
         };
       }
     );
-    await VerificationEmailModel.insertMany(models);
+    await VerificationEmailModel.insertMany<IVerificationEmailModel>(models);
   }
 
-  async findById(
-    id: string
-  ): Promise<IVerificationEmailTimerPrimitives | null> {
+  async findById(id: UniqId): Promise<VerificationEmailTimer | null> {
     await TestMongoDB.connectMongoDB();
     const emailFound =
-      await VerificationEmailModel.findById<VerificationEmailModelProps>({
-        _id: id,
-      });
+      await VerificationEmailModel.findById<IVerificationEmailModel>({
+        _id: id.id,
+      } as IVerificationEmailModel);
     if (!emailFound) return null;
-    return {
-      id: emailFound._id,
-      email: emailFound.email,
-      expirationDate: emailFound.expirationDate,
-      role: emailFound.role,
-    };
+    return this.toVerificationEmail(emailFound);
   }
 
-  async getAll(): Promise<IVerificationEmailTimerPrimitives[] | null> {
+  async getAll(): Promise<VerificationEmailTimer[] | null> {
     await TestMongoDB.connectMongoDB();
     const emailsFound =
-      await VerificationEmailModel.find<VerificationEmailModelProps>();
+      await VerificationEmailModel.find<IVerificationEmailModel>();
+
     if (emailsFound.length == 0) return null;
-    const emails = emailsFound.map(
-      (mailFound): IVerificationEmailTimerPrimitives => {
-        return {
-          id: mailFound._id,
-          email: mailFound.email,
-          expirationDate: mailFound.expirationDate,
-          role: mailFound.role,
-        };
-      }
-    );
+
+    const emails: VerificationEmailTimer[] = emailsFound.map((email) => {
+      return this.toVerificationEmail(email);
+    });
     return emails;
+  }
+
+  private toVerificationEmail(
+    model: IVerificationEmailModel
+  ): VerificationEmailTimer {
+    return new VerificationEmailTimer({
+      id: new UniqId(model._id),
+      email: new Email(model.email),
+      expirationDate: new ExpirationDate(model.expirationDate),
+      role: new Role(model.role),
+    });
   }
 }

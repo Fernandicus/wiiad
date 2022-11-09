@@ -9,7 +9,7 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { mockedAdRepo } from "./MockAdTestDB";
@@ -33,8 +33,8 @@ interface ICampaignsByStatus {
 }
 
 interface IVerificationEmailsByStatus {
-  expired: IVerificationEmailTimerPrimitives[];
-  valids: IVerificationEmailTimerPrimitives[];
+  expired: VerificationEmailTimer[];
+  valids: VerificationEmailTimer[];
 }
 
 interface InitializedMongoTestDB {

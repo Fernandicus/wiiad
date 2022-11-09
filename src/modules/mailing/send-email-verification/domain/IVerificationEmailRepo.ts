@@ -1,7 +1,8 @@
-import { IVerificationEmailTimerPrimitives } from "./VerificationEmailTimer";
+import { UniqId } from "@/src/utils/UniqId";
+import { VerificationEmailTimer } from "./VerificationEmailTimer";
 
 export interface IVerificationEmailRepo {
-  save(model: IVerificationEmailTimerPrimitives): Promise<void>;
-  findById(id: string): Promise<IVerificationEmailTimerPrimitives | null>;
-  remove(id: string): Promise<void>;
+  save(model: VerificationEmailTimer): Promise<void>;
+  findById(id: UniqId): Promise<VerificationEmailTimer | null>;
+  remove(id: UniqId): Promise<void>;
 }

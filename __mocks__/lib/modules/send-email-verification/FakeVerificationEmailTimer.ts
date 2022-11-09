@@ -5,7 +5,7 @@ import {
   IVerificationEmailTimerPrimitives,
 } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
-import { EmailVerificationConstants } from "@/src/modules/mailing/send-email-verification/EmailVerificationConstants";
+import { TimerConstants } from "@/src/modules/mailing/send-email-verification/domain/TimerConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Role, RoleType } from "@/src/domain/Role";
@@ -20,12 +20,21 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     super({ id, expirationDate, email, role });
   }
 
-  static create(roletype = RoleType.BUSINESS): FakeVerificationEmailTimer {
-    const { email, expirationDate, id, role } = this.generateRandomData(roletype);
+  static create(
+    roletype = RoleType.BUSINESS,
+    hasExpired = false
+  ): VerificationEmailTimer {
+    const { email, expirationDate, id, role } =
+      this.generateRandomData(roletype);
+
+    const expiration = hasExpired
+      ? this.expiredDate(expirationDate)
+      : expirationDate;
+
     return new FakeVerificationEmailTimer({
       id: new UniqId(id),
       email: new Email(email),
-      expirationDate: new ExpirationDate(expirationDate),
+      expirationDate: new ExpirationDate(expiration),
       role: new Role(role),
     });
   }
@@ -34,25 +43,19 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     roletype = RoleType.BUSINESS,
     hasExpired = false,
   }): IVerificationEmailTimerPrimitives {
-    const { email, expirationDate, id, role } = this.generateRandomData(roletype);
-    if (!hasExpired) {
-      return {
-        id,
-        email,
-        expirationDate,
-        role,
-      };
-    } else {
-      const expiredDate = new Date(
-        expirationDate.getTime() - EmailVerificationConstants.twentyFourH
-      );
-      return {
-        id,
-        email,
-        expirationDate: expiredDate,
-        role,
-      };
-    }
+    const { email, expirationDate, id, role } =
+      this.generateRandomData(roletype);
+
+    const expiration = hasExpired
+      ? this.expiredDate(expirationDate)
+      : expirationDate;
+
+    return {
+      id,
+      email,
+      expirationDate: expiration,
+      role,
+    };
   }
 
   static createManyWithPrimitives(
@@ -61,7 +64,8 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     hasExpired = false
   ): IVerificationEmailTimerPrimitives[] {
     let vertificationEmailsPrimitives: IVerificationEmailTimerPrimitives[] = [];
-    for (let i = 0; i < amount -1; i++) {
+
+    for (let i = 0; i < amount - 1; i++) {
       vertificationEmailsPrimitives.push(
         this.createWithPrimitives({ roletype, hasExpired })
       );
@@ -71,30 +75,24 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
 
   static createMany(
     amount = 5,
-    roletype = RoleType.BUSINESS
-  ): FakeVerificationEmailTimer[] {
-    const vertificationEmailsPrimitives = this.generateMany(amount, roletype);
-    const vertificationEmails = vertificationEmailsPrimitives.map(
-      (verificationEmail): FakeVerificationEmailTimer => {
-        return {
-          id: new UniqId(verificationEmail.id),
-          email: new Email(verificationEmail.email),
-          expirationDate: new ExpirationDate(verificationEmail.expirationDate),
-          role: new Role(verificationEmail.role),
-        };
-      }
-    );
-    return vertificationEmails;
+    roletype = RoleType.BUSINESS,
+    hasExpired = false
+  ): VerificationEmailTimer[] {
+    let verificationEmail: VerificationEmailTimer[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      verificationEmail.push(this.create(roletype, hasExpired));
+    }
+
+    return verificationEmail;
   }
 
   private static generateRandomData(
     role: RoleType
   ): IVerificationEmailTimerPrimitives {
     const email = faker.internet.email();
-    const in5min = new Date(Date.now() + EmailVerificationConstants.fiveMin);
-    const in24Hours = new Date(
-      Date.now() + EmailVerificationConstants.twentyFourH
-    );
+    const in5min = new Date(Date.now() + TimerConstants.fiveMin);
+    const in24Hours = new Date(Date.now() + TimerConstants.twentyFourH);
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
     return { email, id, expirationDate, role };
@@ -109,5 +107,9 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
       verificationEmails.push(this.generateRandomData(role));
     }
     return verificationEmails;
+  }
+
+  private static expiredDate(expirationDate: Date): Date {
+    return new Date(expirationDate.getTime() - TimerConstants.twentyFourH);
   }
 }

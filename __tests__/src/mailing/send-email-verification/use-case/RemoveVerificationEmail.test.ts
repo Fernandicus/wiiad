@@ -3,23 +3,22 @@ import { RemoveVerificationEmail } from "@/src/modules/mailing/send-email-verifi
 import { UniqId } from "@/src/utils/UniqId";
 
 describe("On RemoveVerificationEmail, GIVEN Verification Email Repo", () => {
-  let repo: IVerificationEmailRepo;
+  let mockedRepo: IVerificationEmailRepo;
   let removeVerificationEmail: RemoveVerificationEmail;
 
   beforeAll(() => {
-    repo = {
+    mockedRepo = {
       findById: jest.fn(),
       remove: jest.fn(),
       save: jest.fn(),
     };
-    removeVerificationEmail = new RemoveVerificationEmail(repo);
+    removeVerificationEmail = new RemoveVerificationEmail(mockedRepo);
   });
 
   it(`WHEN call the remove method, 
   THEN Repository remove method should be called with the id`, async () => {
     const id: UniqId = UniqId.new();
     await removeVerificationEmail.remove(id);
-
-    expect(repo.remove).toBeCalledWith(id.id);
+    expect(mockedRepo.remove).toBeCalledWith(id);
   });
 });

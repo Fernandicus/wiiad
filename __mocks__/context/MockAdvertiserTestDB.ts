@@ -1,7 +1,7 @@
 import { TestAdvertiserRepository } from "../../__mocks__/lib/modules/advertiser/domain/TestAdvertiserRepository";
 import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { Advertiser, AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
 export const mockedAdvertiserRepo = async (): Promise<MockAdvertiserTestDB> => {
   const testAdvertiserRepo = await TestAdvertiserMongoDBRepo.init();

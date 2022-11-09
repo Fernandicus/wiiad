@@ -12,12 +12,10 @@ export class ValidateEmailHandler {
   ): Promise<IVerificationEmailTimerPrimitives> {
     const verificationToken = new UniqId(token);
     const verificationEmail = new Email(email);
-    const validatedEmail = await this.validateEmail.validate(verificationToken, verificationEmail);
-    return {
-      id: validatedEmail.id,
-      email: validatedEmail.email,
-      expirationDate: validatedEmail.expirationDate,
-      role: validatedEmail.role,
-    };
+    const validatedEmail = await this.validateEmail.validate(
+      verificationToken,
+      verificationEmail
+    );
+    return validatedEmail.toPrimitives();
   }
 }

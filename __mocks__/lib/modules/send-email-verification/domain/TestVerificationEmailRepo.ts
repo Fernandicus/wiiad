@@ -1,9 +1,8 @@
-import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { UniqId } from "@/src/utils/UniqId";
 
 export interface TestVerificationEmailRepo {
-  saveMany(
-    verificationEmailProps: IVerificationEmailTimerPrimitives[]
-  ): Promise<void>;
-  findById(id: string): Promise<IVerificationEmailTimerPrimitives | null>;
-  getAll(): Promise<IVerificationEmailTimerPrimitives[] | null> 
+  saveMany(verificationEmailProps: VerificationEmailTimer[]): Promise<void>;
+  findById(id: UniqId): Promise<VerificationEmailTimer | null>;
+  getAll(): Promise<VerificationEmailTimer[] | null>;
 }
