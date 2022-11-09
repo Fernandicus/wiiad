@@ -12,9 +12,9 @@ export class UpdateReferral {
     addBalance: Balance
   ): Promise<void> {
     await this.referralRepo.increaseReferrerData({
-      userId: userId.id,
-      balance: addBalance.total,
-      counter: 1,
+      userId,
+      balance: addBalance,
+      counter: ReferralCounter.one(),
     });
   }
 
@@ -23,17 +23,17 @@ export class UpdateReferral {
     addBalance: Balance
   ): Promise<void> {
     await this.referralRepo.increaseRefereeData({
-      userId: userId.id,
-      balance: addBalance.total,
-      counter: 1,
+      userId,
+      balance: addBalance,
+      counter: ReferralCounter.one(),
     });
   }
 
   async increaseWatchedAds(refereeId: UniqId): Promise<void> {
-    await this.referralRepo.increaseReferrerData({ 
-      userId: refereeId.id,
-      counter: 1,
-      balance: 0,
+    await this.referralRepo.increaseReferrerData({
+      userId: refereeId,
+      counter:  ReferralCounter.one(),
+      balance: Balance.empty()
     });
   }
 }

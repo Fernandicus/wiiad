@@ -1,8 +1,19 @@
-import { IReferralPrimitives } from "./Referral";
+import { Balance } from "@/src/domain/Balance";
+import { UniqId } from "@/src/utils/UniqId";
+import { Referral } from "./Referral";
+import { ReferralCounter } from "./ReferralCounter";
 
 export interface IReferralRepo {
-  save(referral: IReferralPrimitives): Promise<void>;
-  findByUserID(id:string):Promise<IReferralPrimitives | null>;
-  increaseReferrerData(params:{userId:string; balance:number; counter:number}):Promise<void>;
-  increaseRefereeData(params:{userId:string; balance:number; counter:number}):Promise<void>;
+  save(referral: Referral): Promise<void>;
+  findByUserID(id: UniqId): Promise<Referral | null>;
+  increaseReferrerData(params: {
+    userId: UniqId;
+    balance: Balance;
+    counter: ReferralCounter;
+  }): Promise<void>;
+  increaseRefereeData(params: {
+    userId: UniqId;
+    balance: Balance;
+    counter: ReferralCounter;
+  }): Promise<void>;
 }

@@ -1,6 +1,6 @@
-import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
+import {  Referral } from "@/src/modules/referrals/domain/Referral";
 
 export interface TestReferralRepo {
-  saveMany(users: IReferralPrimitives[]): Promise<void>;
-  getAll(): Promise<IReferralPrimitives[] | null>;
+  saveMany(users: Referral[]): Promise<void>;
+  getAll(): Promise<Referral[] | null>;
 }

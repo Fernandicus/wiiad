@@ -1,7 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 
-const referralSchema = new Schema(
+export interface IReferralModel {
+  _id: string;
+  userId: string;
+  referrers: number;
+  referees: number;
+  referrerBalance: number;
+  refereeBalance: number;
+}
+
+const referralSchema = new Schema<IReferralModel>(
   {
     _id: { type: String, required: true },
     userId: { type: String, required: true },
@@ -13,14 +22,6 @@ const referralSchema = new Schema(
   { _id: false }
 );
 
-export interface IReferralModelProps {
-  _id: string;
-  userId: string;
-  referrers: number;
-  referees: number;
-  referrerBalance: number;
-  refereeBalance: number;
-}
 
-export const ReferralModel =
+export const ReferralModel: Model<IReferralModel> =
   mongoose.models.Referral || mongoose.model("Referral", referralSchema);

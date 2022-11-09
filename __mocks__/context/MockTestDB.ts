@@ -10,8 +10,8 @@ import {
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
+import { IReferralPrimitives, Referral } from "@/src/modules/referrals/domain/Referral";
+import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
 import { mockedAdRepo } from "./MockAdTestDB";
 import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
 import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
@@ -42,9 +42,9 @@ interface InitializedMongoTestDB {
   campaigns: ICampaignsByStatus;
   advertisers: Advertiser[];
   ads: Ad[];
-  users: IUserPrimitives[];
+  users: User[];
   verificationEmails: IVerificationEmailsByStatus;
-  referrals: IReferralPrimitives[];
+  referrals: Referral[];
 }
 
 export class MockTestDB {
@@ -52,7 +52,7 @@ export class MockTestDB {
   readonly campaigns: ICampaignsByStatus;
   readonly advertisers: Advertiser[];
   readonly ads: Ad[];
-  readonly users: IUserPrimitives[];
+  readonly users: User[];
   readonly verificationEmails: IVerificationEmailsByStatus;
 
   constructor(params: InitializedMongoTestDB) {

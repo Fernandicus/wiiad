@@ -1,4 +1,4 @@
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
+import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
 import { TestUserRepository } from "__mocks__/lib/modules/user/domain/TestUserRepository";
 import { FakeUser } from "../../__mocks__/lib/modules/user/FakeUser";
 import { TestUserMongoDBRepo } from "../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
@@ -27,16 +27,16 @@ export class MockUserTestDB {
     return new MockUserTestDB(testUserRepo);
   }
 
-  async saveMany(userPrimitives: IUserPrimitives[]): Promise<void> {
-    await this.testUserRepo.saveMany(userPrimitives);
+  async saveMany(users: User[]): Promise<void> {
+    await this.testUserRepo.saveMany(users);
   }
 
-  async getAll(): Promise<IUserPrimitives[] | null> {
+  async getAll(): Promise<User[] | null> {
     const users = await this.testUserRepo.getAll();
     return users;
   }
 
-  private static setUsers(amount: number): IUserPrimitives[] {
-    return FakeUser.createManyWithPrimitives(5);
+  private static setUsers(amount: number): User[] {
+    return FakeUser.createMany(amount);
   }
 }

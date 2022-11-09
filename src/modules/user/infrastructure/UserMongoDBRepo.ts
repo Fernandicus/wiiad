@@ -6,7 +6,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { BankAccount } from "../domain/BankAccount";
 import { IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";
-import { UserModel, UserModelProps } from "./UserMode";
+import { UserModel, IUserModel } from "./UserMode";
 
 export class UserMongoDBRepo implements IUserRepo {
   async save(user: User): Promise<void> {
@@ -17,9 +17,9 @@ export class UserMongoDBRepo implements IUserRepo {
   }
 
   async findByEmail(email: Email): Promise<User | null> {
-    const userModel = await UserModel.findOne<UserModelProps>({
+    const userModel = await UserModel.findOne<IUserModel>({
       email: email.email,
-    } as UserModelProps);
+    } as IUserModel);
 
     if (!userModel) return null;
 
@@ -27,16 +27,16 @@ export class UserMongoDBRepo implements IUserRepo {
   }
 
   async findByUserName(name: Name): Promise<User | null> {
-    const userModel = await UserModel.findOne<UserModelProps>({
+    const userModel = await UserModel.findOne<IUserModel>({
       name: name.name,
-    } as UserModelProps);
+    } as IUserModel);
 
     if (!userModel) return null;
 
     return this.toUser(userModel);
   }
 
-  private toUser(userModel: UserModelProps): User {
+  private toUser(userModel: IUserModel): User {
     return new User({
       id: new UniqId(userModel._id),
       email: new Email(userModel.email),

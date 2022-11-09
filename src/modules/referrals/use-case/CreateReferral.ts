@@ -5,7 +5,6 @@ export class CreateReferral {
   constructor(private referralRepo: IReferralRepo) {}
 
   async create(referral: Referral): Promise<void> {
-    const referralPrimitives = referral.toPrimitives();
-    await this.referralRepo.save(referralPrimitives);
+    await this.referralRepo.save(referral);
   }
 }

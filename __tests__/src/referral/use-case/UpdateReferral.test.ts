@@ -10,27 +10,40 @@ import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeRef
 describe(`On UpdateReferral, GIVEN a Referral and a Repo`, () => {
   let newReferral: Referral;
   let mockedRepo: IReferralRepo;
+  let updateReferral: UpdateReferral;
 
   beforeAll(() => {
     newReferral = FakeReferral.create(UniqId.new());
     mockedRepo = {
       save: jest.fn(),
-      increaseReferrerData: jest.fn(),
       findByUserID: jest.fn(),
+      increaseReferrerData: jest.fn(),
       increaseRefereeData: jest.fn(),
     };
+    updateReferral = new UpdateReferral(mockedRepo);
   });
 
   it(`WHEN call increaseReferrerBalance, 
   THEN increaseReferrerData should be called with UserId, Balance and a Referrers of 1`, async () => {
-    const updateReferral = new UpdateReferral(mockedRepo);
     const uId = UniqId.new();
     const balance = new Balance(5);
     await updateReferral.increaseReferrerBalance(uId, balance);
     expect(mockedRepo.increaseReferrerData).toBeCalledWith({
-      userId: uId.id,
-      balance: balance.total,
-      counter: 1,
+      userId: uId,
+      balance: balance,
+      counter: ReferralCounter.one(),
+    });
+  });
+
+  it(`WHEN call increaseRefereeBalance, 
+  THEN increaseRefereeData should be called with UserId, Balance and a Referrers of 1`, async () => {
+    const uId = UniqId.new();
+    const balance = new Balance(5);
+    await updateReferral.increaseRefereeBalance(uId, balance);
+    expect(mockedRepo.increaseRefereeData).toBeCalledWith({
+      userId: uId,
+      balance: balance,
+      counter: ReferralCounter.one(),
     });
   });
 });

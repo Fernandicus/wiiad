@@ -1,56 +1,61 @@
-import { HydratedDocument } from "mongoose";
+import { Balance } from "@/src/domain/Balance";
+import { UniqId } from "@/src/utils/UniqId";
 import { IReferralRepo } from "../domain/IReferralRepo";
-import { IReferralPrimitives } from "../domain/Referral";
-import { IReferralModelProps, ReferralModel } from "./ReferralModel";
+import { Referral } from "../domain/Referral";
+import { ReferralCounter } from "../domain/ReferralCounter";
+import { IReferralModel, ReferralModel } from "./ReferralModel";
 
 export class ReferralMongoDBRepo implements IReferralRepo {
-  async save(referral: IReferralPrimitives): Promise<void> {
-    const referralModel: HydratedDocument<IReferralModelProps> =
-      new ReferralModel<IReferralModelProps>({
-        _id: referral.id,
-        ...referral,
-      });
-
-    await referralModel.save();
+  async save(referral: Referral): Promise<void> {
+    await ReferralModel.create({
+      ...referral.toPrimitives(),
+      _id: referral.id.id,
+    } as IReferralModel);
   }
 
-  async findByUserID(id: string): Promise<IReferralPrimitives | null> {
-    const referralModel = await ReferralModel.findOne<IReferralModelProps>({
-      userId: id,
-    });
+  async findByUserID(id: UniqId): Promise<Referral | null> {
+    const referralModel = await ReferralModel.findOne<IReferralModel>({
+      userId: id.id,
+    } as IReferralModel);
     if (!referralModel) return null;
-    return {
-      id: referralModel._id,
-      userId: referralModel.userId,
-      referees: referralModel.referees,
-      referrers: referralModel.referrers,
-      refereeBalance: referralModel.refereeBalance,
-      referrerBalance: referralModel.referrerBalance,
-    };
+    return new Referral({
+      id: new UniqId(referralModel._id),
+      userId: new UniqId(referralModel.userId),
+      referees: new ReferralCounter(referralModel.referees),
+      referrers: new ReferralCounter(referralModel.referrers),
+      refereeBalance: new Balance(referralModel.refereeBalance),
+      referrerBalance: new Balance(referralModel.referrerBalance),
+    });
   }
 
   async increaseReferrerData(params: {
-    userId: string;
-    balance: number;
-    counter: number;
+    userId: UniqId;
+    balance: Balance;
+    counter: ReferralCounter;
   }): Promise<void> {
-    await ReferralModel.updateOne<IReferralModelProps>(
-      { userId: params.userId },
+    await ReferralModel.updateOne<IReferralModel>(
+      { userId: params.userId.id } as IReferralModel,
       {
-        $inc: { referrers: params.counter, referrerBalance: params.balance },
+        $inc: {
+          referrers: params.counter.getAmount(),
+          referrerBalance: params.balance.total,
+        },
       }
     );
   }
 
   async increaseRefereeData(params: {
-    userId: string;
-    balance: number;
-    counter: number;
+    userId: UniqId;
+    balance: Balance;
+    counter: ReferralCounter;
   }): Promise<void> {
-    await ReferralModel.updateOne<IReferralModelProps>(
-      { userId: params.userId },
+    await ReferralModel.updateOne<IReferralModel>(
+      { userId: params.userId.id } as IReferralModel,
       {
-        $inc: { referees: params.counter, refereeBalance: params.balance },
+        $inc: {
+          referees: params.counter.getAmount(),
+          refereeBalance: params.balance.total,
+        },
       }
     );
   }

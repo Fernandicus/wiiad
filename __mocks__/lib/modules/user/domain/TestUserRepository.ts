@@ -1,7 +1,7 @@
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
+import {  User } from "@/src/modules/user/domain/User";
 
 export interface TestUserRepository {
-    save(user: IUserPrimitives): Promise<void>;
-    saveMany(users: IUserPrimitives[]): Promise<void>;
-    getAll(): Promise<IUserPrimitives[] | null>;
+    save(user: User): Promise<void>;
+    saveMany(users: User[]): Promise<void>;
+    getAll(): Promise<User[] | null>;
 }

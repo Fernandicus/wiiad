@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { IUserPrimitives, User } from "./User";
+import { User } from "./User";
 
 export interface IUserRepo {
   save(user: User): Promise<void>;

@@ -1,7 +1,7 @@
 import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 
-export interface UserModelProps {
+export interface IUserModel {
   _id: string;
   name: string;
   email: string;
@@ -10,7 +10,7 @@ export interface UserModelProps {
   bankAccount?: string;
 }
 
-const userSchema = new Schema<UserModelProps>(
+const userSchema = new Schema<IUserModel>(
   {
     _id: { type: String, required: true },
     name: {
@@ -37,5 +37,5 @@ const userSchema = new Schema<UserModelProps>(
   { _id: false }
 );
 
-export const UserModel: Model<UserModelProps> =
+export const UserModel: Model<IUserModel> =
   mongoose.models.User || mongoose.model("User", userSchema);

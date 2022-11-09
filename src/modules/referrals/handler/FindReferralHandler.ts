@@ -5,10 +5,9 @@ import { FindReferral } from "../use-case/FindReferral";
 export class FindReferralHandler {
   constructor(private findReferral: FindReferral) {}
 
-  async byUserId(id: string): Promise<IReferralPrimitives | null> {
+  async byUserId(id: string): Promise<IReferralPrimitives> {
     const uniqId = new UniqId(id);
     const referralFound = await this.findReferral.findByUserId(uniqId);
-    if (!referralFound) return null;
     return referralFound.toPrimitives();
   }
 }

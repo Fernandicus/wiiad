@@ -34,16 +34,16 @@ export class FakeReferral extends Referral {
     };
   }
 
-  static createMany(userId: UniqId, amount = 5): Referral[] {
+  static createMany(userIds: UniqId[]): Referral[] {
     let referrals: Referral[] = [];
 
-    for (let i = 0; i < amount; i++) {
-      referrals.push(this.create(userId));
+    for (let i = 0; i < userIds.length; i++) {
+      referrals.push(this.create(userIds[i]));
     }
 
     return referrals;
   }
-
+/* 
   static createManyWithPrimitives(
     userId: string,
     amount = 5
@@ -56,5 +56,5 @@ export class FakeReferral extends Referral {
     );
 
     return referralsPrimitives;
-  }
+  } */
 }
