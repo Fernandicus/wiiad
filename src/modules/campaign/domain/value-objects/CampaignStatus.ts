@@ -19,4 +19,15 @@ export class CampaignStatus {
       );
     this.status = status;
   }
+
+  static active():CampaignStatus{
+    return new CampaignStatus(CampaignStatusType.ACTIVE)
+  }
+
+  static finished():CampaignStatus{
+    return new CampaignStatus(CampaignStatusType.FINISHED)
+  }
+  static standBy():CampaignStatus{
+    return new CampaignStatus(CampaignStatusType.STAND_BY)
+  }
 }

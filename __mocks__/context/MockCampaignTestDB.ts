@@ -34,7 +34,7 @@ export const autoMockedCampaigns = async () =>
   });
 
 export class MockCampaignTestDB {
-  readonly campaignRepo;
+  private readonly campaignRepo;
 
   private constructor(campaignRepo: TestCampaignRepository) {
     this.campaignRepo = campaignRepo;

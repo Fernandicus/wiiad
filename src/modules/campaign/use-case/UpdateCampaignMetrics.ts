@@ -9,16 +9,16 @@ export class UpdateCampaignMetrics {
     campaignId: UniqId;
   }): Promise<void> {
     await this.campaignRepo.addReferral({
-      campaignId: params.campaignId.id,
-      referralId: params.referralId.id,
+      campaignId: params.campaignId,
+      referralId: params.referralId,
     });
   }
 
   async increaseViews(campaignId: UniqId): Promise<void> {
-    await this.campaignRepo.increaseViews(campaignId.id);
+    await this.campaignRepo.increaseViews(campaignId);
   }
 
   async increaseClicks(campaignId: UniqId): Promise<void> {
-    await this.campaignRepo.increaseClicks(campaignId.id);
+    await this.campaignRepo.increaseClicks(campaignId);
   }
 }

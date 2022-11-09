@@ -5,7 +5,6 @@ export class CreateCampaign {
   constructor(private campaignRepo: ICampaignRepo) {}
 
   async launch(campaign: Campaign): Promise<void> {
-    const campaignPrimitives = campaign.toPrimitives()
-    await this.campaignRepo.save(campaignPrimitives);
+    await this.campaignRepo.save(campaign);
   }
 }

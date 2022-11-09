@@ -17,9 +17,8 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
     campaignRepo = {
       save: jest.fn(),
       findAllByAdvertiserId: jest.fn(),
-      findByStatus: jest.fn(),
+      findAllByStatus: jest.fn(),
       addReferral: jest.fn(),
-      addWatcher: jest.fn(),
       byId: jest.fn(),
       increaseClicks:jest.fn(),
       increaseViews:jest.fn(),
@@ -29,9 +28,8 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
   });
 
   it(`WHEN call the launch method, 
-  THEN the repo should be called with the campaign primitives`, async () => {
+  THEN the repo save method should be called with the campaign object`, async () => {
     await createCampaign.launch(campaign);
-
-    expect(campaignRepo.save).toBeCalledWith(campaign.toPrimitives());
+    expect(campaignRepo.save).toBeCalledWith(campaign);
   });
 });

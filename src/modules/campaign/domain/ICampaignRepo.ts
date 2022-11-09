@@ -1,16 +1,16 @@
-import { AdvertiserPropsPrimitives } from "../../advertiser/domain/Advertiser";
-import { ICampaignPrimitives } from "./Campaign";
-import { CampaignStatusType } from "./value-objects/CampaignStatus";
+import { UniqId } from "@/src/utils/UniqId";
+import { Campaign } from "./Campaign";
+import { CampaignStatus } from "./value-objects/CampaignStatus";
 
 export interface ICampaignRepo {
-  save(campaign: ICampaignPrimitives): Promise<void>;
-  findByStatus(status: string): Promise<ICampaignPrimitives[]>;
-  findAllByAdvertiserId(id: string): Promise<ICampaignPrimitives[]>;
-  byId(id: string): Promise<ICampaignPrimitives | null>;
+  save(campaign: Campaign): Promise<void>;
+  findAllByStatus(status: CampaignStatus): Promise<Campaign[] | null>;
+  findAllByAdvertiserId(id: UniqId): Promise<Campaign[] | null>;
+  byId(id: UniqId): Promise<Campaign | null>;
   addReferral(params: {
-    campaignId: string;
-    referralId: string;
+    campaignId: UniqId;
+    referralId: UniqId;
   }): Promise<void>;
-  increaseViews(id: string): Promise<void>;
-  increaseClicks(id: string): Promise<void>;
+  increaseViews(id: UniqId): Promise<void>;
+  increaseClicks(id: UniqId): Promise<void>;
 }

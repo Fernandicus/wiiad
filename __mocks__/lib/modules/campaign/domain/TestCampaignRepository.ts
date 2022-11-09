@@ -1,4 +1,4 @@
-import { Campaign, ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 
 export interface TestCampaignRepository {
