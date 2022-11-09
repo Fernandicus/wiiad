@@ -1,7 +1,9 @@
-import { IUserPrimitives } from "./User";
+import { Email } from "@/src/domain/Email";
+import { Name } from "@/src/domain/Name";
+import { IUserPrimitives, User } from "./User";
 
 export interface IUserRepo {
-  save(user: IUserPrimitives): Promise<void>;
-  findByEmail(email: string): Promise<IUserPrimitives | null>;
-  findByUserName(name: string): Promise<IUserPrimitives | null>;
+  save(user: User): Promise<void>;
+  findByEmail(email: Email): Promise<User | null>;
+  findByUserName(name: Name): Promise<User | null>;
 }
