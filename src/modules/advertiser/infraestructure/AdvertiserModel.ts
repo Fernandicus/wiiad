@@ -1,7 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 
-const advertiserSchema = new Schema(
+export interface IAdvertiserModel {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  profilePic: string;
+}
+
+const advertiserSchema = new Schema<IAdvertiserModel>(
   {
     _id: { type: String, required: true },
     name: {
@@ -27,12 +35,5 @@ const advertiserSchema = new Schema(
   { _id: false }
 );
 
-export interface AdvertiserModelProps {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  profilePic: string;
-}
-
-export const AdvertiserModel = mongoose.models.Advertiser || mongoose.model("Advertiser", advertiserSchema);
+export const AdvertiserModel: Model<IAdvertiserModel> =
+  mongoose.models.Advertiser || mongoose.model("Advertiser", advertiserSchema);

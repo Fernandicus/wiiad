@@ -1,52 +1,46 @@
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { Advertiser, AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { RoleType } from "@/src/domain/Role";
 import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
-import { TestAdvertiserMongoDBRepo } from "../../../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { mockedAdvertiserRepo } from "../../../../__mocks__/context/MockAdvertiserTestDB";
+import { UniqId } from "@/src/utils/UniqId";
+import { Email } from "@/src/domain/Email";
 
 describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoDB Repo", () => {
-  let advertiser: AdvertiserPropsPrimitives;
+  let advertiser: Advertiser;
   let advertiserRepo: AdvertiserMongoDBRepo;
 
   beforeAll(async () => {
     await mockedAdvertiserRepo();
-    advertiser = FakeAdvertiser.createPrimitives(RoleType.BUSINESS);
+    advertiser = FakeAdvertiser.create(RoleType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);
 
-  it("WHEN call advertiser repository save method, THEN advertiser is saved in MongoDB", async () => {
+  it("WHEN call save method, THEN advertiser is saved in MongoDB and foundedById ", async () => {
     await advertiserRepo.save(advertiser);
-    const advertiserFound = await AdvertiserModel.findById(advertiser.id);
-    expect(advertiserFound?.name).toBe(advertiser.name);
-    expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.role).toBe(advertiser.role);
-  }, 8000);
-
-  it("WHEN call advertiser repository findById method, THEN return the saved advertiser in MongoDB", async () => {
     const advertiserFound = await advertiserRepo.findById(advertiser.id);
-    expect(advertiserFound?.name).toBe(advertiser.name);
-    expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.role).toBe(advertiser.role);
+    expect(advertiserFound?.name).toEqual(advertiser.name);
+    expect(advertiserFound?.email).toEqual(advertiser.email);
+    expect(advertiserFound?.role).toEqual(advertiser.role);
   }, 8000);
 
-  it("WHEN call findById with a non existing ID, THEN return null", async () => {
-    const advertiserFound = await advertiserRepo.findById("12345");
-    expect(advertiserFound).toBe(null);
+  it("WHEN call findById for a non existing ID, THEN return null", async () => {
+    const advertiserFound = await advertiserRepo.findById(UniqId.new());
+    expect(advertiserFound).toEqual(null);
   }, 8000);
 
-  it(`WHEN call advertiser repository findByEmail method, 
+  it(`WHEN call findByEmail method, 
   THEN return the saved advertiser in MongoDB`, async () => {
     const advertiserFound = await advertiserRepo.findByEmail(advertiser.email);
-    expect(advertiserFound?.name).toBe(advertiser.name);
-    expect(advertiserFound?.email).toBe(advertiser.email);
-    expect(advertiserFound?.role).toBe(advertiser.role);
+    expect(advertiserFound?.name).toEqual(advertiser.name);
+    expect(advertiserFound?.email).toEqual(advertiser.email);
+    expect(advertiserFound?.role).toEqual(advertiser.role);
   }, 8000);
 
-  it(`WHEN call advertiser repository findByEmail method for a non existing advertiser email, 
+  it(`WHEN call findByEmail method for a non existing advertiser email, 
   THEN return the saved advertiser in MongoDB`, async () => {
-    const advertiserFound = await advertiserRepo.findByEmail("xxx@xxx.com");
+    const advertiserFound = await advertiserRepo.findByEmail(new Email("xxx@xxx.com"));
     expect(advertiserFound).toBe(null);
   }, 8000);
 });

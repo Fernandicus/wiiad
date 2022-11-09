@@ -1,6 +1,6 @@
 import { RoleType } from "@/src/domain/Role";
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { Advertiser, AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import {
   Campaign,
   ICampaignPrimitives,
@@ -40,7 +40,7 @@ interface IVerificationEmailsByStatus {
 interface InitializedMongoTestDB {
   mocks: IMockedDB;
   campaigns: ICampaignsByStatus;
-  advertisers: AdvertiserPropsPrimitives[];
+  advertisers: Advertiser[];
   ads: Ad[];
   users: IUserPrimitives[];
   verificationEmails: IVerificationEmailsByStatus;
@@ -50,7 +50,7 @@ interface InitializedMongoTestDB {
 export class MockTestDB {
   readonly mocks: IMockedDB;
   readonly campaigns: ICampaignsByStatus;
-  readonly advertisers: AdvertiserPropsPrimitives[];
+  readonly advertisers: Advertiser[];
   readonly ads: Ad[];
   readonly users: IUserPrimitives[];
   readonly verificationEmails: IVerificationEmailsByStatus;

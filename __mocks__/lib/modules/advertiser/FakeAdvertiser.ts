@@ -15,13 +15,23 @@ export class FakeAdvertiser extends Advertiser {
     super(props);
   }
 
-  static create(role = RoleType.BUSINESS): FakeAdvertiser {
+  static create(role = RoleType.BUSINESS): Advertiser {
     const primaryData = this.generateFakeData();
     const advertiser = this.generateAdvertiser({
       ...primaryData,
       role,
     });
-    return new FakeAdvertiser({ ...advertiser });
+    return new Advertiser({ ...advertiser });
+  }
+
+  static createMany(amount = 5, role = RoleType.BUSINESS): Advertiser[] {
+    let advertisers: Advertiser[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      advertisers.push(this.create(role));
+    }
+
+    return advertisers;
   }
 
   static createPrimitives(role = RoleType.BUSINESS): AdvertiserPropsPrimitives {
@@ -48,7 +58,7 @@ export class FakeAdvertiser extends Advertiser {
     email: string;
     name: string;
     id: string;
-    profilePic:string;
+    profilePic: string;
   } {
     return {
       email: faker.internet.email(),
@@ -61,7 +71,6 @@ export class FakeAdvertiser extends Advertiser {
   private static generateAdvertiser(
     primitives: AdvertiserPropsPrimitives
   ): Advertiser {
-  
     return new Advertiser({
       id: new UniqId(primitives.id),
       email: new Email(primitives.email),

@@ -6,6 +6,7 @@ import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/Fak
 describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser repo", () => {
   let advertiser: Advertiser;
   let advertiserRepoMock: AdvertiserRepo;
+  let createAdvertiser: CreateAdvertiser;
 
   beforeAll(() => {
     advertiser = FakeAdvertiser.create();
@@ -15,12 +16,12 @@ describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser re
       findByEmail: jest.fn(),
       findByName: jest.fn(),
     };
+    createAdvertiser = new CreateAdvertiser(advertiserRepoMock);
   });
 
   it(`WHEN call the save method, 
     THEN the advertiser repository save method should be called with the advertiser props`, async () => {
-    const createAdvertiser = new CreateAdvertiser(advertiserRepoMock);
     await createAdvertiser.create(advertiser);
-    expect(advertiserRepoMock.save).toBeCalledWith(advertiser.toPrimitives());
+    expect(advertiserRepoMock.save).toBeCalledWith(advertiser);
   });
 });

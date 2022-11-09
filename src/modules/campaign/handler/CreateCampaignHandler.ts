@@ -6,16 +6,22 @@ import {
 } from "../domain/value-objects/Budget";
 import { CreateCampaign } from "../use-case/CreateCampaign";
 
+interface ILaunchCampaignProps {
+  advertiserId: string;
+  adId: string;
+  id: string;
+  budget: CampaignBudgetProps;
+}
+
 export class CreateCampaignHandler {
   constructor(private createCampaign: CreateCampaign) {}
 
-  async launch(props: {
-    advertiserId: string;
-    adId: string;
-    id: string;
-    budget: CampaignBudgetProps;
-  }): Promise<void> {
-    const { advertiserId, adId, id, budget } = props;
+  async launch({
+    advertiserId,
+    adId,
+    id,
+    budget,
+  }: ILaunchCampaignProps): Promise<void> {
     const campaignBudget = new CampaignBudget({
       balance: budget.balance,
       clicks: budget.clicks,

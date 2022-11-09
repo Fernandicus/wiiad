@@ -1,6 +1,6 @@
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
 export interface TestAdvertiserRepository {
-  saveMany(advertiserPrimitives: AdvertiserPropsPrimitives[]): Promise<void>;
-  getAllAdvertisers(): Promise<AdvertiserPropsPrimitives[] | null>
+  saveMany(advertiser: Advertiser[]): Promise<void>;
+  getAllAdvertisers(): Promise<Advertiser[] | null>
 }

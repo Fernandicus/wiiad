@@ -9,7 +9,6 @@ export class FindAdvertiserHandler {
   async findByEmail(email: string): Promise<AdvertiserPropsPrimitives | null> {
     const mail = new Email(email);
     const advertiserFound = await this.findAdvertiser.byEmail(mail);
-    if (!advertiserFound) return null;
     return advertiserFound.toPrimitives();
   }
 
@@ -18,7 +17,6 @@ export class FindAdvertiserHandler {
   ): Promise<AdvertiserPropsPrimitives | null> {
     const userName = new Name(name);
     const advertiserFound = await this.findAdvertiser.byUserName(userName);
-    if (!advertiserFound) return null;
     return advertiserFound.toPrimitives();
   }
 }

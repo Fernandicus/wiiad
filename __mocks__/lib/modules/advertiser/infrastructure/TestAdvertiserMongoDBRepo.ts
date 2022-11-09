@@ -1,9 +1,17 @@
+import { Email } from "@/src/domain/Email";
+import { Name } from "@/src/domain/Name";
+import { ProfilePic } from "@/src/domain/ProfilePic";
+import { Role } from "@/src/domain/Role";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import {
+  Advertiser,
+  AdvertiserPropsPrimitives,
+} from "@/src/modules/advertiser/domain/Advertiser";
 import {
   AdvertiserModel,
-  AdvertiserModelProps,
+  IAdvertiserModel,
 } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
+import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 import { TestAdvertiserRepository } from "../domain/TestAdvertiserRepository";
@@ -19,39 +27,30 @@ export class TestAdvertiserMongoDBRepo
     return new TestAdvertiserMongoDBRepo();
   }
 
-  async saveMany(
-    advertiserPrimitives: AdvertiserPropsPrimitives[]
-  ): Promise<void> {
+  async saveMany(advertiser: Advertiser[]): Promise<void> {
     await TestMongoDB.connectMongoDB();
-    const models = advertiserPrimitives.map(
-      (advertiser): AdvertiserModelProps => {
-        return {
-          _id: advertiser.id,
-          email: advertiser.email,
-          name: advertiser.name,
-          role: advertiser.role,
-          profilePic: advertiser.profilePic,
-        };
-      }
-    );
-    await AdvertiserModel.insertMany(models);
+    const models = advertiser.map((advertiser): IAdvertiserModel => {
+      return {
+        ...advertiser.toPrimitives(),
+        _id: advertiser.id.id,
+      };
+    });
+    await AdvertiserModel.insertMany<IAdvertiserModel>(models);
   }
 
-  async getAllAdvertisers(): Promise<AdvertiserPropsPrimitives[] | null> {
+  async getAllAdvertisers(): Promise<Advertiser[] | null> {
     await TestMongoDB.connectMongoDB();
-    const advertisers = await AdvertiserModel.find<AdvertiserModelProps>();
-    if (advertisers.length == 0) return null;
-    const advertisersPrimitives = advertisers.map(
-      (advertiser): AdvertiserPropsPrimitives => {
-        return {
-          id: advertiser._id,
-          email: advertiser.email,
-          name: advertiser.name,
-          role: advertiser.role,
-          profilePic: advertiser.profilePic,
-        };
-      }
-    );
-    return advertisersPrimitives;
+    const advertiserModels = await AdvertiserModel.find<IAdvertiserModel>();
+    if (advertiserModels.length == 0) return null;
+    const advertisers = advertiserModels.map((advertiser) => {
+      return new Advertiser({
+        id: new UniqId(advertiser._id),
+        name: new Name(advertiser.name),
+        email: new Email(advertiser.email),
+        role: new Role(advertiser.role),
+        profilePic: new ProfilePic(advertiser.profilePic),
+      });
+    });
+    return advertisers;
   }
 }

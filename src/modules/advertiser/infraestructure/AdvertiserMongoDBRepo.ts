@@ -1,43 +1,51 @@
-import { AdvertiserPropsPrimitives } from "../domain/Advertiser";
+import { Email } from "@/src/domain/Email";
+import { Name } from "@/src/domain/Name";
+import { ProfilePic } from "@/src/domain/ProfilePic";
+import { Role } from "@/src/domain/Role";
+import { UniqId } from "@/src/utils/UniqId";
+import { Advertiser } from "../domain/Advertiser";
 import { AdvertiserRepo } from "../domain/AdvertiserRepo";
-import { AdvertiserModel, AdvertiserModelProps } from "./AdvertiserModel";
+import { AdvertiserModel, IAdvertiserModel } from "./AdvertiserModel";
 
 export class AdvertiserMongoDBRepo implements AdvertiserRepo {
-  async findByName(name: string): Promise<AdvertiserPropsPrimitives | null> {
-    const advertiserModel = await AdvertiserModel.findOne<AdvertiserModelProps>(
-      { name }
+  async save(advertiser: Advertiser): Promise<void> {
+    await AdvertiserModel.create({
+      ...advertiser.toPrimitives(),
+      _id: advertiser.id.id,
+    } as IAdvertiserModel);
+  }
+
+  async findByName(name: Name): Promise<Advertiser | null> {
+    const advertiserModel = await AdvertiserModel.findOne<IAdvertiserModel>({
+      name: name.name,
+    } as IAdvertiserModel);
+    if (!advertiserModel) return null;
+    return this.returnAdvertiser(advertiserModel);
+  }
+
+  async findById(id: UniqId): Promise<Advertiser | null> {
+    const advertiserModel = await AdvertiserModel.findById<IAdvertiserModel>(
+      id.id
     );
+    if (!advertiserModel) return null;
     return this.returnAdvertiser(advertiserModel);
   }
 
-  async save(model: AdvertiserPropsPrimitives): Promise<void> {
-    const advertiserModel = new AdvertiserModel({ _id: model.id, ...model });
-    await advertiserModel.save();
-  }
-
-  async findById(id: string): Promise<AdvertiserPropsPrimitives | null> {
-    const advertiserModel =
-      await AdvertiserModel.findById<AdvertiserModelProps>(id);
+  async findByEmail(email: Email): Promise<Advertiser | null> {
+    const advertiserModel = await AdvertiserModel.findOne<IAdvertiserModel>({
+      email: email.email,
+    } as IAdvertiserModel);
+    if (!advertiserModel) return null;
     return this.returnAdvertiser(advertiserModel);
   }
 
-  async findByEmail(email: string): Promise<AdvertiserPropsPrimitives | null> {
-    const advertiserModel = await AdvertiserModel.findOne<AdvertiserModelProps>(
-      { email }
-    );
-    return this.returnAdvertiser(advertiserModel);
-  }
-
-  private returnAdvertiser(
-    advertiser: AdvertiserModelProps | null
-  ): AdvertiserPropsPrimitives | null {
-    if (!advertiser) return null;
-    return {
-      id: advertiser._id,
-      name: advertiser.name,
-      email: advertiser.email,
-      role: advertiser.role,
-      profilePic: advertiser.profilePic
-    };
+  private returnAdvertiser(advertiser: IAdvertiserModel): Advertiser {
+    return new Advertiser({
+      id: new UniqId(advertiser._id),
+      name: new Name(advertiser.name),
+      email: new Email(advertiser.email),
+      role: new Role(advertiser.role),
+      profilePic: new ProfilePic(advertiser.profilePic),
+    });
   }
 }
