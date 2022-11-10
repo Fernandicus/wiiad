@@ -1,8 +1,8 @@
-import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
 
 export interface TestVerificationEmailRepo {
-  saveMany(verificationEmailProps: VerificationEmailTimer[]): Promise<void>;
-  findById(id: UniqId): Promise<VerificationEmailTimer | null>;
-  getAll(): Promise<VerificationEmailTimer[] | null>;
+  saveMany(verificationEmailProps: VerificationEmail[]): Promise<void>;
+  findById(id: UniqId): Promise<VerificationEmail | null>;
+  getAll(): Promise<VerificationEmail[] | null>;
 }

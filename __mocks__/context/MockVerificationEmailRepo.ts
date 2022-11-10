@@ -1,15 +1,16 @@
 import { RoleType } from "@/src/domain/Role";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
-import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
+import { FakeVerificationEmail } from "../lib/modules/send-email-verification/FakeVerificationEmail";
 
 export const mockedVerificationEmailRepo = (emails: {
-  valid: VerificationEmailTimer;
-  expired: VerificationEmailTimer;
+  valid: VerificationEmail;
+  expired: VerificationEmail;
 }) : IVerificationEmailRepo => {
-  const business = FakeVerificationEmailTimer.createMany(3, RoleType.BUSINESS);
-  const user = FakeVerificationEmailTimer.createMany(2, RoleType.USER);
+  const business = FakeVerificationEmail.createMany(3, RoleType.BUSINESS);
+  const user = FakeVerificationEmail.createMany(2, RoleType.USER);
   const verificationEmails = [
     ...business,
     ...user,
@@ -18,14 +19,14 @@ export const mockedVerificationEmailRepo = (emails: {
   ];
 
   return {
-    findById: jest.fn().mockImplementation((tokenId: UniqId) : VerificationEmailTimer | null=> {
+    findByAuthToken: jest.fn().mockImplementation((tokenId: AuthToken) : VerificationEmail | null=> {
       const emailFound = verificationEmails.find(
-        (email) => email.id.id == tokenId.id
+        (email) => email.authToken.token == tokenId.token
       );
       if (!emailFound) return null;
       return emailFound;
     }),
-    remove: jest.fn(),
+    removeById: jest.fn(),
     save: jest.fn(),
   };
 };

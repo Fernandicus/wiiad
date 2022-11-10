@@ -2,6 +2,6 @@ import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/
 
 export const mockedEmailSenderRepo = (): IEmailSenderRepo => {
   return {
-    send: jest.fn(),
+    login: jest.fn(),
   };
 };

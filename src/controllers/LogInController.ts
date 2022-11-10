@@ -15,7 +15,7 @@ import { UniqId } from "../utils/UniqId";
 import { createUserHandler, findUserHandler } from "../modules/user/container";
 import { IUserPrimitives } from "../modules/user/domain/User";
 import { ProfilePic } from "../domain/ProfilePic";
-import { IVerificationEmailTimerPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmail";
 
 interface ILogInParams {
   token: string;
@@ -24,7 +24,7 @@ interface ILogInParams {
 
 interface UserData {
   queries: ILogInParams;
-  verificationEmail: IVerificationEmailTimerPrimitives;
+  verificationEmail: IVerificationEmailPrimitives;
 }
 
 export class LogInController {

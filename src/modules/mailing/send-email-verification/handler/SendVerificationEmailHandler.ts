@@ -1,5 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
+import { AuthToken } from "../domain/AuthToken";
 import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
 import { VerificationURL } from "../domain/VerificationURL";
 import { CreateAuthToken } from "../use-case/CreateAuthToken";
@@ -16,7 +17,7 @@ export class SendVerificationEmailHandler {
     const verificationEmail = new VerificationURL({
       userName: new Name(props.userName),
       to: new Email(props.email),
-      authToken:props.authToken,
+      authToken: new AuthToken(props.authToken),
     });
     await this.sendEmail.login(verificationEmail);
   }

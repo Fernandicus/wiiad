@@ -1,29 +1,25 @@
 import { Email } from "@/src/domain/Email";
 import {
-  VerificationEmailTimer,
-  IVerificationEmailTimerProps,
-  IVerificationEmailTimerPrimitives,
-} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+  VerificationEmail,
+  IVerificationEmailProps,
+  IVerificationEmailPrimitives,
+} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
 import { TimerConstants } from "@/src/modules/mailing/send-email-verification/domain/TimerConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Role, RoleType } from "@/src/domain/Role";
+import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
 
-export class FakeVerificationEmailTimer extends VerificationEmailTimer {
-  constructor({
-    id,
-    expirationDate,
-    email,
-    role,
-  }: IVerificationEmailTimerProps) {
-    super({ id, expirationDate, email, role });
+export class FakeVerificationEmail extends VerificationEmail {
+  constructor(params: IVerificationEmailProps) {
+    super(params);
   }
 
   static create(
     roletype = RoleType.BUSINESS,
     hasExpired = false
-  ): VerificationEmailTimer {
+  ): VerificationEmail {
     const { email, expirationDate, id, role } =
       this.generateRandomData(roletype);
 
@@ -31,18 +27,21 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
       ? this.expiredDate(expirationDate)
       : expirationDate;
 
-    return new FakeVerificationEmailTimer({
+    const authToken = authTokenCreator.generate();
+
+    return new FakeVerificationEmail({
       id: new UniqId(id),
       email: new Email(email),
       expirationDate: new ExpirationDate(expiration),
       role: new Role(role),
+      authToken,
     });
   }
 
   static createWithPrimitives({
     roletype = RoleType.BUSINESS,
     hasExpired = false,
-  }): IVerificationEmailTimerPrimitives {
+  }): IVerificationEmailPrimitives {
     const { email, expirationDate, id, role } =
       this.generateRandomData(roletype);
 
@@ -50,11 +49,14 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
       ? this.expiredDate(expirationDate)
       : expirationDate;
 
+    const authToken = authTokenCreator.generate().token;
+
     return {
       id,
       email,
       expirationDate: expiration,
       role,
+      authToken,
     };
   }
 
@@ -62,8 +64,8 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     amount = 5,
     roletype = RoleType.BUSINESS,
     hasExpired = false
-  ): IVerificationEmailTimerPrimitives[] {
-    let vertificationEmailsPrimitives: IVerificationEmailTimerPrimitives[] = [];
+  ): IVerificationEmailPrimitives[] {
+    let vertificationEmailsPrimitives: IVerificationEmailPrimitives[] = [];
 
     for (let i = 0; i < amount - 1; i++) {
       vertificationEmailsPrimitives.push(
@@ -77,8 +79,8 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
     amount = 5,
     roletype = RoleType.BUSINESS,
     hasExpired = false
-  ): VerificationEmailTimer[] {
-    let verificationEmail: VerificationEmailTimer[] = [];
+  ): VerificationEmail[] {
+    let verificationEmail: VerificationEmail[] = [];
 
     for (let i = 0; i < amount; i++) {
       verificationEmail.push(this.create(roletype, hasExpired));
@@ -89,20 +91,21 @@ export class FakeVerificationEmailTimer extends VerificationEmailTimer {
 
   private static generateRandomData(
     role: RoleType
-  ): IVerificationEmailTimerPrimitives {
+  ): IVerificationEmailPrimitives {
     const email = faker.internet.email();
     const in5min = new Date(Date.now() + TimerConstants.fiveMin);
     const in24Hours = new Date(Date.now() + TimerConstants.twentyFourH);
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
-    return { email, id, expirationDate, role };
+    const authToken =authTokenCreator.generate().token;
+    return { email, id, expirationDate, role, authToken };
   }
 
   private static generateMany(
     amount: number,
     role: RoleType
-  ): IVerificationEmailTimerPrimitives[] {
-    let verificationEmails: IVerificationEmailTimerPrimitives[] = [];
+  ): IVerificationEmailPrimitives[] {
+    let verificationEmails: IVerificationEmailPrimitives[] = [];
     for (var i = 0; i <= amount - 1; i++) {
       verificationEmails.push(this.generateRandomData(role));
     }

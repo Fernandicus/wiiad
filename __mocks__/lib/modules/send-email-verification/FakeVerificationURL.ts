@@ -1,5 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
 import {
   IVerificationURLProps,
   VerificationURL,
@@ -12,10 +13,10 @@ export class FakeVerificationURL extends VerificationURL {
     super(props);
   }
 
-  static create(token:string): FakeVerificationURL {
+  static create(authToken:AuthToken): FakeVerificationURL {
     const to = new Email(faker.internet.email());
     const userName = new Name(faker.name.firstName());
 
-    return new VerificationURL({ to, token, userName });
+    return new VerificationURL({ to, authToken, userName });
   }
 }

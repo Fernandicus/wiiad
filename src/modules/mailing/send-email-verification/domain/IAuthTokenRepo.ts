@@ -1,4 +1,5 @@
+import { AuthToken } from "./AuthToken";
 
 export interface IAuthTokenRepo{
-    generate():string;
+    generate():AuthToken;
 }

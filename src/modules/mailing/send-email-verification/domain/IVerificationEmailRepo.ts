@@ -1,8 +1,9 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { VerificationEmailTimer } from "./VerificationEmailTimer";
+import { AuthToken } from "./AuthToken";
+import { VerificationEmail } from "./VerificationEmail";
 
 export interface IVerificationEmailRepo {
-  save(model: VerificationEmailTimer): Promise<void>;
-  findByAuthToken(token: string): Promise<VerificationEmailTimer | null>;
-  removeById(id: string): Promise<void>;
+  save(verificationEmail: VerificationEmail): Promise<void>;
+  findByAuthToken(token: AuthToken): Promise<VerificationEmail | null>;
+  removeById(id: UniqId): Promise<void>;
 }

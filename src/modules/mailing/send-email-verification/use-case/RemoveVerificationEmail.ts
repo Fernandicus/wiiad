@@ -5,6 +5,6 @@ export class RemoveVerificationEmail{
     constructor(private verificationEmailRepo: IVerificationEmailRepo){}
 
     async removeById(id: UniqId):Promise<void>{
-        await this.verificationEmailRepo.removeById(id.id);
+        await this.verificationEmailRepo.removeById(id);
     }
 }

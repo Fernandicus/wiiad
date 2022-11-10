@@ -1,10 +1,10 @@
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
-import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
+import { VerificationEmail } from "../domain/VerificationEmail";
 
-export class SaveEmailVerification {
+export class SaveVerificationEmail {
   constructor(private repository: IVerificationEmailRepo) {}
 
-  async save(verificationTimer: VerificationEmailTimer): Promise<void> {
+  async save(verificationTimer: VerificationEmail): Promise<void> {
     await this.repository.save(verificationTimer);
   }
 }

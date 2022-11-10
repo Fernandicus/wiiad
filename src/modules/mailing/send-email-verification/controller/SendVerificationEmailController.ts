@@ -1,7 +1,5 @@
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { findUserHandler } from "@/src/modules/user/container";
-import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
 import { ISendVerificationEmailRepo } from "../domain/ISendVerificationEmailRepo";
 import {
@@ -15,6 +13,21 @@ export class SendVerificationEmailController {
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
+    await this.checkIfUserNameExists(data);
+    await this.checkIfUserEmailExists(data);
+    const authToken = authTokenCreator.generate();
+    await this.saveAndSendEmail({
+      email: data.email,
+      verificationEmailId: id,
+      name: data.userName,
+      role: data.role,
+      authToken: authToken.token,
+    });
+  }
+
+  static async checkIfUserNameExists(
+    data: ISendVerificationEmailRepo
+  ): Promise<void> {
     const userNameFoundByName = await findUserHandler.findByUserName(
       data.userName
     );
@@ -22,19 +35,16 @@ export class SendVerificationEmailController {
       throw new ErrorEmailVerification(
         `El nombre de ususario '${data.userName}' ya existe`
       );
+  }
+
+  static async checkIfUserEmailExists(
+    data: ISendVerificationEmailRepo
+  ): Promise<void> {
     const userFoundByEmail = await findUserHandler.findByEmail(data.email);
     if (userFoundByEmail)
       throw new ErrorEmailVerification(
         `El email '${data.email}' ya está asignado a un usuario`
       );
-    const authToken = authTokenCreator.generate();
-    await this.send({
-      email: data.email,
-      verificationEmailId: id,
-      name: data.userName,
-      role: data.role,
-      authToken,
-    });
   }
 
   static async sendToUser(
@@ -46,14 +56,15 @@ export class SendVerificationEmailController {
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
     const authToken = authTokenCreator.generate();
 
-    await this.send({
+    await this.saveAndSendEmail({
       email: userFoundByEmail.email,
       verificationEmailId: id,
       name: userFoundByEmail.name,
       role: userFoundByEmail.role,
-      authToken,
+      authToken: authToken.token,
     });
   }
+  
 
   static async sendToNewAdvertiser(
     data: ISendVerificationEmailRepo,
@@ -74,12 +85,12 @@ export class SendVerificationEmailController {
         `El email '${data.email}' ya está asignado a un anunciante`
       );
     const authToken = authTokenCreator.generate();
-    await this.send({
+    await this.saveAndSendEmail({
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
       role: data.role,
-      authToken,
+      authToken: authToken.token,
     });
   }
 
@@ -93,16 +104,16 @@ export class SendVerificationEmailController {
     if (!advertiserFoundByEmail)
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
     const authToken = authTokenCreator.generate();
-    await this.send({
+    await this.saveAndSendEmail({
       email: advertiserFoundByEmail.email,
       verificationEmailId: id,
       name: advertiserFoundByEmail.name,
       role: advertiserFoundByEmail.role,
-      authToken: authToken,
+      authToken: authToken.token,
     });
   }
 
-  private static async send(params: {
+  private static async saveAndSendEmail(params: {
     email: string;
     name: string;
     role: string;

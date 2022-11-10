@@ -1,10 +1,11 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
+import { AuthToken } from "./AuthToken";
 
 export interface IVerificationURLProps {
   userName: Name;
   to: Email;
-  authToken: string;
+  authToken: AuthToken;
 }
 
 export class VerificationURL {
@@ -28,6 +29,8 @@ export class VerificationURL {
   }
 
   private verificationUrl(log: string) {
-    return `/${this.userName.name}?log=${log}&authToken=${this.authToken}`;
+    const name = this.userName.name;
+    const token = this.authToken.token;
+    return `/${name}?log=${log}&authToken=${token}`;
   }
 }

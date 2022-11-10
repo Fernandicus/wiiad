@@ -1,10 +1,8 @@
 import { Email } from "@/src/domain/Email";
 import { Role } from "@/src/domain/Role";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
 import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
-import {
-  IVerificationEmailTimerPrimitives,
-  VerificationEmailTimer,
-} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import {
   IVerificationEmailModel,
   VerificationEmailModel,
@@ -28,9 +26,7 @@ export class TestVerificationEmailMongoDBRepo
     return new TestVerificationEmailMongoDBRepo();
   }
 
-  async saveMany(
-    verificationEmailProps: VerificationEmailTimer[]
-  ): Promise<void> {
+  async saveMany(verificationEmailProps: VerificationEmail[]): Promise<void> {
     await TestMongoDB.connectMongoDB();
     const models: IVerificationEmailModel[] = verificationEmailProps.map(
       (model) => {
@@ -43,7 +39,7 @@ export class TestVerificationEmailMongoDBRepo
     await VerificationEmailModel.insertMany<IVerificationEmailModel>(models);
   }
 
-  async findById(id: UniqId): Promise<VerificationEmailTimer | null> {
+  async findById(id: UniqId): Promise<VerificationEmail | null> {
     await TestMongoDB.connectMongoDB();
     const emailFound =
       await VerificationEmailModel.findById<IVerificationEmailModel>({
@@ -53,14 +49,14 @@ export class TestVerificationEmailMongoDBRepo
     return this.toVerificationEmail(emailFound);
   }
 
-  async getAll(): Promise<VerificationEmailTimer[] | null> {
+  async getAll(): Promise<VerificationEmail[] | null> {
     await TestMongoDB.connectMongoDB();
     const emailsFound =
       await VerificationEmailModel.find<IVerificationEmailModel>();
 
     if (emailsFound.length == 0) return null;
 
-    const emails: VerificationEmailTimer[] = emailsFound.map((email) => {
+    const emails: VerificationEmail[] = emailsFound.map((email) => {
       return this.toVerificationEmail(email);
     });
     return emails;
@@ -68,12 +64,13 @@ export class TestVerificationEmailMongoDBRepo
 
   private toVerificationEmail(
     model: IVerificationEmailModel
-  ): VerificationEmailTimer {
-    return new VerificationEmailTimer({
+  ): VerificationEmail {
+    return new VerificationEmail({
       id: new UniqId(model._id),
       email: new Email(model.email),
       expirationDate: new ExpirationDate(model.expirationDate),
       role: new Role(model.role),
+      authToken: new AuthToken(model.authToken),
     });
   }
 }

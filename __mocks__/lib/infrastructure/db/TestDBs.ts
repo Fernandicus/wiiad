@@ -5,7 +5,7 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { User } from "@/src/modules/user/domain/User";
 import { setTestAdDB } from "./TestAdDB";

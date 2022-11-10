@@ -1,6 +1,6 @@
 import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
-import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { userSession } from "@/src/use-case/container";

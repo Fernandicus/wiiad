@@ -1,9 +1,10 @@
+import { AuthToken } from "../domain/AuthToken";
 import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
 
 export class CreateAuthToken {
   constructor(private authToken: IAuthTokenRepo) {}
 
-  generate(): string {
+  generate(): AuthToken {
     return this.authToken.generate();
   }
 }

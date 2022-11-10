@@ -7,14 +7,14 @@ import { NodemailerSendVerificationEmail } from "./infrastructure/NodemailerSend
 import { VerificationEmailMongoDBRepo } from "./infrastructure/VerificationEmailMongoDBRepo";
 import { CreateAuthToken } from "./use-case/CreateAuthToken";
 import { RemoveVerificationEmail } from "./use-case/RemoveVerificationEmail";
-import { SaveEmailVerification } from "./use-case/SaveEmailVerification";
+import { SaveVerificationEmail } from "./use-case/SaveVerificationEmail";
 import { SendlVerificationEmail } from "./use-case/SendVerificationEmail";
 import { ValidateVerificationEmail } from "./use-case/ValidateVerificationEmail";
 
 const verificationEmailRepo = new VerificationEmailMongoDBRepo();
-const saveEmailVerification = new SaveEmailVerification(verificationEmailRepo);
+const saveVerificationEmail = new SaveVerificationEmail(verificationEmailRepo);
 export const verificationEmailHandler = new EmailVerificationTokenHandler(
-  saveEmailVerification
+  saveVerificationEmail
 );
 
 const nodemailerSender = new NodemailerSendVerificationEmail();
@@ -22,10 +22,7 @@ const authTokenRepo = new AuthTokenCrypto();
 export const authTokenCreator = new CreateAuthToken(authTokenRepo);
 const sendEmail = new SendlVerificationEmail(nodemailerSender);
 
-export const sendEmailHandler = new SendVerificationEmailHandler(
-  sendEmail,
-  authTokenCreator
-);
+export const sendEmailHandler = new SendVerificationEmailHandler(sendEmail);
 
 const validateEmail = new ValidateVerificationEmail(verificationEmailRepo);
 export const validateEmailHandler = new ValidateEmailHandler(validateEmail);

@@ -1,9 +1,10 @@
 import { Email } from "@/src/domain/Email";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
+import { AuthToken } from "../domain/AuthToken";
 import { ExpirationDate } from "../domain/ExpirationDate";
 import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
-import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
+import { VerificationEmail } from "../domain/VerificationEmail";
 import {
   IVerificationEmailModel,
   VerificationEmailModel,
@@ -11,30 +12,30 @@ import {
 
 export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
 
-  async save(model: VerificationEmailTimer): Promise<void> {
+  async save(verificationEmail: VerificationEmail): Promise<void> {
     await VerificationEmailModel.create({
-      ...model.toPrimitives(),
-      _id: model.id.id,
+      ...verificationEmail.toPrimitives(),
+      _id: verificationEmail.id.id,
     } as IVerificationEmailModel);
   }
 
   async findByAuthToken(
-    authToken: string
-  ): Promise<VerificationEmailTimer | null> {
+    authToken: AuthToken
+  ): Promise<VerificationEmail | null> {
     const model = await VerificationEmailModel.findOne<IVerificationEmailModel>(
-      { authToken } as IVerificationEmailModel
+      { authToken: authToken.token } as IVerificationEmailModel
     );
     if (!model) return null;
-    return new VerificationEmailTimer({
+    return new VerificationEmail({
       id: new UniqId(model._id),
       expirationDate: new ExpirationDate(model.expirationDate),
       email: new Email(model.email),
       role: new Role(model.role),
-      authToken: model.authToken,
+      authToken: new AuthToken(model.authToken) ,
     });
   }
 
-  async removeById(id: string): Promise<void> {
-    await VerificationEmailModel.findByIdAndDelete(id);
+  async removeById(id: UniqId): Promise<void> {
+    await VerificationEmailModel.findByIdAndDelete(id.id);
   }
 }

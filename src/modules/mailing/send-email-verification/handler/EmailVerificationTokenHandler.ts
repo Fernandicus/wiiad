@@ -1,26 +1,29 @@
 import { Email } from "@/src/domain/Email";
-import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
+import { VerificationEmail } from "../domain/VerificationEmail";
 import { ExpirationDate } from "../domain/ExpirationDate";
-import { SaveEmailVerification } from "../use-case/SaveEmailVerification";
+import { SaveVerificationEmail } from "../use-case/SaveVerificationEmail";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
+import { AuthToken } from "../domain/AuthToken";
+
+interface ISaveEmailParams{
+  id: string;
+  email: string;
+  role: string;
+  authToken: string;
+}
 
 export class EmailVerificationTokenHandler {
-  constructor(private saveEmailVerfication: SaveEmailVerification) {}
+  constructor(private saveEmailVerfication: SaveVerificationEmail) {}
 
-  async saveWithExpirationIn5min(props: {
-    id: string;
-    email: string;
-    role: string;
-    authToken: string;
-  }): Promise<void> {
-    const verificationEmailTimer = new VerificationEmailTimer({
+  async saveWithExpirationIn5min(props: ISaveEmailParams): Promise<void> {
+    const verificationEmail = new VerificationEmail({
       id: new UniqId(props.id),
       expirationDate: ExpirationDate.inFiveMinutes(),
       email: new Email(props.email),
       role: new Role(props.role),
-      authToken: props.authToken,
+      authToken: new AuthToken(props.authToken),
     });
-    this.saveEmailVerfication.save(verificationEmailTimer);
+    this.saveEmailVerfication.save(verificationEmail);
   }
 }
