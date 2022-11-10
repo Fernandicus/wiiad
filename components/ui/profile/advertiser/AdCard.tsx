@@ -84,7 +84,7 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
   };
 
   return (
-    <AdCardItem image={ad.image}>
+    <AdCardItem image={ad.file}>
       <div className="space-y-2">
         <h3 className="font-medium text-gray-600">{ad.title}</h3>
         <p className="text-gray-500">{`${ad.description.slice(0, 70)}...`}</p>

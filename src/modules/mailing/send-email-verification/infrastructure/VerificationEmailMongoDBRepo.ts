@@ -10,25 +10,31 @@ import {
 } from "./VerificationEmailModel";
 
 export class VerificationEmailMongoDBRepo implements IVerificationEmailRepo {
+
   async save(model: VerificationEmailTimer): Promise<void> {
     await VerificationEmailModel.create({
-      _id: model.id.id,
       ...model.toPrimitives(),
+      _id: model.id.id,
     } as IVerificationEmailModel);
   }
 
-  async findById(id: UniqId): Promise<VerificationEmailTimer | null> {
-    const model = await VerificationEmailModel.findById(id.id);
+  async findByAuthToken(
+    authToken: string
+  ): Promise<VerificationEmailTimer | null> {
+    const model = await VerificationEmailModel.findOne<IVerificationEmailModel>(
+      { authToken } as IVerificationEmailModel
+    );
     if (!model) return null;
     return new VerificationEmailTimer({
       id: new UniqId(model._id),
-      email: new Email(model.email),
       expirationDate: new ExpirationDate(model.expirationDate),
+      email: new Email(model.email),
       role: new Role(model.role),
+      authToken: model.authToken,
     });
   }
 
-  async remove(id: UniqId): Promise<void> {
-    await VerificationEmailModel.findByIdAndDelete(id.id);
+  async removeById(id: string): Promise<void> {
+    await VerificationEmailModel.findByIdAndDelete(id);
   }
 }

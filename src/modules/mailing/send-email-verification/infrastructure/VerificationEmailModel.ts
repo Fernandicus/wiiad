@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 export interface IVerificationEmailModel {
   _id: string;
+  authToken: string;
   expirationDate: Date;
   email: string;
   role: string;
@@ -15,6 +16,7 @@ const verificationEmailSchema = new Schema<IVerificationEmailModel>(
       type: Date,
       required: true,
     },
+    authToken: { type: String, required: true },
     email: {
       type: String,
       required: true,

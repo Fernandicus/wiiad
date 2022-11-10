@@ -12,12 +12,14 @@ export class EmailVerificationTokenHandler {
     id: string;
     email: string;
     role: string;
+    authToken: string;
   }): Promise<void> {
     const verificationEmailTimer = new VerificationEmailTimer({
       id: new UniqId(props.id),
       expirationDate: ExpirationDate.inFiveMinutes(),
       email: new Email(props.email),
       role: new Role(props.role),
+      authToken: props.authToken,
     });
     this.saveEmailVerfication.save(verificationEmailTimer);
   }

@@ -3,6 +3,6 @@ import { VerificationEmailTimer } from "./VerificationEmailTimer";
 
 export interface IVerificationEmailRepo {
   save(model: VerificationEmailTimer): Promise<void>;
-  findById(id: UniqId): Promise<VerificationEmailTimer | null>;
-  remove(id: UniqId): Promise<void>;
+  findByAuthToken(token: string): Promise<VerificationEmailTimer | null>;
+  removeById(id: string): Promise<void>;
 }

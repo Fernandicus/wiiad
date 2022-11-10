@@ -32,17 +32,17 @@ export class NodemailerSendVerificationEmail
     this.email_from = process.env.EMAIL_FROM;
   }
 
-  async send(props: VerificationURL): Promise<void> {
+  async login(verificationUrl: VerificationURL): Promise<void> {
     const result = await this.transport.sendMail({
       from: this.email_from,
-      to: props.to.email,
+      to: verificationUrl.to.email,
       subject: `Sign in to ${this.base_url}`,
       text: VerificationEmailTemplate.title({
-        url: `${this.base_url}${props.url}`,
+        url: `${this.base_url}${verificationUrl.login()}`,
         host: this.base_url,
       }),
       html: VerificationEmailTemplate.html({
-        url: `${this.base_url}${props.url}`,
+        url: `${this.base_url}${verificationUrl.login()}`,
         host: this.base_url,
       }),
     });

@@ -19,19 +19,19 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
   THEN the verificationEmail should be saved and found in MongoDB`, async () => {
     const verificationEmail = FakeVerificationEmailTimer.create();
     await repo.save(verificationEmail);
-    const verificationEmailFound = await repo.findById(verificationEmail.id);
+    const verificationEmailFound = await repo.findByAuthToken(verificationEmail.id);
     expect(verificationEmailFound).toEqual(verificationEmail);
   });
 
   it(`WHEN call the remove method for an ID, 
   THEN the verification email should be removed from MongoDB`, async () => {
-    const verificationEmailFound = await repo.findById(
+    const verificationEmailFound = await repo.findByAuthToken(
       validEmails[0].id
     );
 
     await repo.remove(verificationEmailFound!.id);
 
-    const notVerificationEmailFound = await repo.findById(
+    const notVerificationEmailFound = await repo.findByAuthToken(
       validEmails[0].id
     );
 

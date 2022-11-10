@@ -78,11 +78,11 @@ export default function Profile({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-
+  
   const queryParams = new LoginQueries(query);
 
   try {
-    if (!queryParams.email || !queryParams.token) {
+    if (!queryParams.token) {
       const session = userSession.getFromServer(context);
       if (session && session.name == queryParams.userName) {
         if (session.role !== RoleType.USER) {
@@ -133,20 +133,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
 
-    const {user, ads, campaigns} = await MongoDB.connectAndDisconnect<{
+    const { user, ads, campaigns } = await MongoDB.connectAndDisconnect<{
       user: IGenericUserPrimitives;
       campaigns?: ICampaignPrimitives[] | null;
       ads?: AdPropsPrimitives[] | null;
     }>(async () => {
       const user = await LogInController.initSession(
         {
-          email: queryParams.email!,
           token: queryParams.token!,
           userName: queryParams.userName,
         },
         context
       );
-      if (user.role === RoleType.USER) return { user, ads: null, campaigns:null };
+      if (user.role === RoleType.USER)
+        return { user, ads: null, campaigns: null };
       const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
       const ads = await adFinderHandler.findAll(user.id);
       return { user, campaigns, ads };
@@ -156,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         user,
         ad: ads,
-        campaign: campaigns
+        campaign: campaigns,
       } as IUserNamePage,
     };
   } catch (err) {

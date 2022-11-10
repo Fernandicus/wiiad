@@ -5,6 +5,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
 import { ISendVerificationEmailRepo } from "../domain/ISendVerificationEmailRepo";
 import {
+  authTokenCreator,
   sendEmailHandler,
   verificationEmailHandler,
 } from "../email-verification-container";
@@ -26,12 +27,13 @@ export class SendVerificationEmailController {
       throw new ErrorEmailVerification(
         `El email '${data.email}' ya está asignado a un usuario`
       );
-
+    const authToken = authTokenCreator.generate();
     await this.send({
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
       role: data.role,
+      authToken,
     });
   }
 
@@ -42,18 +44,14 @@ export class SendVerificationEmailController {
     const userFoundByEmail = await findUserHandler.findByEmail(data.email);
     if (!userFoundByEmail)
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
-
-    await verificationEmailHandler.saveWithExpirationIn5min({
-      email: userFoundByEmail.email,
-      id,
-      role: userFoundByEmail.role,
-    });
+    const authToken = authTokenCreator.generate();
 
     await this.send({
       email: userFoundByEmail.email,
       verificationEmailId: id,
       name: userFoundByEmail.name,
       role: userFoundByEmail.role,
+      authToken,
     });
   }
 
@@ -75,11 +73,13 @@ export class SendVerificationEmailController {
       throw new ErrorEmailVerification(
         `El email '${data.email}' ya está asignado a un anunciante`
       );
+    const authToken = authTokenCreator.generate();
     await this.send({
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
       role: data.role,
+      authToken,
     });
   }
 
@@ -92,12 +92,13 @@ export class SendVerificationEmailController {
     );
     if (!advertiserFoundByEmail)
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
-
+    const authToken = authTokenCreator.generate();
     await this.send({
       email: advertiserFoundByEmail.email,
       verificationEmailId: id,
       name: advertiserFoundByEmail.name,
       role: advertiserFoundByEmail.role,
+      authToken: authToken,
     });
   }
 
@@ -106,16 +107,19 @@ export class SendVerificationEmailController {
     name: string;
     role: string;
     verificationEmailId: string;
+    authToken: string;
   }): Promise<void> {
-    const { email, verificationEmailId, name, role } = params;
+    const { email, verificationEmailId, name, role, authToken } = params;
+
     await verificationEmailHandler.saveWithExpirationIn5min({
       email,
       id: verificationEmailId,
       role,
+      authToken,
     });
 
-    await sendEmailHandler.send({
-      id: verificationEmailId,
+    await sendEmailHandler.sendLogin({
+      authToken,
       email,
       userName: name,
     });

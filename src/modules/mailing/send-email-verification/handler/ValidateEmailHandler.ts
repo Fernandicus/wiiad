@@ -6,16 +6,8 @@ import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail
 export class ValidateEmailHandler {
   constructor(private validateEmail: ValidateVerificationEmail) {}
 
-  async validate(
-    token: string,
-    email: string
-  ): Promise<IVerificationEmailTimerPrimitives> {
-    const verificationToken = new UniqId(token);
-    const verificationEmail = new Email(email);
-    const validatedEmail = await this.validateEmail.validate(
-      verificationToken,
-      verificationEmail
-    );
+  async validate(token: string): Promise<IVerificationEmailTimerPrimitives> {
+    const validatedEmail = await this.validateEmail.validate(token);
     return validatedEmail.toPrimitives();
   }
 }

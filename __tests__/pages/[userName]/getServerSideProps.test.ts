@@ -1,6 +1,6 @@
 import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
-import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { userSession } from "@/src/use-case/container";
@@ -18,8 +18,8 @@ interface IServerSideResponse {
 
 describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
   let verificationMock: TestVerificationEmailDB;
-  let validVerificationEmails: IVerificationEmailTimerPrimitives[];
-  let expiredVerificationEmail: IVerificationEmailTimerPrimitives;
+  let validVerificationEmails: VerificationEmailTimer[];
+  let expiredVerificationEmail: VerificationEmailTimer;
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
 
@@ -41,7 +41,6 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: "fernandisco",
-        email: validVerificationEmails[0].email,
         verificationToken: "1234-1243-1234",
       },
     })) as IServerSideResponse;
@@ -58,9 +57,8 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: "fernandisco",
-        email: faker.internet.email(),
-        verificationToken: validVerificationEmails[0].id,
-      },
+        authToken: validVerificationEmails[0].authToken,
+      } ,
     })) as IServerSideResponse;
 
     const verificationEmailFound = await verificationMock.findById(
@@ -80,7 +78,6 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: faker.name.firstName(),
-        email: expiredVerificationEmail.email,
         verificationToken: expiredVerificationEmail.id,
       },
     })) as IServerSideResponse;

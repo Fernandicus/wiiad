@@ -20,7 +20,7 @@ describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verificat
 
   it(`WHEN call SendVerificationEmail send method, 
   THEN Email Sender send method should be called with the VerificationEmail data`, async () => {
-    await sendVerificationEmail.send(verificationUrl);
-    expect(mockedRepo.send).toBeCalledWith(verificationUrl);
+    await sendVerificationEmail.login(verificationUrl);
+    expect(mockedRepo.login).toBeCalledWith(verificationUrl);
   });
 });

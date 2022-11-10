@@ -15,32 +15,31 @@ import { UniqId } from "../utils/UniqId";
 import { createUserHandler, findUserHandler } from "../modules/user/container";
 import { IUserPrimitives } from "../modules/user/domain/User";
 import { ProfilePic } from "../domain/ProfilePic";
+import { IVerificationEmailTimerPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 
-interface UserData {
-  queries: LogInQueries;
-  role: string;
-}
-
-interface LogInQueries {
-  email: string;
+interface ILogInParams {
   token: string;
   userName: string;
 }
 
+interface UserData {
+  queries: ILogInParams;
+  verificationEmail: IVerificationEmailTimerPrimitives;
+}
+
 export class LogInController {
   static async initSession(
-    loginQueries: LogInQueries,
+    loginQueries: ILogInParams,
     context: IReqAndRes
   ): Promise<IGenericUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
-      loginQueries.token,
-      loginQueries.email
+      loginQueries.token
     );
 
     if (verificationEmail.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn({
         queries: loginQueries,
-        role: verificationEmail.role,
+        verificationEmail,
       });
 
       this.userInitSession(context, advertiser);
@@ -48,7 +47,7 @@ export class LogInController {
     } else {
       const user = await this.userLogIn({
         queries: loginQueries,
-        role: verificationEmail.role,
+        verificationEmail,
       });
 
       this.userInitSession(context, user);
@@ -68,13 +67,13 @@ export class LogInController {
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
     const advertiserFound = await findAdvertiserHandler.findByEmail(
-      data.queries.email
+      data.verificationEmail.email
     );
 
     if (!advertiserFound) return this.newAdvertiser(data);
 
     const advertiserId = advertiserFound.id;
-    await removeVerificationEmailHandler.remove(data.queries.token);
+    await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, advertiserId, advertiserFound.profilePic);
   }
 
@@ -86,12 +85,14 @@ export class LogInController {
   private static async findOrCreateNewUser(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
-    const userFound = await findUserHandler.findByEmail(data.queries.email);
+    const userFound = await findUserHandler.findByEmail(
+      data.verificationEmail.email
+    );
 
     if (!userFound) return this.newUser(data);
 
     const userId = userFound.id;
-    await removeVerificationEmailHandler.remove(data.queries.token);
+    await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, userId, userFound.profilePic);
   }
 
@@ -112,10 +113,10 @@ export class LogInController {
     const profilePic = ProfilePic.defaultAdvertiserPic;
 
     await createAdvertiserHandler.create({
-      email: data.queries.email,
+      email: data.verificationEmail.email,
       name: data.queries.userName,
       id: advertiserId,
-      role: data.role,
+      role: data.verificationEmail.role,
       profilePic,
     });
 
@@ -129,10 +130,10 @@ export class LogInController {
     const profilePic = ProfilePic.defaultUserPic;
 
     await createUserHandler.create({
-      email: data.queries.email,
+      email: data.verificationEmail.email,
       name: data.queries.userName,
       id: userId,
-      role: data.role,
+      role: data.verificationEmail.role,
       profilePic,
     });
 
@@ -146,9 +147,9 @@ export class LogInController {
   ): IGenericUserPrimitives {
     return {
       id,
-      email: data.queries.email,
+      email: data.verificationEmail.email,
       name: data.queries.userName,
-      role: data.role,
+      role: data.verificationEmail.role,
       profilePic,
     };
   }

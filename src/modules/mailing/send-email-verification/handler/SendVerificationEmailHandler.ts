@@ -6,19 +6,18 @@ import { CreateAuthToken } from "../use-case/CreateAuthToken";
 import { SendlVerificationEmail } from "../use-case/SendVerificationEmail";
 
 export class SendVerificationEmailHandler {
-  constructor(private sendEmail: SendlVerificationEmail, private createAuthToken: CreateAuthToken) {}
+  constructor(private sendEmail: SendlVerificationEmail) {}
 
-  async send(props: {
+  async sendLogin(props: {
     userName: string;
     email: string;
-    id: string;
+    authToken: string;
   }): Promise<void> {
-    const token = this.createAuthToken.generate();
     const verificationEmail = new VerificationURL({
       userName: new Name(props.userName),
       to: new Email(props.email),
-      token,
+      authToken:props.authToken,
     });
-    await this.sendEmail.send(verificationEmail);
+    await this.sendEmail.login(verificationEmail);
   }
 }

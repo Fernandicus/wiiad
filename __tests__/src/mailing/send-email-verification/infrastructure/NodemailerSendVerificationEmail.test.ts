@@ -16,6 +16,6 @@ describe("On NodemailerSendVerificationEmail, GIVEN a SMTP service", () => {
 
   it(`WHEN call the send method, 
   THEN do not expect any error`, async () => {
-    expect(nodemailer.send(verificationUrl)).resolves.not.toThrowError();
+    expect(nodemailer.login(verificationUrl)).resolves.not.toThrowError();
   });
 });

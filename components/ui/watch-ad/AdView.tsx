@@ -155,7 +155,7 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
         <div className="w-full space-y-2">
           <h1 className="text-lg font-bold text-gray-700">{ad.title}</h1>
           <div className="space-y-5">
-            {ad.image.includes(".mp4") ? (
+            {ad.file.includes(".mp4") ? (
               <video
                 ref={videoRef}
                 autoPlay
@@ -163,12 +163,12 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
                 controls
                 className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
               >
-                <source src={ad.image} type="video/mp4" />
+                <source src={ad.file} type="video/mp4" />
                 Tu navegador no el formato de video mp4
               </video>
             ) : (
               <img
-                src={ad.image}
+                src={ad.file}
                 alt="alt"
                 className="w-[576px] h-[324px] object-cover  bg-slate-200 rounded-lg"
               ></img>

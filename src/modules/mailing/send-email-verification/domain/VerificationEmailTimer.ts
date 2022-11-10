@@ -8,6 +8,7 @@ export interface IVerificationEmailTimerPrimitives {
   expirationDate: Date;
   email: string;
   role: string;
+  authToken:string;
 }
 
 export interface IVerificationEmailTimerProps {
@@ -15,6 +16,7 @@ export interface IVerificationEmailTimerProps {
   expirationDate: ExpirationDate;
   email: Email;
   role: Role;
+  authToken:string;
 }
 
 export class VerificationEmailTimer {
@@ -22,12 +24,14 @@ export class VerificationEmailTimer {
   readonly expirationDate;
   readonly email;
   readonly role;
+  readonly authToken;
 
   constructor(props: IVerificationEmailTimerProps) {
     this.id = props.id;
     this.expirationDate = props.expirationDate;
     this.email = props.email;
     this.role = props.role;
+    this.authToken = props.authToken;
   }
 
   toPrimitives(): IVerificationEmailTimerPrimitives {
@@ -36,6 +40,7 @@ export class VerificationEmailTimer {
       email: this.email.email,
       role: this.role.role,
       expirationDate: this.expirationDate.date,
+      authToken: this.authToken,
     };
   }
 }

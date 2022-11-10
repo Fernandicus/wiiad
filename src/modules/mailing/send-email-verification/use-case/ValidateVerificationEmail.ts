@@ -8,19 +8,14 @@ import { VerificationEmailTimer } from "../domain/VerificationEmailTimer";
 export class ValidateVerificationEmail {
   constructor(private repository: IVerificationEmailRepo) {}
 
-  async validate(
-    tokenId: UniqId,
-    email: Email
-  ): Promise<VerificationEmailTimer> {
-    const verificationEmail = await this.repository.findById(tokenId);
+  async validate(tokenId: string): Promise<VerificationEmailTimer> {
+    const verificationEmail = await this.repository.findByAuthToken(tokenId);
+   
     if (!verificationEmail)
       throw new ErrorEmailVerification("Verification Email not found");
 
-    await this.repository.remove(tokenId);
+    await this.repository.removeById(tokenId);
     await this.checkExpirationDate(verificationEmail);
-
-    if (email.email !== verificationEmail.email.email)
-      throw new ErrorEmailVerification("The email provided is not valid");
 
     return verificationEmail;
   }

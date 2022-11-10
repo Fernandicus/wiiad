@@ -4,18 +4,30 @@ import { Name } from "@/src/domain/Name";
 export interface IVerificationURLProps {
   userName: Name;
   to: Email;
-  token: string;
+  authToken: string;
 }
 
 export class VerificationURL {
-  readonly url;
   readonly to;
   readonly userName;
+  readonly authToken;
 
   constructor(props: IVerificationURLProps) {
-    const { to, token, userName } = props;
+    const { to, authToken, userName } = props;
     this.to = to;
     this.userName = userName;
-    this.url = `/${userName.name}?email=${to.email}&verificationToken=${token}`;
+    this.authToken = authToken;
+  }
+
+  login(): string {
+    return this.verificationUrl("login");
+  }
+
+  signUp(): string {
+    return this.verificationUrl("sign-up");
+  }
+
+  private verificationUrl(log: string) {
+    return `/${this.userName.name}?log=${log}&authToken=${this.authToken}`;
   }
 }
