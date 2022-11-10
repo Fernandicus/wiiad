@@ -8,7 +8,7 @@ export interface AdModelProps {
   advertiserId: string;
   title: string;
   description: string;
-  image: string;
+  file: string;
   redirectionUrl: string;
   segments: string[];
 }
@@ -29,7 +29,7 @@ const adSchema = new Schema<AdModelProps>(
       min: 1,
       max: AdDescription.maxLength,
     },
-    image: { type: String, required: true },
+    file: { type: String, required: true },
     redirectionUrl: { type: String, required: true },
     segments: [{ type: String }],
   },

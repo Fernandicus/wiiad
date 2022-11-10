@@ -1,6 +1,6 @@
 import { Ad, AdPropsPrimitives } from "../domain/Ad";
 import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
+import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
@@ -22,7 +22,7 @@ export class AdCreatorHandler {
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
-      image: new AdImageUrl(adProps.image),
+      image: new AdFileUrl(adProps.image),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new UniqId(advertiserId),
     });

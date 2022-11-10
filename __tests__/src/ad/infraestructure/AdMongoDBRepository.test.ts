@@ -36,7 +36,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     expect(adInRepository!.id).toEqual(fakeAd.id);
     expect(adInRepository!.title).toEqual(fakeAd.title);
     expect(adInRepository!.description).toEqual(fakeAd.description);
-    expect(adInRepository!.image).toEqual(fakeAd.image);
+    expect(adInRepository!.file).toEqual(fakeAd.file);
     expect(adInRepository!.advertiserId).toEqual(fakeAd.advertiserId);
     expect(adInRepository!.redirectionUrl).toEqual(fakeAd.redirectionUrl);
     expect(adInRepository!.segments).toEqual(fakeAd.segments);

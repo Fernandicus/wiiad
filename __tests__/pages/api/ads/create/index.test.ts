@@ -1,9 +1,9 @@
-import createAdvertise from "@/pages/api/v1/ads/create";
+import createAdvertise from "@/pages/api/v1/ads/create/banner";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { userSession } from "@/src/use-case/container";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { MockContext } from "../../../../../__mocks__/context/MockContext";
+import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
@@ -18,7 +18,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   THEN should return a 200 statusCode`, async () => {
     const ad = FakeAd.createWithPrimitives(advertiser.id);
 
-    const ctx = MockContext("POST", ad);
+    const ctx = mockedContext({ method: "POST", body: ad });
 
     userSession.setFromServer(ctx, advertiser);
 
@@ -31,7 +31,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   THEN should return a 400 statusCode`, async () => {
     const ad = FakeAd.createWithPrimitives(advertiser.id);
 
-    const ctx = MockContext("POST", ad);
+    const ctx = mockedContext({ method: "POST", body: ad });
 
     userSession.remove(ctx);
 
@@ -43,7 +43,10 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   it("WHEN sending a 'POST' request with an invalid params, THEN should return a 400 statusCode", async () => {
     const ad = FakeAd.createWithPrimitives(advertiser.id);
 
-    const { req, res } = MockContext("POST", { ...ad, advertiserId: "" });
+    const { req, res } = mockedContext({
+      method: "POST",
+      body: { ...ad, advertiserId: "" },
+    });
 
     await createAdvertise(req, res);
 
@@ -53,7 +56,7 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   it("WHEN sending a not 'POST' request, THEN should return a 400 statusCode", async () => {
     const ad = FakeAd.createWithPrimitives(advertiser.id);
 
-    const { req, res } = MockContext("GET", { ...ad });
+    const { req, res } = mockedContext({ method: "GET", body: ad });
 
     await createAdvertise(req, res);
 

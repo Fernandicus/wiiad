@@ -1,6 +1,6 @@
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
+import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
@@ -44,7 +44,7 @@ export class TestAdMongoDBRepository
         id: new UniqId(ad._id),
         title: new AdTitle(ad.title),
         description: new AdDescription(ad.description),
-        image: new AdImageUrl(ad.image),
+        file: new AdFileUrl(ad.file),
         redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
         segments: new AdSegments(ad.segments),
         advertiserId: new UniqId(ad.advertiserId),

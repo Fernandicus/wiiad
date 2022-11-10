@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         advertiserId: "",
         title: fields["title"] as string,
         description: fields["description"] as string,
-        image: fields["image"] as string,
+        file: fields["image"] as string,
         redirectionUrl: fields["redirectionUrl"] as string,
         segments: fields["segments"] as string[],
       };

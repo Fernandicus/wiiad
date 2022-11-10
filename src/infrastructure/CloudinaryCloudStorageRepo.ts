@@ -1,5 +1,7 @@
 import { ICloudStorageRepo } from "../domain/ICloudStorageRepo";
 import { v2 as cloudinary } from "cloudinary";
+import { Folder } from "../domain/Folder";
+import { AdFileUrl } from "../modules/ad/domain/value-objects/AdFileUrl";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -10,25 +12,25 @@ cloudinary.config({
 export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
   private readonly image_upload_preset = "ml_default";
 
-  async uploadImageAndGetUrl(
+  async uploadBannerAndGetUrl(
     filePath: string,
-    folderPath: string
-  ): Promise<string> {
+    folder: Folder
+  ): Promise<AdFileUrl> {
     const { secure_url } = await cloudinary.uploader.upload(filePath, {
-      folder: folderPath,
+      folder: folder.path,
       upload_preset: this.image_upload_preset,
     });
 
-    return secure_url;
+    return new AdFileUrl(secure_url);
   }
 
   async uploadVideoAndGetUrl(
     filePath: string,
-    folderPath: string
-  ): Promise<string> {
+    folder: Folder
+  ): Promise<AdFileUrl> {
     const { public_id } = await cloudinary.uploader.upload(filePath, {
       resource_type: "video",
-      folder: folderPath,
+      folder: folder.path,
       eager_async: true,
       chunk_size: 10 * 1024 * 1024, // 6mb
     });
@@ -45,6 +47,6 @@ export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
       },
     });
 
-    return transformed_url;
+    return new AdFileUrl(transformed_url);
   }
 }

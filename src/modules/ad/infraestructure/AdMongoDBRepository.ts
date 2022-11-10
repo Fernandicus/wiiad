@@ -2,7 +2,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { Ad } from "../domain/Ad";
 import { IAdRepository } from "../domain/IAdRepository";
 import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
+import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
@@ -45,7 +45,7 @@ export class AdMongoDBRepository implements IAdRepository {
       id: new UniqId(adModel._id),
       title: new AdTitle(adModel.title),
       description: new AdDescription(adModel.description),
-      image: new AdImageUrl(adModel.image),
+      file: new AdFileUrl(adModel.file),
       redirectionUrl: new AdRedirectionUrl(adModel.redirectionUrl),
       segments: new AdSegments(adModel.segments),
       advertiserId: new UniqId(adModel.advertiserId),

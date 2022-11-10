@@ -1,5 +1,5 @@
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
+import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { Ad, AdProps, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
@@ -110,7 +110,7 @@ export class FakeAd extends Ad {
       description: "",
       advertiserId: "",
       id: "",
-      image: "",
+      file: "",
       redirectionUrl: "",
       segments: [],
     });
@@ -121,7 +121,7 @@ export class FakeAd extends Ad {
     const description = faker.commerce
       .productDescription()
       .substring(0, AdDescription.maxLength);
-    const image = faker.image.avatar();
+    const file = faker.image.avatar();
     const redirectionUrl = faker.internet.url();
     const advertiserId = faker.random.numeric(10);
     const segments = this.getRandomAdSegments();
@@ -130,7 +130,7 @@ export class FakeAd extends Ad {
       id: "",
       title,
       description,
-      image,
+      file,
       redirectionUrl,
       advertiserId,
       segments,
@@ -158,7 +158,7 @@ export class FakeAd extends Ad {
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
-      image: new AdImageUrl(adProps.image),
+      file: new AdFileUrl(adProps.file),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new UniqId(adProps.advertiserId),
     });

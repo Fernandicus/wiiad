@@ -1,5 +1,5 @@
 import { AdDescription } from "./value-objects/AdDescription";
-import { AdImageUrl } from "./value-objects/AdImageUrl";
+import { AdFileUrl } from "./value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "./value-objects/AdRedirectionUrl";
 import { AdSegments } from "./value-objects/AdSegments";
 import { AdTitle } from "./value-objects/AdTitle";
@@ -10,7 +10,7 @@ export interface AdPropsPrimitives {
   advertiserId: string;
   title: string;
   description: string;
-  image: string;
+  file: string;
   redirectionUrl: string;
   segments: string[];
 }
@@ -19,7 +19,7 @@ export interface AdProps {
   id: UniqId;
   title: AdTitle;
   description: AdDescription;
-  image: AdImageUrl;
+  file: AdFileUrl;
   redirectionUrl: AdRedirectionUrl;
   advertiserId: UniqId;
   segments: AdSegments;
@@ -30,7 +30,7 @@ export class Ad {
   public readonly advertiserId: UniqId;
   public readonly title: AdTitle;
   public readonly description: AdDescription;
-  public readonly image: AdImageUrl;
+  public readonly file: AdFileUrl;
   public readonly redirectionUrl: AdRedirectionUrl;
   public readonly segments: AdSegments;
 
@@ -38,7 +38,7 @@ export class Ad {
     this.id = adProps.id;
     this.title = adProps.title;
     this.description = adProps.description;
-    this.image = adProps.image;
+    this.file = adProps.file;
     this.redirectionUrl = adProps.redirectionUrl;
     this.advertiserId = adProps.advertiserId;
     this.segments = adProps.segments;
@@ -50,7 +50,7 @@ export class Ad {
       advertiserId: this.advertiserId.id,
       title: this.title.title,
       description: this.description.description,
-      image: this.image.image,
+      file: this.file.file,
       redirectionUrl: this.redirectionUrl.url,
       segments: this.segments.segments,
     };

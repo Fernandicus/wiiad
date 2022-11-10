@@ -1,15 +1,24 @@
+import { Folder } from "../domain/Folder";
 import { ICloudStorageRepo } from "../domain/ICloudStorageRepo";
+import { Name } from "../domain/Name";
+import { AdFileUrl } from "../modules/ad/domain/value-objects/AdFileUrl";
 
 export class UploadFile {
   constructor(private cloudStorageRepo: ICloudStorageRepo) {}
 
-  async image(filePath: string, folder: string): Promise<string> {
-    const url = await this.cloudStorageRepo.uploadImageAndGetUrl(filePath, folder);
+  async adBanner(filePath: string, folder: Folder): Promise<AdFileUrl> {
+    const url = await this.cloudStorageRepo.uploadBannerAndGetUrl(
+      filePath,
+      folder
+    );
     return url;
   }
 
-  async video(filePath: string, folder: string): Promise<string> {
-    const url = await this.cloudStorageRepo.uploadVideoAndGetUrl(filePath, folder);
+  async adVideo(filePath: string, folder: Folder): Promise<AdFileUrl> {
+    const url = await this.cloudStorageRepo.uploadVideoAndGetUrl(
+      filePath,
+      folder
+    );
     return url;
   }
 }
