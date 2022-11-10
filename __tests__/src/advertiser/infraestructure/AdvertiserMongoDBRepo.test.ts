@@ -3,7 +3,7 @@ import { RoleType } from "@/src/domain/Role";
 import { AdvertiserModel } from "@/src/modules/advertiser/infraestructure/AdvertiserModel";
 import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { mockedAdvertiserRepo } from "../../../../__mocks__/context/MockAdvertiserTestDB";
+import { setTestAdvertiserDB } from "../../../../__mocks__/context/db/TestAdvertiserDB";
 import { UniqId } from "@/src/utils/UniqId";
 import { Email } from "@/src/domain/Email";
 
@@ -12,7 +12,7 @@ describe("On AdvertiserMongoDBRepo, GIVEN an Advertiser and an Advertiser MongoD
   let advertiserRepo: AdvertiserMongoDBRepo;
 
   beforeAll(async () => {
-    await mockedAdvertiserRepo();
+    await setTestAdvertiserDB();
     advertiser = FakeAdvertiser.create(RoleType.BUSINESS);
     advertiserRepo = new AdvertiserMongoDBRepo();
   }, 8000);

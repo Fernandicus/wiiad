@@ -1,7 +1,4 @@
-import {
-  Campaign,
-  ICampaignPrimitives,
-} from "@/src/modules/campaign/domain/Campaign";
+import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { ICampaignRepo } from "@/src/modules/campaign/domain/ICampaignRepo";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { CreateCampaign } from "@/src/modules/campaign/use-case/CreateCampaign";
@@ -20,11 +17,14 @@ describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
       findAllByStatus: jest.fn(),
       addReferral: jest.fn(),
       byId: jest.fn(),
-      increaseClicks:jest.fn(),
-      increaseViews:jest.fn(),
+      increaseClicks: jest.fn(),
+      increaseViews: jest.fn(),
     };
     createCampaign = new CreateCampaign(campaignRepo);
-    campaign = FakeCampaign.create({advertiserId: UniqId.new(), status: CampaignStatusType.ACTIVE});
+    campaign = FakeCampaign.create({
+      advertiserId: UniqId.new(),
+      status: CampaignStatusType.ACTIVE,
+    });
   });
 
   it(`WHEN call the launch method, 

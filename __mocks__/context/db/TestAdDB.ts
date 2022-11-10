@@ -1,15 +1,15 @@
-import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Ad } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestAdRepository } from "__mocks__/lib/modules/ads/domain/TestAdRepository";
-import { FakeAd } from "../../__mocks__/lib/modules/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
+import { TestAdRepository } from "../../lib/modules/ads/domain/TestAdRepository";
+import { FakeAd } from "../../lib/modules/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../../lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 
-export const mockedAdRepo = async (amount: number): Promise<MockAdTestDB> => {
+export const setTestAdDB = async (amount: number): Promise<TestAdDB> => {
   const testAdRepo = await TestAdMongoDBRepository.init();
-  return MockAdTestDB.setAndInit(testAdRepo, amount);
+  return TestAdDB.setAndInit(testAdRepo, amount);
 };
 
-export class MockAdTestDB {
+export class TestAdDB {
   readonly adRepo;
 
   private constructor(adRepo: TestAdRepository) {
@@ -19,11 +19,11 @@ export class MockAdTestDB {
   static async setAndInit(
     adRepo: TestAdRepository,
     amount: number
-  ): Promise<MockAdTestDB> {
+  ): Promise<TestAdDB> {
     const ads = this.setAds(amount);
     await adRepo.saveMany(ads);
 
-    return new MockAdTestDB(adRepo);
+    return new TestAdDB(adRepo);
   }
 
   async getAllAds(): Promise<Ad[] | null> {

@@ -2,7 +2,7 @@ import { User } from "@/src/modules/user/domain/User";
 import { UserMongoDBRepo } from "@/src/modules/user/infrastructure/UserMongoDBRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
-import { mockedUserRepo } from "../../../../__mocks__/context/MockUserTestDB";
+import { setTestUserDB } from "../../../../__mocks__/context/db/TestUserDB";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 
@@ -11,7 +11,7 @@ describe("On UserMongoDBRepo, GIVEN a user", () => {
   let repo: UserMongoDBRepo;
   
   beforeAll(async () => {
-    await mockedUserRepo(3) ;
+    await setTestUserDB(3) ;
     user = FakeUser.create(UniqId.new());
     repo = new UserMongoDBRepo();
   });

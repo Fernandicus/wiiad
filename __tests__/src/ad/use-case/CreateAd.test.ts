@@ -3,11 +3,6 @@ import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { AdImageUrl } from "@/src/modules/ad/domain/value-objects/AdImageUrl";
-import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
-import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
-import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 
 describe("On CreateAd use case, GIVEN a repository and an ad", () => {

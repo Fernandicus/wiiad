@@ -1,12 +1,9 @@
-import {
-  IReferralPrimitives,
-  Referral,
-} from "@/src/modules/referrals/domain/Referral";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralMongoDBRepo } from "@/src/modules/referrals/infrastructure/ReferralMongoDBRepo";
-import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
+import { User } from "@/src/modules/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
-import { mockedReferralRepo } from "../../../../__mocks__/context/MockReferralTestDB";
+import { setTestReferralDB } from "../../../../__mocks__/context/db/TestReferralDB";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
 import { Balance } from "@/src/domain/Balance";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
@@ -25,7 +22,7 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     const userTwo = FakeUser.create(UniqId.new());
     user = FakeUser.create(UniqId.new());
     referral = FakeReferral.create(user.id);
-    await mockedReferralRepo([userTwo.id]);
+    await setTestReferralDB([userTwo.id]);
     repo = new ReferralMongoDBRepo();
     increaseData = {
       balance: new Balance(5),

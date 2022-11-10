@@ -3,7 +3,6 @@ import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verific
 import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
-import { faker } from "@faker-js/faker";
 import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
 import { RoleType } from "@/src/domain/Role";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";

@@ -1,7 +1,7 @@
 import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { FindAds } from "@/src/modules/ad/use-case/FindAds";
-import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Ad } from "@/src/modules/ad/domain/Ad";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";

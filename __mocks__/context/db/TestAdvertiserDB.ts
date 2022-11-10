@@ -1,24 +1,24 @@
-import { TestAdvertiserRepository } from "../../__mocks__/lib/modules/advertiser/domain/TestAdvertiserRepository";
-import { TestAdvertiserMongoDBRepo } from "../../__mocks__/lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeAdvertiser } from "../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { TestAdvertiserRepository } from "../../lib/modules/advertiser/domain/TestAdvertiserRepository";
+import { TestAdvertiserMongoDBRepo } from "../../lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeAdvertiser } from "../../lib/modules/advertiser/FakeAdvertiser";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
-export const mockedAdvertiserRepo = async (): Promise<MockAdvertiserTestDB> => {
+export const setTestAdvertiserDB = async (): Promise<TestAdvertiserDB> => {
   const testAdvertiserRepo = await TestAdvertiserMongoDBRepo.init();
-  return MockAdvertiserTestDB.setAndInit(testAdvertiserRepo);
+  return TestAdvertiserDB.setAndInit(testAdvertiserRepo);
 };
 
-class MockAdvertiserTestDB {
+class TestAdvertiserDB {
   readonly advertiserRepo;
 
   private constructor(advertiserRepo: TestAdvertiserRepository) {
     this.advertiserRepo = advertiserRepo;
   }
 
-  static async setAndInit(advertiserRepo: TestAdvertiserRepository): Promise<MockAdvertiserTestDB> {
+  static async setAndInit(advertiserRepo: TestAdvertiserRepository): Promise<TestAdvertiserDB> {
     const advertisers = this.setAdvertisers();
     await advertiserRepo.saveMany(advertisers);
-    return new MockAdvertiserTestDB(advertiserRepo);
+    return new TestAdvertiserDB(advertiserRepo);
   }
 
   async getAllAdvertisers(): Promise<Advertiser[] | null> {

@@ -1,17 +1,17 @@
-import { IReferralPrimitives, Referral } from "@/src/modules/referrals/domain/Referral";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestReferralRepo } from "../lib/modules/referral/domain/TestReferralRepo";
-import { FakeReferral } from "../lib/modules/referral/FakeReferral";
-import { TestReferralMongoDBRepo } from "../lib/modules/referral/infrastructure/TestReferralMongoDBRepo";
+import { FakeReferral } from "../../lib/modules/referral/FakeReferral";
+import { TestReferralMongoDBRepo } from "../../lib/modules/referral/infrastructure/TestReferralMongoDBRepo";
+import { TestReferralRepo } from "../../lib/modules/referral/domain/TestReferralRepo";
 
-export const mockedReferralRepo = async (
+export const setTestReferralDB = async (
   usersId: UniqId[]
-): Promise<MockReferralTestDB> => {
+): Promise<TestReferralDB> => {
   const testReferralRepo = await TestReferralMongoDBRepo.init();
-  return MockReferralTestDB.setAndInit(testReferralRepo, usersId);
+  return TestReferralDB.setAndInit(testReferralRepo, usersId);
 };
 
-export class MockReferralTestDB {
+export class TestReferralDB {
   readonly referralRepo;
 
   private constructor(referralRepo: TestReferralRepo) {
@@ -21,10 +21,10 @@ export class MockReferralTestDB {
   static async setAndInit(
     referralRepo: TestReferralRepo,
     usersId: UniqId[]
-  ): Promise<MockReferralTestDB> {
+  ): Promise<TestReferralDB> {
     const referrals = this.createMany(usersId);
     await referralRepo.saveMany(referrals);
-    return new MockReferralTestDB(referralRepo);
+    return new TestReferralDB(referralRepo);
   }
 
   async getAll(): Promise<Referral[] | null> {

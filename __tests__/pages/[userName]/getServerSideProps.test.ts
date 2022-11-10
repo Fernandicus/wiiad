@@ -1,19 +1,15 @@
 import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
 import { IVerificationEmailTimerPrimitives } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { userSession } from "@/src/use-case/container";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { MockTestDB } from "../../../__mocks__/context/MockTestDB";
-import { MockVerificationEmailDB } from "__mocks__/context/MockVerificationEmailDB";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { TestDBs } from "__mocks__/context/db/TestDBs";
+import { TestVerificationEmailDB } from "__mocks__/context/db/TestVerificationEmailDB";
 
 interface IServerSideResponse {
   props: {};
@@ -21,7 +17,7 @@ interface IServerSideResponse {
 }
 
 describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
-  let verificationMock: MockVerificationEmailDB;
+  let verificationMock: TestVerificationEmailDB;
   let validVerificationEmails: IVerificationEmailTimerPrimitives[];
   let expiredVerificationEmail: IVerificationEmailTimerPrimitives;
   let req: MockRequest<NextApiRequest>;
@@ -30,7 +26,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
-    const mockTest = await MockTestDB.setAndInitAll();
+    const mockTest = await TestDBs.setAndInitAll();
     verificationMock = mockTest.mocks.verificationEmailsDB;
     validVerificationEmails = mockTest.verificationEmails.valids;
     expiredVerificationEmail = mockTest.verificationEmails.expired[0];

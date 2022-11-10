@@ -3,7 +3,7 @@ import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/Campa
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 import { CampaignStatus, CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
-import { autoMockedCampaigns } from "../../../../__mocks__/context/MockCampaignTestDB";
+import { autoSetTestCampaignDB } from "../../../../__mocks__/context/db/TestCampaignDB";
 
 describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () => {
   let campaignRepo: CampaignMongoDBRepo;
@@ -11,7 +11,7 @@ describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () =>
   let activeCampaigns: Campaign[] | null;
 
   beforeAll(async () => {
-    const mock = await autoMockedCampaigns();
+    const mock = await autoSetTestCampaignDB();
     activeCampaigns = await mock.findByStatus(CampaignStatus.active());
     newCampaign = FakeCampaign.create({
       advertiserId: UniqId.new(),

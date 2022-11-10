@@ -1,11 +1,5 @@
 import { ICloudStorageRepo } from "../domain/ICloudStorageRepo";
-import {
-  UploadApiOptions,
-  v2 as cloudinary,
-  VideoFormat,
-  VideoTransformationOptions,
-} from "cloudinary";
-import { ApiRoutes } from "../utils/ApiRoutes";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,14 +9,13 @@ cloudinary.config({
 
 export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
   private readonly image_upload_preset = "ml_default";
-  private readonly video_upload_preset = "ml_video";
 
   async uploadImageAndGetUrl(
     filePath: string,
-    folder: string
+    folderPath: string
   ): Promise<string> {
     const { secure_url } = await cloudinary.uploader.upload(filePath, {
-      folder,
+      folder: folderPath,
       upload_preset: this.image_upload_preset,
     });
 
@@ -31,28 +24,24 @@ export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
 
   async uploadVideoAndGetUrl(
     filePath: string,
-    folder: string
+    folderPath: string
   ): Promise<string> {
-    const { url, secure_url, public_id } = await cloudinary.uploader.upload(
-      filePath,
-      {
-        resource_type: "video",
-        folder,
-        eager_async: true,
-        chunk_size: 10 * 1024 * 1024, // 6mb
-       // eager: [{ format: "mp4" }],
-      }
-    );
+    const { public_id } = await cloudinary.uploader.upload(filePath, {
+      resource_type: "video",
+      folder: folderPath,
+      eager_async: true,
+      chunk_size: 10 * 1024 * 1024, // 6mb
+    });
 
     const transformed_url = cloudinary.url(public_id, {
       resource_type: "video",
       format: "mp4",
       transformation: {
         duration: 30,
-        width:720,
-        height:405,
-        fps:30,
-        quality:"auto",
+        width: 720,
+        height: 405,
+        fps: 30,
+        quality: "auto",
       },
     });
 

@@ -1,35 +1,31 @@
-import { RoleType } from "@/src/domain/Role";
-import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { Advertiser, AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import {
-  Campaign,
-  ICampaignPrimitives,
-} from "@/src/modules/campaign/domain/Campaign";
+import { Ad } from "@/src/modules/ad/domain/Ad";
+import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
+import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
-import { IReferralPrimitives, Referral } from "@/src/modules/referrals/domain/Referral";
-import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
-import { mockedAdRepo } from "./MockAdTestDB";
-import { mockedAdvertiserRepo } from "./MockAdvertiserTestDB";
-import { MockCampaignTestDB, mockedCampaignRepo } from "./MockCampaignTestDB";
-import { mockedReferralRepo } from "./MockReferralTestDB";
-import { mockedUserRepo } from "./MockUserTestDB";
+import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
+import { User } from "@/src/modules/user/domain/User";
+import { setTestAdDB } from "./TestAdDB";
+import { setTestAdvertiserDB } from "./TestAdvertiserDB";
+import { setTestCampaignDB, TestCampaignDB } from "./TestCampaignDB";
+import { setTestReferralDB } from "./TestReferralDB";
+import { setTestUserDB } from "./TestUserDB";
 import {
-  mockedVerificationEmailRepo,
-  MockVerificationEmailDB,
-} from "./MockVerificationEmailDB";
+  setTestVerificationEmailDB,
+  TestVerificationEmailDB,
+} from "./TestVerificationEmailDB";
 
 interface IMockedDB {
-  verificationEmailsDB: MockVerificationEmailDB;
+  verificationEmailsDB: TestVerificationEmailDB;
 }
 
 interface ICampaignsByStatus {
-  actives: ICampaignPrimitives[];
-  finished: ICampaignPrimitives[];
-  standBy: ICampaignPrimitives[];
+  actives: Campaign[];
+  finished: Campaign[];
+  standBy: Campaign[];
 }
 
 interface IVerificationEmailsByStatus {
@@ -47,7 +43,7 @@ interface InitializedMongoTestDB {
   referrals: Referral[];
 }
 
-export class MockTestDB {
+export class TestDBs {
   readonly mocks: IMockedDB;
   readonly campaigns: ICampaignsByStatus;
   readonly advertisers: Advertiser[];
@@ -64,41 +60,41 @@ export class MockTestDB {
     this.verificationEmails = params.verificationEmails;
   }
 
-  static async setAndInitAll(): Promise<MockTestDB> {
+  static async setAndInitAll(): Promise<TestDBs> {
     const totalAds = 9;
 
-    const mockedAdDB = await mockedAdRepo(totalAds);
+    const mockedAdDB = await setTestAdDB(totalAds);
     const mockedAds = await mockedAdDB.getAllAds();
 
-    const mockedAdvertisers = await mockedAdvertiserRepo();
+    const mockedAdvertisers = await setTestAdvertiserDB();
     const advertisers = await mockedAdvertisers.getAllAdvertisers();
 
-    const mockedCampaigns = await mockedCampaignRepo({
-      activeAds: mockedAds!.slice(0, 3),
-      finishedAds: mockedAds!.slice(3, 6),
-      standByAds: mockedAds!.slice(6, 9),
+    const mockedCampaigns = await setTestCampaignDB({
+      activeCampaignAds: mockedAds!.slice(0, 3),
+      finishedCampaignAds: mockedAds!.slice(3, 6),
+      standByCampaignAds: mockedAds!.slice(6, 9),
     });
     const campaigns = await this.findCampaignsByStatus(mockedCampaigns);
 
-    const mockedUsers = await mockedUserRepo(3);
+    const mockedUsers = await setTestUserDB(3);
     const users = await mockedUsers.getAll();
 
-    const mockedVerificationEmails = await mockedVerificationEmailRepo(2, 4);
+    const mockedVerificationEmails = await setTestVerificationEmailDB(2, 4);
     const verificationEmails = await mockedVerificationEmails.getAll();
 
-    const mockedReferrals = await mockedReferralRepo(
+    const mockedReferrals = await setTestReferralDB(
       users!.map((user) => user.id)
     );
     const referrals = await mockedReferrals.getAll();
 
-    return new MockTestDB({
+    return new TestDBs({
       mocks: {
         verificationEmailsDB: mockedVerificationEmails,
       },
       campaigns: {
-        actives: campaigns.actives!.map(campaign => campaign.toPrimitives()),
-        finished: campaigns.finished!.map(campaign => campaign.toPrimitives()),
-        standBy: campaigns.standBy!.map(campaign => campaign.toPrimitives()),
+        actives: campaigns.actives!.map((campaign) => campaign),
+        finished: campaigns.finished!.map((campaign) => campaign),
+        standBy: campaigns.standBy!.map((campaign) => campaign),
       },
       advertisers: advertisers!,
       users: users!,
@@ -112,19 +108,19 @@ export class MockTestDB {
   }
 
   private static async findCampaignsByStatus(
-    mockedCampaigns: MockCampaignTestDB
+    testCampaignDB: TestCampaignDB
   ): Promise<{
     actives: Campaign[] | null;
     finished: Campaign[] | null;
     standBy: Campaign[] | null;
   }> {
-    const actives = await mockedCampaigns.findByStatus(
+    const actives = await testCampaignDB.findByStatus(
       new CampaignStatus(CampaignStatusType.ACTIVE)
     );
-    const finished = await mockedCampaigns.findByStatus(
+    const finished = await testCampaignDB.findByStatus(
       new CampaignStatus(CampaignStatusType.FINISHED)
     );
-    const standBy = await mockedCampaigns.findByStatus(
+    const standBy = await testCampaignDB.findByStatus(
       new CampaignStatus(CampaignStatusType.STAND_BY)
     );
     return { actives, finished, standBy };

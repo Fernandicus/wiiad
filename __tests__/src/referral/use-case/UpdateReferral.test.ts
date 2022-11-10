@@ -2,7 +2,6 @@ import { Balance } from "@/src/domain/Balance";
 import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
-import { CreateReferral } from "@/src/modules/referrals/use-case/CreateReferral";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";

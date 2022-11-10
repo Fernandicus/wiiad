@@ -1,5 +1,5 @@
 
 export interface ICloudStorageRepo{
-    uploadImageAndGetUrl(filePath: string, folder:string):Promise<string>;
-    uploadVideoAndGetUrl(filePath: string, folder:string):Promise<string>;
+    uploadImageAndGetUrl(file: string, folderPath:string):Promise<string>;
+    uploadVideoAndGetUrl(file: string, folderPath:string):Promise<string>;
 }

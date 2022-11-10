@@ -1,26 +1,23 @@
 import { RoleType } from "@/src/domain/Role";
-import {
-  IVerificationEmailTimerPrimitives,
-  VerificationEmailTimer,
-} from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
+import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestVerificationEmailRepo } from "../../__mocks__/lib/modules/send-email-verification/domain/TestVerificationEmailRepo";
-import { FakeVerificationEmailTimer } from "../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
+import { TestVerificationEmailRepo } from "../../lib/modules/send-email-verification/domain/TestVerificationEmailRepo";
+import { FakeVerificationEmailTimer } from "../../lib/modules/send-email-verification/FakeVerificationEmailTimer";
+import { TestVerificationEmailMongoDBRepo } from "../../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 
-export const mockedVerificationEmailRepo = async (
+export const setTestVerificationEmailDB = async (
   expiredAmount: number,
   validAmount: number
-): Promise<MockVerificationEmailDB> => {
+): Promise<TestVerificationEmailDB> => {
   const verificationEmailRepo = await TestVerificationEmailMongoDBRepo.init();
-  return MockVerificationEmailDB.setAndInit(
+  return TestVerificationEmailDB.setAndInit(
     verificationEmailRepo,
     expiredAmount,
     validAmount
   );
 };
 
-export class MockVerificationEmailDB {
+export class TestVerificationEmailDB {
   readonly verificationEmailRepo;
 
   private constructor(verificationEmailRepo: TestVerificationEmailRepo) {
@@ -31,13 +28,13 @@ export class MockVerificationEmailDB {
     verificationEmailRepo: TestVerificationEmailRepo,
     expiredAmount: number,
     validAmount: number
-  ): Promise<MockVerificationEmailDB> {
+  ): Promise<TestVerificationEmailDB> {
     const { expired, valids } = this.setEmailVerification(
       expiredAmount,
       validAmount
     );
     await verificationEmailRepo.saveMany([...expired, ...valids]);
-    return new MockVerificationEmailDB(verificationEmailRepo);
+    return new TestVerificationEmailDB(verificationEmailRepo);
   }
 
   async saveMany(verificationEmail: VerificationEmailTimer[]): Promise<void> {

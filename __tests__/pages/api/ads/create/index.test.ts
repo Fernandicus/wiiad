@@ -1,18 +1,16 @@
 import createAdvertise from "@/pages/api/v1/ads/create";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { UniqId } from "@/src/utils/UniqId";
-import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { userSession } from "@/src/use-case/container";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { MockContext } from "../../../../../__mocks__/context/MockContext";
-import { mockedAdRepo } from "../../../../../__mocks__/context/MockAdTestDB";
+import { setTestAdDB } from "../../../../../__mocks__/context/db/TestAdDB";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
   let advertiser: AdvertiserPropsPrimitives;
 
   beforeAll(async () => {
-    await mockedAdRepo(5);
+    await setTestAdDB(5);
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 

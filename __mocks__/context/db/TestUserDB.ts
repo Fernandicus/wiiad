@@ -1,16 +1,16 @@
-import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
-import { TestUserRepository } from "__mocks__/lib/modules/user/domain/TestUserRepository";
-import { FakeUser } from "../../__mocks__/lib/modules/user/FakeUser";
-import { TestUserMongoDBRepo } from "../../__mocks__/lib/modules/user/infrastructure/TestUserMongoDBRepo";
+import {  User } from "@/src/modules/user/domain/User";
+import { TestUserRepository } from "../../lib/modules/user/domain/TestUserRepository";
+import { FakeUser } from "../../lib/modules/user/FakeUser";
+import { TestUserMongoDBRepo } from "../../lib/modules/user/infrastructure/TestUserMongoDBRepo";
 
-export const mockedUserRepo = async (
+export const setTestUserDB = async (
   amount: number
-): Promise<MockUserTestDB> => {
+): Promise<TestUserDB> => {
   const testUserRepo = await TestUserMongoDBRepo.init();
-  return MockUserTestDB.setAndInit(testUserRepo, amount);
+  return TestUserDB.setAndInit(testUserRepo, amount);
 };
 
-export class MockUserTestDB {
+export class TestUserDB {
   readonly testUserRepo;
 
   private constructor(testUserRepo: TestUserRepository) {
@@ -20,11 +20,11 @@ export class MockUserTestDB {
   static async setAndInit(
     testUserRepo: TestUserRepository,
     amount: number
-  ): Promise<MockUserTestDB> {
+  ): Promise<TestUserDB> {
     const users = this.setUsers(amount);
     await testUserRepo.saveMany(users);
 
-    return new MockUserTestDB(testUserRepo);
+    return new TestUserDB(testUserRepo);
   }
 
   async saveMany(users: User[]): Promise<void> {
