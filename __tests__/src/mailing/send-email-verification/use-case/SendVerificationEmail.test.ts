@@ -1,5 +1,7 @@
 import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/domain/IEmailSenderRepo";
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
+import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
+import { AuthTokenCrypto } from "@/src/modules/mailing/send-email-verification/infrastructure/AuthTokenCrypto";
 import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SendVerificationEmail";
 import { mockedEmailSenderRepo } from "../../../../../__mocks__/context/MockEmailSenderRepo";
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
@@ -11,7 +13,8 @@ describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verificat
 
   beforeAll(() => {
     mockedRepo = mockedEmailSenderRepo();
-    verificationUrl = FakeVerificationURL.create();
+    const token = authTokenCreator.generate();
+    verificationUrl = FakeVerificationURL.create(token);
     sendVerificationEmail = new SendlVerificationEmail(mockedRepo);
   });
 

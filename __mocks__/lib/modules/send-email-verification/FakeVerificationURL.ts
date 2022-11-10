@@ -12,11 +12,10 @@ export class FakeVerificationURL extends VerificationURL {
     super(props);
   }
 
-  static create(): FakeVerificationURL {
+  static create(token:string): FakeVerificationURL {
     const to = new Email(faker.internet.email());
-    const token = UniqId.new();
     const userName = new Name(faker.name.firstName());
 
-    return new FakeVerificationURL({ to, token, userName });
+    return new VerificationURL({ to, token, userName });
   }
 }
