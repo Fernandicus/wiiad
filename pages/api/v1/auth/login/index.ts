@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/ErrorSendingEmail";
 import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/controller/SendVerificationEmailController";
-import { ISendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmail";
+import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmailRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
@@ -13,7 +13,7 @@ import { RoleType } from "@/src/domain/Role";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export interface APISendEmailVerification {
-  data: ISendVerificationEmail;
+  data: ISendVerificationEmailRepo;
   isNewUser: boolean;
 }
 

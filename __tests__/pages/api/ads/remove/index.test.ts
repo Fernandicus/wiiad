@@ -8,7 +8,7 @@ import { MockContext } from "../../../../../__mocks__/context/MockContext";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { userSession } from "@/src/use-case/container";
-import { mockedAdRepo } from "../../../../../__mocks__/context/db/TestAdDB";
+import { mockedAdRepo } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 
 describe("On api/ads/remove-ad route", () => {
   let advertiser: AdvertiserPropsPrimitives;

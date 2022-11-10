@@ -1,10 +1,10 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { Ad } from "../domain/Ad";
-import { AdRepository } from "../domain/AdRepository";
+import { IAdRepository } from "../domain/IAdRepository";
 import { ErrorFindingAd } from "../domain/ErrorFindingAd";
 
 export class FindAds {
-  constructor(private repository: AdRepository) {}
+  constructor(private repository: IAdRepository) {}
 
   async findAllByAdvertiserId(id: UniqId): Promise<Ad[]> {
     const adsFound = await this.repository.findAllByAdvertiserId(id);

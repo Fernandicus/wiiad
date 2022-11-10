@@ -9,7 +9,7 @@ import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/Fak
 import {
   mockedAdRepo,
   MockAdTestDB,
-} from "../../../../__mocks__/context/db/TestAdDB";
+} from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {

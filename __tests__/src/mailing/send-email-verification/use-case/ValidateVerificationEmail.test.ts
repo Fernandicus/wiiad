@@ -6,11 +6,11 @@ import { UniqId } from "@/src/utils/UniqId";
 import { FakeVerificationEmailTimer } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmailTimer";
 import { RoleType } from "@/src/domain/Role";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
+import { mockedVerificationEmailRepo } from "../../../../../__mocks__/context/MockVerificationEmailRepo";
 
 describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () => {
   let validEmailTimer: VerificationEmailTimer;
   let expiredEmailTimer: VerificationEmailTimer;
-  let emails: VerificationEmailTimer[] = [];
   let mockedRepo: IVerificationEmailRepo;
   let verifyEmail: ValidateVerificationEmail;
 
@@ -20,18 +20,10 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
       RoleType.BUSINESS,
       true
     );
-
-    emails = [validEmailTimer, expiredEmailTimer];
-
-    mockedRepo = {
-      findById: jest.fn().mockImplementation((tokenId: UniqId) => {
-        const email = emails.find((email) => email.id.id == tokenId.id);
-        if (!email) return null;
-        return validEmailTimer;
-      }),
-      remove: jest.fn(),
-      save: jest.fn(),
-    };
+    mockedRepo = mockedVerificationEmailRepo({
+      valid: validEmailTimer,
+      expired: expiredEmailTimer,
+    });
     verifyEmail = new ValidateVerificationEmail(mockedRepo);
   });
 

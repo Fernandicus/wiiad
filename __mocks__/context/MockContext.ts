@@ -1,12 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import httpMock, { Mocks, RequestMethod } from "node-mocks-http";
 
-export const MockContext = function (
-  method: RequestMethod,
-  body: object,
-): Mocks<NextApiRequest, NextApiResponse> {
+interface IMockedContext {
+  method?: RequestMethod;
+  body?: object;
+}
+
+export const mockedContext = (
+  params?: IMockedContext
+): Mocks<NextApiRequest, NextApiResponse> => {
   return {
-    req: httpMock.createRequest({ method, body }),
+    req: httpMock.createRequest({ method: params?.method, body: params?.body }),
     res: httpMock.createResponse(),
   };
 };

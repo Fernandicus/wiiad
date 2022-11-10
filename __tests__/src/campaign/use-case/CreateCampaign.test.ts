@@ -3,33 +3,28 @@ import { ICampaignRepo } from "@/src/modules/campaign/domain/ICampaignRepo";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { CreateCampaign } from "@/src/modules/campaign/use-case/CreateCampaign";
 import { UniqId } from "@/src/utils/UniqId";
+import { mockedCampaignsRepo } from "../../../../__mocks__/context/MockCampaignRepo";
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 
 describe("On CreateCampaign, GIVEN a Campaign and a Campaign Repo ", () => {
-  let campaignRepo: ICampaignRepo;
+  let mockedRepo: ICampaignRepo;
   let createCampaign: CreateCampaign;
   let campaign: Campaign;
 
   beforeAll(() => {
-    campaignRepo = {
-      save: jest.fn(),
-      findAllByAdvertiserId: jest.fn(),
-      findAllByStatus: jest.fn(),
-      addReferral: jest.fn(),
-      byId: jest.fn(),
-      increaseClicks: jest.fn(),
-      increaseViews: jest.fn(),
-    };
-    createCampaign = new CreateCampaign(campaignRepo);
-    campaign = FakeCampaign.create({
+    const campaigns = FakeCampaign.createMany({
       advertiserId: UniqId.new(),
       status: CampaignStatusType.ACTIVE,
+      amount: 3,
     });
+    campaign = campaigns[0];
+    mockedRepo = mockedCampaignsRepo(campaigns);
+    createCampaign = new CreateCampaign(mockedRepo);
   });
 
   it(`WHEN call the launch method, 
   THEN the repo save method should be called with the campaign object`, async () => {
     await createCampaign.launch(campaign);
-    expect(campaignRepo.save).toBeCalledWith(campaign);
+    expect(mockedRepo.save).toBeCalledWith(campaign);
   });
 });

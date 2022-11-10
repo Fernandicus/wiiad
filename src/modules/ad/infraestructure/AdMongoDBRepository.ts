@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { AdRepository } from "../domain/AdRepository";
+import { Ad } from "../domain/Ad";
+import { IAdRepository } from "../domain/IAdRepository";
 import { AdDescription } from "../domain/value-objects/AdDescription";
 import { AdImageUrl } from "../domain/value-objects/AdImageUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
@@ -8,7 +8,7 @@ import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
 import { AdModel, AdModelProps } from "./AdModel";
 
-export class AdMongoDBRepository implements AdRepository {
+export class AdMongoDBRepository implements IAdRepository {
   public async save(ad: Ad): Promise<void> {
     await AdModel.create({
       ...ad.toPrimitives(),

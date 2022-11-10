@@ -1,4 +1,4 @@
-import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
+import { IAdRepository } from "@/src/modules/ad/domain/IAdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { FindAds } from "@/src/modules/ad/use-case/FindAds";
 import { Ad } from "@/src/modules/ad/domain/Ad";
@@ -6,31 +6,18 @@ import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { ErrorFindingAd } from "@/src/modules/ad/domain/ErrorFindingAd";
+import { mockedAdRepo } from "../../../../__mocks__/context/MockAdRepo";
 
 describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads", () => {
   let advertiser: Advertiser;
   let ads: Ad[];
-  let repository: AdRepository;
+  let repository: IAdRepository;
   let findAds: FindAds;
 
   beforeAll(() => {
     advertiser = FakeAdvertiser.create();
     ads = FakeAd.createMany(advertiser.id, 5);
-    repository = {
-      findAllByAdvertiserId: jest
-        .fn()
-        .mockImplementation((advertiserId: UniqId) => {
-          if (advertiserId.id !== advertiser.id.id) return null;
-          return ads;
-        }),
-      remove: jest.fn(),
-      save: jest.fn(),
-      findByAdId: jest.fn().mockImplementation((adId: UniqId) => {
-        const adFound = ads.find((ad) => ad.id == adId);
-        if (!adFound) return null;
-        return adFound;
-      }),
-    };
+    repository = mockedAdRepo(ads);
     findAds = new FindAds(repository);
   });
 
@@ -41,7 +28,7 @@ describe("On FindAds use case, GIVEN an advertiser id, a repository and some ads
     expect(repository.findAllByAdvertiserId).toHaveBeenCalledWith(
       advertiser.id
     );
-    expect(adsFound?.length).toEqual(ads.length);
+    expect(adsFound?.length).toBe(ads.length);
     adsFound?.forEach((ad) => {
       expect(ad.advertiserId).toEqual(advertiser.id);
     });

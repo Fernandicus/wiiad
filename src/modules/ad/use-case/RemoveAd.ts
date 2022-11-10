@@ -1,8 +1,8 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { AdRepository } from "../domain/AdRepository";
+import { IAdRepository } from "../domain/IAdRepository";
 
 export class RemoveAd {
-  constructor(private repository: AdRepository) {}
+  constructor(private repository: IAdRepository) {}
 
   async byId(id: UniqId): Promise<void> {
     await this.repository.remove(id);

@@ -8,8 +8,8 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { TestDBs } from "__mocks__/context/db/TestDBs";
-import { TestVerificationEmailDB } from "__mocks__/context/db/TestVerificationEmailDB";
+import { TestDBs } from "__mocks__/lib/infrastructure/db/TestDBs";
+import { TestVerificationEmailDB } from "__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 
 interface IServerSideResponse {
   props: {};

@@ -1,13 +1,13 @@
 import { createTransport, Transporter } from "nodemailer";
 import { ErrorSendingEmail } from "../domain/ErrorSendingEmail";
-import { IEmailSender } from "../domain/IEmailSender";
+import { IEmailSenderRepo } from "../domain/IEmailSenderRepo";
 import { SMTPData } from "../domain/SMTPData";
 import { VerificationEmailTemplate } from "../domain/VerificationEmailTemplate";
 import { VerificationURL } from "../domain/VerificationURL";
 
 export class NodemailerSendVerificationEmail
   extends SMTPData
-  implements IEmailSender
+  implements IEmailSenderRepo
 {
   private transport: Transporter;
   readonly base_url: string;

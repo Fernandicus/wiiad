@@ -1,14 +1,11 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { ProfilePic } from "@/src/domain/ProfilePic";
-import { Role } from "@/src/domain/Role";
-import { UniqId } from "@/src/utils/UniqId";
-import { Advertiser, AdvertiserPropsPrimitives } from "../domain/Advertiser";
-import { AdvertiserRepo } from "../domain/AdvertiserRepo";
+import { Advertiser } from "../domain/Advertiser";
+import { IAdvertiserRepo } from "../domain/IAdvertiserRepo";
 import { ErrorFindingAdvertiser } from "../domain/ErrorFindingAdvertiser";
 
 export class FindAdvertiser {
-  constructor(private repository: AdvertiserRepo) {}
+  constructor(private repository: IAdvertiserRepo) {}
 
   async byEmail(email: Email): Promise<Advertiser> {
     const advertiser = await this.repository.findByEmail(email);

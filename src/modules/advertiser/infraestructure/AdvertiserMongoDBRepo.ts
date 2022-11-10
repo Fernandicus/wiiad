@@ -4,10 +4,10 @@ import { ProfilePic } from "@/src/domain/ProfilePic";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { Advertiser } from "../domain/Advertiser";
-import { AdvertiserRepo } from "../domain/AdvertiserRepo";
+import { IAdvertiserRepo } from "../domain/IAdvertiserRepo";
 import { AdvertiserModel, IAdvertiserModel } from "./AdvertiserModel";
 
-export class AdvertiserMongoDBRepo implements AdvertiserRepo {
+export class AdvertiserMongoDBRepo implements IAdvertiserRepo {
   async save(advertiser: Advertiser): Promise<void> {
     await AdvertiserModel.create({
       ...advertiser.toPrimitives(),

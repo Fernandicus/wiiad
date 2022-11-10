@@ -3,7 +3,7 @@ import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-conta
 import { findUserHandler } from "@/src/modules/user/container";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
-import { ISendVerificationEmail } from "../domain/ISendVerificationEmail";
+import { ISendVerificationEmailRepo } from "../domain/ISendVerificationEmailRepo";
 import {
   sendEmailHandler,
   verificationEmailHandler,
@@ -11,7 +11,7 @@ import {
 
 export class SendVerificationEmailController {
   static async sendToNewUser(
-    data: ISendVerificationEmail,
+    data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
     const userNameFoundByName = await findUserHandler.findByUserName(
@@ -36,7 +36,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToUser(
-    data: ISendVerificationEmail,
+    data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
     const userFoundByEmail = await findUserHandler.findByEmail(data.email);
@@ -58,7 +58,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToNewAdvertiser(
-    data: ISendVerificationEmail,
+    data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
     const advertiserFound = await findAdvertiserHandler.findByUserName(
@@ -84,7 +84,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToAdvertiser(
-    data: ISendVerificationEmail,
+    data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
     const advertiserFoundByEmail = await findAdvertiserHandler.findByEmail(

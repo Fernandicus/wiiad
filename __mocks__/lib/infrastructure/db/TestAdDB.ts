@@ -1,8 +1,8 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestAdRepository } from "../../lib/modules/ads/domain/TestAdRepository";
-import { FakeAd } from "../../lib/modules/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../lib/modules/ads/infraestructure/TestAdMongoDBRepository";
+import { TestAdRepository } from "../../modules/ads/domain/TestAdRepository";
+import { FakeAd } from "../../modules/ads/FakeAd";
+import { TestAdMongoDBRepository } from "../../modules/ads/infraestructure/TestAdMongoDBRepository";
 
 export const setTestAdDB = async (amount: number): Promise<TestAdDB> => {
   const testAdRepo = await TestAdMongoDBRepository.init();

@@ -1,7 +1,7 @@
 import {  User } from "@/src/modules/user/domain/User";
-import { TestUserRepository } from "../../lib/modules/user/domain/TestUserRepository";
-import { FakeUser } from "../../lib/modules/user/FakeUser";
-import { TestUserMongoDBRepo } from "../../lib/modules/user/infrastructure/TestUserMongoDBRepo";
+import { TestUserRepository } from "../../modules/user/domain/TestUserRepository";
+import { FakeUser } from "../../modules/user/FakeUser";
+import { TestUserMongoDBRepo } from "../../modules/user/infrastructure/TestUserMongoDBRepo";
 
 export const setTestUserDB = async (
   amount: number

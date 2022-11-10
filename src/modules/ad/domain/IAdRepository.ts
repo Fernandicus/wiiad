@@ -1,7 +1,7 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Ad, AdPropsPrimitives } from "./Ad";
+import { Ad } from "./Ad";
 
-export interface AdRepository {
+export interface IAdRepository {
   save(model: Ad): Promise<void>;
   findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null>;
   remove(id: UniqId): Promise<void>;

@@ -5,7 +5,7 @@ import {
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
-import { setTestAdDB } from "../../../../__mocks__/context/db/TestAdDB";
+import { setTestAdDB } from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
@@ -16,10 +16,10 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   let advertiser: Advertiser;
 
   beforeAll(async () => {
-    const mockedAdDB = await setTestAdDB(5);
+    const testAdDB = await setTestAdDB(5);
     advertiser = FakeAdvertiser.create();
     fakeAds = FakeAd.createMany(advertiser.id, 5);
-    await mockedAdDB.saveMany(fakeAds);
+    await testAdDB.saveMany(fakeAds);
     adMongoDBRepo = new AdMongoDBRepository();
   }, 8000);
 

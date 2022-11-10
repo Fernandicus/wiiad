@@ -2,7 +2,7 @@ import { User } from "@/src/modules/user/domain/User";
 import { UserMongoDBRepo } from "@/src/modules/user/infrastructure/UserMongoDBRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
-import { setTestUserDB } from "../../../../__mocks__/context/db/TestUserDB";
+import { setTestUserDB } from "../../../../__mocks__/lib/infrastructure/db/TestUserDB";
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 

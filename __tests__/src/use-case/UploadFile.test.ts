@@ -1,16 +1,12 @@
 import { ICloudStorageRepo } from "@/src/domain/ICloudStorageRepo";
 import { UploadFile } from "@/src/use-case/UploadFile";
+import { mockedCloudStorageRepo } from "../../../__mocks__/context/MockCloudStorageRepo";
 
 describe("On UploadFile, GIVEN an some 'files'", () => {
   let mockedRepo: ICloudStorageRepo;
 
   beforeAll(() => {
-    mockedRepo = {
-      uploadImageAndGetUrl: jest
-        .fn()
-        .mockImplementation((file: string, path: string) => path + file),
-      uploadVideoAndGetUrl: jest.fn(),
-    };
+    mockedRepo = mockedCloudStorageRepo();
   });
 
   it(`WHEN upload image, THEN return url`, async () => {

@@ -1,6 +1,6 @@
-import { TestAdvertiserRepository } from "../../lib/modules/advertiser/domain/TestAdvertiserRepository";
-import { TestAdvertiserMongoDBRepo } from "../../lib/modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
-import { FakeAdvertiser } from "../../lib/modules/advertiser/FakeAdvertiser";
+import { TestAdvertiserRepository } from "../../modules/advertiser/domain/TestAdvertiserRepository";
+import { TestAdvertiserMongoDBRepo } from "../../modules/advertiser/infrastructure/TestAdvertiserMongoDBRepo";
+import { FakeAdvertiser } from "../../modules/advertiser/FakeAdvertiser";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
 export const setTestAdvertiserDB = async (): Promise<TestAdvertiserDB> => {

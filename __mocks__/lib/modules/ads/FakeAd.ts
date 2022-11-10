@@ -24,6 +24,15 @@ export class FakeAd extends Ad {
     };
   }
 
+  static create(advertiserId: UniqId): Ad {
+    const fakeAdData = this.generateFakeAdData();
+    return this.getAd({
+      ...fakeAdData,
+      advertiserId: advertiserId.id,
+      id: UniqId.generate(),
+    });
+  }
+
   static createMany(advertiserId: UniqId, amount: number): Ad[] {
     const fakeAdData = this.generateFakeAdData();
     let ads: Ad[] = [];
@@ -32,6 +41,21 @@ export class FakeAd extends Ad {
       const ad = this.getAd({
         ...fakeAdData,
         advertiserId: advertiserId.id,
+        id: UniqId.generate(),
+      });
+      ads.push(ad);
+    }
+    return ads;
+  }
+
+  static createManyWithRandomAdvertiserIds(amount: number): Ad[] {
+    const fakeAdData = this.generateFakeAdData();
+    let ads: Ad[] = [];
+
+    for (var i = 0; i < amount; i++) {
+      const ad = this.getAd({
+        ...fakeAdData,
+        advertiserId: UniqId.generate(),
         id: UniqId.generate(),
       });
       ads.push(ad);

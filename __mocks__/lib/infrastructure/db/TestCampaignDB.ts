@@ -1,14 +1,14 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestCampaignRepository } from "../../lib/modules/campaign/domain/TestCampaignRepository";
-import { FakeAd } from "../../lib/modules/ads/FakeAd";
-import { TestCampaignMongoDBRepo } from "../../lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
+import { TestCampaignRepository } from "../../modules/campaign/domain/TestCampaignRepository";
+import { FakeAd } from "../../modules/ads/FakeAd";
+import { TestCampaignMongoDBRepo } from "../../modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
-import { FakeCampaign } from "../../lib/modules/campaign/FakeCampaign";
+import { FakeCampaign } from "../../modules/campaign/FakeCampaign";
 
 interface ITestCampaignDB {
   activeCampaignAds: Ad[];

@@ -1,28 +1,24 @@
 import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
 import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
-import { AdRepository } from "@/src/modules/ad/domain/AdRepository";
+import { IAdRepository } from "@/src/modules/ad/domain/IAdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { Ad } from "@/src/modules/ad/domain/Ad";
+import { mockedAdRepo } from "../../../../__mocks__/context/MockAdRepo";
 
 describe("On CreateAd use case, GIVEN a repository and an ad", () => {
-  let mockedRepo: AdRepository;
-  let advertiserId: UniqId;
-  let adId: UniqId;
+  let mockedRepo: IAdRepository;
   let ad: Ad;
   let createAd: CreateAd;
 
   beforeAll(() => {
-    mockedRepo = {
-      save: jest.fn(),
-      findAllByAdvertiserId: jest.fn(),
-      remove: jest.fn(),
-      findByAdId: jest.fn(),
-    };
-    advertiserId = UniqId.new();
-    adId = UniqId.new();
-    ad = FakeAd.createWithGivenIds({ advertiserId, adId });
-    createAd =  new CreateAd(mockedRepo);
+    ad = FakeAd.createWithGivenIds({
+      advertiserId: UniqId.new(),
+      adId: UniqId.new(),
+    });
+    const ads = FakeAd.createMany(UniqId.new(), 3);
+    mockedRepo = mockedAdRepo(ads);
+    createAd = new CreateAd(mockedRepo);
   });
 
   it(`WHEN call the CreateAd save method,

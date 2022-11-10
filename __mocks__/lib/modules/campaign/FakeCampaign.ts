@@ -40,6 +40,21 @@ export class FakeCampaign extends Campaign {
     });
   }
 
+  static createMany(props: {
+    status: CampaignStatusType;
+    advertiserId: UniqId;
+    amount: number;
+  }): Campaign[] {
+    const repeat = (n: number) => Array(n).fill("");
+    let campaigns = repeat(props.amount).map((_) =>
+      this.create({
+        status: props.status,
+        advertiserId: UniqId.new(),
+      })
+    );
+    return campaigns;
+  }
+
   static createWithGivenIds(props: {
     status: CampaignStatusType;
     advertiserId: UniqId;

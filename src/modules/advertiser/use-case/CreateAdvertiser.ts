@@ -1,8 +1,8 @@
 import { Advertiser } from "../domain/Advertiser";
-import { AdvertiserRepo } from "../domain/AdvertiserRepo";
+import { IAdvertiserRepo } from "../domain/IAdvertiserRepo";
 
 export class CreateAdvertiser {
-  constructor(private repository: AdvertiserRepo) {}
+  constructor(private repository: IAdvertiserRepo) {}
 
   async create(advertiser: Advertiser): Promise<void> {
     this.repository.save(advertiser)

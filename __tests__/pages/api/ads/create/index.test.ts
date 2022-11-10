@@ -4,7 +4,7 @@ import { userSession } from "@/src/use-case/container";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { MockContext } from "../../../../../__mocks__/context/MockContext";
-import { setTestAdDB } from "../../../../../__mocks__/context/db/TestAdDB";
+import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
   let advertiser: AdvertiserPropsPrimitives;

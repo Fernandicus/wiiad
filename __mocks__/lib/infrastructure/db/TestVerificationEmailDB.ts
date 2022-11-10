@@ -1,9 +1,9 @@
 import { RoleType } from "@/src/domain/Role";
 import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmailTimer";
 import { UniqId } from "@/src/utils/UniqId";
-import { TestVerificationEmailRepo } from "../../lib/modules/send-email-verification/domain/TestVerificationEmailRepo";
-import { FakeVerificationEmailTimer } from "../../lib/modules/send-email-verification/FakeVerificationEmailTimer";
-import { TestVerificationEmailMongoDBRepo } from "../../lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
+import { TestVerificationEmailRepo } from "../../modules/send-email-verification/domain/TestVerificationEmailRepo";
+import { FakeVerificationEmailTimer } from "../../modules/send-email-verification/FakeVerificationEmailTimer";
+import { TestVerificationEmailMongoDBRepo } from "../../modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 
 export const setTestVerificationEmailDB = async (
   expiredAmount: number,

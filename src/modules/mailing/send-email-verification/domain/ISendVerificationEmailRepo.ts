@@ -1,4 +1,4 @@
-export interface ISendVerificationEmail {
+export interface ISendVerificationEmailRepo {
   email: string;
   userName: string;
   role: string;

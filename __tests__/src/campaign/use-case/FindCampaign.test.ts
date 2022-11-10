@@ -7,38 +7,42 @@ import {
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
 import { UniqId } from "@/src/utils/UniqId";
+import { mockedCampaignsRepo } from "../../../../__mocks__/context/MockCampaignRepo";
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 
 describe("On FindCampaign use case, GIVEN some active campaigns", () => {
   let mockedRepo: ICampaignRepo;
   let findCampaign: FindCampaign;
   let campaign: Campaign;
+  let actives: Campaign[];
 
   beforeAll(async () => {
-    campaign = FakeCampaign.create({
-      status: CampaignStatusType.ACTIVE,
+    actives = FakeCampaign.createMany({
       advertiserId: UniqId.new(),
+      amount: 2,
+      status: CampaignStatusType.ACTIVE,
     });
-    mockedRepo = {
-      save: jest.fn(),
-      findAllByAdvertiserId: jest.fn().mockImplementation((id: UniqId) => {
-        if (id.id !== campaign.advertiserId.id) return null;
-        return campaign;
-      }),
-      findAllByStatus: jest.fn().mockResolvedValue(campaign),
-      addReferral: jest.fn(),
-      byId: jest.fn().mockImplementation((id: UniqId) => {
-        if (id.id !== campaign.id.id) return null;
-        return campaign;
-      }),
-      increaseClicks: jest.fn(),
-      increaseViews: jest.fn(),
-    };
+    const standby = FakeCampaign.createMany({
+      advertiserId: UniqId.new(),
+      amount: 1,
+      status: CampaignStatusType.STAND_BY,
+    });
+    const finished = FakeCampaign.createMany({
+      advertiserId: UniqId.new(),
+      amount: 3,
+      status: CampaignStatusType.FINISHED,
+    });
+    
+    campaign = actives[0];
+    const campaigns = [...actives, ...finished, ...standby, campaign];
+
+    mockedRepo = mockedCampaignsRepo(campaigns);
+
     findCampaign = new FindCampaign(mockedRepo);
   });
 
   it(`WHEN call findAllActives, THEN repo method findAllByStatus should be called with CampaignStatus active`, async () => {
-    await findCampaign.allActives();
+    const found = await findCampaign.allActives();
     expect(mockedRepo.findAllByStatus).toBeCalledWith(CampaignStatus.active());
   });
 

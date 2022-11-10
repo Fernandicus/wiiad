@@ -5,6 +5,7 @@ import { IUserRepo } from "@/src/modules/user/domain/IUserRepo";
 import { User } from "@/src/modules/user/domain/User";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { UniqId } from "@/src/utils/UniqId";
+import { mockedUserRepo } from "../../../../__mocks__/context/MockUserRepo";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
 describe("On FindUser, GIVEN a user", () => {
@@ -14,17 +15,7 @@ describe("On FindUser, GIVEN a user", () => {
 
   beforeAll(() => {
     user = FakeUser.create(UniqId.new());
-    userRepo = {
-      save: jest.fn(),
-      findByEmail: jest.fn().mockImplementation((email: Email) => {
-        if (email.email !== user.email.email) return null;
-        return user;
-      }),
-      findByUserName: jest.fn().mockImplementation((name: Name) => {
-        if (name.name !== user.name.name) return null;
-        return user;
-      }),
-    };
+    userRepo = mockedUserRepo(user)
     findUser = new FindUser(userRepo);
   });
 

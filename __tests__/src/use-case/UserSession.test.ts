@@ -3,28 +3,27 @@ import { AuthCookie } from "@/src/infrastructure/AuthCookie";
 import { JsonWebTokenNPM } from "@/src/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/use-case/UserSession";
 import { FakeAdvertiser } from "../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import httpMock, { MockRequest, MockResponse } from "node-mocks-http";
+import  {Mocks } from "node-mocks-http";
 import { NextApiRequest, NextApiResponse } from "next";
+import { mockedContext } from "../../../__mocks__/context/MockContext";
 
 describe("On UserSession, GIVEN an Advertiser", () => {
   let fakeAdvertiser: AdvertiserPropsPrimitives;
   let userSession: UserSession;
-  let res: MockResponse<NextApiResponse>;
-  let req: MockRequest<NextApiRequest>;
+  let context: Mocks<NextApiRequest, NextApiResponse>
 
   beforeAll(() => {
     fakeAdvertiser = FakeAdvertiser.createPrimitives();
     const authCookie = new AuthCookie();
     const jwtRepo = new JsonWebTokenNPM();
     userSession = new UserSession(authCookie, jwtRepo);
-    req = httpMock.createRequest();
-    res = httpMock.createResponse();
+    context = mockedContext();
   });
 
   it(`WHEN call the setFromServer and pass an advertiser as a payload, 
   THEN when call getFromServer the session should contain the advertiser data`, () => {
-    userSession.setFromServer({ req, res }, { ...fakeAdvertiser });
-    const session = userSession.getFromServer({ req, res });
+    userSession.setFromServer(context, { ...fakeAdvertiser });
+    const session = userSession.getFromServer(context);
 
     expect(session?.email).toBe(fakeAdvertiser.email);
     expect(session?.id).toBe(fakeAdvertiser.id);
@@ -34,8 +33,8 @@ describe("On UserSession, GIVEN an Advertiser", () => {
 
   it(`WHEN call the remove, 
   THEN when call getFromServer the session shouldn't return null`, () => {
-    userSession.remove({ req, res });
-    const session = userSession.getFromServer({ req, res });
+    userSession.remove(context);
+    const session = userSession.getFromServer(context);
 
     expect(session).toBe(null);
   });

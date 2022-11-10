@@ -1,8 +1,8 @@
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakeReferral } from "../../lib/modules/referral/FakeReferral";
-import { TestReferralMongoDBRepo } from "../../lib/modules/referral/infrastructure/TestReferralMongoDBRepo";
-import { TestReferralRepo } from "../../lib/modules/referral/domain/TestReferralRepo";
+import { FakeReferral } from "../../modules/referral/FakeReferral";
+import { TestReferralMongoDBRepo } from "../../modules/referral/infrastructure/TestReferralMongoDBRepo";
+import { TestReferralRepo } from "../../modules/referral/domain/TestReferralRepo";
 
 export const setTestReferralDB = async (
   usersId: UniqId[]

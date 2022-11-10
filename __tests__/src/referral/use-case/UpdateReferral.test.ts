@@ -4,6 +4,7 @@ import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
 import { UniqId } from "@/src/utils/UniqId";
+import { mockedReferralRepo } from "../../../../__mocks__/context/MockedReferralRepo";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
 
 describe(`On UpdateReferral, GIVEN a Referral and a Repo`, () => {
@@ -13,12 +14,7 @@ describe(`On UpdateReferral, GIVEN a Referral and a Repo`, () => {
 
   beforeAll(() => {
     newReferral = FakeReferral.create(UniqId.new());
-    mockedRepo = {
-      save: jest.fn(),
-      findByUserID: jest.fn(),
-      increaseReferrerData: jest.fn(),
-      increaseRefereeData: jest.fn(),
-    };
+    mockedRepo = mockedReferralRepo([newReferral]);
     updateReferral = new UpdateReferral(mockedRepo);
   });
 

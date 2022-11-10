@@ -1,11 +1,11 @@
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
+import { IAdvertiserRepo } from "@/src/modules/advertiser/domain/IAdvertiserRepo";
 import { CreateAdvertiser } from "@/src/modules/advertiser/use-case/CreateAdvertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On CreateAdvertiser use case, GIVEN an advertiser and an advertiser repo", () => {
   let advertiser: Advertiser;
-  let advertiserRepoMock: AdvertiserRepo;
+  let advertiserRepoMock: IAdvertiserRepo;
   let createAdvertiser: CreateAdvertiser;
 
   beforeAll(() => {

@@ -1,17 +1,16 @@
-import { IEmailSender } from "@/src/modules/mailing/send-email-verification/domain/IEmailSender";
+import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/domain/IEmailSenderRepo";
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
 import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SendVerificationEmail";
+import { mockedEmailSenderRepo } from "../../../../../__mocks__/context/MockEmailSenderRepo";
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
 
 describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verification", () => {
-  let mockedRepo: IEmailSender;
+  let mockedRepo: IEmailSenderRepo;
   let verificationUrl: VerificationURL;
   let sendVerificationEmail: SendlVerificationEmail;
 
   beforeAll(() => {
-    mockedRepo = {
-      send: jest.fn(),
-    };
+    mockedRepo = mockedEmailSenderRepo();
     verificationUrl = FakeVerificationURL.create();
     sendVerificationEmail = new SendlVerificationEmail(mockedRepo);
   });

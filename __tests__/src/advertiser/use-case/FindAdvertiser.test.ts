@@ -1,30 +1,20 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { AdvertiserRepo } from "@/src/modules/advertiser/domain/AdvertiserRepo";
+import { IAdvertiserRepo } from "@/src/modules/advertiser/domain/IAdvertiserRepo";
 import { ErrorFindingAdvertiser } from "@/src/modules/advertiser/domain/ErrorFindingAdvertiser";
 import { FindAdvertiser } from "@/src/modules/advertiser/use-case/FindAdvertiser";
+import { mockedAdvertiserRepo } from "../../../../__mocks__/context/MockAdvertiserRepo";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 
 describe("On FindAdvertiser, GIVEN AdvertiserRepo", () => {
   let advertiser: Advertiser;
-  let mockRepo: AdvertiserRepo;
+  let mockRepo: IAdvertiserRepo;
   let findAdvertiser: FindAdvertiser;
 
   beforeAll(() => {
     advertiser = FakeAdvertiser.create();
-    mockRepo = {
-      findByEmail: jest.fn().mockImplementation((email: Email) => {
-        if (email.email !== advertiser.email.email) return null;
-        return advertiser;
-      }),
-      findByName: jest.fn().mockImplementation((name: Name) => {
-        if (name.name !== advertiser.name.name) return null;
-        return advertiser;
-      }),
-      findById: jest.fn(),
-      save: jest.fn(),
-    };
+    mockRepo = mockedAdvertiserRepo(advertiser);
     findAdvertiser = new FindAdvertiser(mockRepo);
   });
 
