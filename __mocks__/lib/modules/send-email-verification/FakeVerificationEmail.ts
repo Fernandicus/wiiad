@@ -10,10 +10,41 @@ import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Role, RoleType } from "@/src/domain/Role";
 import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
+import { User } from "@/src/modules/user/domain/User";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
+import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
 export class FakeVerificationEmail extends VerificationEmail {
   constructor(params: IVerificationEmailProps) {
     super(params);
+  }
+
+  static createGivenUser(
+    user: User | Advertiser,
+    hasExpired = false
+  ): VerificationEmail {
+    const expirationDate = ExpirationDate.inFiveMinutes().date;
+    const expiration = hasExpired
+      ? this.expiredDate(expirationDate)
+      : expirationDate;
+    const authToken = authTokenCreator.generate();
+    return new VerificationEmail({
+      id: new UniqId(user.id.id),
+      email: new Email(user.email.email),
+      expirationDate: new ExpirationDate(expiration),
+      role: new Role(user.role.role),
+      authToken: new AuthToken(authToken.token),
+    });
+  }
+
+  static createManyGivenUsers(
+    users: User[] | Advertiser[],
+    hasExpired = false
+  ): VerificationEmail[] {
+    const verificationEmails = users.map((user) =>
+      this.createGivenUser(user, hasExpired)
+    );
+    return verificationEmails;
   }
 
   static create(
@@ -97,7 +128,7 @@ export class FakeVerificationEmail extends VerificationEmail {
     const in24Hours = new Date(Date.now() + TimerConstants.twentyFourH);
     const expirationDate = faker.date.between(in5min, in24Hours);
     const id = UniqId.generate();
-    const authToken =authTokenCreator.generate().token;
+    const authToken = authTokenCreator.generate().token;
     return { email, id, expirationDate, role, authToken };
   }
 

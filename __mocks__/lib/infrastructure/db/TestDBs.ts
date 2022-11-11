@@ -5,7 +5,7 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
+import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { User } from "@/src/modules/user/domain/User";
 import { setTestAdDB } from "./TestAdDB";
@@ -29,8 +29,8 @@ interface ICampaignsByStatus {
 }
 
 interface IVerificationEmailsByStatus {
-  expired: VerificationEmailTimer[];
-  valids: VerificationEmailTimer[];
+  expired: VerificationEmail[];
+  valids: VerificationEmail[];
 }
 
 interface InitializedMongoTestDB {
@@ -79,7 +79,10 @@ export class TestDBs {
     const mockedUsers = await setTestUserDB(3);
     const users = await mockedUsers.getAll();
 
-    const mockedVerificationEmails = await setTestVerificationEmailDB(2, 4);
+    const mockedVerificationEmails = await setTestVerificationEmailDB({
+      valid: users!,
+      expired: advertisers!,
+    });
     const verificationEmails = await mockedVerificationEmails.getAll();
 
     const mockedReferrals = await setTestReferralDB(

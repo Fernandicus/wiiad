@@ -19,17 +19,19 @@ interface IServerSideResponse {
   redirect: { destination: string };
 }
 
-describe.only("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
+describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
   let verificationMock: TestVerificationEmailDB;
   let validVerificationEmails: VerificationEmail[];
   let expiredVerificationEmail: VerificationEmail;
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
+  let user: User;
 
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
     const mockTest = await TestDBs.setAndInitAll();
+    user = mockTest.users[0];
     verificationMock = mockTest.mocks.verificationEmailsDB;
     validVerificationEmails = mockTest.verificationEmails.valids;
     expiredVerificationEmail = mockTest.verificationEmails.expired[0];
@@ -49,27 +51,6 @@ describe.only("On getServerSideProps LogIn, GIVEN some verification emails in Mo
     })) as IServerSideResponse;
 
     expect(resp.redirect.destination).toBe("/");
-  }, 12000);
-
-  it(`WHEN send an url with a not valid email, 
-  THEN return redirect to home page '/' and verification email should be removed`, async () => {
-    const resp = (await getServerSideProps({
-      req,
-      res,
-      resolvedUrl: "",
-      params: {},
-      query: {
-        userName: "fernandisco",
-        authToken: validVerificationEmails[0].authToken.token,
-      },
-    })) as IServerSideResponse;
-
-    const verificationEmailFound = await verificationMock.findById(
-      validVerificationEmails[0].id
-    );
-
-    expect(resp.redirect.destination).toBe("/");
-    expect(verificationEmailFound).toBe(null);
   }, 12000);
 
   it(`WHEN send an url with an expired token, 
@@ -93,7 +74,7 @@ describe.only("On getServerSideProps LogIn, GIVEN some verification emails in Mo
     expect(verificationEmailFound).toBe(null);
   }, 12000);
 
-  it.only(`WHEN send a req with a url with valid params, 
+  it(`WHEN send a req with a url with valid params, 
   THEN verification email should be removed, 
   new advertiser should be saved
   and return a valid JWT`, async () => {
@@ -118,7 +99,6 @@ describe.only("On getServerSideProps LogIn, GIVEN some verification emails in Mo
       verificationEmail.id
     );
 
-    console.log("resp ", user);
     expect(verificationEmailFound).toBe(null);
     expect(user).not.toBe(undefined); 
   }, 12000);
@@ -141,6 +121,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
 
   it(`WHEN access to url without user session,
   THEN response should be all active campaigns`, async () => {
+
     const resp = (await getServerSideProps({
       req,
       res,
@@ -151,6 +132,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       },
     })) as { props: IUserNamePage };
 
+    
     expect(resp.props.campaign).not.toBe(null);
     expect(resp.props.ad).not.toBe(null);
   });
@@ -202,7 +184,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(campaign).not.toBe(undefined);
     expect(ad.id).toBe(campaign.adId);
     expect(user.id).toBe(myUser.id);
-    expect(referrer.id).toBe(influencer.id);
+    expect(referrer.id).toBe(influencer.id.id);
   });
 
   it(`WHEN access to a not existing influencer url,

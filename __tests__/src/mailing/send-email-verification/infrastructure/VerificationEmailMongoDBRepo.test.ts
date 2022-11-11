@@ -1,7 +1,7 @@
 import { FakeVerificationEmail } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmail";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
-import { setTestVerificationEmailDB } from "../../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
+import { autoSetTestVerificationEmailDB } from "../../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { UniqId } from "@/src/utils/UniqId";
 
 describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in MongoDB", () => {
@@ -9,7 +9,7 @@ describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in Mon
   let repo: VerificationEmailMongoDBRepo;
 
   beforeAll(async () => {
-    const testVerificationEmailDB = await setTestVerificationEmailDB(2, 2);
+    const testVerificationEmailDB = await autoSetTestVerificationEmailDB(2, 2);
     const emails = await testVerificationEmailDB.getAll();
     validEmails = emails!.valid;
     repo = new VerificationEmailMongoDBRepo();

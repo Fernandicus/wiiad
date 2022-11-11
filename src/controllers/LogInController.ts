@@ -36,7 +36,10 @@ export class LogInController {
       loginQueries.authToken
     );
 
+    console.log("VALID ", verificationEmail.role);
+
     if (verificationEmail.role !== RoleType.USER) {
+      console.log("business");
       const advertiser = await this.advertiserLogIn({
         queries: loginQueries,
         verificationEmail,
@@ -45,6 +48,7 @@ export class LogInController {
       this.userInitSession(context, advertiser);
       return advertiser;
     } else {
+      console.log("user");
       const user = await this.userLogIn({
         queries: loginQueries,
         verificationEmail,
@@ -66,9 +70,11 @@ export class LogInController {
   private static async findOrCreateNewAdvertiser(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
+    console.log(data);
     const advertiserFound = await findAdvertiserHandler.findByEmail(
       data.verificationEmail.email
     );
+    console.log(advertiserFound);
 
     if (!advertiserFound) return this.newAdvertiser(data);
 
@@ -85,12 +91,11 @@ export class LogInController {
   private static async findOrCreateNewUser(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
-    const userFound = await findUserHandler.findByEmail(
-      data.verificationEmail.email
-    );
+    const findUser = findUserHandler.findByEmail(data.verificationEmail.email);
+    const response = await Promise.allSettled([findUser]);
 
-    if (!userFound) return this.newUser(data);
-
+    if (response[0].status == "rejected") return this.newUser(data);
+    const userFound = response[0].value;
     const userId = userFound.id;
     await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, userId, userFound.profilePic);
@@ -128,7 +133,7 @@ export class LogInController {
   ): Promise<AdvertiserPropsPrimitives> {
     const userId = UniqId.generate();
     const profilePic = ProfilePic.defaultUserPic;
-
+    console.log("NEW USER");
     await createUserHandler.create({
       email: data.verificationEmail.email,
       name: data.queries.userName,

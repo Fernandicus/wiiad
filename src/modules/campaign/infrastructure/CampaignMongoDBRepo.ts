@@ -39,7 +39,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async byId(id: UniqId): Promise<Campaign | null> {
-    const campaignModel = await CampaignModel.findById(id);
+    const campaignModel = await CampaignModel.findById(id.id);
     if (!campaignModel) return null;
     return this.toCampaign(campaignModel);
   }
@@ -56,13 +56,13 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async increaseViews(id: UniqId): Promise<void> {
-    await CampaignModel.findByIdAndUpdate(id, {
+    await CampaignModel.findByIdAndUpdate(id.id, {
       $inc: { "metrics.totalViews": 1 },
     });
   }
 
   async increaseClicks(id: UniqId): Promise<void> {
-    await CampaignModel.findByIdAndUpdate(id, {
+    await CampaignModel.findByIdAndUpdate(id.id, {
       $inc: { "metrics.totalClicks": 1 },
     });
   }

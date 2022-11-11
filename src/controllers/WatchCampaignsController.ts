@@ -25,15 +25,12 @@ export class WatchCampaignsController {
     session: IGenericUserPrimitives | null
   ): Promise<IWatchCampaignData> {
     const referrer = await findUserHandler.findByUserName(influencerName);
-
-    if (!referrer)
-      throw new ErrorWatchingCampaign(
-        `User profile ${influencerName} do not exist`
-      );
+  
     const campaignData = await this.randomActiveCampaign();
     if (session) {
       await updateReferralHandler.increaseWatchedAds(session.id);
     }
+    
     return { ...campaignData, referrer };
   }
 

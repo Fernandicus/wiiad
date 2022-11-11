@@ -138,6 +138,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       campaigns?: ICampaignPrimitives[] | null;
       ads?: AdPropsPrimitives[] | null;
     }>(async () => {
+      console.log(queryParams);
       const user = await LogInController.initSession(
         {
           authToken: queryParams.authToken!,
