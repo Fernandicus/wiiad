@@ -78,11 +78,11 @@ export default function Profile({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-  
+
   const queryParams = new LoginQueries(query);
 
   try {
-    if (!queryParams.token) {
+    if (!queryParams.authToken) {
       const session = userSession.getFromServer(context);
       if (session && session.name == queryParams.userName) {
         if (session.role !== RoleType.USER) {
@@ -140,7 +140,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }>(async () => {
       const user = await LogInController.initSession(
         {
-          token: queryParams.token!,
+          authToken: queryParams.authToken!,
           userName: queryParams.userName,
         },
         context

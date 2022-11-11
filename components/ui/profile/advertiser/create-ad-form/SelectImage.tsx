@@ -2,8 +2,8 @@ import Image from "next/image";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
-  onSelectImage(image: string | ArrayBuffer | null | undefined): void;
-  imagePreview: string | ArrayBuffer | null | undefined;
+  onSelectImage(image: string | null): void;
+  imagePreview: string | null;
   onSuccess(): void;
 }
 
@@ -21,8 +21,9 @@ export function SelectImage({ onSelectImage, imagePreview, onSuccess }: Props) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        console.log(reader.result);
-        onSelectImage(reader.result);
+
+        const res = reader.result as string
+        onSelectImage(res);
       };
       onSuccess();
     }

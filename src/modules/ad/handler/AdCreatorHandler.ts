@@ -22,7 +22,7 @@ export class AdCreatorHandler {
       segments: new AdSegments(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
-      image: new AdFileUrl(adProps.image),
+      file: new AdFileUrl(adProps.file),
       redirectionUrl: new AdRedirectionUrl(adProps.redirectionUrl),
       advertiserId: new UniqId(advertiserId),
     });

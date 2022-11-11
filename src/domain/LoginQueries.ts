@@ -5,7 +5,7 @@ import { ErrorLogIn } from "./ErrorLogIn";
 
 export class LoginQueries {
   //readonly email: string | undefined;
-  readonly token: string | undefined;
+  readonly authToken: string | undefined;
   readonly userName: string;
 
   constructor(query: ParsedUrlQuery) {
@@ -23,9 +23,9 @@ export class LoginQueries {
     } */
 
     if (authToken instanceof Array) {
-      this.token = authToken[0];
+      this.authToken = authToken[0];
     } else {
-      this.token = authToken;
+      this.authToken = authToken;
     }
 
     if (userName instanceof Array) {

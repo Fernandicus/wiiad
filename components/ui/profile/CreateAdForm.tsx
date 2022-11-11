@@ -10,6 +10,7 @@ import {
 import { AdType } from "@/pages/[userName]/ads";
 import axios from "axios";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
+import { CloudinaryUploader } from "../../src/cloudinary/CloudinaryUploader";
 
 export default function CreateAdForm(props: {
   user: IGenericUserPrimitives;
@@ -24,52 +25,32 @@ export default function CreateAdForm(props: {
 
   const [isFileOk, setIsFileOk] = useState<boolean>(false);
 
-  const [filePreview, setFilePreview] = useState<string | ArrayBuffer | null>();
+  const [filePreview, setFilePreview] = useState<string | null>(null);
 
   const [isSendingAd, setIsSendingAd] = useState(false);
 
-  const submitAd = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isSendingAd) return;
-    setIsSendingAd(true);
-    props.handleResponse({
-      message: "Creando anuncio . . .",
-      status: "info",
-    });
+  const saveAd = async (params: { fileUrl: string; apiRoute: string }) => {
     try {
-      const apiRoute =
-        props.createAd == "banner"
-          ? ApiRoutes.createBannerAd
-          : ApiRoutes.createVideoAd;
-
-      const resp = await axios.post(
-        apiRoute,
-        {
+      const resp = await fetch(params.apiRoute, {
+        method: "POST",
+        body: JSON.stringify({
           title: titleRef.current!.value,
           description: descriptionRef.current!.value,
-          image: filePreview,
+          file: params.fileUrl,
           redirectionUrl: urlRef.current!.value,
           segments: [segmentsRef.current!.value],
-        },
-        {
-          onUploadProgress: function (progressEvent) {
-            const event = progressEvent;
-            var percentCompleted = Math.round(
-              (event.loaded * 100) / event.total!
-            );
-            console.log("Uploaded: " + percentCompleted + "%");
-          },
-        }
-      );
+        }),
+      });
+
       setIsSendingAd(false);
       if (resp.status === 200) {
         props.handleResponse({
           message: "Anuncio creado!",
           status: "success",
         });
-        window.location.reload();
+        //!   window.location.reload();
       } else {
-        const respJSON = resp.data;
+        const respJSON = await resp.json();
         props.handleResponse({
           message: respJSON["info"],
           status: "error",
@@ -90,6 +71,29 @@ export default function CreateAdForm(props: {
           });
         }
       }
+    }
+  };
+
+  const submitAd = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSendingAd) return;
+    if (!filePreview) return;
+    setIsSendingAd(true);
+    props.handleResponse({
+      message: "Creando anuncio . . .",
+      status: "info",
+    });
+
+    let fileUrl: string;
+    const cloudinaryVideoUploader = new CloudinaryUploader();
+
+    if (props.createAd == "video") {
+      fileUrl = await cloudinaryVideoUploader.uploadVideo(filePreview);
+      await saveAd({ fileUrl, apiRoute: ApiRoutes.createVideoAd });
+
+    } else if (props.createAd == "banner") {
+      fileUrl = await cloudinaryVideoUploader.uploadBanner(filePreview);
+      await saveAd({ fileUrl, apiRoute: ApiRoutes.createBannerAd });
     }
   };
 
@@ -118,7 +122,7 @@ export default function CreateAdForm(props: {
       <form className="w-full  space-y-5" onSubmit={submitAd}>
         {props.createAd == "banner" ? (
           <SelectImage
-            onSelectImage={(image) => setFilePreview(image)}
+            onSelectImage={(image) => setFilePreview(image!)}
             imagePreview={filePreview}
             onSuccess={() => {
               setIsFileOk(true);

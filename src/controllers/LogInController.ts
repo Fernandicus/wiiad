@@ -18,7 +18,7 @@ import { ProfilePic } from "../domain/ProfilePic";
 import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmail";
 
 interface ILogInParams {
-  token: string;
+  authToken: string;
   userName: string;
 }
 
@@ -33,7 +33,7 @@ export class LogInController {
     context: IReqAndRes
   ): Promise<IGenericUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
-      loginQueries.token
+      loginQueries.authToken
     );
 
     if (verificationEmail.role !== RoleType.USER) {

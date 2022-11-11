@@ -1,8 +1,8 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 interface Props {
-  onSelectVideo(video: string | ArrayBuffer | null | undefined): void;
-  videoPreview: string | ArrayBuffer | null | undefined;
+  onSelectVideo(video: string  | null): void;
+  videoPreview: string | null;
   onSuccess(): void;
 }
 
@@ -24,7 +24,9 @@ export function SelectVideo({ onSelectVideo, videoPreview, onSuccess }: Props) {
       reader.readAsDataURL(event.target.files![0]);
 
       reader.onloadend = () => {
-        onSelectVideo(reader.result);
+        const res = reader.result as string;
+
+        onSelectVideo(res);
         videoRef.current?.load();
       };
 

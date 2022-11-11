@@ -36,13 +36,37 @@ export class NodemailerSendVerificationEmail
     const result = await this.transport.sendMail({
       from: this.email_from,
       to: verificationUrl.to.email,
-      subject: `Sign in to ${this.base_url}`,
+      subject: `Log in to ${this.base_url}`,
       text: VerificationEmailTemplate.title({
         url: `${this.base_url}${verificationUrl.login()}`,
         host: this.base_url,
       }),
       html: VerificationEmailTemplate.html({
         url: `${this.base_url}${verificationUrl.login()}`,
+        host: this.base_url,
+      }),
+    });
+
+    const failed = result.rejected.concat(result.pending).filter(Boolean);
+
+    if (failed.length) {
+      throw new ErrorSendingEmail(
+        `Email(s) (${failed.join(", ")}) could not be sent`
+      );
+    }
+  }
+
+  async signUp(verificationUrl: VerificationURL): Promise<void> {
+    const result = await this.transport.sendMail({
+      from: this.email_from,
+      to: verificationUrl.to.email,
+      subject: `Sign up to ${this.base_url}`,
+      text: VerificationEmailTemplate.title({
+        url: `${this.base_url}${verificationUrl.signUp()}`,
+        host: this.base_url,
+      }),
+      html: VerificationEmailTemplate.html({
+        url: `${this.base_url}${verificationUrl.signUp()}`,
         host: this.base_url,
       }),
     });

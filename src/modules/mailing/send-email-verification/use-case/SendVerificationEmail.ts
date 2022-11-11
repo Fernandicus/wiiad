@@ -8,4 +8,8 @@ export class SendlVerificationEmail {
   async login(verificationURL: VerificationURL): Promise<void> {
     await this.emailSender.login(verificationURL);
   }
+
+  async signUp(verificationURL: VerificationURL): Promise<void> {
+    await this.emailSender.signUp(verificationURL);
+  }
 }

@@ -1,5 +1,6 @@
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { findUserHandler } from "@/src/modules/user/container";
+import { ErrorFindingUser } from "@/src/modules/user/domain/ErrorFindingUser";
 import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
 import { ISendVerificationEmailRepo } from "../domain/ISendVerificationEmailRepo";
 import {
@@ -13,8 +14,16 @@ export class SendVerificationEmailController {
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
-    await this.checkIfUserNameExists(data);
-    await this.checkIfUserEmailExists(data);
+    const findUserByName = findUserHandler.findByUserName(data.userName);
+    const findUserByEmail = findUserHandler.findByEmail(data.email);
+
+    const resp = await Promise.allSettled([findUserByName, findUserByEmail]);
+
+    if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
+      throw new ErrorEmailVerification(
+        `El nombre de ususario '${data.userName}' o el email '${data.email}' ya existen`
+      );
+
     const authToken = authTokenCreator.generate();
     await this.saveAndSendEmail({
       email: data.email,
@@ -25,46 +34,24 @@ export class SendVerificationEmailController {
     });
   }
 
-  static async checkIfUserNameExists(
-    data: ISendVerificationEmailRepo
-  ): Promise<void> {
-    const userNameFoundByName = await findUserHandler.findByUserName(
-      data.userName
-    );
-    if (userNameFoundByName)
-      throw new ErrorEmailVerification(
-        `El nombre de ususario '${data.userName}' ya existe`
-      );
-  }
-
-  static async checkIfUserEmailExists(
-    data: ISendVerificationEmailRepo
-  ): Promise<void> {
-    const userFoundByEmail = await findUserHandler.findByEmail(data.email);
-    if (userFoundByEmail)
-      throw new ErrorEmailVerification(
-        `El email '${data.email}' ya está asignado a un usuario`
-      );
-  }
-
   static async sendToUser(
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
-    const userFoundByEmail = await findUserHandler.findByEmail(data.email);
-    if (!userFoundByEmail)
+    try {
+      const userFound = await findUserHandler.findByEmail(data.email);
+      const authToken = authTokenCreator.generate();
+      await this.saveAndSendEmail({
+        verificationEmailId: id,
+        email: userFound.email,
+        name: userFound.name,
+        role: userFound.role,
+        authToken: authToken.token,
+      });
+    } catch (error) {
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
-    const authToken = authTokenCreator.generate();
-
-    await this.saveAndSendEmail({
-      email: userFoundByEmail.email,
-      verificationEmailId: id,
-      name: userFoundByEmail.name,
-      role: userFoundByEmail.role,
-      authToken: authToken.token,
-    });
+    }
   }
-  
 
   static async sendToNewAdvertiser(
     data: ISendVerificationEmailRepo,

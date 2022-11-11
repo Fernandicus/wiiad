@@ -1,13 +1,27 @@
 import { ICloudStorageRepo } from "../domain/ICloudStorageRepo";
-import { v2 as cloudinary } from "cloudinary";
+import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 import { Folder } from "../domain/Folder";
 import { AdFileUrl } from "../modules/ad/domain/value-objects/AdFileUrl";
+import { Name } from "../domain/Name";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+interface ICloudinaryApiSign {
+  signature: string;
+  timestamp: number;
+  signedParams: UploadApiOptions;
+}
+
+export interface ICloudinarySignedParams {
+  signature: string;
+  timestamp: number;
+  signedParams: UploadApiOptions;
+  api_key: string;
+}
 
 export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
   private readonly image_upload_preset = "ml_default";
@@ -48,5 +62,33 @@ export class CloudinaryCloudStorageRepo implements ICloudStorageRepo {
     });
 
     return new AdFileUrl(transformed_url);
+  }
+
+  getSignedData(folder: Folder): ICloudinarySignedParams {
+    const { signature, timestamp, signedParams } = this.apiSignature({folder: folder.path});
+    return {
+      signature,
+      timestamp,
+      signedParams,
+      api_key: process.env.CLOUDINARY_API_KEY!,
+    };
+  }
+
+  /**
+   * Docs:
+   *
+   * https://cloudinary.com/documentation/upload_images#generating_authentication_signatures
+   *
+   * https://cloudinary.com/documentation/upload_images#uploading_with_a_direct_call_to_the_rest_api
+   *
+   * */
+  private apiSignature(params_to_sign: UploadApiOptions): ICloudinaryApiSign {
+    const timestamp = Date.now();
+    const signedParams = params_to_sign;
+    const signature = cloudinary.utils.api_sign_request(
+      { ...signedParams, timestamp },
+      process.env.CLOUDINARY_API_SECRET!
+    );
+    return { signature, timestamp, signedParams };
   }
 }

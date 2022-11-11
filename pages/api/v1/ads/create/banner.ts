@@ -1,19 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { CreateAdController } from "@/src/modules/ad/controller/CreateAdController";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
 import { reqBodyParse } from "@/src/utils/utils";
 import formidable from "formidable";
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-const form = new formidable.IncomingForm();
+import { userSession } from "@/src/use-case/container";
+import { adCreatorHandler } from "@/src/modules/ad/ad-container";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
@@ -22,33 +15,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
+    const session = userSession.getFromServer({ req, res });
 
-    form.parse(req, async (err, fields, files) => {
-      
-      const reqBody: AdPropsPrimitives = {
-        id: "",
-        advertiserId: "",
-        title: fields["title"] as string,
-        description: fields["description"] as string,
-        file: fields["image"] as string,
-        redirectionUrl: fields["redirectionUrl"] as string,
-        segments: fields["segments"] as string[],
-      };
+    if (!session) return res.status(400);
 
-      console.log(reqBody.title);
+    const reqBody: AdPropsPrimitives = reqBodyParse(req);
 
-      await MongoDB.connectAndDisconnect(
-        async () =>
-          await CreateAdController.create({
-            context: { req, res },
-            adProps: reqBody,
-            adId: UniqId.generate(),
-          })
-      );
+    await MongoDB.connectAndDisconnect(
+      async () =>
+      await adCreatorHandler.create({
+        adProps: reqBody,
+        advertiserId: session.id,
+        adId: UniqId.generate(),
+      })
+    );
 
-      res.status(200).json({});
-      return;
-    });
+    res.status(200).json({});
+    return;
+    
   } catch (err) {
     console.error(err);
     if (err instanceof ErrorCreatingAd) {

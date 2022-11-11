@@ -1,25 +1,28 @@
 import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
-import { IVerificationEmailTimerPrimitives, VerificationEmailTimer } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
+import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { userSession } from "@/src/use-case/container";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { TestDBs } from "__mocks__/lib/infrastructure/db/TestDBs";
+import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
+import { TestDBs } from "../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { TestVerificationEmailDB } from "__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 
 interface IServerSideResponse {
   props: {};
   redirect: { destination: string };
 }
 
-describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
+describe.only("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB", () => {
   let verificationMock: TestVerificationEmailDB;
-  let validVerificationEmails: VerificationEmailTimer[];
-  let expiredVerificationEmail: VerificationEmailTimer;
+  let validVerificationEmails: VerificationEmail[];
+  let expiredVerificationEmail: VerificationEmail;
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
 
@@ -41,7 +44,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: "fernandisco",
-        verificationToken: "1234-1243-1234",
+        authToken: "1234-1243-1234",
       },
     })) as IServerSideResponse;
 
@@ -57,8 +60,8 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: "fernandisco",
-        authToken: validVerificationEmails[0].authToken,
-      } ,
+        authToken: validVerificationEmails[0].authToken.token,
+      },
     })) as IServerSideResponse;
 
     const verificationEmailFound = await verificationMock.findById(
@@ -78,7 +81,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: faker.name.firstName(),
-        verificationToken: expiredVerificationEmail.id,
+        authToken: expiredVerificationEmail.authToken.token,
       },
     })) as IServerSideResponse;
 
@@ -90,12 +93,12 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
     expect(verificationEmailFound).toBe(null);
   }, 12000);
 
-  it(`WHEN send a req with a url with valid params, 
+  it.only(`WHEN send a req with a url with valid params, 
   THEN verification email should be removed, 
   new advertiser should be saved
   and return a valid JWT`, async () => {
-    const emailVerificationEmail = validVerificationEmails[1].email;
-    const verificationToken = validVerificationEmails[1].id;
+    const verificationEmail = validVerificationEmails[1];
+    const authToken = verificationEmail.authToken.token;
     const nameVerificationEmail = faker.name.firstName();
 
     const resp = (await getServerSideProps({
@@ -105,35 +108,33 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
       params: {},
       query: {
         userName: nameVerificationEmail,
-        email: emailVerificationEmail,
-        verificationToken: verificationToken,
+        authToken,
       },
-    })) as { props: IUserNamePage};
+    })) as { props: IUserNamePage };
 
     const user = resp.props.user;
 
     const verificationEmailFound = await verificationMock.findById(
-      verificationToken
+      verificationEmail.id
     );
 
+    console.log("resp ", user);
     expect(verificationEmailFound).toBe(null);
-    expect(user.email).toBe(emailVerificationEmail);
-    expect(user.name).toBe(nameVerificationEmail);
-    expect(user.role).not.toBe(null);
+    expect(user).not.toBe(undefined); 
   }, 12000);
 });
 
 describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns", () => {
   let req: MockRequest<NextApiRequest>;
   let res: MockRequest<NextApiResponse>;
-  let influencer: IUserPrimitives;
+  let influencer: User;
   let myUser: IUserPrimitives;
 
   beforeAll(async () => {
     req = httpMock.createRequest();
     res = httpMock.createResponse();
     userSession.remove({ req, res });
-    const { users } = await MockTestDB.setAndInitAll();
+    const { users } = await TestDBs.setAndInitAll();
     influencer = users[0];
     myUser = FakeUser.createWithPrimitives(UniqId.generate());
   });
@@ -146,7 +147,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       resolvedUrl: "",
       params: {},
       query: {
-        userName: influencer.name,
+        userName: influencer.name.name,
       },
     })) as { props: IUserNamePage };
 
@@ -189,16 +190,19 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       resolvedUrl: "",
       params: {},
       query: {
-        userName: influencer.name,
+        userName: influencer.name.name,
       },
     })) as { props: IUserNamePage };
 
-    //console.log(resp.props.campaign)
+    const campaign = resp.props.campaign as ICampaignPrimitives;
+    const ad = resp.props.ad as AdPropsPrimitives;
+    const user = resp.props.user as IUserPrimitives;
+    const referrer = resp.props.referrer as IGenericUserPrimitives;
 
-    expect(resp.props.campaign).not.toBe(undefined);
-    expect(resp.props.ad?.id).toBe(resp.props.campaign?.adId);
-    expect(resp.props.user.id).toBe(myUser.id);
-    expect(resp.props.referrer?.id).toBe(influencer.id);
+    expect(campaign).not.toBe(undefined);
+    expect(ad.id).toBe(campaign.adId);
+    expect(user.id).toBe(myUser.id);
+    expect(referrer.id).toBe(influencer.id);
   });
 
   it(`WHEN access to a not existing influencer url,

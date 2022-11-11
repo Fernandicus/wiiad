@@ -4,17 +4,17 @@ import { NextApiResponse } from "next";
 import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
-import { MockContext } from "../../../../../__mocks__/context/MockContext";
+import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { userSession } from "@/src/use-case/container";
-import { mockedAdRepo } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
+import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 
 describe("On api/ads/remove-ad route", () => {
   let advertiser: AdvertiserPropsPrimitives;
-  
+
   beforeEach(async () => {
-    await mockedAdRepo(5);
+    await setTestAdDB(5);
     advertiser = FakeAdvertiser.createPrimitives();
   }, 8000);
 
@@ -25,11 +25,14 @@ describe("On api/ads/remove-ad route", () => {
       _id: adData.id,
       ...adData,
     });
-    
+
     await ad.save();
-   
-    const ctx = MockContext("DELETE", {
-      adId: ad.id,
+
+    const ctx = mockedContext({
+      method: "DELETE",
+      body: {
+        adId: ad.id,
+      },
     });
 
     userSession.setFromServer(ctx, { ...advertiser });
@@ -49,11 +52,14 @@ describe("On api/ads/remove-ad route", () => {
 
     await ad.save();
 
-    const ctx = MockContext("DELETE", {
-      adId: ad.id,
+    const ctx = mockedContext({
+      method: "DELETE",
+      body: {
+        adId: ad.id,
+      },
     });
 
-    userSession.remove(ctx)
+    userSession.remove(ctx);
 
     await removeAd(ctx.req, ctx.res);
 

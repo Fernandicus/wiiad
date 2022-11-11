@@ -2,16 +2,16 @@ import sendEmailVerification from "@/pages/api/v1/auth/login";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RoleType } from "@/src/domain/Role";
-import { MockContext } from "../../../../__mocks__/context/MockContext";
+import { mockedContext } from "../../../../__mocks__/context/MockContext";
 import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmailRepo";
-import { mockedVerificationEmailRepo } from "../../../../__mocks__/context/MockVerificationEmailDB";
+import { setTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailRepo;
 
   beforeAll(async () => {
-    await mockedVerificationEmailRepo(2, 2); //await TestVerificationEmailMongoDBRepo.init();
+    await setTestVerificationEmailDB(2, 2);
     user = {
       email: faker.internet.email(),
       userName: faker.name.firstName(),
@@ -21,7 +21,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request with all the required data for new user,
   THEN return status code 200`, async () => {
-    const { req, res } = MockContext("POST", { data: user, isNewUser: true });
+    const { req, res } = mockedContext({method:"POST", body:{ data: user, isNewUser: true }});
 
     await sendEmailVerification(req, res);
 
@@ -30,7 +30,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request with all the required data for an existing user,
   THEN return status code 400`, async () => {
-    const { req, res } = MockContext("POST", { data: user, isNewUser: false });
+    const { req, res } = mockedContext({method:"POST", body:{ data: user, isNewUser: false }});
 
     await sendEmailVerification(req, res);
 
@@ -39,7 +39,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send GET request, 
   THEN return status code 400`, async () => {
-    const { req, res } = MockContext("GET", { data: user });
+    const { req, res } = mockedContext({method:"GET", body:{ data: user }});
 
     await sendEmailVerification(req, res);
 
@@ -48,7 +48,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request without the required data, 
   THEN return status code 400`, async () => {
-    const { req, res } = MockContext("POST", { data: {} });
+    const { req, res } = mockedContext({method:"POST", body:{ data: {} }});
 
     await sendEmailVerification(req, res);
 
