@@ -15,15 +15,21 @@ interface Props {
   ad: AdPropsPrimitives;
   handleResponse: (data: NotificationData) => void;
   campaign: ICampaignPrimitives | null;
+  onLaunchCampaign(ad: AdPropsPrimitives): void;
 }
 
-export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
+export const AdCard = ({
+  ad,
+  handleResponse,
+  campaign,
+  onLaunchCampaign,
+}: Props) => {
   const [isLaunching, setIsLaunching] = useState(false);
 
-  const budget = new CampaignBudget({
+  /*   const budget = new CampaignBudget({
     clicks: 1000,
     balance: new Balance(5000),
-  });
+  }); */
 
   const deleteAd = async (id: string) => {
     try {
@@ -43,7 +49,6 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
         });
         window.location.reload();
       }
-      
     } catch (err) {
       handleResponse({
         message: "No se pudo eliminar el anuncio",
@@ -52,7 +57,7 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
     }
   };
 
-  const launchCampaign = async (ad: AdPropsPrimitives) => {
+  /* const launchCampaign = async (ad: AdPropsPrimitives) => {
     console.log("LAUNCH ", ad.id);
     if (isLaunching) return;
     setIsLaunching(true);
@@ -81,7 +86,7 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
         status: "error",
       });
     }
-  };
+  }; */
 
   return (
     <AdCardItem image={ad.file}>
@@ -109,14 +114,10 @@ export const AdCard = ({ ad, handleResponse, campaign }: Props) => {
               : "bg-sky-500 hover:bg-sky-400 text-white"
           }   p-2 rounded-md font-medium w-full`}
           type="button"
-          onClick={campaign ? undefined : () => launchCampaign(ad)}
+          onClick={campaign ? undefined : () => onLaunchCampaign(ad)}
         >
           {!campaign && !isLaunching ? (
             <span>Lanzar campaña</span>
-          ) : !campaign && isLaunching ? (
-            <div className="w-5 h-5 inline-flex justify-center">
-              <LoadingSpinnerAnimation />
-            </div>
           ) : (
             <span>Campaña lanzada</span>
           )}

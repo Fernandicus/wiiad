@@ -9,18 +9,16 @@ import { ErrorCreatingCampaign } from "../domain/value-objects/ErrorCreatingCamp
 
 export class LaunchCampaignController {
   static async launch(props: {
-    context: IReqAndRes;
     adId: string;
     budget: CampaignBudgetProps;
+    advertiserId: string;
     id: string;
   }): Promise<void> {
-    const { adId, context, id } = props;
-    const session = userSession.getFromServer(context);
-    if (!session) throw new ErrorCreatingCampaign("Missing session");
+    const { adId, advertiserId, id } = props;
     await createCampaignHandler.launch({
       id,
       adId,
-      advertiserId: session.id,
+      advertiserId,
       budget: props.budget,
     });
   }

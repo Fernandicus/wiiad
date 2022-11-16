@@ -39,8 +39,7 @@ export class CloudinaryUploader {
     const { public_id } = jsonResp as { public_id: string };
 
     const transformedVideo = this.transformImage(public_id);
-    //const url = this.toURL(transformedVideo, format);
-console.log(transformedVideo.toURL());
+
     return transformedVideo.toURL();
   }
 
@@ -107,7 +106,6 @@ console.log(transformedVideo.toURL());
     const urlWithExtension = cleanedURL.concat("." + format);
     return urlWithExtension;
   }
-
 
   private transformImage(public_id: string): CloudinaryImage {
     const myImage = this.cld.image(public_id);

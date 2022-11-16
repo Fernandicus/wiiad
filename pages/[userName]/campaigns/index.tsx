@@ -32,7 +32,7 @@ export default function CampaignsPage(props: {
             const ad = props.ads.find((ad) => ad.id == campaign.adId);
             return (
               <div key={campaign.id} className="p-5 w-80 ">
-                <AdCardItem image={ad!.image}>
+                <AdCardItem image={ad!.file}>
                   <div className=" w-full  inline-flex justify-between ">
                     <p className="text-md font-semibold truncate">{ad!.title}</p>
                     <button

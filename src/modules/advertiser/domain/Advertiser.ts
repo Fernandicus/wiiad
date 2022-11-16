@@ -5,7 +5,7 @@ import {
   IGenericUserPrimitives,
 } from "@/src/domain/IGenericUser";
 import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
-import { ProfilePic } from "@/src/domain/ProfilePic";
+
 
 export interface AdvertiserPropsPrimitives extends IGenericUserPrimitives {}
 

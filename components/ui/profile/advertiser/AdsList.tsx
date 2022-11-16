@@ -12,9 +12,10 @@ interface Props {
   campaigns: ICampaignPrimitives[];
   onCreateAd: Dispatch<SetStateAction<AdType | null>>;
   handleResponse: (data: NotificationData) => void;
+  onLaunchCampaign(ad: AdPropsPrimitives):void;
 }
 
-export function AdsList({ ads, onCreateAd, handleResponse, campaigns }: Props) {
+export function AdsList({ ads, onCreateAd, handleResponse, campaigns, onLaunchCampaign }: Props) {
   return (
     <div className="w-full py-10">
       <div className="space-y-5">
@@ -43,11 +44,12 @@ export function AdsList({ ads, onCreateAd, handleResponse, campaigns }: Props) {
               (campaign) => campaign.adId == ad.id
             );
             return (
-              <div key={ad.id} className="p-5 w-96">
+              <div key={ad.id} className="relative p-5 w-96">
                 <AdCard
                   ad={ad}
                   handleResponse={handleResponse}
                   campaign={!campaign ? null : campaign}
+                  onLaunchCampaign={onLaunchCampaign}
                 />
               </div>
             );
