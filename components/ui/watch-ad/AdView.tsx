@@ -26,16 +26,6 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
     showNotification: (data: NotificationData) => {},
   });
 
-  const campaignMetrics = async () => {
-    fetch(ApiRoutes.campaignMetrics, {
-      method: "POST",
-      body: JSON.stringify({
-        referrerId: referrer.id,
-        campaignId: campaign.id,
-      }),
-    });
-  };
-
   const pay = () => {
     fetch(ApiRoutes.addReferral, {
       method: "POST",
@@ -80,10 +70,6 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
   };
 
   useEffect(() => {
-    campaignMetrics();
-    console.log(videoRef);
-
-   
     if (videoRef.current && videoRef.current.duration) {
       /* videoRef.current.muted = false; */
       setTimeout(() => {
@@ -91,7 +77,7 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
         console.log("EARN MONEY");
         console.log(videoRef.current?.duration);
       }, videoRef.current!.duration * 1000);
-    }else{
+    } else {
       setTimeout(() => {
         setCanEarnMoney(true);
       }, 5 * 1000);
@@ -100,7 +86,11 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
 
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center">
-      <Notifications ref={notificationRef} />
+      <Notifications ref={notificationRef}>
+        <Link href="/" className=" text-blue-500 ">
+        <span className="underline">Iniciar sesion</span> 👈
+        </Link>
+      </Notifications>
       <div className="max-w-xl space-y-20 pt-10">
         <div className="flex justify-center">
           <div className="flex items-center w-full p-2 bg-white rounded-full shadow-lg shadow-slate-200">
@@ -175,12 +165,23 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
             )}
             <p className=" text-slate-600 text-sm">{ad.description}</p>
             <div>
-              <Link href={ad.redirectionUrl} passHref target="_blank">
-                <a target="_blank" rel="noopener noreferrer">
-                  <div className="w-full p-2 bg-sky-500 hover:bg-sky-400 text-white shadow-md shadow-slate-300 rounded-md text-center">
-                    Visitar web
-                  </div>
-                </a>
+              <Link
+                onClick={() => {
+                  console.log("REDIRECT");
+                  fetch(ApiRoutes.campaign_metrics_increase_clicks, {
+                    method: "POST",
+                    body: JSON.stringify({
+                      campaignId: campaign.id,
+                    }),
+                  });
+                }}
+                href={ad.redirectionUrl}
+                passHref
+                target="_blank"
+              >
+                <div className="w-full p-2 bg-sky-500 hover:bg-sky-400 text-white shadow-md shadow-slate-300 rounded-md text-center">
+                  Visitar web
+                </div>
               </Link>
             </div>
           </div>

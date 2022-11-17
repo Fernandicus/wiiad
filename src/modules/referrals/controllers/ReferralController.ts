@@ -13,13 +13,15 @@ export class ReferralController {
   }) {
     const { refereeId, referrerId, balance } = params;
 
-    const referrer_referralFound = await findReferralHandler.byUserId(
-      referrerId
-    );
+    const findReferrer = findReferralHandler.byUserId(referrerId);
+    const findReferee = findReferralHandler.byUserId(refereeId);
 
-    const referee_referralFound = await findReferralHandler.byUserId(refereeId);
+    const referralsResp = await Promise.allSettled([findReferrer, findReferee]);
 
-    if (!referrer_referralFound) {
+    const referrer = referralsResp[0];
+    const referee = referralsResp[1];
+
+    if (referrer.status === "rejected") {
       await createReferralHandler.forReferrer({
         id: UniqId.generate(),
         referrerId,
@@ -29,7 +31,7 @@ export class ReferralController {
       await updateReferralHandler.increaseReferrerBalance(referrerId, balance);
     }
 
-    if (!referee_referralFound) {
+    if (referee.status === "rejected") {
       await createReferralHandler.forReferee({
         id: UniqId.generate(),
         refereeId,

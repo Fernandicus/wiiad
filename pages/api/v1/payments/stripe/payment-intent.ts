@@ -55,8 +55,22 @@ export default async function handler(
         clicks: 5000,
       });
       break;
+    case 3:
+      budget = new CampaignBudget({
+        balance: new Balance(15000),
+        clicks: 7500,
+      });
+      break;
+    case 4:
+      budget = new CampaignBudget({
+        balance: new Balance(20000),
+        clicks: 10000,
+      });
+      break;
     default:
-      throw new ErrorCreatingPayment("No budget item provided");
+      throw new ErrorCreatingPayment(
+        `Incorrect budget item provided '${budgetItem}'`
+      );
   }
 
   try {

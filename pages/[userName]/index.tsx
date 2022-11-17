@@ -26,6 +26,7 @@ import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { Logout } from "../../components/ui/login/Logout";
 import { findCampaignHandler } from "@/src/modules/campaign/container";
 import CampaignsPage from "./campaigns";
+import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -90,11 +91,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             ads: AdPropsPrimitives[];
             campaigns: ICampaignPrimitives[];
           }>(async () => {
-            const campaigns = await findCampaignHandler.byAdvertiserId(
-              session.id
-            );
-            const ads = await adFinderHandler.findAll(session.id);
-            return { campaigns, ads };
+            const all = await AdvertiserDataController.getAll(session.id);
+            return all;
           });
 
           return {

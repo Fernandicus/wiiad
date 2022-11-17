@@ -23,6 +23,7 @@ import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/S
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { Balance } from "@/src/domain/Balance";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 
 export type AdType = "banner" | "video";
 
@@ -44,46 +45,6 @@ export default function Ads(props: IAdsPageProps) {
   const [showPaymentProcess, setPaymentProcess] = useState<boolean>(false);
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchAd, setLaunchAd] = useState<AdPropsPrimitives>();
-
-/*   const budget = new CampaignBudget({
-    clicks: 1000,
-    balance: new Balance(5000),
-  });
-
-  const launchCampaign = async (ad: AdPropsPrimitives) => {
-    console.log("LAUNCH ", ad.id);
-    if (isLaunching) return;
-    setIsLaunching(true);
-    notificationsRef.current!.showNotification({
-      message: "Lanzando campaña ...",
-      status: "info",
-    });
-
-    try {
-      const resp = await fetch(ApiRoutes.launchCampaign, {
-        method: "POST",
-        body: JSON.stringify({
-          id: ad.id,
-          budget,
-        }),
-      });
-      setIsLaunching(false);
-      if (resp.status === 200) {
-        console.log("NEW CAMPAIGN LAUNCHED");
-        notificationsRef.current!.showNotification({
-          message: "Nueva campaña lanzada!",
-          status: "success",
-        });
-      }
-      window.location.reload();
-    } catch (err) {
-      setIsLaunching(false);
-      notificationsRef.current!.showNotification({
-        message: "No se pudo lanzar la campaña",
-        status: "error",
-      });
-    }
-  }; */
 
   const onLaunchCampaign = (ad: AdPropsPrimitives) => {
     setPaymentProcess(true);
@@ -144,13 +105,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const { ads, campaigns, stripeCustomer } =
       await MongoDB.connectAndDisconnect(async () => {
-        const ads = await adFinderHandler.findAll(session.id);
-        const campaigns = await findCampaignHandler.byAdvertiserId(session.id);
-        const stripeCustomer = await findCustomerHandler.findByUserId(
-          session.id
-        );
-
-        return { ads, campaigns, stripeCustomer };
+        const all = await AdvertiserDataController.getAll(session.id);
+        return all;
       });
 
     return {

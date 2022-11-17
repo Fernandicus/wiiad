@@ -41,7 +41,10 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
         jsonResp.message !== "" ? jsonResp.message : `Algo ha ido mal :(`;
       setMessage({ status: resp.status, message });
     } else {
-      setMessage({ status: 0, message: "Te hemos enviado un email de confirmacion" });
+      setMessage({
+        status: 0,
+        message: "Te hemos enviado un email de confirmacion",
+      });
     }
   };
 
@@ -85,7 +88,9 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                   {isNewUser ? (
                     <div className="space-y-2 mb-4">
                       <label htmlFor="myName">
-                        {isUserRole ? `Elige tu mote!` : "El nombre de tu marca"}
+                        {isUserRole
+                          ? `Elige tu alias`
+                          : "El nombre de tu marca"}
                       </label>
                       <input
                         ref={myName}
@@ -116,9 +121,9 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                   </div>
                 </div>
               </div>
-              <div className="space-y-5">
+              <div className="space-y-2">
                 <button
-                  className="  bg-sky-600 text-white p-1 w-full h-10 rounded-md"
+                  className="  bg-sky-500 text-white p-1 w-full h-10 rounded-md hover:bg-sky-400 transition ease-in duration-150"
                   type="submit"
                 >
                   {isNewUser
@@ -126,36 +131,17 @@ export default function Home(props: { session: AdvertiserPropsPrimitives }) {
                     : "Iniciar sesion"}
                 </button>
                 <div className="text-center">
-                  {isNewUser ? (
-                    <p className="text-sm text-center">
-                      <button
-                        type="button"
-                        className=" text-sky-500 "
-                        onClick={(e) => {
-                          e.preventDefault();
-                          console.log(isNewUser);
-                          setIsNewUser(!isNewUser);
-                        }}
-                      >
-                        Ya tengo cuenta
-                      </button>
-                    </p>
-                  ) : (
-                    <p className="text-sm text-center">
-                      ¿No tienes cuenta?{" "}
-                      <button
-                        type="button"
-                        className=" text-sky-500 "
-                        onClick={(e) => {
-                          e.preventDefault();
-                          console.log(isNewUser);
-                          setIsNewUser((isNewUser) => !isNewUser);
-                        }}
-                      >
-                        Crea tu cuenta aquí
-                      </button>
-                    </p>
-                  )}
+                  <button
+                    type="button"
+                    className="p-1 w-full h-10 text-sky-500  bg-sky-50 hover:bg-sky-100 transition ease-in duration-150 rounded-md"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log(isNewUser);
+                      setIsNewUser((isNewUser) => !isNewUser);
+                    }}
+                  >
+                    {isNewUser ? "Ya tengo cuenta" : "Crea una cuenta"}
+                  </button>
                 </div>
               </div>
             </form>

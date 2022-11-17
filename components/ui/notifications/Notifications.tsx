@@ -1,7 +1,8 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 
-interface Props {
+interface INotificationProps {
   props?: string;
+  children?: JSX.Element;
 }
 
 export type NotificationStatus = "error" | "info" | "success";
@@ -16,7 +17,7 @@ export interface NotificationData {
 }
 
 export const Notifications = forwardRef(
-  (props: Props, ref: React.ForwardedRef<RefNotifications>) => {
+  (props: INotificationProps, ref: React.ForwardedRef<RefNotifications>) => {
     const [message, setMessage] = useState<NotificationData>({
       message: "",
       status: "error",
@@ -34,22 +35,19 @@ export const Notifications = forwardRef(
     return (
       <div className="fixed p-5 inline-flex top-0 right-0">
         {message.status == "error" && message.message != "" ? (
-          <div className="">
-            <h3 className=" bg-red-200 text-gray-900  border-l-8 border border-red-400 rounded-md shadow-lg p-5">
-              {message.message}
-            </h3>
+          <div className="bg-red-200   border-l-8 border border-red-400 rounded-md shadow-lg p-5">
+            <h3 className="text-gray-900">{message.message}</h3>
+            {props.children}
           </div>
         ) : message.status == "success" && message.message != "" ? (
-          <div className="">
-            <h3 className=" bg-lime-200 text-gray-700  border-l-8 border border-lime-400 rounded-md shadow-lg p-5">
-              {message.message}
-            </h3>
+          <div className="bg-lime-200 border-l-8 border border-lime-400 rounded-md shadow-lg p-5">
+            <h3 className=" text-gray-700">{message.message}</h3>
+            {props.children}
           </div>
         ) : message.status == "info" && message.message != "" ? (
-          <div className="">
-            <h3 className=" bg-blue-200 text-gray-700  border-l-8 border border-blue-400 rounded-md shadow-lg p-5">
-              {message.message}
-            </h3>
+          <div className="bg-blue-200   border-l-8 border border-blue-400 rounded-md shadow-lg p-5">
+            <h3 className="text-gray-700 ">{message.message}</h3>
+            {props.children}
           </div>
         ) : null}
       </div>

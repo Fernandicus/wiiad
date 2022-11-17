@@ -6,17 +6,17 @@ export const Logout = () => {
 
   const exit = async () => {
     fetch(ApiRoutes.logout).then((resp) => {
-      router.push("/login");
+      router.push("/");
     });
   };
 
   return (
     <div className="fixed top-0 left-0 p-5">
       <button
-        className=" bg-red-500 group hover:bg-white transition ease-in duration-75 p-2 rounded-md shadow-lg shadow-slate-300 flex space-x-2"
+        className={`group hover:bg-red-500 transition ease-in duration-75 p-2 rounded-md hover:shadow-lg flex space-x-2`}
         onClick={exit}
       >
-        <div className="text-white group-hover:text-red-500">
+        <div className="text-red-500 group-hover:text-white ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -32,7 +32,7 @@ export const Logout = () => {
             />
           </svg>
         </div>
-        <p className="text-white group-hover:text-red-500">Salir</p>
+        <p className="text-red-500 group-hover:text-white ">Salir</p>
       </button>
     </div>
   );

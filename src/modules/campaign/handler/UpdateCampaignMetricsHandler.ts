@@ -20,4 +20,9 @@ export class UpdateCampaignMetricsHandler {
     const id = new UniqId(campaignId);
     await this.updateMetrics.increaseViews(id);
   }
+
+  async increaseClicks(campaignId: string):Promise<void>{
+    const id = new UniqId(campaignId);
+    await this.updateMetrics.increaseClicks(id);
+  }
 }

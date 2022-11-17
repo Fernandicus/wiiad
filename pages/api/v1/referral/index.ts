@@ -1,19 +1,13 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-
-import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
 import { RoleType } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/ErrorCreatingReferral";
-
 import {
   createReferralHandler,
   findReferralHandler,
-  updateReferralHandler,
 } from "@/src/modules/referrals/referral-container";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ReferralController } from "@/src/modules/referrals/controllers/ReferralController";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ErrorFindingReferral } from "@/src/modules/referrals/domain/ErrorFindingReferral";
 
@@ -32,9 +26,10 @@ export default async function handler(
       throw new ErrorCreatingReferral("Rol type has no permits");
 
     const referralFound = await MongoDB.connectAndDisconnect(async () => {
-      const referralFound = await findReferralHandler.byUserId(session.id);
-
-      if (!referralFound) {
+      try {
+        const referralFound = await findReferralHandler.byUserId(session.id);
+        return referralFound;
+      } catch (err) {
         const newReferral = Referral.empty({
           id: UniqId.new(),
           userId: new UniqId(session.id),
@@ -47,12 +42,11 @@ export default async function handler(
         });
         return newReferral;
       }
-
-      return referralFound;
     });
 
     return res.status(200).json({ referral: referralFound });
   } catch (err) {
+    console.error(err);
     if (err instanceof ErrorCreatingReferral)
       return res.status(401).json({ message: err.info });
     if (err instanceof Error)

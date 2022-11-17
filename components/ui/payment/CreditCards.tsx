@@ -12,36 +12,42 @@ export const CreditCards = ({
   const [method, setPaymentMethod] = useState<string>();
 
   return (
-    <div className="space-x-5">
-      {paymentMethods.map((pMethod) => (
+    <div className="h-48 flex items-center">
+      <div className="w-full space-y-2 ">
+        {paymentMethods.map((pMethod) => (
+          <button
+            key={pMethod}
+            className={`${
+              method === pMethod
+                ? "bg-slate-200 text-gray-700 border-slate-200 font-semibold"
+                : "bg-white  text-slate-700 border-slate-100 "
+            } border p-4 rounded-lg w-full text-center `}
+            onClick={() => {
+              setPaymentMethod(pMethod);
+              onSelectedMethod(pMethod);
+            }}
+          >
+            <div className="flex justify-center items-center space-x-5">
+              <p className="">Visa</p>
+              <p className="text-gray-600 align-base">**** 4242</p>
+            </div>
+          </button>
+        ))}
+
         <button
-          key={pMethod}
           className={`${
-            method === pMethod
-              ? "bg-sky-500 text-white"
-              : "bg-white-500 text-sky-500 border-sky-500"
-          } border font-bold p-3 rounded-lg inline-block w-20 text-center`}
+            !method
+              ? "bg-slate-200 text-gray-700 border-slate-200 "
+              : "bg-white  text-slate-700 border-slate-100"
+          } border   bg-white-500 p-4 rounded-lg block w-full text-center`}
           onClick={() => {
-            setPaymentMethod(pMethod);
-            onSelectedMethod(pMethod);
+            setPaymentMethod(undefined);
+            onSelectedMethod(undefined);
           }}
         >
-          Visa
+          Usar nueva tarjeta
         </button>
-      ))}
-      <button
-        className={`${
-          !method
-            ? "bg-sky-500 text-white border-sky-500"
-            : "bg-white text-sky-500 border-sky-500"
-        } border font-medium bg-white-500 p-3 rounded-lg inline-block text-center`}
-        onClick={() => {
-          setPaymentMethod(undefined);
-          onSelectedMethod(undefined);
-        }}
-      >
-        Nueva tarjeta
-      </button>
+      </div>
     </div>
   );
 };

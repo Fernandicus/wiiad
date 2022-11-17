@@ -17,15 +17,7 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   try {
-    const reqBody: { referralId: string; campaignId: string } =
-      reqBodyParse(req);
-
-    const session = userSession.getFromServer({ req, res });
-
-    if (!session) throw new ErrorFindingCampaign("There is no session");
-
-    if (session?.role !== RoleType.USER)
-      throw new ErrorFindingCampaign("Role type has no permits");
+    const reqBody: { campaignId: string } = reqBodyParse(req);
 
     await MongoDB.connectAndDisconnect(async () => {
       await campaignMetricsHandler.increaseViews(reqBody.campaignId);

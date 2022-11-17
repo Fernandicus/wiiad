@@ -7,7 +7,8 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../../components/ui/profile/advertiser/AdCardItem";
-import { GridItem } from "../../../components/ui/profile/advertiser/GridItem";
+import { CampaignTags } from "../../../components/ui/profile/advertiser/CampaignTags";
+import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 
 export default function CampaignsPage(props: {
   campaigns: ICampaignPrimitives[];
@@ -19,52 +20,36 @@ export default function CampaignsPage(props: {
         <h1 className="font-bold text-center">Estas son tus campañas</h1>
       </div>
       <div className="py-20 w-full inline-flex justify-center">
-        <div
-          className={` grid ${
-            props.campaigns.length == 1
-              ? "grid-cols-1"
-              : props.campaigns.length == 2
-              ? "grid-cols-2"
-              : "grid-cols-3"
-          } `}
-        >
-          {props.campaigns.map((campaign) => {
-            const ad = props.ads.find((ad) => ad.id == campaign.adId);
-            return (
-              <div key={campaign.id} className="p-5 w-80 ">
-                <AdCardItem image={ad!.file}>
-                  <div className=" w-full  inline-flex justify-between ">
-                    <p className="text-md font-semibold truncate">{ad!.title}</p>
-                    <button
-                      className={`w-16 group bg-lime-300  py-0.5 px-2 rounded-md text-lime-800 text-xs font-medium ${
-                        campaign.status == "active"
-                          ? "hover:bg-red-200 hover:text-red-800"
-                          : "hover:bg-lime-200"
-                      }`}
-                    >
-                      <div className="group-hover:hidden block">
-                        {campaign.status == "active" ? "activa" : "detenida"}
-                      </div>
-                      <div className="group-hover:block hidden">
-                        {campaign.status == "standby" ? "activar" : "detener"}
-                      </div>
-                    </button>
-                  </div>
-                  <div className=" flex rounded-md  py-3 justify-between text-sm border-t-2 border-sky-100">
-                    <div className="w-full text-center">
-                      <p>Visualizaciones</p>
-                      <p>{campaign.metrics.totalViews}</p>
-                    </div>
-                    <div className="w-full text-center">
-                      <p>Redirecciones</p>
-                      <p>{campaign.metrics.totalClicks}</p>
-                    </div>
-                  </div>
-                </AdCardItem>
-              </div>
-            );
-          })}
-        </div>
+        {props.campaigns.length == 0 ? (
+          <h1 className="text-center">Aún no has lanzado ninguna campaña</h1>
+        ) : (
+          <div
+            className={` grid ${
+              props.campaigns.length == 1
+                ? "grid-cols-1"
+                : props.campaigns.length == 2
+                ? "grid-cols-2"
+                : "grid-cols-3"
+            } `}
+          >
+            {props.campaigns.map((campaign) => {
+              const ad = props.ads.find((ad) => ad.id == campaign.adId);
+              return (
+                <div key={campaign.id} className="p-5 w-80">
+                  <AdCardItem image={ad!.file}>
+                    <CampaignTags campaign={campaign} />
+                    <p className="text-md font-semibold truncate">
+                      {ad!.title}
+                    </p>
+                    <p className="text-sm text-gray-500 italic">
+                      {ad!.description}
+                    </p>
+                  </AdCardItem>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -77,9 +62,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {}, redirect: { destination: "/login", permanent: false } };
 
   const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-    const campaigns = await findCampaignHandler.byAdvertiserId(session.id);
-    const ads = await adFinderHandler.findAll(session.id);
-    return { campaigns, ads };
+    const all = await AdvertiserDataController.getAll(session.id);
+    return all;
   });
 
   return {

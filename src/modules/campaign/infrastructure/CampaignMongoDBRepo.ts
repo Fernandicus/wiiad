@@ -56,6 +56,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async increaseViews(id: UniqId): Promise<void> {
+    console.log(" increaseViews ");
     await CampaignModel.findByIdAndUpdate(id.id, {
       $inc: { "metrics.totalViews": 1 },
     });

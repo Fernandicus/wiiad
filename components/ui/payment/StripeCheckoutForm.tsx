@@ -77,7 +77,7 @@ export default function StripeCheckoutForm({ adId }: { adId: string }) {
               <LoadingSpinnerAnimation />
             </div>
           ) : (
-            "Pay now"
+            "Pagar y lanzar"
           )}
         </span>
       </button>

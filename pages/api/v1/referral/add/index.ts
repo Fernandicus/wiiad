@@ -4,14 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
 import { RoleType } from "@/src/domain/Role";
-import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/ErrorCreatingReferral";
-
-import {
-  createReferralHandler,
-  findReferralHandler,
-  updateReferralHandler,
-} from "@/src/modules/referrals/referral-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ReferralController } from "@/src/modules/referrals/controllers/ReferralController";
 
