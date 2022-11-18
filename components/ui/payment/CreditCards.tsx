@@ -9,32 +9,33 @@ export const CreditCards = ({
   paymentMethods,
   onSelectedMethod,
 }: ICreditCardsParams) => {
-  const [method, setPaymentMethod] = useState<string>();
+  const [isMethodSelected, setMethodSelected] = useState<string>();
 
   return (
-    <div className="h-48 flex items-center">
+    <div className="h-48 flex ">
       <div className="w-full space-y-2 ">
         {paymentMethods.map((pMethod) => (
           <button
             key={pMethod}
-            className={`${
-              method === pMethod
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-semibold"
-                : "bg-white  text-slate-700 border-slate-100 "
-            } border p-4 rounded-lg w-full text-center `}
+            className={` border p-4 rounded-lg w-full text-center transition-all duration-150 ease-in ${
+              isMethodSelected === pMethod
+                ? "bg-green-50 text-green-700 border-green-200"
+                : "bg-white  text-green-700 border-green-100 "
+            }`}
             onClick={() => {
-              setPaymentMethod(pMethod);
+              setMethodSelected(pMethod);
               onSelectedMethod(pMethod);
+             
             }}
           >
-            <div className="flex justify-center items-center space-x-5">
+            <div className="text-green-600 flex justify-center items-center space-x-5">
               <p className="">Visa</p>
-              <p className="text-gray-600 align-base">**** 4242</p>
+              <p className=" align-base font-normal">**** 4242</p>
             </div>
           </button>
         ))}
 
-        <button
+        {/* <button
           className={`${
             !method
               ? "bg-slate-200 text-gray-700 border-slate-200 "
@@ -46,7 +47,7 @@ export const CreditCards = ({
           }}
         >
           Usar nueva tarjeta
-        </button>
+        </button> */}
       </div>
     </div>
   );

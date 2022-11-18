@@ -15,8 +15,8 @@ export const stripePromise = loadStripe(
 export class StripePaymentProcess {
   async setPaymentAmount(
     budgetItem: number,
-    adId:string,
-    paymentMethod?: string,
+    adId: string,
+    paymentMethod?: string
   ): Promise<string> {
     try {
       const paymentIntentResp = await fetch(ApiRoutes.stripePaymentIntent, {
@@ -42,19 +42,16 @@ export class StripePaymentProcess {
   async confirmPayment(
     useStripe: Stripe,
     useElements: StripeElements,
-    adId: string
+    userName: string
   ): Promise<string> {
-    const { error } = await useStripe.confirmPayment({
-      elements: useElements,
-      confirmParams: {
-        return_url: `http://localhost:3000/${ApiRoutes.paymentCompleted(adId)}`,
-      },
-    });
-
-    if (error.type === "card_error" || error.type === "validation_error") {
-      return error.message!;
-    } else {
-      return "An unexpected error occurred.";
+    try {
+      await useStripe.confirmPayment({
+        elements: useElements,
+        redirect: "if_required",
+      });
+      return "Pago completado!";
+    } catch (err) {
+      return "Algo fue mal";
     }
   }
 }

@@ -11,7 +11,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
 
   return (
     <div>
-      <h1 className="font-bold text-lg text-gray-700">Elige tu presupuesto</h1>
+      <h1 className="font-bold text-lg text-gray-700">Calcula tu presupuesto</h1>
       <div className="h-48 w-full flex items-center justify-center">
         <div className="text-center space-y-2">
           <h2 className="text-4xl text-gray-600 font-semibold">{amount}€</h2>

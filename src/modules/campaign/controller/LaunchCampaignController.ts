@@ -4,13 +4,14 @@ import { createCampaignHandler } from "../container";
 import {
   CampaignBudget,
   CampaignBudgetProps,
+  ICampaignBudgetPrimitives,
 } from "../domain/value-objects/Budget";
 import { ErrorCreatingCampaign } from "../domain/value-objects/ErrorCreatingCampaign";
 
 export class LaunchCampaignController {
   static async launch(props: {
     adId: string;
-    budget: CampaignBudgetProps;
+    budget: ICampaignBudgetPrimitives;
     advertiserId: string;
     id: string;
   }): Promise<void> {

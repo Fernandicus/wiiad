@@ -1,8 +1,10 @@
+import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
 import { Campaign } from "../domain/Campaign";
 import {
   CampaignBudget,
   CampaignBudgetProps,
+  ICampaignBudgetPrimitives,
 } from "../domain/value-objects/Budget";
 import { CreateCampaign } from "../use-case/CreateCampaign";
 
@@ -10,7 +12,7 @@ interface ILaunchCampaignProps {
   advertiserId: string;
   adId: string;
   id: string;
-  budget: CampaignBudgetProps;
+  budget: ICampaignBudgetPrimitives;
 }
 
 export class CreateCampaignHandler {
@@ -23,7 +25,7 @@ export class CreateCampaignHandler {
     budget,
   }: ILaunchCampaignProps): Promise<void> {
     const campaignBudget = new CampaignBudget({
-      balance: budget.balance,
+      balance: new Balance(budget.balance),
       clicks: budget.clicks,
     });
     const campaign = Campaign.new({

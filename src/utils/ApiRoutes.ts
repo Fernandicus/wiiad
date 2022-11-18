@@ -1,7 +1,9 @@
 export class ApiRoutes {
   static launchCampaign = "/api/v1/campaign/launch";
-  static campaign_metrics_increase_views = "/api/v1/campaign/metrics/increase-views";
-  static campaign_metrics_increase_clicks = "/api/v1/campaign/metrics/increase-clicks";
+  static campaign_metrics_increase_views =
+    "/api/v1/campaign/metrics/increase-views";
+  static campaign_metrics_increase_clicks =
+    "/api/v1/campaign/metrics/increase-clicks";
   static removeAds = "/api/v1/ads/remove";
   static allAds = "/api/v1/ads/";
   static advertiserCampaigns = "/api/v1/campaign";
@@ -17,5 +19,5 @@ export class ApiRoutes {
   static cloudinaryImageEndPoint =
     "https://api.cloudinary.com/v1_1/fernanprojects/image/upload/";
   static stripePaymentIntent = "/api/v1/payments/stripe/payment-intent/";
-  static paymentCompleted = (adId: string) => `/payment/complete?ad=${adId}`;
+  static paymentCompleted = (userName: string) => `${userName}/campaigns`;
 }

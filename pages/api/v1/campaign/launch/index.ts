@@ -1,7 +1,8 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
-import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
+import { CampaignBudgetProps, ICampaignBudgetPrimitives } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
+import { userSession } from "@/src/use-case/container";
 import { UniqId } from "@/src/utils/UniqId";
 import { reqBodyParse } from "@/src/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -13,15 +14,19 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400).json({});
 
   try {
-    const ad: { id: string; budget: CampaignBudgetProps } = reqBodyParse(req)
+    const session = userSession.getFromServer({ req, res });
+    if (!session) res.status(400).end();
+    
+    const ad: { id: string; budget: ICampaignBudgetPrimitives } = reqBodyParse(req);
 
-    await MongoDB.connectAndDisconnect(async () =>
-      await LaunchCampaignController.launch({
-        context: { req, res },
-        adId: ad.id,
-        id: UniqId.generate(),
-        budget: ad.budget,
-      })
+    await MongoDB.connectAndDisconnect(
+      async () =>
+        await LaunchCampaignController.launch({
+          adId: ad.id,
+          id: UniqId.generate(),
+          budget: ad.budget,
+          advertiserId: session!.id,
+        })
     );
 
     return res.status(200).json({});

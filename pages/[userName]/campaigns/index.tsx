@@ -9,6 +9,17 @@ import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../../components/ui/profile/advertiser/AdCardItem";
 import { CampaignTags } from "../../../components/ui/profile/advertiser/CampaignTags";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
+import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
+import {
+  findCustomerHandler,
+  getPaymentDetailsHandler,
+  updateStripeHandler,
+} from "@/src/modules/payment-methods/stripe/stripe-container";
+import { UniqId } from "@/src/utils/UniqId";
+import { RoleType } from "@/src/domain/Role";
+import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
+import { Balance } from "@/src/domain/Balance";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
 
 export default function CampaignsPage(props: {
   campaigns: ICampaignPrimitives[];
@@ -58,12 +69,41 @@ export default function CampaignsPage(props: {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = userSession.getFromServer(context);
 
-  if (!session)
-    return { props: {}, redirect: { destination: "/login", permanent: false } };
+  if (!session || session.role === RoleType.USER)
+    return { props: {}, redirect: { destination: "/", permanent: false } };
+
+  //TODO: - - - - -
+  const paymentIntent = context.query["payment_intent"] as string;
+
+  if (!paymentIntent) {
+    const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
+      const all = await AdvertiserDataController.getAll(session.id);
+      return all;
+    });
+    return {
+      props: { campaigns, ads },
+    };
+  }
 
   const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-    const all = await AdvertiserDataController.getAll(session.id);
-    return all;
+    const details = await getPaymentDetailsHandler.fromPaymentIntent(
+      paymentIntent
+    );
+    const stripeCustomer = await findCustomerHandler.findByUserId(session!.id);
+    const savedMethod = stripeCustomer.paymentMethods.find(
+      (method) => method == details.paymentMethodId
+    );
+
+    console.log(" savedMethod ", savedMethod);
+
+    if (!savedMethod && details.paymentMethodId)
+      await updateStripeHandler.savePaymentMethod(
+        session!.id,
+        details.paymentMethodId
+      );
+
+    const advertiserData = await AdvertiserDataController.getAll(session.id);
+    return advertiserData;
   });
 
   return {

@@ -88,6 +88,7 @@ export default function Ads(props: IAdsPageProps) {
       {showPaymentProcess ? (
         <div className=" fixed w-full ">
           <LaunchCampaign
+            userName={advertiser.name}
             adToLaunch={launchAd!}
             paymentMethods={props.stripeCustomer?.paymentMethods}
           />

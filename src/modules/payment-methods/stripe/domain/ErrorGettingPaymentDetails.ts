@@ -1,5 +1,5 @@
 
-export class ErrorFindingPaymentMethod extends Error {
+export class ErrorGettingPaymentDetails extends Error {
     readonly info;
     constructor(info: string, errorMessage?: string) {
       super(errorMessage);

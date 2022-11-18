@@ -1,27 +1,53 @@
 import { CustomerId } from "../domain/CustomerId";
+import { IStripeMetadata } from "../domain/IStripeMetadata";
 import { PaymentAmount } from "../domain/PaymentAmount";
+import {
+  IPaymentDetailsPrimitives,
+  PaymentDetails,
+} from "../domain/PaymentDetails";
+import { PaymentIntentId } from "../domain/PaymentIntentId";
 import { PaymentMethodId } from "../domain/PaymentMethodId";
 import { PaymentIntent } from "../use-case/PaymentIntent";
 
 export class PaymentIntentHandler {
   constructor(private paymentIntent: PaymentIntent) {}
 
-  async withoutPaymentMethod(customerId: string, amount: number): Promise<string> {
+  async withoutPaymentMethod(
+    customerId: string,
+    amount: number,
+    metadata?: IStripeMetadata,
+  ): Promise<IPaymentDetailsPrimitives> {
     const customer = new CustomerId(customerId);
     const totalAmount = new PaymentAmount(amount);
-    const clientSecret = await this.paymentIntent.withoutPaymentMethod(
+    const details = await this.paymentIntent.withoutPaymentMethod(
       customer,
-      totalAmount
+      totalAmount,
+      metadata,
     );
-    return clientSecret;
+    return details.toPrimitives();
   }
 
-  async withPaymentMethod(customerId: string, amount: number, paymentMethodId:string): Promise<string> {
+  async withPaymentMethod(
+    customerId: string,
+    amount: number,
+    paymentMethodId: string,
+    metadata?: IStripeMetadata,
+  ): Promise<IPaymentDetailsPrimitives> {
     const customer = new CustomerId(customerId);
     const totalAmount = new PaymentAmount(amount);
     const methodId = new PaymentMethodId(paymentMethodId);
-    
-    const clientSecret = await this.paymentIntent.withPaymentMethod(customer, totalAmount, methodId);
-    return clientSecret;
+
+    const details = await this.paymentIntent.withPaymentMethod(
+      customer,
+      totalAmount,
+      methodId,
+      metadata,
+    );
+    return details.toPrimitives();
+  }
+
+  async confirmPaymentIntent(paymentIntentId: string): Promise<void> {
+    const pi_ID = new PaymentIntentId(paymentIntentId);
+    await this.paymentIntent.confirm(pi_ID);
   }
 }

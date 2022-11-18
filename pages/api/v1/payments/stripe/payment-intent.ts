@@ -1,17 +1,16 @@
 //? https://stripe.com/docs/payments/quickstart
 //? https://stripe.com/docs/payments/save-during-payment
 
+import StripePayment from "@/pages/payment";
 import { StripePaymentController } from "@/src/controllers/StripePaymentController";
-import { Balance } from "@/src/domain/Balance";
-import { ErrorCreatingPayment } from "@/src/domain/ErrorCreatingPayment";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
-import {
-  CampaignBudget,
-  CampaignBudgetProps,
-} from "@/src/modules/campaign/domain/value-objects/Budget";
+import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
+import { IPaymentDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";
+import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/PaymentIntentId";
+import { StripePayments } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
 import { userSession } from "@/src/use-case/container";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { UniqId } from "@/src/utils/UniqId";
 import { reqBodyParse } from "@/src/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -34,71 +33,39 @@ export default async function handler(
   const { paymentMethod, budgetItem, adId }: IApiPaymentIntent =
     reqBodyParse(req);
 
-  let budget: CampaignBudget;
-
-  switch (budgetItem) {
-    case 0:
-      budget = new CampaignBudget({
-        balance: new Balance(5000),
-        clicks: 1000,
-      });
-      break;
-    case 1:
-      budget = new CampaignBudget({
-        balance: new Balance(7000),
-        clicks: 2000,
-      });
-      break;
-    case 2:
-      budget = new CampaignBudget({
-        balance: new Balance(10000),
-        clicks: 5000,
-      });
-      break;
-    case 3:
-      budget = new CampaignBudget({
-        balance: new Balance(15000),
-        clicks: 7500,
-      });
-      break;
-    case 4:
-      budget = new CampaignBudget({
-        balance: new Balance(20000),
-        clicks: 10000,
-      });
-      break;
-    default:
-      throw new ErrorCreatingPayment(
-        `Incorrect budget item provided '${budgetItem}'`
-      );
-  }
+  console.log({ paymentMethod, budgetItem, adId });
 
   try {
-    const clientSecret = await MongoDB.connectAndDisconnect(async () => {
-      let clientSecret;
-      if (!paymentMethod) {
-        clientSecret =
+    const amount = PaymentAmount.fromItem(budgetItem);
+
+    if (!amount.isValidAmount())
+      throw new Error("La cantidad a pagar no es valida");
+
+    if (!paymentMethod) {
+      const paymentDetails = await MongoDB.connectAndDisconnect(async () => {
+        const details =
           await StripePaymentController.paymentWithoutPaymentMethod({
             userId: session!.id,
-            amount: budget.balance.total,
+            amount: amount.amount,
+            metadata: { adId, advertiserId: session!.id },
           });
-      } else {
-        clientSecret = await StripePaymentController.paymentWithPaymentMethod({
-          userId: session!.id,
-          amount: budget.balance.total,
-          paymentMethodId: paymentMethod,
-        });
-      }
-      await LaunchCampaignController.launch({
-        id: UniqId.generate(),
-        adId,
-        advertiserId: session!.id,
-        budget,
+        return details;
       });
-      return clientSecret;
-    });
 
-    res.status(200).send({ clientSecret });
+      res.status(200).send({ clientSecret: paymentDetails.clientSecret });
+    } else {
+      await MongoDB.connectAndDisconnect(async () => {
+        const paymentDetails =
+          await StripePaymentController.paymentWithPaymentMethod({
+            userId: session!.id,
+            paymentMethodId: paymentMethod,
+            amount: amount.amount,
+            metadata: { adId, advertiserId: session!.id },
+          });
+        return paymentDetails;
+      });
+      res.status(200).end();
+    }
   } catch (err) {
     console.error(err);
     res.status(400).end();

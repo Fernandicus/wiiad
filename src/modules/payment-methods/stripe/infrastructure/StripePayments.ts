@@ -1,14 +1,26 @@
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { UniqId } from "@/src/utils/UniqId";
 import Stripe from "stripe";
+import { CardDetails } from "../domain/CardDetails";
 import { CustomerId } from "../domain/CustomerId";
-import { ErrorFindingPaymentMethod } from "../domain/ErrorFindingPaymentMethod";
+import { IStripeMetadata } from "../domain/IStripeMetadata";
 import { PaymentAmount } from "../domain/PaymentAmount";
+import { PaymentDetails } from "../domain/PaymentDetails";
 import { PaymentIntentId } from "../domain/PaymentIntentId";
 import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { PaymentStatus } from "../domain/PaymentStatus";
 
-interface IPaymentWithPaymentId {
+interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
   amount: PaymentAmount;
   paymentMethod: PaymentMethodId;
+  metadata?: IStripeMetadata;
+}
+
+interface IPaymentWithoutPaymentMethod {
+  customerId: CustomerId;
+  amount: PaymentAmount;
+  metadata?: IStripeMetadata;
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -16,21 +28,45 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export class StripePayments {
-  async getPaymentMethodFromPaymentIntent(
-    paymentIntent: PaymentIntentId
-  ): Promise<PaymentMethodId | null> {
-    const paymentDetails = await stripe.paymentIntents.retrieve(
-      paymentIntent.id
-    );
+  async getPaymentMethodDetails(
+    id: PaymentMethodId
+  ): Promise<CardDetails | null> {
+    const paymentDetails = await stripe.paymentMethods.retrieve(id.id);
     if (!paymentDetails) return null;
-    return new PaymentMethodId(paymentDetails.payment_method!.toString());
+    paymentDetails.card?.brand;
+    return new CardDetails({
+      id: UniqId.new(),
+      paymentMethodId: id,
+      brand: paymentDetails.card!.brand,
+      last4: paymentDetails.card!.last4,
+      expYear: paymentDetails.card!.exp_year,
+      expMonth: paymentDetails.card!.exp_month,
+    });
   }
 
-  async paymentIntentWithoutPaymentMethod(
-    customerId: CustomerId,
-    amount: PaymentAmount
-  ): Promise<string | null> {
+  async getPaymentIntentDetails(
+    id: PaymentIntentId
+  ): Promise<PaymentDetails | null> {
+    const paymentDetails = await stripe.paymentIntents.retrieve(id.id);
+    if (!paymentDetails) return null;
+
+    return new PaymentDetails({
+      id: id,
+      amount: new PaymentAmount(paymentDetails.amount),
+      paymentMethodId: new PaymentMethodId(
+        paymentDetails.payment_method!.toString()
+      ),
+      clientSecret: paymentDetails.client_secret!,
+    });
+  }
+
+  async paymentIntentWithoutPaymentMethod({
+    customerId,
+    amount,
+    metadata,
+  }: IPaymentWithoutPaymentMethod): Promise<PaymentDetails | null> {
     const paymentIntent = await stripe.paymentIntents.create({
+      metadata,
       customer: customerId.id,
       setup_future_usage: "off_session",
       amount: amount.amount,
@@ -39,26 +75,58 @@ export class StripePayments {
         enabled: true,
       },
     });
-    if (!paymentIntent.client_secret) return null;
-    return paymentIntent.client_secret;
-  }
 
-  async createCustomer(): Promise<Stripe.Response<Stripe.Customer>> {
-    const customer = await stripe.customers.create();
-    return customer;
+    if (!paymentIntent) return null;
+
+    return new PaymentDetails({
+      id: new PaymentIntentId(paymentIntent.id),
+      amount: new PaymentAmount(paymentIntent.amount),
+      paymentMethodId: paymentIntent.payment_method
+        ? new PaymentMethodId(paymentIntent.payment_method?.toString())
+        : undefined,
+      clientSecret: paymentIntent.client_secret!,
+    });
   }
 
   async paymentIntentWithPaymentMethod({
     customerId,
     amount,
     paymentMethod,
-  }: IPaymentWithPaymentId): Promise<string | null> {
+    metadata,
+  }: IPaymentWithPaymentMethod): Promise<PaymentDetails | null> {
     const paymentIntent = await stripe.paymentIntents.create({
+      metadata, //* { adId: "123-456" },
       amount: amount.amount,
       currency: "eur",
       customer: customerId.id,
       payment_method: paymentMethod.id,
     });
-    return paymentIntent.client_secret;
+
+    if (!paymentIntent) return null;
+
+    return new PaymentDetails({
+      id: new PaymentIntentId(paymentIntent.id),
+      amount: new PaymentAmount(paymentIntent.amount),
+      paymentMethodId: new PaymentMethodId(
+        paymentIntent.payment_method!.toString()
+      ),
+      clientSecret: paymentIntent.client_secret!,
+    });
+  }
+
+  async confirmPaymentIntent(id: PaymentIntentId): Promise<PaymentStatus> {
+    const stripeIntent = await stripe.paymentIntents.confirm(id.id);
+
+    switch (stripeIntent.status) {
+      case "succeeded":
+        return PaymentStatus.Success;
+      default:
+        return PaymentStatus.Error;
+    }
+  }
+
+  async createCustomer(): Promise<Stripe.Response<Stripe.Customer>> {
+    const customer = await stripe.customers.create();
+    return customer;
   }
 }

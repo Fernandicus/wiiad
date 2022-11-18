@@ -1,5 +1,14 @@
 import { Balance } from "@/src/domain/Balance";
+import {
+  AvailableAmounts,
+  PaymentAmount,
+} from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
 import { ErrorCreatingCampaign } from "./ErrorCreatingCampaign";
+
+export interface ICampaignBudgetPrimitives {
+  balance: number;
+  clicks: number;
+}
 
 export interface CampaignBudgetProps {
   balance: Balance;
@@ -10,10 +19,28 @@ export class CampaignBudget {
   readonly clicks;
   readonly balance;
 
-  constructor(props: CampaignBudgetProps) {
-    if (props.clicks <= 0 || props.balance.total <= 0)
+  constructor({ balance, clicks }: CampaignBudgetProps) {
+    if (clicks <= 0 || balance.total <= 0)
       throw new ErrorCreatingCampaign("MaxClicks and balance must be > 0");
-    this.clicks = props.clicks;
-    this.balance = props.balance;
+    this.clicks = clicks;
+    this.balance = balance;
+  }
+
+  static fromAmount(amount: PaymentAmount): CampaignBudget {
+    return new CampaignBudget({
+      balance: new Balance(amount.amount),
+      clicks: this.getTotalClicks(amount),
+    });
+  }
+
+  toPrimitives(): ICampaignBudgetPrimitives {
+    return {
+      balance: this.balance.total,
+      clicks: this.clicks,
+    };
+  }
+
+  private static getTotalClicks(amount: PaymentAmount): number {
+    return amount.amount / 100 / 0.05;
   }
 }

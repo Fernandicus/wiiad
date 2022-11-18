@@ -1,4 +1,6 @@
 import { ErrorFindingStripe } from "../modules/payment-methods/stripe/domain/ErrorFindingStripe";
+import { IStripeMetadata } from "../modules/payment-methods/stripe/domain/IStripeMetadata";
+import { IPaymentDetailsPrimitives } from "../modules/payment-methods/stripe/domain/PaymentDetails";
 import { StripePayments } from "../modules/payment-methods/stripe/infrastructure/StripePayments";
 import {
   findCustomerHandler,
@@ -16,16 +18,19 @@ export class StripePaymentController {
   static async paymentWithoutPaymentMethod(params: {
     userId: string;
     amount: number;
-  }): Promise<string> {
-    const { userId, amount } = params;
+    metadata: IStripeMetadata;
+  }): Promise<IPaymentDetailsPrimitives> {
+    const { userId, amount,metadata } = params;
     const stripePayment = new StripePayments();
     try {
       const stripeFound = await findCustomerHandler.findByUserId(params.userId);
-      const clientSecret = await paymentIntentHandler.withoutPaymentMethod(
+      const paymentDetails = await paymentIntentHandler.withoutPaymentMethod(
         stripeFound.customerId,
-        amount
+        amount,
+        metadata,
       );
-      return clientSecret;
+      console.log(" stripeFound ", stripeFound);
+      return paymentDetails;
     } catch (err) {
       console.error(err);
       if (err instanceof ErrorFindingStripe) {
@@ -35,11 +40,11 @@ export class StripePaymentController {
           customerId: newCustomer.id,
           id: UniqId.generate(),
         });
-        const clientSecret = await paymentIntentHandler.withoutPaymentMethod(
+        const paymentDetails = await paymentIntentHandler.withoutPaymentMethod(
           newCustomer.id,
           amount
         );
-        return clientSecret;
+        return paymentDetails;
       }
       throw new Error("Something Went Wrong Creating a Payment");
     }
@@ -49,17 +54,20 @@ export class StripePaymentController {
     userId: string;
     amount: number;
     paymentMethodId: string;
-  }): Promise<string> {
-    const { userId, amount, paymentMethodId } = params;
+    metadata: IStripeMetadata;
+  }): Promise<IPaymentDetailsPrimitives> {
+    const { userId, amount, paymentMethodId, metadata } = params;
     const stripePayment = new StripePayments();
     try {
       const stripeFound = await findCustomerHandler.findByUserId(params.userId);
-      const clientSecret = await paymentIntentHandler.withPaymentMethod(
+      const paymentDetails = await paymentIntentHandler.withPaymentMethod(
         stripeFound.customerId,
         amount,
-        paymentMethodId
+        paymentMethodId,
+        metadata,
       );
-      return clientSecret;
+      await paymentIntentHandler.confirmPaymentIntent(paymentDetails.id);
+      return paymentDetails;
     } catch (err) {
       if (err instanceof ErrorFindingStripe) {
         const newCustomer = await stripePayment.createCustomer();
@@ -68,12 +76,12 @@ export class StripePaymentController {
           customerId: newCustomer.id,
           id: UniqId.generate(),
         });
-        const clientSecret = await paymentIntentHandler.withPaymentMethod(
+        const paymentDetails = await paymentIntentHandler.withPaymentMethod(
           newCustomer.id,
           amount,
-          paymentMethodId,
+          paymentMethodId
         );
-        return clientSecret;
+        return paymentDetails;
       }
       throw new Error("Something Went Wrong Creating a Payment");
     }

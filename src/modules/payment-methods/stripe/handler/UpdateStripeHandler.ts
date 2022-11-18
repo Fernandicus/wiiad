@@ -7,10 +7,10 @@ export class UpdateStripeHandler {
 
   async savePaymentMethod(
     userId: string,
-    paymentMethod: string
+    paymentMethodId: string
   ): Promise<void> {
     const id = new UniqId(userId);
-    const method = new PaymentMethodId(paymentMethod);
+    const method = new PaymentMethodId(paymentMethodId);
     await this.updateStripe.savePaymentMethod({
       userId: id,
       paymentMethod: method,
