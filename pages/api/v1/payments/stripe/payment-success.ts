@@ -47,6 +47,10 @@ export default async function handler(
   const amount = new PaymentAmount(object.amount);
   const budget = CampaignBudget.fromAmount(amount);
 
+  //TODO: CHECK IF PAYMENT IS NEW PAYMENT METHOD
+  //* check if saved
+  //* if not, save it
+
   try {
     switch (event.type) {
       case "payment_intent.succeeded":
@@ -58,7 +62,6 @@ export default async function handler(
             budget: budget.toPrimitives(),
           });
         });
-        console.log("  CAMPAIGN LAUNCHED ");
         break;
       default:
         console.log(`Unhandled event type ${event.type}`);

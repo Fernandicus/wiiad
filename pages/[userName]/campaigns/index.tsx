@@ -67,12 +67,12 @@ export default function CampaignsPage(props: {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+
   const session = userSession.getFromServer(context);
 
   if (!session || session.role === RoleType.USER)
     return { props: {}, redirect: { destination: "/", permanent: false } };
 
-  //TODO: - - - - -
   const paymentIntent = context.query["payment_intent"] as string;
 
   if (!paymentIntent) {
