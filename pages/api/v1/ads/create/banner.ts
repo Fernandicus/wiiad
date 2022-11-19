@@ -4,7 +4,6 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
 import { reqBodyParse } from "@/src/utils/utils";
-import formidable from "formidable";
 import { userSession } from "@/src/use-case/container";
 import { adCreatorHandler } from "@/src/modules/ad/ad-container";
 

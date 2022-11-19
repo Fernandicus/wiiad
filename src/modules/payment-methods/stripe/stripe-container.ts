@@ -4,7 +4,6 @@ import { StripeMongoDBRepo } from "./infrastructure/StripeMongoDBRepo";
 import { FindStripeCustomer } from "./use-case/FindStripeCustomer";
 import { SaveStripeCustomer } from "./use-case/SaveStripeCustomer";
 import { PaymentIntent } from "./use-case/PaymentIntent";
-import StripePayment from "@/pages/payment";
 import { StripePayments } from "./infrastructure/StripePayments";
 import { PaymentIntentHandler } from "./handler/PaymentIntentHandler";
 import { UpdateStripe } from "./use-case/UpdateStripe";

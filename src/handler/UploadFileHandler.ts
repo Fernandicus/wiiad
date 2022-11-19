@@ -12,7 +12,7 @@ export class UploadFileHandler {
     const userName = new Name(params.advertiserName);
     const folder = Folder.bannerAd(userName);
     const url = await this.uploadFile.adBanner(params.file, folder);
-    return url.image;
+    return url.file;
   }
 
   async videoAdvertising(params: {
@@ -22,6 +22,6 @@ export class UploadFileHandler {
     const userName = new Name(params.advertiserName);
     const folder = Folder.videoAd(userName);
     const url = await this.uploadFile.adVideo(params.file, folder);
-    return url.image;
+    return url.file;
   }
 }

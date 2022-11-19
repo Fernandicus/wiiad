@@ -1,17 +1,11 @@
 //? https://stripe.com/docs/payments/quickstart
 //? https://stripe.com/docs/payments/save-during-payment
 
-import StripePayment from "@/pages/payment";
+
 import { StripePaymentController } from "@/src/controllers/StripePaymentController";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
-import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
-import { IPaymentDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";
-import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/PaymentIntentId";
-import { StripePayments } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
 import { userSession } from "@/src/use-case/container";
-import { UniqId } from "@/src/utils/UniqId";
 import { reqBodyParse } from "@/src/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 
