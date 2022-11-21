@@ -47,11 +47,10 @@ export class StripePaymentProcess {
     try {
       await useStripe.confirmPayment({
         elements: useElements,
-        //redirect: "if_required",
-        // redirect: "always",
-        confirmParams: {
+        redirect: "if_required",
+        /* confirmParams: {
           return_url: path,
-        },
+        }, */
       });
       return "Pago completado!";
     } catch (err) {
