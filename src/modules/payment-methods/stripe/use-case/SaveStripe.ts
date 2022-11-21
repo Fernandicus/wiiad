@@ -1,7 +1,7 @@
 import { IStripeRepo } from "../domain/IStripeRepo";
 import { Stripe } from "../domain/Stripe";
 
-export class SaveStripeCustomer {
+export class SaveStripe {
   constructor(private repo: IStripeRepo) {}
 
   async save(stripe: Stripe): Promise<void> {

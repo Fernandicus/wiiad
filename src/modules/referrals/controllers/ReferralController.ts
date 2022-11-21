@@ -1,4 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
+import { Referral } from "../domain/Referral";
 import {
   createReferralHandler,
   findReferralHandler,
@@ -40,5 +41,18 @@ export class ReferralController {
     } else {
       await updateReferralHandler.increaseRefereeBalance(refereeId, balance);
     }
+  }
+
+  static async createNew(userId: string): Promise<void> {
+    const referral = Referral.empty({
+      id: UniqId.new(),
+      userId: new UniqId(userId),
+    });
+
+    await createReferralHandler.create({
+      id: UniqId.generate(),
+      userId,
+      referral: referral.toPrimitives(),
+    });
   }
 }

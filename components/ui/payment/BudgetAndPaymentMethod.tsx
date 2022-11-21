@@ -57,7 +57,7 @@ export const BudgetAndPaymentMethod = ({
           <div className="space-y-2 ">
             <h3 className="text-lg font-semibold">Elije el método de pago</h3>
             <CreditCards
-              paymentMethods={paymentMethods!}
+              paymentMethods={paymentMethods}
               onSelectedMethod={(method) => {
                 setPaymentMethod(method);
                 onSelectedPaymentMethod(method);

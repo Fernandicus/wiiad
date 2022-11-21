@@ -29,6 +29,8 @@ export default async function handler(
 ) {
   if (req.method !== "POST") res.status(400).end();
 
+  console.info("STRIPE PAYMENT SUCCESS WEBHOOK");
+
   const sig = req.headers["stripe-signature"] as string | Buffer | string[];
   const webhookSecret = process.env.STRIPE_SUCCESS_WEBHOOK_SECRET!;
   const body = await buffer(req);

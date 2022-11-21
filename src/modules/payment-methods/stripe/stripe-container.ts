@@ -1,8 +1,8 @@
-import { SaveStripeCustomerHandler } from "./handler/SaveStripeCustomerHandler";
+import { SaveStripeHandler } from "./handler/SaveStripeHandler";
 import { FindStripeCustomerHandler } from "./handler/FindStripeCustomerHandler";
 import { StripeMongoDBRepo } from "./infrastructure/StripeMongoDBRepo";
 import { FindStripeCustomer } from "./use-case/FindStripeCustomer";
-import { SaveStripeCustomer } from "./use-case/SaveStripeCustomer";
+import { SaveStripe } from "./use-case/SaveStripe";
 import { PaymentIntent } from "./use-case/PaymentIntent";
 import { StripePayments } from "./infrastructure/StripePayments";
 import { PaymentIntentHandler } from "./handler/PaymentIntentHandler";
@@ -10,17 +10,21 @@ import { UpdateStripe } from "./use-case/UpdateStripe";
 import { UpdateStripeHandler } from "./handler/UpdateStripeHandler";
 import { GetPaymentDetailsHandler } from "./handler/GetPaymentDetailsHandler";
 import { GetPaymentDetails } from "./use-case/GetPaymentDetails";
+import { CreateStripeCustomer } from "./use-case/CreateStripeCustomer";
+import { CreateStripeCustomerHandler } from "./handler/CreateStripeCustomerHandler";
 
 const stripeRepo = new StripeMongoDBRepo();
 const stripePayments = new StripePayments();
-const saveStripe = new SaveStripeCustomer(stripeRepo);
+const saveStripe = new SaveStripe(stripeRepo);
 const findStripe = new FindStripeCustomer(stripeRepo);
 const paymentIntent = new PaymentIntent(stripePayments);
 const updateStripe = new UpdateStripe(stripeRepo);
 const getDetails = new GetPaymentDetails(stripePayments);
+const createStripeCustomer = new CreateStripeCustomer(stripePayments);
 
-export const saveCustomerHandler = new SaveStripeCustomerHandler(saveStripe);
+export const saveStripeHandler = new SaveStripeHandler(saveStripe);
 export const findCustomerHandler = new FindStripeCustomerHandler(findStripe);
 export const paymentIntentHandler = new PaymentIntentHandler(paymentIntent);
 export const updateStripeHandler = new UpdateStripeHandler(updateStripe);
 export const getPaymentDetailsHandler = new GetPaymentDetailsHandler(getDetails);
+export const createStripeCustomerHandler = new CreateStripeCustomerHandler(createStripeCustomer);

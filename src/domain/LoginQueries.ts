@@ -1,37 +1,25 @@
 import { ParsedUrlQuery } from "querystring";
 import { ErrorLogIn } from "./ErrorLogIn";
 
-
-
 export class LoginQueries {
-  //readonly email: string | undefined;
   readonly authToken: string | undefined;
+  readonly log: string | undefined;
   readonly userName: string;
 
   constructor(query: ParsedUrlQuery) {
     const userName = query["userName"];
-    //const email = query["email"] ;
     const authToken = query["authToken"];
-    
-    if (!userName)
-      throw new ErrorLogIn("Missing param /<userName> to login");
+    const log = query["log"];
 
-    /* if (email instanceof Array) {
-      this.email = email[0];
-    } else {
-      this.email = email;
-    } */
+    if (!userName) throw new ErrorLogIn("Missing param /<userName> to login");
+    else this.userName = this.getQuery(userName)!;
 
-    if (authToken instanceof Array) {
-      this.authToken = authToken[0];
-    } else {
-      this.authToken = authToken;
-    }
+    this.authToken = this.getQuery(authToken);
+    this.log = this.getQuery(log);
+  }
 
-    if (userName instanceof Array) {
-      this.userName = userName[0];
-    } else {
-      this.userName = userName;
-    }
+  private getQuery(query: string | string[] | undefined): string | undefined {
+    if (query instanceof Array) return query[0];
+    else return query;
   }
 }

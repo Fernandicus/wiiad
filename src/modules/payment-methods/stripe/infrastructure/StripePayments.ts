@@ -125,8 +125,8 @@ export class StripePayments {
     }
   }
 
-  async createCustomer(): Promise<Stripe.Response<Stripe.Customer>> {
+  async createCustomer(): Promise<CustomerId> {
     const customer = await stripe.customers.create();
-    return customer;
+    return new CustomerId(customer.id) ;
   }
 }

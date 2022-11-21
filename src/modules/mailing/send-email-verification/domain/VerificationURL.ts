@@ -1,4 +1,5 @@
 import { Email } from "@/src/domain/Email";
+import { LogStates } from "@/src/domain/LogStates";
 import { Name } from "@/src/domain/Name";
 import { AuthToken } from "./AuthToken";
 
@@ -21,14 +22,14 @@ export class VerificationURL {
   }
 
   login(): string {
-    return this.verificationUrl("login");
+    return this.verificationUrl(LogStates.LogIn);
   }
 
   signUp(): string {
-    return this.verificationUrl("sign-up");
+    return this.verificationUrl(LogStates.SignUp);
   }
 
-  private verificationUrl(log: string) {
+  private verificationUrl(log: LogStates) {
     const name = this.userName.name;
     const token = this.authToken.token;
     return `/${name}?log=${log}&authToken=${token}`;

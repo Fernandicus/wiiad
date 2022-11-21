@@ -16,6 +16,9 @@ import { createUserHandler, findUserHandler } from "../modules/user/container";
 import { IUserPrimitives } from "../modules/user/domain/User";
 import { ProfilePic } from "../domain/ProfilePic";
 import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmail";
+import { createReferralHandler } from "../modules/referrals/referral-container";
+import { Referral } from "../modules/referrals/domain/Referral";
+import { ReferralController } from "../modules/referrals/controllers/ReferralController";
 
 interface ILogInParams {
   authToken: string;
@@ -27,8 +30,8 @@ interface UserData {
   verificationEmail: IVerificationEmailPrimitives;
 }
 
-export class LogInController {
-  static async initSession(
+export class AuthController {
+  static async logIn(
     loginQueries: ILogInParams,
     context: IReqAndRes
   ): Promise<IGenericUserPrimitives> {
@@ -36,10 +39,7 @@ export class LogInController {
       loginQueries.authToken
     );
 
-    console.log("VALID ", verificationEmail.role);
-
     if (verificationEmail.role !== RoleType.USER) {
-      console.log("business");
       const advertiser = await this.advertiserLogIn({
         queries: loginQueries,
         verificationEmail,
@@ -48,7 +48,6 @@ export class LogInController {
       this.userInitSession(context, advertiser);
       return advertiser;
     } else {
-      console.log("user");
       const user = await this.userLogIn({
         queries: loginQueries,
         verificationEmail,
@@ -60,45 +59,67 @@ export class LogInController {
     }
   }
 
+  static async signUp(
+    loginQueries: ILogInParams,
+    context: IReqAndRes
+  ): Promise<IGenericUserPrimitives> {
+    const verificationEmail = await validateEmailHandler.validate(
+      loginQueries.authToken
+    );
+
+    if (verificationEmail.role !== RoleType.USER) {
+      console.log("business");
+      const advertiser = await this.advertiserSignUp({
+        queries: loginQueries,
+        verificationEmail,
+      });
+
+      this.userInitSession(context, advertiser);
+      return advertiser;
+    } else {
+      console.log("user");
+      const user = await this.userSignUp({
+        queries: loginQueries,
+        verificationEmail,
+      });
+
+     await ReferralController.createNew(user.id);
+
+      this.userInitSession(context, user);
+
+      return user;
+    }
+  }
+
   private static async advertiserLogIn(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
-    const advertiser = await this.findOrCreateNewAdvertiser(data);
-    return advertiser;
-  }
-
-  private static async findOrCreateNewAdvertiser(
-    data: UserData
-  ): Promise<AdvertiserPropsPrimitives> {
-    console.log(data);
     const advertiserFound = await findAdvertiserHandler.findByEmail(
       data.verificationEmail.email
     );
-    console.log(advertiserFound);
-
-    if (!advertiserFound) return this.newAdvertiser(data);
-
     const advertiserId = advertiserFound.id;
     await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, advertiserId, advertiserFound.profilePic);
   }
 
-  private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
-    const user = await this.findOrCreateNewUser(data);
-    return user;
-  }
-
-  private static async findOrCreateNewUser(
+  private static async advertiserSignUp(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
-    const findUser = findUserHandler.findByEmail(data.verificationEmail.email);
-    const response = await Promise.allSettled([findUser]);
+    return this.getAndCreateNewAdvertiser(data);
+  }
 
-    if (response[0].status == "rejected") return this.newUser(data);
-    const userFound = response[0].value;
+  private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
+    const findUser = findUserHandler.findByEmail(data.verificationEmail.email);
+    const response = await Promise.all([findUser]);
+    const userFound = response[0];
     const userId = userFound.id;
     await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, userId, userFound.profilePic);
+  }
+
+  private static async userSignUp(data: UserData): Promise<IUserPrimitives> {
+    await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
+    return this.getAndCreateNewUser(data);
   }
 
   private static userInitSession(
@@ -111,7 +132,7 @@ export class LogInController {
     userSession.setFromServer(context, payload);
   }
 
-  private static async newAdvertiser(
+  private static async getAndCreateNewAdvertiser(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
     const advertiserId = UniqId.generate();
@@ -128,12 +149,11 @@ export class LogInController {
     return this.user(data, advertiserId, profilePic);
   }
 
-  private static async newUser(
+  private static async getAndCreateNewUser(
     data: UserData
   ): Promise<AdvertiserPropsPrimitives> {
     const userId = UniqId.generate();
     const profilePic = ProfilePic.defaultUserPic;
-    console.log("NEW USER");
     await createUserHandler.create({
       email: data.verificationEmail.email,
       name: data.queries.userName,

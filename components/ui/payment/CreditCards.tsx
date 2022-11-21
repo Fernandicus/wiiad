@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface ICreditCardsParams {
-  paymentMethods: string[];
+  paymentMethods?: string[];
   onSelectedMethod(method?: string): void;
 }
 
@@ -14,7 +14,7 @@ export const CreditCards = ({
   return (
     <div className="h-48 flex ">
       <div className="w-full space-y-2 ">
-        {paymentMethods.map((pMethod) => (
+        {paymentMethods && paymentMethods.map((pMethod) => (
           <button
             key={pMethod}
             className={` border p-4 rounded-lg w-full text-center transition-all duration-150 ease-in ${
@@ -34,20 +34,6 @@ export const CreditCards = ({
             </div>
           </button>
         ))}
-
-        {/* <button
-          className={`${
-            !method
-              ? "bg-slate-200 text-gray-700 border-slate-200 "
-              : "bg-white  text-slate-700 border-slate-100"
-          } border   bg-white-500 p-4 rounded-lg block w-full text-center`}
-          onClick={() => {
-            setPaymentMethod(undefined);
-            onSelectedMethod(undefined);
-          }}
-        >
-          Usar nueva tarjeta
-        </button> */}
       </div>
     </div>
   );

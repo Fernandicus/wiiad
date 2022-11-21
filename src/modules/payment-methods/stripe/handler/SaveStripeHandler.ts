@@ -1,7 +1,7 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { CustomerId } from "../domain/CustomerId";
 import { Stripe } from "../domain/Stripe";
-import { SaveStripeCustomer } from "../use-case/SaveStripeCustomer";
+import { SaveStripe } from "../use-case/SaveStripe";
 
 interface IStripeCustomerPrimitives {
   id: string;
@@ -9,8 +9,8 @@ interface IStripeCustomerPrimitives {
   customerId: string;
 }
 
-export class SaveStripeCustomerHandler {
-  constructor(private saveStripeCustomer: SaveStripeCustomer) {}
+export class SaveStripeHandler {
+  constructor(private saveStripeCustomer: SaveStripe) {}
 
   async save({
     id,

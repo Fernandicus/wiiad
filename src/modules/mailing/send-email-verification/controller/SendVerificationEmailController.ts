@@ -25,7 +25,7 @@ export class SendVerificationEmailController {
       );
 
     const authToken = authTokenCreator.generate();
-    await this.saveAndSendEmail({
+    await this.saveAndSignUpSendEmail({
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
@@ -41,7 +41,7 @@ export class SendVerificationEmailController {
     try {
       const userFound = await findUserHandler.findByEmail(data.email);
       const authToken = authTokenCreator.generate();
-      await this.saveAndSendEmail({
+      await this.saveAndSendLogInEmail({
         verificationEmailId: id,
         email: userFound.email,
         name: userFound.name,
@@ -72,7 +72,7 @@ export class SendVerificationEmailController {
         `El email '${data.email}' ya está asignado a un anunciante`
       );
     const authToken = authTokenCreator.generate();
-    await this.saveAndSendEmail({
+    await this.saveAndSignUpSendEmail({
       email: data.email,
       verificationEmailId: id,
       name: data.userName,
@@ -91,7 +91,7 @@ export class SendVerificationEmailController {
     if (!advertiserFoundByEmail)
       throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
     const authToken = authTokenCreator.generate();
-    await this.saveAndSendEmail({
+    await this.saveAndSendLogInEmail({
       email: advertiserFoundByEmail.email,
       verificationEmailId: id,
       name: advertiserFoundByEmail.name,
@@ -100,7 +100,7 @@ export class SendVerificationEmailController {
     });
   }
 
-  private static async saveAndSendEmail(params: {
+  private static async saveAndSendLogInEmail(params: {
     email: string;
     name: string;
     role: string;
@@ -117,6 +117,29 @@ export class SendVerificationEmailController {
     });
 
     await sendEmailHandler.sendLogin({
+      authToken,
+      email,
+      userName: name,
+    });
+  }
+
+  private static async saveAndSignUpSendEmail(params: {
+    email: string;
+    name: string;
+    role: string;
+    verificationEmailId: string;
+    authToken: string;
+  }): Promise<void> {
+    const { email, verificationEmailId, name, role, authToken } = params;
+
+    await verificationEmailHandler.saveWithExpirationIn5min({
+      email,
+      id: verificationEmailId,
+      role,
+      authToken,
+    });
+
+    await sendEmailHandler.sendSignUp({
       authToken,
       email,
       userName: name,

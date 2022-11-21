@@ -1,6 +1,6 @@
 import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/IStripeRepo";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { SaveStripeCustomer } from "@/src/modules/payment-methods/stripe/use-case/SaveStripeCustomer";
+import { SaveStripeCustomer } from "@/src/modules/payment-methods/stripe/use-case/SaveStripe";
 import { UniqId } from "@/src/utils/UniqId";
 import { mockedStripeRepo } from "../../../../../__mocks__/context/MockStripeRepo";
 import { FakeStripe } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeStripe";

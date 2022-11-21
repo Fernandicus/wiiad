@@ -1,7 +1,7 @@
 import { LoginQueries } from "@/src/domain/LoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { LogInController } from "@/src/controllers/LogInController";
+import { AuthController } from "@/src/controllers/AuthController";
 import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
@@ -27,6 +27,7 @@ import { Logout } from "../../components/ui/login/Logout";
 import { findCampaignHandler } from "@/src/modules/campaign/container";
 import CampaignsPage from "./campaigns";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
+import { LogStates } from "@/src/domain/LogStates";
 
 export interface IUserNamePage {
   user: IGenericUserPrimitives;
@@ -136,19 +137,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       campaigns?: ICampaignPrimitives[] | null;
       ads?: AdPropsPrimitives[] | null;
     }>(async () => {
-      console.log(queryParams);
-      const user = await LogInController.initSession(
-        {
-          authToken: queryParams.authToken!,
-          userName: queryParams.userName,
-        },
-        context
-      );
-      if (user.role === RoleType.USER)
-        return { user, ads: null, campaigns: null };
-      const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
-      const ads = await adFinderHandler.findAll(user.id);
-      return { user, campaigns, ads };
+      if (queryParams.log === LogStates.LogIn) {
+        const user = await AuthController.logIn(
+          {
+            authToken: queryParams.authToken!,
+            userName: queryParams.userName,
+          },
+          context
+        );
+        if (user.role === RoleType.USER)
+          return { user, ads: null, campaigns: null };
+        const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
+        const ads = await adFinderHandler.findAll(user.id);
+        return { user, campaigns, ads };
+      } else if (queryParams.log === LogStates.SignUp) {
+        const user = await AuthController.signUp(
+          {
+            authToken: queryParams.authToken!,
+            userName: queryParams.userName,
+          },
+          context
+        );
+        if (user.role === RoleType.USER)
+          return { user, ads: null, campaigns: null };
+        const campaigns = await findCampaignHandler.byAdvertiserId(user.id);
+        const ads = await adFinderHandler.findAll(user.id);
+        return { user, campaigns, ads };
+      } else {
+        throw new Error("No 'log' query param provided");
+      }
     });
 
     return {
