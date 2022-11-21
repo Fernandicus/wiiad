@@ -12,8 +12,11 @@ import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 export const stripePromise = loadStripe(PublicKeys.stripe);
 
 export class StripePaymentProcess {
-  async payUsingNewCard(params:{budgetItem: number, adId: string}): Promise<string> {
-    const {budgetItem, adId} = params;
+  async payUsingNewCard(params: {
+    budgetItem: number;
+    adId: string;
+  }): Promise<string> {
+    const { budgetItem, adId } = params;
     try {
       const paymentIntentResp = await this.pay({ adId, budgetItem });
       if (paymentIntentResp.status !== 200)
@@ -27,12 +30,12 @@ export class StripePaymentProcess {
     }
   }
 
-  async payWithSelectedCard(params:{
-    budgetItem: number,
-    adId: string,
-    paymentMethod: string
+  async payWithSelectedCard(params: {
+    budgetItem: number;
+    adId: string;
+    paymentMethod: string;
   }): Promise<void> {
-    const {budgetItem, adId, paymentMethod} = params;
+    const { budgetItem, adId, paymentMethod } = params;
     console.log("BUDGET ", budgetItem);
     try {
       const paymentIntentResp = await this.pay({
@@ -75,10 +78,10 @@ export class StripePaymentProcess {
     try {
       await useStripe.confirmPayment({
         elements: useElements,
-        redirect: "if_required",
-        /* confirmParams: {
+        //redirect: "if_required",
+        confirmParams: {
           return_url: path,
-        }, */
+        },
       });
       return "Pago completado!";
     } catch (err) {
