@@ -27,7 +27,6 @@ export const BudgetAndPaymentMethod = ({
   const [isPayingWithNewCard, setPayingWithNewCard] = useState<boolean>(false);
 
   const handlePaymentAmount = async (useNewCard = false) => {
-    
     setIsPaying(true);
     if (isPaying) return;
     if (!ad) return;
@@ -35,16 +34,23 @@ export const BudgetAndPaymentMethod = ({
 
     try {
       const stripePayment = new StripePaymentProcess();
-      const clientSecret = await stripePayment.setPaymentAmount(
-        budget,
-        ad.id,
-        useNewCard ? undefined : method
-      );
-
-      setIsPaying(false);
-      console.log(clientSecret);
-      if (method) return;
-      onContinue(clientSecret);
+      if (useNewCard) {
+        const clientSecret = await stripePayment.payUsingNewCard({
+          budgetItem: budget,
+          adId: ad.id,
+        });
+        setIsPaying(false);
+        onContinue(clientSecret);
+        return;
+      } else {
+        await stripePayment.payWithSelectedCard({
+          budgetItem: budget,
+          adId: ad.id,
+          paymentMethod: method!,
+        });
+        setIsPaying(false);
+        return;
+      }
     } catch (err) {
       console.error(err);
     }

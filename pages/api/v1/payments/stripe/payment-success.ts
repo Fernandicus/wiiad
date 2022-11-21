@@ -29,8 +29,6 @@ export default async function handler(
 ) {
   if (req.method !== "POST") res.status(400).end();
 
-  console.info("STRIPE PAYMENT SUCCESS WEBHOOK");
-
   const sig = req.headers["stripe-signature"] as string | Buffer | string[];
   const webhookSecret = process.env.STRIPE_SUCCESS_WEBHOOK_SECRET!;
   const body = await buffer(req);
@@ -45,6 +43,10 @@ export default async function handler(
     res.status(400).send(`Webhook Error`);
     return;
   }
+
+  if (!object.amount) throw new Error("There is no payment amount found");
+  if (!object.metadata.adId || !object.metadata.adId)
+    throw new Error("No metadata added to the Payment Intent Confirmation:");
 
   const amount = new PaymentAmount(object.amount);
   const budget = CampaignBudget.fromAmount(amount);

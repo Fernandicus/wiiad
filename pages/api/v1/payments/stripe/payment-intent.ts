@@ -46,7 +46,7 @@ export default async function handler(
         return details;
       });
 
-      res.status(200).send({ clientSecret: paymentDetails.clientSecret });
+      res.status(200).json({ clientSecret: paymentDetails.clientSecret });
     } else {
       await MongoDB.connectAndDisconnect(async () => {
         const paymentDetails =
