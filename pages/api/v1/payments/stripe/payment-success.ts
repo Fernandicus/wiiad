@@ -98,6 +98,8 @@ export default async function handler(
             (method) => method.paymentMethodId == object.payment_method
           );
 
+          console.log("SUCCESS: SAVED METHOD " , savedMethod);
+
           if (!savedMethod && object.payment_method) {
             const card = object.charges.data[0].payment_method_details.card;
             const paymentDetails: ICardDetailsPrimitives = {
