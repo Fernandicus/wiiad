@@ -37,10 +37,7 @@ export default async function handler(
   let object: { metadata: IStripeMetadata; amount: number };
 
   try {
-    console.log("BODY : ");
-    console.log(req.body);
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    console.log("EVENT TYPE: ", event.type);
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     object = event.data.object as { metadata: IStripeMetadata; amount: number };
   } catch (err) {
     console.error(err);
