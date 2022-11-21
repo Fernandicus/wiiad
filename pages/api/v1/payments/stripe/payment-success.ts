@@ -40,7 +40,8 @@ export default async function handler(
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     object = event.data.object as { metadata: IStripeMetadata; amount: number };
   } catch (err) {
-    res.status(400).send(`Webhook Error`);
+    console.error(err);
+    res.status(400).send(`Webhook EVENT Error`);
     return;
   }
 
@@ -72,6 +73,7 @@ export default async function handler(
     }
     res.status(200).end();
   } catch (err) {
+    console.error(err);
     res.status(400).send(`Webhook Error`);
     return;
   }
