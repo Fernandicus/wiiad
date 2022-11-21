@@ -1,20 +1,21 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { GenericUser } from "@/src/domain/IGenericUser";
 import { CustomerId } from "./CustomerId";
-import { PaymentMethodId } from "./PaymentMethodId";
+import { PaymentMethodId } from "./value-objects/PaymentMethodId";
+import { CardDetails, ICardDetailsPrimitives } from "./CardDetails";
 
 export interface IStripePrimitives {
   id: string;
   userId: string;
   customerId: string;
-  paymentMethods: string[];
+  paymentMethods: ICardDetailsPrimitives[];
 }
 
 interface IStripeParams {
   id: UniqId;
   userId: UniqId;
   customerId: CustomerId;
-  paymentMethods: PaymentMethodId[];
+  paymentMethods: CardDetails[];
 }
 
 export class Stripe {
@@ -35,7 +36,15 @@ export class Stripe {
       id: this.id.id,
       userId: this.userId.id,
       customerId: this.customerId.id,
-      paymentMethods: this.paymentMethods.map(method=> method.id),
+      paymentMethods: this.paymentMethods.map((method) => {
+        return {
+          paymentMethodId: method.paymentMethodId.id,
+          brand: method.brand.brand,
+          expMonth: method.expMonth.month,
+          expYear: method.expYear.year,
+          last4: method.last4.digits,
+        };
+      }),
     };
   }
 }

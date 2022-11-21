@@ -2,9 +2,10 @@ import StripePaymentElement from "../../payment/StripePaymentElement";
 import { BudgetAndPaymentMethod } from "../../payment/BudgetAndPaymentMethod";
 import { useState } from "react";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 
 interface ILaunchCampaign {
-  paymentMethods?: string[];
+  paymentMethods?: ICardDetailsPrimitives[];
   adToLaunch: AdPropsPrimitives;
   userName: string;
 }

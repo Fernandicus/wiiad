@@ -2,7 +2,7 @@ import { CardDetails } from "../domain/CardDetails";
 import { ErrorGettingPaymentDetails } from "../domain/ErrorGettingPaymentDetails";
 import { PaymentDetails } from "../domain/PaymentDetails";
 import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { StripePayments } from "../infrastructure/StripePayments";
 
 export class GetPaymentDetails {

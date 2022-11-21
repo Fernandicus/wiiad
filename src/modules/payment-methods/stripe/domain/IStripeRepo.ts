@@ -1,12 +1,13 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "../domain/Stripe";
-import { PaymentMethodId } from "./PaymentMethodId";
+import { CardDetails } from "./CardDetails";
+import { PaymentMethodId } from "./value-objects/PaymentMethodId";
 
 export interface IStripeRepo {
   save(stripe: Stripe): Promise<void>;
   findByUserId(userId: UniqId): Promise<Stripe | null>;
-  updatePaymentMethod(params: {
+  addNewCardDetails(params: {
     userId: UniqId;
-    paymentMethod: PaymentMethodId;
+    cardDetails: CardDetails;
   }): Promise<void>;
 }

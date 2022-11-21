@@ -1,6 +1,6 @@
 import { PaymentAmount } from "./PaymentAmount";
 import { PaymentIntentId } from "./PaymentIntentId";
-import { PaymentMethodId } from "./PaymentMethodId";
+import { PaymentMethodId } from "./value-objects/PaymentMethodId";
 
 export interface IPaymentDetailsPrimitives {
   id: string;

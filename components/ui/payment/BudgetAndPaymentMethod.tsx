@@ -4,9 +4,12 @@ import { CreditCards } from "./CreditCards";
 import { Budgets } from "./Budgets";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
+import { useRouter } from "next/router";
+import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 
 interface IBudgetAndPMethods {
-  paymentMethods?: string[];
+  paymentMethods?: ICardDetailsPrimitives[];
   onContinue(clientSecret: string): void;
   onSelectedPaymentMethod(selectedMethod?: string): void;
   ad?: AdPropsPrimitives;
@@ -25,6 +28,7 @@ export const BudgetAndPaymentMethod = ({
   const [isPaying, setIsPaying] = useState<boolean>(false);
   const [isPayingWithPM, setPayingWithPM] = useState<boolean>(false);
   const [isPayingWithNewCard, setPayingWithNewCard] = useState<boolean>(false);
+  const router = useRouter();
 
   const handlePaymentAmount = async (useNewCard = false) => {
     setIsPaying(true);
@@ -49,6 +53,9 @@ export const BudgetAndPaymentMethod = ({
           paymentMethod: method!,
         });
         setIsPaying(false);
+        const splitedPath = window.location.pathname.split("/");
+        const path = `/${splitedPath[1]}/campaigns`;
+        router.push(path);
         return;
       }
     } catch (err) {

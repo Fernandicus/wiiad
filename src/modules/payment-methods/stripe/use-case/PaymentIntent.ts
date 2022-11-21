@@ -4,7 +4,7 @@ import { IStripeMetadata } from "../domain/IStripeMetadata";
 import { PaymentAmount } from "../domain/PaymentAmount";
 import { PaymentDetails } from "../domain/PaymentDetails";
 import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { PaymentStatus } from "../domain/PaymentStatus";
 import { StripePayments } from "../infrastructure/StripePayments";
 

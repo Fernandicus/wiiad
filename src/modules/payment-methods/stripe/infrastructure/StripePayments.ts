@@ -7,8 +7,12 @@ import { IStripeMetadata } from "../domain/IStripeMetadata";
 import { PaymentAmount } from "../domain/PaymentAmount";
 import { PaymentDetails } from "../domain/PaymentDetails";
 import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { PaymentStatus } from "../domain/PaymentStatus";
+import { CardBrand } from "../domain/value-objects/CardBrand";
+import { Last4 } from "../domain/value-objects/Last4";
+import { ExpYear } from "../domain/value-objects/ExpYear";
+import { ExpMonth } from "../domain/value-objects/ExpMonth";
 
 interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
@@ -33,14 +37,14 @@ export class StripePayments {
   ): Promise<CardDetails | null> {
     const paymentDetails = await stripe.paymentMethods.retrieve(id.id);
     if (!paymentDetails) return null;
-    paymentDetails.card?.brand;
+    if (!paymentDetails.card) return null;
+    const card = paymentDetails.card;
     return new CardDetails({
-      id: UniqId.new(),
-      paymentMethodId: id,
-      brand: paymentDetails.card!.brand,
-      last4: paymentDetails.card!.last4,
-      expYear: paymentDetails.card!.exp_year,
-      expMonth: paymentDetails.card!.exp_month,
+      paymentMethodId: new PaymentMethodId(paymentDetails.id),
+      brand: new CardBrand(card.brand),
+      last4: new Last4(card.last4),
+      expYear: new ExpYear(card.exp_year),
+      expMonth: new ExpMonth(card.exp_month),
     });
   }
 
@@ -127,6 +131,6 @@ export class StripePayments {
 
   async createCustomer(): Promise<CustomerId> {
     const customer = await stripe.customers.create();
-    return new CustomerId(customer.id) ;
+    return new CustomerId(customer.id);
   }
 }

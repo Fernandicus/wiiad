@@ -8,7 +8,7 @@ import { findCustomerHandler } from "../../payment-methods/stripe/stripe-contain
 interface IAdsAndCampaigns {
   campaigns: ICampaignPrimitives[];
   ads: AdPropsPrimitives[];
-  stripeCustomer?: IStripePrimitives;
+  stripeCustomer: IStripePrimitives | null;
 }
 
 export class AdvertiserDataController {
@@ -29,8 +29,8 @@ export class AdvertiserDataController {
     const ads: AdPropsPrimitives[] =
       response[1].status == "rejected" ? [] : response[1].value;
 
-    const stripeCustomer: IStripePrimitives | undefined =
-      response[2].status == "rejected" ? undefined : response[2].value;
+    const stripeCustomer: IStripePrimitives | null =
+      response[2].status == "rejected" ? null : response[2].value;
 
     return { campaigns, ads, stripeCustomer };
   }

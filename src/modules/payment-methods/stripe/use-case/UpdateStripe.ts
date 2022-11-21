@@ -1,15 +1,17 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { CardDetails } from "../domain/CardDetails";
+import { IStripeRepo } from "../domain/IStripeRepo";
+import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { StripeMongoDBRepo } from "../infrastructure/StripeMongoDBRepo";
 
 export class UpdateStripe {
-  constructor(private stripe: StripeMongoDBRepo) {}
+  constructor(private stripe: IStripeRepo) {}
 
-  async savePaymentMethod(params: {
+  async saveCardDetails(params: {
     userId: UniqId;
-    paymentMethod: PaymentMethodId;
+    cardDetails: CardDetails;
   }): Promise<void> {
-    const { userId, paymentMethod } = params;
-    await this.stripe.updatePaymentMethod({ userId, paymentMethod });
+    const { userId, cardDetails } = params;
+    await this.stripe.addNewCardDetails({ userId, cardDetails });
   }
 }

@@ -6,7 +6,7 @@ import {
   PaymentDetails,
 } from "../domain/PaymentDetails";
 import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/PaymentMethodId";
+import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { PaymentIntent } from "../use-case/PaymentIntent";
 
 export class PaymentIntentHandler {

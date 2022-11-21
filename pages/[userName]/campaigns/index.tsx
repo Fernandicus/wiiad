@@ -67,7 +67,6 @@ export default function CampaignsPage(props: {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
   const session = userSession.getFromServer(context);
 
   if (!session || session.role === RoleType.USER)
@@ -75,37 +74,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const paymentIntent = context.query["payment_intent"] as string;
 
-  if (!paymentIntent) {
-    const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-      const all = await AdvertiserDataController.getAll(session.id);
-      return all;
-    });
-    return {
-      props: { campaigns, ads },
-    };
-  }
-
+  //if (!paymentIntent) {
   const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-    const details = await getPaymentDetailsHandler.fromPaymentIntent(
-      paymentIntent
-    );
-    const stripeCustomer = await findCustomerHandler.findByUserId(session!.id);
-    const savedMethod = stripeCustomer.paymentMethods.find(
-      (method) => method == details.paymentMethodId
-    );
-
-    console.log(" savedMethod ", savedMethod);
-
-    if (!savedMethod && details.paymentMethodId)
-      await updateStripeHandler.savePaymentMethod(
-        session!.id,
-        details.paymentMethodId
-      );
-
-    const advertiserData = await AdvertiserDataController.getAll(session.id);
-    return advertiserData;
+    const all = await AdvertiserDataController.getAll(session.id);
+    return all;
   });
-
   return {
     props: { campaigns, ads },
   };
