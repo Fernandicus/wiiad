@@ -39,6 +39,7 @@ export default async function handler(
   try {
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     object = event.data.object as { metadata: IStripeMetadata; amount: number };
+    console.log("advertiser id: ", object.metadata.advertiserId);
   } catch (err) {
     console.error(err);
     res.status(400).send(`Webhook EVENT Error`);
