@@ -43,15 +43,14 @@ export class StripePaymentProcess {
     useElements: StripeElements,
     userName: string
   ): Promise<string> {
+    const host = window.location.host;
     try {
       await useStripe.confirmPayment({
         elements: useElements,
         //redirect: "if_required",
         // redirect: "always",
         confirmParams: {
-          return_url: `http://localhost:3000/${ApiRoutes.paymentCompleted(
-            userName
-          )}`,
+          return_url: `${host}/${ApiRoutes.paymentCompleted(userName)}`,
         },
       });
       return "Pago completado!";
