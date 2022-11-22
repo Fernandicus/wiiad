@@ -80,6 +80,10 @@ export default async function handler(
   const budget = CampaignBudget.fromAmount(amount);
 
   try {
+
+    console.log(" OBJECT ");
+    console.log(object);
+
     switch (event.type) {
       case "payment_intent.succeeded":
         await MongoDB.connectAndDisconnect(async () => {
@@ -89,6 +93,8 @@ export default async function handler(
             adId: object.metadata.adId,
             budget: budget.toPrimitives(),
           });
+
+          //TODO: Fix error: findByUserId() throws an error when no stripe model is found
 
           const stripeCustomer = await findCustomerHandler.findByUserId(
             object.metadata.advertiserId
