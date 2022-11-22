@@ -1,4 +1,4 @@
-import { AdType } from "@/pages/[userName]/ads";
+import { AdType } from "@/pages/ads";
 import { Dispatch, SetStateAction } from "react";
 import { AdResourceSelector } from "./AdResourceSelector";
 

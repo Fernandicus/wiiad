@@ -7,7 +7,7 @@ import {
   NotificationData,
   Notifications,
 } from "../notifications/Notifications";
-import { AdType } from "@/pages/[userName]/ads";
+import { AdType } from "@/pages/ads";
 import axios from "axios";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 import { CloudinaryUploader } from "../../src/cloudinary/CloudinaryUploader";

@@ -1,4 +1,5 @@
-import { getServerSideProps, IUserNamePage } from "@/pages/[userName]/index";
+import { getServerSideProps as watchAdsPage, IWatchCampaignPage } from "@/pages/[userName]/index";
+import { getServerSideProps as profilePage, IUserProfilePage } from "@/pages/profile";
 import httpMock, { MockRequest } from "node-mocks-http";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -39,7 +40,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
 
   it(`WHEN send an url with a not valid token, 
   THEN return redirect to home page '/'`, async () => {
-    const resp = (await getServerSideProps({
+    const resp = (await profilePage({
       req,
       res,
       resolvedUrl: "",
@@ -55,7 +56,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
 
   it(`WHEN send an url with an expired token, 
   THEN return redirect to home page '/' and verification email should be removed`, async () => {
-    const resp = (await getServerSideProps({
+    const resp = (await profilePage({
       req,
       res,
       resolvedUrl: "",
@@ -82,7 +83,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
     const authToken = verificationEmail.authToken.token;
     const nameVerificationEmail = faker.name.firstName();
 
-    const resp = (await getServerSideProps({
+    const resp = (await profilePage({
       req,
       res,
       resolvedUrl: "",
@@ -91,7 +92,7 @@ describe("On getServerSideProps LogIn, GIVEN some verification emails in MongoDB
         userName: nameVerificationEmail,
         authToken,
       },
-    })) as { props: IUserNamePage };
+    })) as { props: IUserProfilePage };
 
     const user = resp.props.user;
 
@@ -122,7 +123,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   it(`WHEN access to url without user session,
   THEN response should be all active campaigns`, async () => {
 
-    const resp = (await getServerSideProps({
+    const resp = (await watchAdsPage({
       req,
       res,
       resolvedUrl: "",
@@ -130,7 +131,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       query: {
         userName: influencer.name.name,
       },
-    })) as { props: IUserNamePage };
+    })) as { props: IWatchCampaignPage };
 
     
     expect(resp.props.campaign).not.toBe(null);
@@ -142,7 +143,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);
 
-    const resp = (await getServerSideProps({
+    const resp = (await watchAdsPage({
       req,
       res,
       resolvedUrl: "",
@@ -150,14 +151,14 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       query: {
         userName: myUser.name,
       },
-    })) as { props: IUserNamePage };
+    })) as { props: IWatchCampaignPage };
 
-    const userResponse: AdvertiserPropsPrimitives = resp.props.user;
+    const userResponse: IGenericUserPrimitives | null = resp.props.user;
 
-    expect(userResponse.name).toEqual(myUser.name);
-    expect(userResponse.id).toEqual(myUser.id);
-    expect(userResponse.email).toEqual(myUser.email);
-    expect(userResponse.role).toEqual(myUser.role);
+    expect(userResponse?.name).toEqual(myUser.name);
+    expect(userResponse?.id).toEqual(myUser.id);
+    expect(userResponse?.email).toEqual(myUser.email);
+    expect(userResponse?.role).toEqual(myUser.role);
     expect(resp.props.campaign).toBe(undefined);
     expect(resp.props.ad).toBe(undefined);
   });
@@ -166,7 +167,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   THEN response should have an active campaign and ad`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);
-    const resp = (await getServerSideProps({
+    const resp = (await watchAdsPage({
       req,
       res,
       resolvedUrl: "",
@@ -174,7 +175,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       query: {
         userName: influencer.name.name,
       },
-    })) as { props: IUserNamePage };
+    })) as { props: IWatchCampaignPage };
 
     const campaign = resp.props.campaign as ICampaignPrimitives;
     const ad = resp.props.ad as AdPropsPrimitives;
@@ -191,7 +192,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
   THEN response should return a redirect address`, async () => {
     userSession.remove({ req, res });
     userSession.setFromServer({ req, res }, myUser);
-    const resp = (await getServerSideProps({
+    const resp = (await watchAdsPage({
       req,
       res,
       resolvedUrl: "",

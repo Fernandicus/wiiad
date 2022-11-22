@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 import { NotificationData } from "../../notifications/Notifications";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdResourceSelector } from "./AdResourceSelector";
-import { AdType } from "@/pages/[userName]/ads";
+import { AdType } from "@/pages/ads";
 
 interface Props {
   ads: AdPropsPrimitives[];
