@@ -36,7 +36,8 @@ export class StripePaymentController {
         const customerId = await this.createNewStripeCustomer(userId);
         const paymentDetails = await paymentIntentHandler.withoutPaymentMethod(
           customerId,
-          amount
+          amount,
+          metadata
         );
         return paymentDetails;
       }

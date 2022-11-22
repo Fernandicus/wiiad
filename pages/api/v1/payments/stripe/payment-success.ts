@@ -94,7 +94,7 @@ export default async function handler(
             budget: budget.toPrimitives(),
           });
 
-          //TODO: Fix error: findByUserId() throws an error when no stripe model is found
+          //TODO: When is first payment there are no metadata
 
           const stripeCustomer = await findCustomerHandler.findByUserId(
             object.metadata.advertiserId
