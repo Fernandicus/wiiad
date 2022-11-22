@@ -32,9 +32,12 @@ export const BudgetAndPaymentMethod = ({
 
   const handlePaymentAmount = async (useNewCard = false) => {
     setIsPaying(true);
+
+    console.log(" handlePaymentAmount() ");
+
     if (isPaying) return;
     if (!ad) return;
-    if (!budget || budget < 0) return;
+    if (budget < 0) return;
 
     try {
       const stripePayment = new StripePaymentProcess();
@@ -92,10 +95,14 @@ export const BudgetAndPaymentMethod = ({
           }`}
           onClick={async (e) => {
             e.preventDefault();
-            if (!isSelectCardPage) {
+
+            if (!isSelectCardPage && (!paymentMethods || paymentMethods.length == 0)) {
+              setPayingWithPM(true);
+              await handlePaymentAmount(true);
+              setPayingWithPM(false);
+            } else if (!isSelectCardPage && paymentMethods) {
               setSelectCardPage(true);
             } else if (isSelectCardPage && method) {
-              console.log("object");
               setPayingWithPM(true);
               await handlePaymentAmount();
               setPayingWithPM(false);
@@ -112,6 +119,12 @@ export const BudgetAndPaymentMethod = ({
             ) : (
               "Pagar y lanzar"
             )
+          ) : isPayingWithPM ? (
+            <div className="w-full flex justify-center">
+              <div className="w-6 h-6 ">
+                <LoadingSpinnerAnimation />
+              </div>
+            </div>
           ) : (
             "Continuar"
           )}

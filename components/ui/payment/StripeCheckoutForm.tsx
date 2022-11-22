@@ -7,11 +7,20 @@ import {
 import { StripePaymentProcess } from "../../src/payments/StripePaymentProcess";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 
-export default function StripeCheckoutForm({ adId, userName }: { adId: string, userName:string }) {
+export default function StripeCheckoutForm({
+  adId,
+  userName,
+}: {
+  adId: string;
+  userName: string;
+}) {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<{ message: string; state: number }>({
+    message: "",
+    state: 0,
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -30,16 +39,19 @@ export default function StripeCheckoutForm({ adId, userName }: { adId: string, u
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent!.status) {
         case "succeeded":
-          setMessage("Payment succeeded!");
+          setMessage({ message: "Payment succeeded!", state: 0 });
           break;
         case "processing":
-          setMessage("Your payment is processing.");
+          setMessage({ message: "Your payment is processing.", state: 1 });
           break;
         case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
+          setMessage({
+            message: "Your payment was not successful, please try again.",
+            state: 2,
+          });
           break;
         default:
-          setMessage("Something went wrong.");
+          setMessage({ message: "Something went wrong.", state: 2 });
           break;
       }
     });
@@ -57,8 +69,12 @@ export default function StripeCheckoutForm({ adId, userName }: { adId: string, u
     setIsLoading(true);
 
     const paymentProcess = new StripePaymentProcess();
-    const message = await paymentProcess.confirmPayment(stripe, elements, userName);
-    setMessage(message);
+    const { message, status } = await paymentProcess.confirmPayment(
+      stripe,
+      elements,
+      userName
+    );
+    setMessage({ message, state: status });
 
     setIsLoading(false);
   };
@@ -69,9 +85,9 @@ export default function StripeCheckoutForm({ adId, userName }: { adId: string, u
       <button
         disabled={isLoading || !stripe || !elements}
         id="submit"
-        className="bg-sky-500 text-white p-2 w-full rounded-md"
+        className="bg-sky-500 text-white p-2 w-full text-center rounded-md"
       >
-        <span id="button-text">
+        <span id="button-text" className="w-full flex justify-center">
           {isLoading ? (
             <div className="w-6 h-6">
               <LoadingSpinnerAnimation />
@@ -82,7 +98,20 @@ export default function StripeCheckoutForm({ adId, userName }: { adId: string, u
         </span>
       </button>
       {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
+      {message && (
+        <div
+          id="payment-message"
+          className={`${
+            message.state == 0
+              ? "text-green-500"
+              : message.state == 2
+              ? "text-red-500"
+              : "text-gray-500"
+          }`}
+        >
+          {message.message}
+        </div>
+      )}
     </form>
   );
 }

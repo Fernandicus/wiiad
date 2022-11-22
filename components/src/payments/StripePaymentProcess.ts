@@ -73,19 +73,19 @@ export class StripePaymentProcess {
     useStripe: Stripe,
     useElements: StripeElements,
     userName: string
-  ): Promise<string> {
+  ): Promise<{ message: string; status: number }> {
     const path = ApiRoutes.paymentCompleted(userName);
     try {
       await useStripe.confirmPayment({
         elements: useElements,
-        // redirect: "if_required",
+        //redirect: "if_required",
         confirmParams: {
           return_url: path,
         },
       });
-      return "Pago completado!";
+      return { message: "Pago completado!", status: 0 };
     } catch (err) {
-      return "Algo fue mal";
+      return { message: "Pago completado!", status: 2 };
     }
   }
 }

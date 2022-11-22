@@ -80,10 +80,6 @@ export default async function handler(
   const budget = CampaignBudget.fromAmount(amount);
 
   try {
-
-    console.log(" OBJECT ");
-    console.log(object);
-
     switch (event.type) {
       case "payment_intent.succeeded":
         await MongoDB.connectAndDisconnect(async () => {
@@ -94,8 +90,6 @@ export default async function handler(
             budget: budget.toPrimitives(),
           });
 
-          //TODO: When is first payment there are no metadata
-
           const stripeCustomer = await findCustomerHandler.findByUserId(
             object.metadata.advertiserId
           );
@@ -104,7 +98,7 @@ export default async function handler(
             (method) => method.paymentMethodId == object.payment_method
           );
 
-          console.log("SUCCESS: SAVED METHOD " , savedMethod);
+          console.log("SUCCESS: SAVED METHOD ", savedMethod);
 
           if (!savedMethod && object.payment_method) {
             const card = object.charges.data[0].payment_method_details.card;

@@ -74,12 +74,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const paymentIntent = context.query["payment_intent"] as string;
 
-  //if (!paymentIntent) {
   const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
     const all = await AdvertiserDataController.getAll(session.id);
     return all;
   });
-  return {
-    props: { campaigns, ads },
-  };
+
+  if (paymentIntent)
+    return {
+      props: { campaigns, ads },
+      redirect: { destination: `/${session.name}/campaigns`, permanent: false },
+    };
+  else
+    return {
+      props: { campaigns, ads },
+    };
 };
