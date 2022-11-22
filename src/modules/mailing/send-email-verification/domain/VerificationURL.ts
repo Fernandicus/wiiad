@@ -32,6 +32,6 @@ export class VerificationURL {
   private verificationUrl(log: LogStates) {
     const name = this.userName.name;
     const token = this.authToken.token;
-    return `/${name}?log=${log}&authToken=${token}`;
+    return `profile?userName=${name}&log=${log}&authToken=${token}`;
   }
 }

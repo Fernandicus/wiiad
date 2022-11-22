@@ -27,4 +27,9 @@ export class UpdateReferralHandler {
     const userId = new UniqId(refereeId);
     await this.update.increaseWatchedAds(userId)
   }
+
+  async increaseReferredUsers(refereeId:string):Promise<void>{
+    const userId = new UniqId(refereeId);
+    await this.update.increaseReferredUsers(userId)
+  }
 }

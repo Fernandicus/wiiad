@@ -65,7 +65,7 @@ export const LaunchCampaign = ({
     <div className="w-full min-h-screen flex justify-center items-center bg-gray-400/50">
       <div className="w-full p-5 max-w-sm border border-slate-200 rounded-lg bg-white shadow-xl">
         {(!paymentMethods || paymentMethods.length == 0) && clientSecret && !method ? (
-          <StripePaymentElement clientSecret={clientSecret} ad={adToLaunch} userName={userName}/>
+          <StripePaymentElement clientSecret={clientSecret}/>
         ) : (
           <BudgetAndPaymentMethod
             ad={adToLaunch}

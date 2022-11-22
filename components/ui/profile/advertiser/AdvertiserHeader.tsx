@@ -16,8 +16,8 @@ export function AdvertiserHeader({ user, totalAds, totalCampaigns }: Props) {
       <div className="flex justify-center h-full items-center">
         <div className="h-28 space-x-4 inline-flex items-center">
           <ProfileCard user={user} />
-          <DataCardButton href={`/${user.name}/ads`} title="Anuncios" data={totalAds.toString()} />
-          <DataCardButton href={`/${user.name}/campaigns`} title="Campañas" data={totalCampaigns.toString()} />
+          <DataCardButton href={`/ads`} title="Anuncios" data={totalAds.toString()} />
+          <DataCardButton href={`/campaigns`} title="Campañas" data={totalCampaigns.toString()} />
         </div>
       </div>
   );

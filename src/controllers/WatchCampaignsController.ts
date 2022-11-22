@@ -20,17 +20,18 @@ export interface IWatchCampaignData {
 }
 
 export class WatchCampaignsController {
-  static async forInfluencer(
-    influencerName: string,
-    session: IGenericUserPrimitives | null
-  ): Promise<IWatchCampaignData> {
+  static async forInfluencer(params: {
+    influencerName: string;
+    session: IGenericUserPrimitives | null;
+  }): Promise<IWatchCampaignData> {
+    const { influencerName, session } = params;
+
     const referrer = await findUserHandler.findByUserName(influencerName);
-  
     const campaignData = await this.randomActiveCampaign();
-    if (session) {
-      await updateReferralHandler.increaseWatchedAds(session.id);
-    }
     
+    updateReferralHandler.increaseReferredUsers(referrer.id)
+    if (session) updateReferralHandler.increaseWatchedAds(session.id);
+
     return { ...campaignData, referrer };
   }
 

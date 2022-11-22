@@ -7,40 +7,22 @@ import {
 } from "../referral-container";
 
 export class ReferralController {
-  static async updateBalanceAndCounters(params: {
+  static async updateBalance(params: {
     referrerId: string;
     refereeId: string;
     balance: number;
-  }) {
+  }): Promise<void> {
     const { refereeId, referrerId, balance } = params;
+    const increaseReferrer = updateReferralHandler.increaseReferrerBalance(
+      referrerId,
+      balance
+    );
+    const increaseReferee = updateReferralHandler.increaseRefereeBalance(
+      refereeId,
+      balance
+    );
 
-    const findReferrer = findReferralHandler.byUserId(referrerId);
-    const findReferee = findReferralHandler.byUserId(refereeId);
-
-    const referralsResp = await Promise.allSettled([findReferrer, findReferee]);
-
-    const referrer = referralsResp[0];
-    const referee = referralsResp[1];
-
-    if (referrer.status === "rejected") {
-      await createReferralHandler.forReferrer({
-        id: UniqId.generate(),
-        referrerId,
-        referrerBalance: balance,
-      });
-    } else {
-      await updateReferralHandler.increaseReferrerBalance(referrerId, balance);
-    }
-
-    if (referee.status === "rejected") {
-      await createReferralHandler.forReferee({
-        id: UniqId.generate(),
-        refereeId,
-        refereeBalance: balance,
-      });
-    } else {
-      await updateReferralHandler.increaseRefereeBalance(refereeId, balance);
-    }
+    await Promise.all([increaseReferrer, increaseReferee]);
   }
 
   static async createNew(userId: string): Promise<void> {

@@ -19,20 +19,17 @@ import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-veri
 import { createReferralHandler } from "../modules/referrals/referral-container";
 import { Referral } from "../modules/referrals/domain/Referral";
 import { ReferralController } from "../modules/referrals/controllers/ReferralController";
-
-interface ILogInParams {
-  authToken: string;
-  userName: string;
-}
+import { ILogingInParams, LoginQueries } from "../domain/LoginQueries";
+import { ErrorAuthentifying } from "../domain/ErrorAuthentifying";
 
 interface UserData {
-  queries: ILogInParams;
+  queries: ILogingInParams;
   verificationEmail: IVerificationEmailPrimitives;
 }
 
 export class AuthController {
   static async logIn(
-    loginQueries: ILogInParams,
+    loginQueries: ILogingInParams,
     context: IReqAndRes
   ): Promise<IGenericUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
@@ -60,9 +57,12 @@ export class AuthController {
   }
 
   static async signUp(
-    loginQueries: ILogInParams,
+    loginQueries: ILogingInParams,
     context: IReqAndRes
   ): Promise<IGenericUserPrimitives> {
+    if (!loginQueries.authToken || !loginQueries.userName)
+      throw new Error("No 'auth token or/and userName' queries provided");
+
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.authToken
     );
@@ -83,7 +83,7 @@ export class AuthController {
         verificationEmail,
       });
 
-     await ReferralController.createNew(user.id);
+      await ReferralController.createNew(user.id);
 
       this.userInitSession(context, user);
 

@@ -33,7 +33,7 @@ export class CreateReferralHandler {
     const refereeBalance = new Balance(params.refereeBalance);
     const referees = ReferralCounter.one();
 
-    const referrerBalance = Balance.empty();
+    const referrerBalance = Balance.zero();
     const referrers = ReferralCounter.zero();
 
     const newReferral = new Referral({
@@ -58,7 +58,7 @@ export class CreateReferralHandler {
     const referrerBalance = new Balance(params.referrerBalance);
     const referrers = ReferralCounter.one();
 
-    const refereeBalance = Balance.empty();
+    const refereeBalance = Balance.zero();
     const referees = ReferralCounter.zero();
 
     const newReferral = new Referral({

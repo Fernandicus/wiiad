@@ -7,13 +7,7 @@ import {
 import { StripePaymentProcess } from "../../src/payments/StripePaymentProcess";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 
-export default function StripeCheckoutForm({
-  adId,
-  userName,
-}: {
-  adId: string;
-  userName: string;
-}) {
+export default function StripeCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -71,8 +65,7 @@ export default function StripeCheckoutForm({
     const paymentProcess = new StripePaymentProcess();
     const { message, status } = await paymentProcess.confirmPayment(
       stripe,
-      elements,
-      userName
+      elements
     );
     setMessage({ message, state: status });
 

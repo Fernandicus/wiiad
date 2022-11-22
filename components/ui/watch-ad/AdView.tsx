@@ -12,21 +12,31 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { RoleType } from "@/src/domain/Role";
 
 interface AdViewParams {
+  user: IGenericUserPrimitives | null;
   campaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
   referrer: IGenericUserPrimitives;
 }
 
-export default function AdView({ campaign, ad, referrer }: AdViewParams) {
+export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canEarnMoney, setCanEarnMoney] = useState<boolean>(false);
   const notificationRef = useRef<RefNotifications>({
-    showNotification: (data: NotificationData) => {},
+    showNotification(data: NotificationData): void {},
   });
 
   const pay = () => {
+    if (user && user.role !== RoleType.USER) {
+      notificationRef.current.showNotification({
+        message: `Los perfiles de anunciante no pueden ganar dinero viendo anuncios`,
+        status: "error",
+      });
+      return;
+    }
+    setCanEarnMoney(false);
     fetch(ApiRoutes.addReferral, {
       method: "POST",
       body: JSON.stringify({
@@ -87,9 +97,11 @@ export default function AdView({ campaign, ad, referrer }: AdViewParams) {
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center">
       <Notifications ref={notificationRef}>
-        <Link href="/" className=" text-blue-500 ">
-        <span className="underline">Iniciar sesion</span> 👈
-        </Link>
+        {!user ? (
+          <Link href="/" className=" text-blue-500 ">
+            <span className="underline">Iniciar sesion</span> 👈
+          </Link>
+        ) : null}
       </Notifications>
       <div className="max-w-xl space-y-20 pt-10">
         <div className="flex justify-center">

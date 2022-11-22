@@ -23,15 +23,18 @@ export class AdvertiserDataController {
       findStripeCustomer,
     ]);
 
-    const campaigns: ICampaignPrimitives[] =
-      response[0].status == "rejected" ? [] : response[0].value;
-
-    const ads: AdPropsPrimitives[] =
-      response[1].status == "rejected" ? [] : response[1].value;
-
-    const stripeCustomer: IStripePrimitives | null =
-      response[2].status == "rejected" ? null : response[2].value;
+    const campaigns = this.getValueArray(response[0]);
+    const ads = this.getValueArray(response[1]);
+    const stripeCustomer = this.getValue(response[2]);
 
     return { campaigns, ads, stripeCustomer };
+  }
+
+  private static getValueArray<T>(resp: PromiseSettledResult<T[]>): T[] {
+    return resp.status == "rejected" ? [] : resp.value;
+  }
+
+  private static getValue<T>(resp: PromiseSettledResult<T>): T | null {
+    return resp.status == "rejected" ? null : resp.value;
   }
 }

@@ -19,10 +19,9 @@ export class ApiRoutes {
   static cloudinaryImageEndPoint =
     "https://api.cloudinary.com/v1_1/fernanprojects/image/upload/";
   static stripePaymentIntent = "/api/v1/payments/stripe/payment-intent/";
-  static paymentCompleted = (userName: string) => {
+  static paymentCompleted = () => {
     const host = window.location.host;
-    if (host === "localhost:3000")
-      return `http://${host}/${userName}/campaigns`;
-    else return `https://${host}/${userName}/campaigns`;
+    if (host === "localhost:3000") return `http://${host}/campaigns`;
+    else return `https://${host}/campaigns`;
   };
 }

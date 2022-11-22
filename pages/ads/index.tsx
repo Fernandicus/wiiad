@@ -1,4 +1,4 @@
-import CreateAdForm from "../../../components/ui/profile/CreateAdForm";
+import CreateAdForm from "../../components/ui/profile/CreateAdForm";
 import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { RoleType } from "@/src/domain/Role";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
@@ -8,16 +8,16 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useRef, useState } from "react";
-import { EmptyAds } from "../../../components/ui/profile/advertiser/EmptyAds";
-import { AdsList } from "../../../components/ui/profile/advertiser/AdsList";
+import { EmptyAds } from "../../components/ui/profile/advertiser/EmptyAds";
+import { AdsList } from "../../components/ui/profile/advertiser/AdsList";
 import {
   NotificationData,
   Notifications,
   RefNotifications,
-} from "../../../components/ui/notifications/Notifications";
+} from "../../components/ui/notifications/Notifications";
 import { findCampaignHandler } from "@/src/modules/campaign/container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { LaunchCampaign } from "../../../components/ui/profile/advertiser/LaunchCampaign";
+import { LaunchCampaign } from "../../components/ui/profile/advertiser/LaunchCampaign";
 import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/stripe-container";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";

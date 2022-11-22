@@ -25,7 +25,7 @@ export default async function handler(
     if (session?.role !== RoleType.USER)
       throw new ErrorCreatingReferral("Rol type has no permits");
 
-    if (session.role === reqBody.referrerId)
+    if (session.id === reqBody.referrerId)
       throw new ErrorCreatingReferral("Cant referee to yourself");
 
     const increasedBalance = await MongoDB.connectAndDisconnect(async () => {
@@ -33,7 +33,7 @@ export default async function handler(
       const clicks = reqBody.campaign.budget.clicks;
       const balanceToAdd = Math.floor(campaignBalance / clicks);
 
-      await ReferralController.updateBalanceAndCounters({
+      await ReferralController.updateBalance({
         balance: balanceToAdd,
         refereeId: session.id,
         referrerId: reqBody.referrerId,

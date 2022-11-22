@@ -72,9 +72,8 @@ export class StripePaymentProcess {
   async confirmPayment(
     useStripe: Stripe,
     useElements: StripeElements,
-    userName: string
   ): Promise<{ message: string; status: number }> {
-    const path = ApiRoutes.paymentCompleted(userName);
+    const path = ApiRoutes.paymentCompleted();
     try {
       await useStripe.confirmPayment({
         elements: useElements,

@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 interface INotificationProps {
   props?: string;
-  children?: JSX.Element;
+  children?: JSX.Element | null;
 }
 
 export type NotificationStatus = "error" | "info" | "success";

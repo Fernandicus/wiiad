@@ -48,8 +48,8 @@ export class Referral {
     return new Referral({
       id: params.id,
       userId: params.userId,
-      refereeBalance: Balance.empty(),
-      referrerBalance: Balance.empty(),
+      refereeBalance: Balance.zero(),
+      referrerBalance: Balance.zero(),
       referees: ReferralCounter.zero(),
       referrers: ReferralCounter.zero(),
     });

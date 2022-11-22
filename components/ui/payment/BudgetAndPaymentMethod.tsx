@@ -56,9 +56,7 @@ export const BudgetAndPaymentMethod = ({
           paymentMethod: method!,
         });
         setIsPaying(false);
-        const splitedPath = window.location.pathname.split("/");
-        const path = `/${splitedPath[1]}/campaigns`;
-        router.push(path);
+        router.push(`/campaigns`);
         return;
       }
     } catch (err) {
@@ -96,7 +94,10 @@ export const BudgetAndPaymentMethod = ({
           onClick={async (e) => {
             e.preventDefault();
 
-            if (!isSelectCardPage && (!paymentMethods || paymentMethods.length == 0)) {
+            if (
+              !isSelectCardPage &&
+              (!paymentMethods || paymentMethods.length == 0)
+            ) {
               setPayingWithPM(true);
               await handlePaymentAmount(true);
               setPayingWithPM(false);

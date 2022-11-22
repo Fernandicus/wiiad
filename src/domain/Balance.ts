@@ -8,7 +8,7 @@ export class Balance {
     this.total = total;
   }
 
-  static empty(): Balance {
+  static zero(): Balance {
     return new Balance(0);
   }
 }
