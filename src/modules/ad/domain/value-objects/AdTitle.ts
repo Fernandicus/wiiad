@@ -2,7 +2,7 @@ import { ErrorCreatingAd } from "../ErrorCreatingAd";
 
 export class AdTitle {
   public readonly title;
-  static readonly maxLength = 30;
+  static readonly maxLength = 40;
 
   constructor(title: string) {
     if (title.length == 0) {

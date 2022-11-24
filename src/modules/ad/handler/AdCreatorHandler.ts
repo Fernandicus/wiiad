@@ -19,7 +19,7 @@ export class AdCreatorHandler {
   async create({ adProps, adId, advertiserId }: CreateAdParams): Promise<void> {
     const ad = new Ad({
       id: new UniqId(adId),
-      segments: new AdSegments(adProps.segments),
+      segments:  AdSegments.filterByAvailables(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
       file: new AdFileUrl(adProps.file),

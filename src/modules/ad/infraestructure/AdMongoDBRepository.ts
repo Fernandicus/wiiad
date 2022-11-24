@@ -47,7 +47,7 @@ export class AdMongoDBRepository implements IAdRepository {
       description: new AdDescription(adModel.description),
       file: new AdFileUrl(adModel.file),
       redirectionUrl: new AdRedirectionUrl(adModel.redirectionUrl),
-      segments: new AdSegments(adModel.segments),
+      segments:  AdSegments.filterByAvailables(adModel.segments),
       advertiserId: new UniqId(adModel.advertiserId),
     });
   }

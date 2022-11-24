@@ -46,7 +46,7 @@ export class TestAdMongoDBRepository
         description: new AdDescription(ad.description),
         file: new AdFileUrl(ad.file),
         redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
-        segments: new AdSegments(ad.segments),
+        segments:  AdSegments.filter(ad.segments),
         advertiserId: new UniqId(ad.advertiserId),
       });
     });

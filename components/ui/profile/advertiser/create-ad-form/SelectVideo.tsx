@@ -4,9 +4,10 @@ interface Props {
   onSelectVideo(video: string  | null): void;
   videoPreview: string | null;
   onSuccess(): void;
+  inputName: string;
 }
 
-export function SelectVideo({ onSelectVideo, videoPreview, onSuccess }: Props) {
+export function SelectVideo({ onSelectVideo, videoPreview, onSuccess, inputName }: Props) {
   const videoMaxDuration = 60;
   const videoMaxSize = 40 * 1020 * 1020;
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -74,11 +75,6 @@ export function SelectVideo({ onSelectVideo, videoPreview, onSuccess }: Props) {
         )}
       </div>
 
-      {errorLoadingMessage && (
-        <p className="bg-red-200 text-red-600 px-2 py-1 text-sm rounded-md">
-          {errorLoadingMessage}
-        </p>
-      )}
 
       <input
         required
@@ -86,8 +82,15 @@ export function SelectVideo({ onSelectVideo, videoPreview, onSuccess }: Props) {
         id="file_input"
         type="file"
         accept=".mp4"
+        name={inputName}
         onChange={onLoadVideo}
       />
+
+      {errorLoadingMessage && (
+        <span className="bg-red-200 text-red-600 px-2 py-1 text-sm rounded-md">
+          {errorLoadingMessage}
+        </span>
+      )}
     </div>
   );
 }

@@ -137,12 +137,12 @@ export class FakeAd extends Ad {
     };
   }
 
-  private static getRandomAdSegments(): AdSegmentType[] {
-    const adSegments = Object.values(AdSegmentType);
+  private static getRandomAdSegments(): string[] {
+    const adSegments =  AdSegments.withAllAvailables().segments;
     const adSegmentsLength = adSegments.length;
     const maxLengthArray = Math.floor(Math.random() * 4);
 
-    let segments: AdSegmentType[] = [];
+    let segments: string[] = [];
 
     for (var i = 0; i <= maxLengthArray; i++) {
       const randomNum = Math.floor(Math.random() * adSegmentsLength);
@@ -155,7 +155,7 @@ export class FakeAd extends Ad {
   private static getAd(adProps: AdPropsPrimitives): Ad {
     return new Ad({
       id: UniqId.new(),
-      segments: new AdSegments(adProps.segments),
+      segments: AdSegments.filterByAvailables(adProps.segments),
       title: new AdTitle(adProps.title),
       description: new AdDescription(adProps.description),
       file: new AdFileUrl(adProps.file),

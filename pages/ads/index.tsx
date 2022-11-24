@@ -1,4 +1,4 @@
-import CreateAdForm from "../../components/ui/profile/CreateAdForm";
+import CreateAdForm from "../../components/ui/profile/advertiser/CreateAdForm";
 import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { RoleType } from "@/src/domain/Role";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
