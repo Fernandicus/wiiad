@@ -154,7 +154,7 @@ export default function CreateAdForm(props: {
 
   return (
     <div className="max-w-xl w-full py-10">
-      <div className="flex space-x-4 pb-5">
+      <div className="pb-5">
         <button
           onClick={props.onBack}
           className="w-6 h-auto hover:text-sky-500"

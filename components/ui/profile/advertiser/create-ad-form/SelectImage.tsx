@@ -5,10 +5,15 @@ interface Props {
   onSelectImage(image: string | null): void;
   imagePreview: string | null;
   onSuccess(): void;
-  inputName:string,
+  inputName: string;
 }
 
-export function SelectImage({ onSelectImage, imagePreview, onSuccess, inputName }: Props) {
+export function SelectImage({
+  onSelectImage,
+  imagePreview,
+  onSuccess,
+  inputName,
+}: Props) {
   const maxSize = 1020 * 1020;
   const [errorLoadingMessage, setErrorLoading] = useState<string | null>();
 
@@ -22,8 +27,7 @@ export function SelectImage({ onSelectImage, imagePreview, onSuccess, inputName 
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-
-        const res = reader.result as string
+        const res = reader.result as string;
         onSelectImage(res);
       };
       onSuccess();
@@ -54,7 +58,7 @@ export function SelectImage({ onSelectImage, imagePreview, onSuccess, inputName 
         ) : (
           <img
             className="w-[576px] h-[324px] object-cover bg-white rounded-lg"
-            src="https://images.unsplash.com/photo-1591254460606-fab865bf82b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2232&q=80"
+            src="https://images.unsplash.com/photo-1588421357574-87938a86fa28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
           ></img>
         )}
       </div>
