@@ -1,12 +1,11 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { Campaign } from "../domain/Campaign";
+import { Campaign } from "../../domain/Campaign";
 import {
   CampaignBudget,
-  CampaignBudgetProps,
   ICampaignBudgetPrimitives,
-} from "../domain/value-objects/Budget";
-import { CreateCampaign } from "../use-case/CreateCampaign";
+} from "../../domain/value-objects/Budget";
+import { CreateCampaign } from "../CreateCampaign";
 
 interface ILaunchCampaignProps {
   advertiserId: string;

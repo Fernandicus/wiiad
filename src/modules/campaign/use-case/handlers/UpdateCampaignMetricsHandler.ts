@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { UpdateCampaignMetrics } from "../use-case/UpdateCampaignMetrics";
+import { UpdateCampaignMetrics } from "../UpdateCampaignMetrics";
 
 export class UpdateCampaignMetricsHandler {
   constructor(private updateMetrics: UpdateCampaignMetrics) {}

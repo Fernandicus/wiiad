@@ -15,7 +15,7 @@ import {
   Notifications,
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { LaunchCampaign } from "../../components/ui/profile/advertiser/LaunchCampaign";
 import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/stripe-container";

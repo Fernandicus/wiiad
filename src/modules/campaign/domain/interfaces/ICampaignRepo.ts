@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Campaign } from "./Campaign";
-import { CampaignStatus } from "./value-objects/CampaignStatus";
+import { Campaign } from "../Campaign";
+import { CampaignStatus } from "../value-objects/CampaignStatus";
 
 export interface ICampaignRepo {
   save(campaign: Campaign): Promise<void>;

@@ -1,6 +1,6 @@
 import { adFinderHandler } from "../../ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "../../ad/domain/Ad";
-import { findCampaignHandler } from "../../campaign/container";
+import { findCampaignHandler } from "../../campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "../../campaign/domain/Campaign";
 import { IStripePrimitives } from "../../payment-methods/stripe/domain/Stripe";
 import { findCustomerHandler } from "../../payment-methods/stripe/stripe-container";

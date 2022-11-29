@@ -1,5 +1,5 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
 import { CampaignBudgetProps, ICampaignBudgetPrimitives } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
 import { userSession } from "@/src/use-case/container";

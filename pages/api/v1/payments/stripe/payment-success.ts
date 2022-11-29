@@ -1,6 +1,6 @@
 //? https://stripe.com/docs/webhooks
 
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
 import { userSession } from "@/src/use-case/container";
 import { UniqId } from "@/src/utils/UniqId";
 import { reqBodyParse } from "@/src/utils/utils";

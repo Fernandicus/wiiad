@@ -2,14 +2,14 @@ import { AdCard } from "../../components/ui/profile/advertiser/AdCard";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/use-case/container";
 import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
 import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
 import {
   findCustomerHandler,
   getPaymentDetailsHandler,

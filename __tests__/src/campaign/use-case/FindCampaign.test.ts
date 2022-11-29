@@ -1,6 +1,6 @@
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
-import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/ErrorFindingCampaign";
-import { ICampaignRepo } from "@/src/modules/campaign/domain/ICampaignRepo";
+import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/errors/ErrorFindingCampaign";
+import { ICampaignRepo } from "@/src/modules/campaign/domain/interfaces/ICampaignRepo";
 import {
   CampaignStatus,
   CampaignStatusType,

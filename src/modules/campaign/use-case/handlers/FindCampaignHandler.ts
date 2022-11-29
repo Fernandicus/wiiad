@@ -1,9 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Campaign, ICampaignPrimitives } from "../domain/Campaign";
-import { ErrorFindingCampaign } from "../domain/ErrorFindingCampaign";
-import { ICampaignRepo } from "../domain/ICampaignRepo";
-import { CampaignStatusType } from "../domain/value-objects/CampaignStatus";
-import { FindCampaign } from "../use-case/FindCampaign";
+import { Campaign, ICampaignPrimitives } from "../../domain/Campaign";
+import { FindCampaign } from "../FindCampaign";
 
 export class FindCampaignHandler {
   constructor(private findCampaign: FindCampaign) {}

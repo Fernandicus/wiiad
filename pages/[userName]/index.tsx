@@ -24,7 +24,7 @@ import {
 } from "../../components/ui/notifications/Notifications";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { Logout } from "../../components/ui/login/Logout";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import CampaignsPage from "../campaigns";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 import { LogStates } from "@/src/domain/LogStates";

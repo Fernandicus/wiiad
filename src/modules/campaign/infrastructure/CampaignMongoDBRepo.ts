@@ -1,15 +1,10 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { HydratedDocument } from "mongoose";
-import { AdvertiserPropsPrimitives } from "../../advertiser/domain/Advertiser";
-import { Campaign, ICampaignPrimitives } from "../domain/Campaign";
-import { ICampaignRepo } from "../domain/ICampaignRepo";
+import { Campaign } from "../domain/Campaign";
+import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
 import { CampaignBudget } from "../domain/value-objects/Budget";
 import { CampaignMetrics } from "../domain/value-objects/CampaignMetrics";
-import {
-  CampaignStatus,
-  CampaignStatusType,
-} from "../domain/value-objects/CampaignStatus";
+import { CampaignStatus } from "../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
@@ -33,7 +28,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
     const campaignModels = await CampaignModel.find<ICampaignModel>({
       advertiserId: id.id,
     } as ICampaignModel);
-    if(campaignModels.length == 0) return null;
+    if (campaignModels.length == 0) return null;
     const campaigns = this.mapToCampaign(campaignModels);
     return campaigns;
   }
