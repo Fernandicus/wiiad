@@ -1,5 +1,5 @@
-import { AuthToken } from "../domain/AuthToken";
-import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
+import { AuthToken } from "../domain/value-objects/AuthToken";
+import { IAuthTokenRepo } from "../domain/interfaces/IAuthTokenRepo";
 
 export class CreateAuthToken {
   constructor(private authToken: IAuthTokenRepo) {}

@@ -1,6 +1,6 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
 import {
   IVerificationURLProps,
   VerificationURL,

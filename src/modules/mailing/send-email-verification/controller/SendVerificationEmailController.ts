@@ -1,13 +1,12 @@
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { findUserHandler } from "@/src/modules/user/container";
-import { ErrorFindingUser } from "@/src/modules/user/domain/ErrorFindingUser";
-import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
-import { ISendVerificationEmailRepo } from "../domain/ISendVerificationEmailRepo";
+import { ErrorSendVerificationEmail } from "../domain/errors/ErrorSendVerificationEmail";
+import { ISendVerificationEmailRepo } from "../domain/interfaces/ISendVerificationEmailRepo";
 import {
   authTokenCreator,
   sendEmailHandler,
   verificationEmailHandler,
-} from "../email-verification-container";
+} from "../infrastructure/email-verification-container";
 
 export class SendVerificationEmailController {
   static async sendToNewUser(
@@ -20,8 +19,9 @@ export class SendVerificationEmailController {
     const resp = await Promise.allSettled([findUserByName, findUserByEmail]);
 
     if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
-      throw new ErrorEmailVerification(
-        `El nombre de ususario '${data.userName}' o el email '${data.email}' ya existen`
+      throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
+        data.userName,
+        data.email
       );
 
     const authToken = authTokenCreator.generate();
@@ -49,7 +49,7 @@ export class SendVerificationEmailController {
         authToken: authToken.token,
       });
     } catch (error) {
-      throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
+      throw ErrorSendVerificationEmail.emailNotExists(data.email);
     }
   }
 
@@ -61,16 +61,12 @@ export class SendVerificationEmailController {
       data.userName
     );
     if (advertiserFound)
-      throw new ErrorEmailVerification(
-        `El nombre de anunciante '${data.userName}' ya existe`
-      );
+      throw ErrorSendVerificationEmail.userNameAlreadyExists(data.userName);
     const advertiserFoundByEmail = await findAdvertiserHandler.findByEmail(
       data.email
     );
     if (advertiserFoundByEmail)
-      throw new ErrorEmailVerification(
-        `El email '${data.email}' ya está asignado a un anunciante`
-      );
+      throw ErrorSendVerificationEmail.emailAlreadyExists(data.email);
     const authToken = authTokenCreator.generate();
     await this.saveAndSignUpSendEmail({
       email: data.email,
@@ -89,7 +85,7 @@ export class SendVerificationEmailController {
       data.email
     );
     if (!advertiserFoundByEmail)
-      throw new ErrorEmailVerification(`El email '${data.email}' no existe`);
+      throw ErrorSendVerificationEmail.emailNotExists(data.email);
     const authToken = authTokenCreator.generate();
     await this.saveAndSendLogInEmail({
       email: advertiserFoundByEmail.email,

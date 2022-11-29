@@ -1,6 +1,6 @@
 import { RoleType } from "@/src/domain/Role";
-import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
-import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
+import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailRepo";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeVerificationEmail } from "../lib/modules/send-email-verification/FakeVerificationEmail";

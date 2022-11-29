@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { RemoveVerificationEmail } from "../use-case/RemoveVerificationEmail";
+import { RemoveVerificationEmail } from "../RemoveVerificationEmail";
 
 export class RemoveVerificationEmailHandler {
   constructor(private removeVerificationEmail: RemoveVerificationEmail) {}

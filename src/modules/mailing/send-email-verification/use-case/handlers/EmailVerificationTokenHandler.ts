@@ -1,10 +1,10 @@
 import { Email } from "@/src/domain/Email";
-import { VerificationEmail } from "../domain/VerificationEmail";
-import { ExpirationDate } from "../domain/ExpirationDate";
-import { SaveVerificationEmail } from "../use-case/SaveVerificationEmail";
+import { VerificationEmail } from "../../domain/VerificationEmail";
+import { ExpirationDate } from "../../domain/value-objects/ExpirationDate";
+import { SaveVerificationEmail } from "../SaveVerificationEmail";
 import { Role } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "../domain/AuthToken";
+import { AuthToken } from "../../domain/value-objects/AuthToken";
 
 interface ISaveEmailParams{
   id: string;

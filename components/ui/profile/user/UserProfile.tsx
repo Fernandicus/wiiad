@@ -1,5 +1,5 @@
 import { Logout } from "../../login/Logout";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
 import { RoleType } from "@/src/domain/Role";
 import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";

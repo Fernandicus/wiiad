@@ -4,14 +4,14 @@ import {
   IVerificationEmailProps,
   IVerificationEmailPrimitives,
 } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
-import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
-import { TimerConstants } from "@/src/modules/mailing/send-email-verification/domain/TimerConstants";
+import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/value-objects/ExpirationDate";
+import { TimerConstants } from "@/src/modules/mailing/send-email-verification/domain/value-objects/TimerConstants";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Role, RoleType } from "@/src/domain/Role";
-import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
+import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { User } from "@/src/modules/user/domain/User";
-import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 
 export class FakeVerificationEmail extends VerificationEmail {

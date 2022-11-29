@@ -2,7 +2,7 @@ import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
 import {
   IGenericUserPrimitives,
   IGenericUserProps,
-} from "../domain/IGenericUser";
+} from "../domain/GenericUser";
 import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
 import {
   campaignMetricsHandler,

@@ -13,7 +13,7 @@ import { TestDBs } from "../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { TestVerificationEmailDB } from "__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
 
 interface IServerSideResponse {
   props: {};

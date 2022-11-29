@@ -3,15 +3,14 @@ import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RoleType } from "@/src/domain/Role";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
-import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmailRepo";
-import { setTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
-import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
+import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
+import { autoSetTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: ISendVerificationEmailRepo;
 
   beforeAll(async () => {
-    await setTestVerificationEmailDB(2, 2);
+    await autoSetTestVerificationEmailDB(2, 2);
     user = {
       email: faker.internet.email(),
       userName: faker.name.firstName(),

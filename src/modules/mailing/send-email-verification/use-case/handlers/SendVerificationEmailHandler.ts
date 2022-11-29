@@ -1,8 +1,8 @@
 import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
-import { AuthToken } from "../domain/AuthToken";
-import { VerificationURL } from "../domain/VerificationURL";
-import { SendlVerificationEmail } from "../use-case/SendVerificationEmail";
+import { AuthToken } from "../../domain/value-objects/AuthToken";
+import { VerificationURL } from "../../domain/VerificationURL";
+import { SendlVerificationEmail } from "../SendVerificationEmail";
 
 interface ISendVerificationParams {
   userName: string;

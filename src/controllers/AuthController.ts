@@ -4,12 +4,12 @@ import {
 } from "../modules/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
 import { IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/IGenericUser";
+import { IGenericUserPrimitives } from "../domain/GenericUser";
 import { RoleType } from "../domain/Role";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
-} from "../modules/mailing/send-email-verification/email-verification-container";
+} from "../modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { userSession } from "../use-case/container";
 import { UniqId } from "../utils/UniqId";
 import { createUserHandler, findUserHandler } from "../modules/user/container";

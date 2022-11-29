@@ -1,5 +1,5 @@
 import { RoleType } from "@/src/domain/Role";
-import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/IVerificationEmailRepo";
+import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailRepo";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { SaveVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SaveVerificationEmail";
 import { mockedVerificationEmailRepo } from "../../../../../__mocks__/context/MockVerificationEmailRepo";

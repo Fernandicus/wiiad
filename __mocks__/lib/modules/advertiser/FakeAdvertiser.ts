@@ -7,7 +7,7 @@ import { Email } from "@/src/domain/Email";
 import { Name } from "@/src/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-import { IGenericUserProps } from "@/src/domain/IGenericUser";
+import { IGenericUserProps } from "@/src/domain/GenericUser";
 import { ProfilePic } from "@/src/domain/ProfilePic";
 
 export class FakeAdvertiser extends Advertiser {

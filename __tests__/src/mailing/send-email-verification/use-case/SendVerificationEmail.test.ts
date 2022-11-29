@@ -1,6 +1,6 @@
-import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/domain/IEmailSenderRepo";
+import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IEmailSenderRepo";
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
-import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
+import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { AuthTokenCrypto } from "@/src/modules/mailing/send-email-verification/infrastructure/AuthTokenCrypto";
 import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SendVerificationEmail";
 import { mockedEmailSenderRepo } from "../../../../../__mocks__/context/MockEmailSenderRepo";

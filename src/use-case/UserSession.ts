@@ -1,5 +1,5 @@
 import { IAuthCookies, IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/IGenericUser";
+import { IGenericUserPrimitives } from "../domain/GenericUser";
 import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
 
 export class UserSession {

@@ -1,9 +1,9 @@
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/ErrorEmailVerification";
-import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/ErrorSendingEmail";
+import { ErrorVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
+import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorSendingEmail";
 import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/controller/SendVerificationEmailController";
-import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/ISendVerificationEmailRepo";
+import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
@@ -57,13 +57,13 @@ export default async function handler(
     return res.status(200).json({ message: `Email sent to ${data.email}` });
   } catch (err) {
     console.error(err);
-    const errorWithVerification = err instanceof ErrorEmailVerification;
+    const errorWithVerification = err instanceof ErrorVerificationEmail;
     const errorSendingEmail = err instanceof ErrorSendingEmail;
     const errorCreatingUser = err instanceof ErrorCreatingUser;
     const errorUnkown = err instanceof Error;
 
     if (errorWithVerification)
-      return res.status(400).json({ message: err.info });
+      return res.status(400).json({ message: err.message });
 
     if (errorSendingEmail) return res.status(500).json({ message: err.info });
 

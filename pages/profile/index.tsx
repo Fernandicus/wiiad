@@ -2,7 +2,7 @@ import { LoginQueries } from "@/src/domain/LoginQueries";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
 import { AuthController } from "@/src/controllers/AuthController";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import AdView from "../../components/ui/watch-ad/AdView";
 import { RoleType } from "@/src/domain/Role";

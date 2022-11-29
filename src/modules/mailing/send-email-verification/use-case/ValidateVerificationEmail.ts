@@ -1,9 +1,6 @@
-import { Email } from "@/src/domain/Email";
-import { ErrorLogIn } from "@/src/domain/ErrorLogIn";
-import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "../domain/AuthToken";
-import { ErrorEmailVerification } from "../domain/ErrorEmailVerification";
-import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
+import { AuthToken } from "../domain/value-objects/AuthToken";
+import { ErrorVerificationEmail } from "../domain/errors/ErrorVerificationEmail";
+import { IVerificationEmailRepo } from "../domain/interfaces/IVerificationEmailRepo";
 import { VerificationEmail } from "../domain/VerificationEmail";
 
 export class ValidateVerificationEmail {
@@ -11,9 +8,9 @@ export class ValidateVerificationEmail {
 
   async validate(tokenId: AuthToken): Promise<VerificationEmail> {
     const verificationEmail = await this.repository.findByAuthToken(tokenId);
-   
+
     if (!verificationEmail)
-      throw new ErrorEmailVerification("Verification Email not found");
+      throw ErrorVerificationEmail.authTokenNotFound(tokenId.token);
 
     await this.repository.removeById(verificationEmail.id);
     await this.checkExpirationDate(verificationEmail);
@@ -26,7 +23,7 @@ export class ValidateVerificationEmail {
   ): Promise<void> {
     const emailExpiration = verificationEmail.expirationDate.date;
     if (this.hasExpired(emailExpiration)) {
-      throw new ErrorEmailVerification("Verification Token has expired");
+      throw ErrorVerificationEmail.expiredToken();
     }
   }
 

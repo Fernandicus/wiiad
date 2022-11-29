@@ -1,4 +1,4 @@
-import { GenericUser, IGenericUserPrimitives, IGenericUserProps } from "@/src/domain/IGenericUser";
+import { GenericUser, IGenericUserPrimitives, IGenericUserProps } from "@/src/domain/GenericUser";
 import { ProfilePic } from "@/src/domain/ProfilePic";
 import { RoleType } from "@/src/domain/Role";
 import { BankAccount } from "./BankAccount";

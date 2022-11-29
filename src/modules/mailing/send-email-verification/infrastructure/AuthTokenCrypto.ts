@@ -1,6 +1,6 @@
-import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
+import { IAuthTokenRepo } from "../domain/interfaces/IAuthTokenRepo";
 import crypto from "crypto";
-import { AuthToken } from "../domain/AuthToken";
+import { AuthToken } from "../domain/value-objects/AuthToken";
 
 export class AuthTokenCrypto implements IAuthTokenRepo {
   generate(): AuthToken {

@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { GenericUser } from "@/src/domain/IGenericUser";
+import { GenericUser } from "@/src/domain/GenericUser";
 import { CustomerId } from "./CustomerId";
 import { PaymentMethodId } from "./value-objects/PaymentMethodId";
 import { CardDetails, ICardDetailsPrimitives } from "./CardDetails";

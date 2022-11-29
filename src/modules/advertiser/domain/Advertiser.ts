@@ -3,7 +3,7 @@ import {
   GenericUser,
   IGenericUserProps,
   IGenericUserPrimitives,
-} from "@/src/domain/IGenericUser";
+} from "@/src/domain/GenericUser";
 import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
 
 

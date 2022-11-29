@@ -1,8 +1,6 @@
-import { Email } from "@/src/domain/Email";
-import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "../domain/AuthToken";
-import { IVerificationEmailPrimitives } from "../domain/VerificationEmail";
-import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail";
+import { AuthToken } from "../../domain/value-objects/AuthToken";
+import { IVerificationEmailPrimitives } from "../../domain/VerificationEmail";
+import { ValidateVerificationEmail } from "../ValidateVerificationEmail";
 
 export class ValidateEmailHandler {
   constructor(private validateEmail: ValidateVerificationEmail) {}

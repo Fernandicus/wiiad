@@ -1,7 +1,7 @@
 import { Email } from "@/src/domain/Email";
 import { LogStates } from "@/src/domain/LogStates";
 import { Name } from "@/src/domain/Name";
-import { AuthToken } from "./AuthToken";
+import { AuthToken } from "./value-objects/AuthToken";
 
 export interface IVerificationURLProps {
   userName: Name;

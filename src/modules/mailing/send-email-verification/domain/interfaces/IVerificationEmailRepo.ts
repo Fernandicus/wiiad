@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "./AuthToken";
-import { VerificationEmail } from "./VerificationEmail";
+import { AuthToken } from "../value-objects/AuthToken";
+import { VerificationEmail } from "../VerificationEmail";
 
 export interface IVerificationEmailRepo {
   save(verificationEmail: VerificationEmail): Promise<void>;
