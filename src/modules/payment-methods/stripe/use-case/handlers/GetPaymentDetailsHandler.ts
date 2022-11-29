@@ -1,9 +1,8 @@
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ICardDetailsPrimitives } from "../domain/CardDetails";
-import { IPaymentDetailsPrimitives } from "../domain/PaymentDetails";
-import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
-import { GetPaymentDetails } from "../use-case/GetPaymentDetails";
+import { ICardDetailsPrimitives } from "../../domain/CardDetails";
+import { IPaymentDetailsPrimitives } from "../../domain/PaymentDetails";
+import { PaymentIntentId } from "../../domain/value-objects/PaymentIntentId";
+import { PaymentMethodId } from "../../domain/value-objects/PaymentMethodId";
+import { GetPaymentDetails } from "../GetPaymentDetails";
 
 export class GetPaymentDetailsHandler {
   constructor(private getDetails: GetPaymentDetails) {}

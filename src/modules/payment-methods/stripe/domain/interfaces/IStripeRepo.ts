@@ -1,7 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Stripe } from "../domain/Stripe";
-import { CardDetails } from "./CardDetails";
-import { PaymentMethodId } from "./value-objects/PaymentMethodId";
+import { Stripe } from "../Stripe";
+import { CardDetails } from "../CardDetails";
 
 export interface IStripeRepo {
   save(stripe: Stripe): Promise<void>;

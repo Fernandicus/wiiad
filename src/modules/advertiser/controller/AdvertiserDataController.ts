@@ -3,7 +3,7 @@ import { AdPropsPrimitives } from "../../ad/domain/Ad";
 import { findCampaignHandler } from "../../campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "../../campaign/domain/Campaign";
 import { IStripePrimitives } from "../../payment-methods/stripe/domain/Stripe";
-import { findCustomerHandler } from "../../payment-methods/stripe/stripe-container";
+import { findCustomerHandler } from "../../payment-methods/stripe/infrastructure/stripe-container";
 
 interface IAdsAndCampaigns {
   campaigns: ICampaignPrimitives[];

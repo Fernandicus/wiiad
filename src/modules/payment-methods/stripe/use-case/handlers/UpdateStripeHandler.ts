@@ -1,11 +1,11 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { CardDetails, ICardDetailsPrimitives } from "../domain/CardDetails";
-import { CardBrand } from "../domain/value-objects/CardBrand";
-import { ExpMonth } from "../domain/value-objects/ExpMonth";
-import { ExpYear } from "../domain/value-objects/ExpYear";
-import { Last4 } from "../domain/value-objects/Last4";
-import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
-import { UpdateStripe } from "../use-case/UpdateStripe";
+import { CardDetails, ICardDetailsPrimitives } from "../../domain/CardDetails";
+import { CardBrand } from "../../domain/value-objects/CardBrand";
+import { ExpMonth } from "../../domain/value-objects/ExpMonth";
+import { ExpYear } from "../../domain/value-objects/ExpYear";
+import { Last4 } from "../../domain/value-objects/Last4";
+import { PaymentMethodId } from "../../domain/value-objects/PaymentMethodId";
+import { UpdateStripe } from "../UpdateStripe";
 
 export class UpdateStripeHandler {
   constructor(private updateStripe: UpdateStripe) {}

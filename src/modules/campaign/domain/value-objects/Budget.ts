@@ -2,7 +2,7 @@ import { Balance } from "@/src/domain/Balance";
 import {
   AvailableAmounts,
   PaymentAmount,
-} from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
+} from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { ErrorCreatingCampaign } from "./ErrorCreatingCampaign";
 
 export interface ICampaignBudgetPrimitives {

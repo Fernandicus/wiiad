@@ -1,13 +1,10 @@
-import { CustomerId } from "../domain/CustomerId";
-import { IStripeMetadata } from "../domain/IStripeMetadata";
-import { PaymentAmount } from "../domain/PaymentAmount";
-import {
-  IPaymentDetailsPrimitives,
-  PaymentDetails,
-} from "../domain/PaymentDetails";
-import { PaymentIntentId } from "../domain/PaymentIntentId";
-import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
-import { PaymentIntent } from "../use-case/PaymentIntent";
+import { CustomerId } from "../../domain/value-objects/CustomerId";
+import { IStripeMetadata } from "../../domain/interfaces/IStripeMetadata";
+import { PaymentAmount } from "../../domain/value-objects/PaymentAmount";
+import { IPaymentDetailsPrimitives } from "../../domain/PaymentDetails";
+import { PaymentIntentId } from "../../domain/value-objects/PaymentIntentId";
+import { PaymentMethodId } from "../../domain/value-objects/PaymentMethodId";
+import { PaymentIntent } from "../PaymentIntent";
 
 export class PaymentIntentHandler {
   constructor(private paymentIntent: PaymentIntent) {}
@@ -15,14 +12,14 @@ export class PaymentIntentHandler {
   async withoutPaymentMethod(
     customerId: string,
     amount: number,
-    metadata?: IStripeMetadata,
+    metadata?: IStripeMetadata
   ): Promise<IPaymentDetailsPrimitives> {
     const customer = new CustomerId(customerId);
     const totalAmount = new PaymentAmount(amount);
     const details = await this.paymentIntent.withoutPaymentMethod(
       customer,
       totalAmount,
-      metadata,
+      metadata
     );
     return details.toPrimitives();
   }
@@ -31,7 +28,7 @@ export class PaymentIntentHandler {
     customerId: string,
     amount: number,
     paymentMethodId: string,
-    metadata?: IStripeMetadata,
+    metadata?: IStripeMetadata
   ): Promise<IPaymentDetailsPrimitives> {
     const customer = new CustomerId(customerId);
     const totalAmount = new PaymentAmount(amount);
@@ -41,7 +38,7 @@ export class PaymentIntentHandler {
       customer,
       totalAmount,
       methodId,
-      metadata,
+      metadata
     );
     return details.toPrimitives();
   }

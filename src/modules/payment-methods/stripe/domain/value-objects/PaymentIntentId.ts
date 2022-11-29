@@ -1,4 +1,4 @@
-import { ErrorCreatingStripe } from "./ErrorCreatingStripe";
+import { ErrorCreatingStripe } from "../errors/ErrorCreatingStripe";
 
 export class PaymentIntentId {
   readonly id;

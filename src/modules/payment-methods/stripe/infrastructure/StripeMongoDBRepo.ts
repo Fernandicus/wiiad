@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { CustomerId } from "../domain/CustomerId";
-import { IStripeRepo } from "../domain/IStripeRepo";
+import { CustomerId } from "../domain/value-objects/CustomerId";
+import { IStripeRepo } from "../domain/interfaces/IStripeRepo";
 import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
 import { Stripe } from "../domain/Stripe";
 import { IStripeModel, StripeModel } from "./StripeModel";

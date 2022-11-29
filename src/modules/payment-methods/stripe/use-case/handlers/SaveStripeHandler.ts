@@ -1,7 +1,7 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { CustomerId } from "../domain/CustomerId";
-import { Stripe } from "../domain/Stripe";
-import { SaveStripe } from "../use-case/SaveStripe";
+import { CustomerId } from "../../domain/value-objects/CustomerId";
+import { Stripe } from "../../domain/Stripe";
+import { SaveStripe } from "../SaveStripe";
 
 interface IStripeCustomerPrimitives {
   id: string;

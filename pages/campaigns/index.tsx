@@ -14,12 +14,12 @@ import {
   findCustomerHandler,
   getPaymentDetailsHandler,
   updateStripeHandler,
-} from "@/src/modules/payment-methods/stripe/stripe-container";
+} from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { UniqId } from "@/src/utils/UniqId";
 import { RoleType } from "@/src/domain/Role";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { Balance } from "@/src/domain/Balance";
-import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 
 export default function CampaignsPage(props: {
   campaigns: ICampaignPrimitives[];

@@ -1,4 +1,4 @@
-import { CreateStripeCustomer } from "../use-case/CreateStripeCustomer";
+import { CreateStripeCustomer } from "../CreateStripeCustomer";
 
 export class CreateStripeCustomerHandler {
   constructor(private createCustomer: CreateStripeCustomer) {}

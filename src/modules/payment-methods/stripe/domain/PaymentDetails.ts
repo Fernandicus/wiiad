@@ -1,5 +1,5 @@
-import { PaymentAmount } from "./PaymentAmount";
-import { PaymentIntentId } from "./PaymentIntentId";
+import { PaymentAmount } from "./value-objects/PaymentAmount";
+import { PaymentIntentId } from "./value-objects/PaymentIntentId";
 import { PaymentMethodId } from "./value-objects/PaymentMethodId";
 
 export interface IPaymentDetailsPrimitives {

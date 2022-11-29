@@ -1,5 +1,5 @@
-import { ErrorFindingStripe } from "../modules/payment-methods/stripe/domain/ErrorFindingStripe";
-import { IStripeMetadata } from "../modules/payment-methods/stripe/domain/IStripeMetadata";
+import { ErrorFindingStripe } from "../modules/payment-methods/stripe/domain/errors/ErrorFindingStripe";
+import { IStripeMetadata } from "../modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 import { IPaymentDetailsPrimitives } from "../modules/payment-methods/stripe/domain/PaymentDetails";
 import { StripePayments } from "../modules/payment-methods/stripe/infrastructure/StripePayments";
 import {
@@ -7,7 +7,7 @@ import {
   findCustomerHandler,
   paymentIntentHandler,
   saveStripeHandler,
-} from "../modules/payment-methods/stripe/stripe-container";
+} from "../modules/payment-methods/stripe/infrastructure/stripe-container";
 import { UniqId } from "../utils/UniqId";
 
 export interface IPaymentIntent {

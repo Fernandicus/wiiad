@@ -9,13 +9,13 @@ import Stripe from "stripe";
 import { buffer } from "micro";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
-import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/IStripeMetadata";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 import {
   findCustomerHandler,
   getPaymentDetailsHandler,
   updateStripeHandler,
-} from "@/src/modules/payment-methods/stripe/stripe-container";
+} from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 
 interface IChargesData {

@@ -1,5 +1,5 @@
-import { ErrorFindingStripe } from "@/src/modules/payment-methods/stripe/domain/ErrorFindingStripe";
-import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/IStripeRepo";
+import { ErrorFindingStripe } from "@/src/modules/payment-methods/stripe/domain/errors/ErrorFindingStripe";
+import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeRepo";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { FindStripeCustomer } from "@/src/modules/payment-methods/stripe/use-case/FindStripeCustomer";
 import { UniqId } from "@/src/utils/UniqId";

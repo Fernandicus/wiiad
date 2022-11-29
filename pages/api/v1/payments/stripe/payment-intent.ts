@@ -4,7 +4,7 @@
 
 import { StripePaymentController } from "@/src/controllers/StripePaymentController";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { userSession } from "@/src/use-case/container";
 import { reqBodyParse } from "@/src/utils/utils";
 import { NextApiRequest, NextApiResponse } from "next";

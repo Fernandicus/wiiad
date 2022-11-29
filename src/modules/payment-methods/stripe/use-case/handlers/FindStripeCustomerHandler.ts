@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { IStripePrimitives } from "../domain/Stripe";
-import { FindStripeCustomer } from "../use-case/FindStripeCustomer";
+import { IStripePrimitives } from "../../domain/Stripe";
+import { FindStripeCustomer } from "../FindStripeCustomer";
 
 export class FindStripeCustomerHandler {
   constructor(private findStripeCustomer: FindStripeCustomer) {}

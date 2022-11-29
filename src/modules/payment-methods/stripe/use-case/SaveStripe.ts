@@ -1,4 +1,4 @@
-import { IStripeRepo } from "../domain/IStripeRepo";
+import { IStripeRepo } from "../domain/interfaces/IStripeRepo";
 import { Stripe } from "../domain/Stripe";
 
 export class SaveStripe {

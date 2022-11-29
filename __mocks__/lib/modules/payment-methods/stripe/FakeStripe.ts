@@ -1,4 +1,4 @@
-import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/CustomerId";
+import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/value-objects/CustomerId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { UniqId } from "@/src/utils/UniqId";
 
