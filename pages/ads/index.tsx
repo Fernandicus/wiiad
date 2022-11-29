@@ -2,7 +2,7 @@ import CreateAdForm from "../../components/ui/profile/advertiser/CreateAdForm";
 import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
 import { RoleType } from "@/src/domain/Role";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { userSession } from "@/src/use-case/container";

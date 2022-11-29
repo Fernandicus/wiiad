@@ -1,7 +1,7 @@
-import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
+import { ErrorCreatingAd } from "@/src/modules/ad/domain/errors/ErrorCreatingAd";
 import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
-import { IAdRepository } from "@/src/modules/ad/domain/IAdRepository";
+import { IAdRepository } from "@/src/modules/ad/domain/interfaces/IAdRepository";
 import { UniqId } from "@/src/utils/UniqId";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { mockedAdRepo } from "../../../../__mocks__/context/MockAdRepo";

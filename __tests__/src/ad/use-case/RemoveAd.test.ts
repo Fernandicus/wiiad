@@ -1,4 +1,4 @@
-import { IAdRepository } from "@/src/modules/ad/domain/IAdRepository";
+import { IAdRepository } from "@/src/modules/ad/domain/interfaces/IAdRepository";
 import { RemoveAd } from "@/src/modules/ad/use-case/RemoveAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";

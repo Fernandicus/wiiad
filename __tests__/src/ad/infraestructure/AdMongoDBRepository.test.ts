@@ -1,6 +1,6 @@
 import {
   AdModel,
-  AdModelProps,
+  IAdModelProps,
 } from "@/src/modules/ad/infraestructure/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
@@ -47,7 +47,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     const adsFound = await adMongoDBRepo.findAllByAdvertiserId(advertiserId);
     const count = await AdModel.count({
       advertiserId: advertiserId.id,
-    } as AdModelProps);
+    } as IAdModelProps);
 
     expect(count).toBe(adsFound!.length);
   }, 8000);

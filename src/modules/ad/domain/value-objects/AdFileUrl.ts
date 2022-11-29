@@ -1,4 +1,4 @@
-import { ErrorCreatingAd } from "../ErrorCreatingAd";
+import { ErrorCreatingAd } from "../errors/ErrorCreatingAd";
 
 export class AdFileUrl {
   public readonly file;

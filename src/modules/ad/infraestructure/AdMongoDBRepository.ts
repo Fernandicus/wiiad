@@ -1,25 +1,25 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { Ad } from "../domain/Ad";
-import { IAdRepository } from "../domain/IAdRepository";
+import { IAdRepository } from "../domain/interfaces/IAdRepository";
 import { AdDescription } from "../domain/value-objects/AdDescription";
 import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../domain/value-objects/AdSegments";
 import { AdTitle } from "../domain/value-objects/AdTitle";
-import { AdModel, AdModelProps } from "./AdModel";
+import { AdModel, IAdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements IAdRepository {
   public async save(ad: Ad): Promise<void> {
     await AdModel.create({
       ...ad.toPrimitives(),
       _id: ad.id.id,
-    } as AdModelProps);
+    } as IAdModelProps);
   }
 
   public async findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null> {
-    const adModel = await AdModel.find<AdModelProps>({
+    const adModel = await AdModel.find<IAdModelProps>({
       advertiserId: id.id,
-    } as AdModelProps);
+    } as IAdModelProps);
 
     const adsArray = adModel.map((model): Ad => {
       return this.toAd(model);
@@ -31,16 +31,16 @@ export class AdMongoDBRepository implements IAdRepository {
   }
 
   async findByAdId(id: UniqId): Promise<Ad | null> {
-    const adModel = await AdModel.findById<AdModelProps>(id.id);
+    const adModel = await AdModel.findById<IAdModelProps>(id.id);
     if (!adModel) return null;
     return this.toAd(adModel);
   }
 
   public async remove(id: UniqId): Promise<void> {
-    await AdModel.findByIdAndRemove({ _id: id.id } as AdModelProps);
+    await AdModel.findByIdAndRemove({ _id: id.id } as IAdModelProps);
   }
 
-  private toAd(adModel: AdModelProps): Ad {
+  private toAd(adModel: IAdModelProps): Ad {
     return new Ad({
       id: new UniqId(adModel._id),
       title: new AdTitle(adModel.title),

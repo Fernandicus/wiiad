@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { RemoveAd } from "../use-case/RemoveAd";
+import { RemoveAd } from "../RemoveAd";
 
 export class AdRemoverHandler {
   constructor(private removeAd: RemoveAd) {}

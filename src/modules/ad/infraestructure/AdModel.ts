@@ -3,7 +3,7 @@ import { AdDescription } from "../domain/value-objects/AdDescription";
 import { AdTitle } from "../domain/value-objects/AdTitle";
 const { Schema } = mongoose;
 
-export interface AdModelProps {
+export interface IAdModelProps {
   _id: string;
   advertiserId: string;
   title: string;
@@ -13,7 +13,7 @@ export interface AdModelProps {
   segments: string[];
 }
 
-const adSchema = new Schema<AdModelProps>(
+const adSchema = new Schema<IAdModelProps>(
   {
     _id: { type: String, required: true },
     advertiserId: { type: String, required: true },
@@ -36,5 +36,5 @@ const adSchema = new Schema<AdModelProps>(
   { _id: false }
 );
 
-export const AdModel: Model<AdModelProps> =
+export const AdModel: Model<IAdModelProps> =
   mongoose.models.Ad || mongoose.model("Ad", adSchema);

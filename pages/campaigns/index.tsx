@@ -1,6 +1,6 @@
 import { AdCard } from "../../components/ui/profile/advertiser/AdCard";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { findCampaignHandler } from "@/src/modules/campaign/container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";

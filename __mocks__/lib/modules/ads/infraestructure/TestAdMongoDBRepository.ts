@@ -6,7 +6,7 @@ import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import {
   AdModel,
-  AdModelProps,
+  IAdModelProps,
 } from "@/src/modules/ad/infraestructure/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
@@ -26,18 +26,18 @@ export class TestAdMongoDBRepository
 
   async saveMany(ads: Ad[]): Promise<void> {
     await TestMongoDB.connectMongoDB();
-    const models = ads.map((ad): AdModelProps => {
+    const models = ads.map((ad): IAdModelProps => {
       return {
         ...ad.toPrimitives(),
         _id: ad.id.id,
       };
     });
-    await AdModel.insertMany<AdModelProps>(models);
+    await AdModel.insertMany<IAdModelProps>(models);
   }
 
   async getAllAds(): Promise<Ad[] | null> {
     await TestMongoDB.connectMongoDB();
-    const ads = await AdModel.find<AdModelProps>();
+    const ads = await AdModel.find<IAdModelProps>();
     if (ads.length == 0) return null;
     const adsPrimitives = ads.map((ad): Ad => {
       return new Ad({
@@ -46,7 +46,7 @@ export class TestAdMongoDBRepository
         description: new AdDescription(ad.description),
         file: new AdFileUrl(ad.file),
         redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
-        segments:  AdSegments.filter(ad.segments),
+        segments:  AdSegments.filterByAvailables(ad.segments),
         advertiserId: new UniqId(ad.advertiserId),
       });
     });

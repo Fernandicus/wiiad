@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Ad } from "./Ad";
+import { Ad } from "../Ad";
 
 export interface IAdRepository {
   save(model: Ad): Promise<void>;

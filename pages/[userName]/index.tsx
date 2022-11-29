@@ -15,7 +15,7 @@ import { userSession } from "@/src/use-case/container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
 import { useEffect, useRef, useState } from "react";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import {
   NotificationData,

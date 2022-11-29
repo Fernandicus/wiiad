@@ -2,10 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { UniqId } from "@/src/utils/UniqId";
-import { ErrorCreatingAd } from "@/src/modules/ad/domain/ErrorCreatingAd";
+import { ErrorCreatingAd } from "@/src/modules/ad/domain/errors/ErrorCreatingAd";
 import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
-import { adCreatorHandler } from "@/src/modules/ad/ad-container";
+import { adCreatorHandler } from "@/src/modules/ad/infraestructure/ad-container";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

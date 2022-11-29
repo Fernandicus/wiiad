@@ -1,7 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { AdPropsPrimitives } from "../domain/Ad";
-import { ErrorFindingAd } from "../domain/ErrorFindingAd";
-import { FindAds } from "../use-case/FindAds";
+import { AdPropsPrimitives } from "../../domain/Ad";
+import { FindAds } from "../FindAds";
 
 export class AdFinderHandler {
   constructor(private findAds: FindAds) {}

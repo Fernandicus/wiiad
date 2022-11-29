@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { IAdRepository } from "../domain/IAdRepository";
+import { IAdRepository } from "../domain/interfaces/IAdRepository";
 
 export class RemoveAd {
   constructor(private repository: IAdRepository) {}

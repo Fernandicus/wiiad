@@ -1,8 +1,8 @@
 import { IReqAndRes } from "@/src/domain/IAuthCookies";
 import { userSession } from "@/src/use-case/container";
 import { adFinderHandler } from "../ad-container";
-import { AdPropsPrimitives } from "../domain/Ad";
-import { ErrorFindingAd } from "../domain/ErrorFindingAd";
+import { AdPropsPrimitives } from "../../domain/Ad";
+import { ErrorFindingAd } from "../../domain/errors/ErrorFindingAd";
 
 export class FindAdController {
   static async findAll(context: IReqAndRes): Promise<AdPropsPrimitives[]> {

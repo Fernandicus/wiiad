@@ -2,7 +2,7 @@ import { MongoDB } from "@/src/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorSendingEmail";
-import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/controller/SendVerificationEmailController";
+import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/controllers/SendVerificationEmailController";
 import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";

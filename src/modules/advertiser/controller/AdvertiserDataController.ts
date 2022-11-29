@@ -1,4 +1,4 @@
-import { adFinderHandler } from "../../ad/ad-container";
+import { adFinderHandler } from "../../ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "../../ad/domain/Ad";
 import { findCampaignHandler } from "../../campaign/container";
 import { ICampaignPrimitives } from "../../campaign/domain/Campaign";

@@ -1,12 +1,12 @@
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 import { findUserHandler } from "@/src/modules/user/container";
-import { ErrorSendVerificationEmail } from "../domain/errors/ErrorSendVerificationEmail";
-import { ISendVerificationEmailRepo } from "../domain/interfaces/ISendVerificationEmailRepo";
+import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
+import { ISendVerificationEmailRepo } from "../../domain/interfaces/ISendVerificationEmailRepo";
 import {
   authTokenCreator,
   sendEmailHandler,
   verificationEmailHandler,
-} from "../infrastructure/email-verification-container";
+} from "../email-verification-container";
 
 export class SendVerificationEmailController {
   static async sendToNewUser(

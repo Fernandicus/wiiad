@@ -1,11 +1,11 @@
-import { Ad, AdPropsPrimitives } from "../domain/Ad";
-import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
-import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
-import { AdSegments } from "../domain/value-objects/AdSegments";
-import { AdTitle } from "../domain/value-objects/AdTitle";
+import { Ad, AdPropsPrimitives } from "../../domain/Ad";
+import { AdDescription } from "../../domain/value-objects/AdDescription";
+import { AdFileUrl } from "../../domain/value-objects/AdFileUrl";
+import { AdRedirectionUrl } from "../../domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "../../domain/value-objects/AdSegments";
+import { AdTitle } from "../../domain/value-objects/AdTitle";
 import { UniqId } from "@/src/utils/UniqId";
-import { CreateAd } from "../use-case/CreateAd";
+import { CreateAd } from "../CreateAd";
 
 interface CreateAdParams {
   adProps: AdPropsPrimitives;

@@ -9,7 +9,7 @@ import {
   findCampaignHandler,
 } from "../modules/campaign/container";
 import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
-import { adFinderHandler } from "../modules/ad/ad-container";
+import { adFinderHandler } from "../modules/ad/infraestructure/ad-container";
 import { findUserHandler } from "../modules/user/container";
 import { updateReferralHandler } from "../modules/referrals/referral-container";
 
