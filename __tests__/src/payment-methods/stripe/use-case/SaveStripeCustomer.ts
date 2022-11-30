@@ -1,4 +1,4 @@
-import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/IStripeRepo";
+import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeRepo";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { SaveStripeCustomer } from "@/src/modules/payment-methods/stripe/use-case/SaveStripe";
 import { UniqId } from "@/src/utils/UniqId";

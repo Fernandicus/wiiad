@@ -5,7 +5,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { setTestReferralDB } from "../../../../__mocks__/lib/infrastructure/db/TestReferralDB";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 
 describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {

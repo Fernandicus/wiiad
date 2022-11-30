@@ -1,21 +1,21 @@
 //? https://stripe.com/docs/webhooks
 
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
-import { userSession } from "@/src/use-case/container";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UniqId } from "@/src/utils/UniqId";
-import { reqBodyParse } from "@/src/utils/utils";
+import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { buffer } from "micro";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/PaymentAmount";
-import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/IStripeMetadata";
+import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 import {
   findCustomerHandler,
   getPaymentDetailsHandler,
   updateStripeHandler,
-} from "@/src/modules/payment-methods/stripe/stripe-container";
+} from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 
 interface IChargesData {

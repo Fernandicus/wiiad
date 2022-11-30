@@ -3,8 +3,8 @@ import { UserMongoDBRepo } from "@/src/modules/user/infrastructure/UserMongoDBRe
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { setTestUserDB } from "../../../../__mocks__/lib/infrastructure/db/TestUserDB";
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
 
 describe("On UserMongoDBRepo, GIVEN a user", () => {
   let user: User;

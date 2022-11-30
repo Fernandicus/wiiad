@@ -1,7 +1,7 @@
 import { createTransport, Transporter } from "nodemailer";
-import { ErrorSendingEmail } from "../domain/ErrorSendingEmail";
-import { IEmailSenderRepo } from "../domain/IEmailSenderRepo";
-import { SMTPData } from "../domain/SMTPData";
+import { ErrorSendingEmail } from "../domain/errors/ErrorSendingEmail";
+import { IEmailSenderRepo } from "../domain/interfaces/IEmailSenderRepo";
+import { SMTPData } from "../domain/interfaces/SMTPData";
 import { VerificationEmailTemplate } from "../domain/VerificationEmailTemplate";
 import { VerificationURL } from "../domain/VerificationURL";
 

@@ -1,9 +1,9 @@
-import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
+import { AdModel } from "@/src/modules/ad/infraestructure/db/AdModel";
 import findAd from "@/pages/api/v1/ads";
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import {
   Advertiser,
   AdvertiserPropsPrimitives,

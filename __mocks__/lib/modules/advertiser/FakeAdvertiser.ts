@@ -2,13 +2,13 @@ import {
   Advertiser,
   AdvertiserPropsPrimitives,
 } from "@/src/modules/advertiser/domain/Advertiser";
-import { Role, RoleType } from "@/src/domain/Role";
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
+import { Role, RoleType } from "@/src/common/domain/Role";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-import { IGenericUserProps } from "@/src/domain/IGenericUser";
-import { ProfilePic } from "@/src/domain/ProfilePic";
+import { IGenericUserProps } from "@/src/common/domain/interfaces/GenericUser";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
 
 export class FakeAdvertiser extends Advertiser {
   constructor(props: IGenericUserProps) {

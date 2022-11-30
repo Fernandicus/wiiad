@@ -1,5 +1,5 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { IAdvertiserRepo } from "@/src/modules/advertiser/domain/IAdvertiserRepo";
 import { ErrorFindingAdvertiser } from "@/src/modules/advertiser/domain/ErrorFindingAdvertiser";

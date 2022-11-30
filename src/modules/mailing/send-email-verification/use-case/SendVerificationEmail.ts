@@ -1,5 +1,4 @@
-import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
-import { IEmailSenderRepo } from "../domain/IEmailSenderRepo";
+import { IEmailSenderRepo } from "../domain/interfaces/IEmailSenderRepo";
 import { VerificationURL } from "../domain/VerificationURL";
 
 export class SendlVerificationEmail {

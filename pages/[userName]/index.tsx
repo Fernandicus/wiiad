@@ -1,21 +1,21 @@
-import { LoginQueries } from "@/src/domain/LoginQueries";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { LoginQueries } from "@/src/common/domain/LoginQueries";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { AuthController } from "@/src/controllers/AuthController";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { AuthController } from "@/src/common/infrastructure/controllers/AuthController";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   IWatchCampaignData,
   WatchCampaignsController,
-} from "@/src/controllers/WatchCampaignsController";
+} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
 import AdView from "../../components/ui/watch-ad/AdView";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
 import { useEffect, useRef, useState } from "react";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import {
   NotificationData,
@@ -24,10 +24,10 @@ import {
 } from "../../components/ui/notifications/Notifications";
 import { IUserPrimitives } from "@/src/modules/user/domain/User";
 import { Logout } from "../../components/ui/login/Logout";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import CampaignsPage from "../campaigns";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
-import { LogStates } from "@/src/domain/LogStates";
+import { LogStates } from "@/src/common/domain/LogStates";
 
 export interface IWatchCampaignPage {
   user: IGenericUserPrimitives | null;

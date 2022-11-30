@@ -1,6 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { User } from "../../user/domain/User";
-import { CampaignBudget, CampaignBudgetProps } from "./value-objects/Budget";
+import { CampaignBudget } from "./value-objects/Budget";
 import { CampaignMetrics } from "./value-objects/CampaignMetrics";
 import { CampaignStatus, CampaignStatusType } from "./value-objects/CampaignStatus";
 
@@ -9,7 +8,6 @@ export interface ICampaignPrimitives {
   advertiserId: string;
   adId: string;
   referrals: string[];
-  /* watchers: string[]; */
   status: string;
   budget: {
     balance: number;
@@ -26,7 +24,6 @@ export interface CampaignProps {
   advertiserId: UniqId;
   adId: UniqId;
   referrals: UniqId[];
-  /* watchers: UniqId[]; */
   status: CampaignStatus;
   budget: CampaignBudget;
   metrics: CampaignMetrics;
@@ -37,7 +34,6 @@ export class Campaign {
   readonly advertiserId: UniqId;
   readonly adId: UniqId;
   readonly referrals: UniqId[];
-  /* readonly watchers: UniqId[]; */
   readonly status: CampaignStatus;
   readonly budget: CampaignBudget;
   readonly metrics: CampaignMetrics;
@@ -47,7 +43,6 @@ export class Campaign {
     this.advertiserId = props.advertiserId;
     this.adId = props.adId;
     this.referrals = props.referrals;
-    /* this.watchers = props.watchers; */
     this.status = props.status;
     this.budget = props.budget;
     this.metrics = props.metrics;
@@ -64,7 +59,6 @@ export class Campaign {
       advertiserId: props.advertiserId,
       adId: props.adId,
       referrals: [],
-     /*  watchers: [], */
       status: new CampaignStatus(CampaignStatusType.ACTIVE),
       budget: props.budget,
       metrics: new CampaignMetrics({
@@ -80,7 +74,6 @@ export class Campaign {
       adId: this.adId.id,
       advertiserId: this.advertiserId.id,
       referrals: this.referrals.map((referral) => referral.id),
-      /* watchers: this.watchers.map((watcher) => watcher.id), */
       budget: {
         clicks: this.budget.clicks,
         balance: this.budget.balance.total,

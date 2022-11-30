@@ -1,5 +1,5 @@
-import { Balance } from "@/src/domain/Balance";
-import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
+import { Balance } from "@/src/common/domain/Balance";
+import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";

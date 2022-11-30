@@ -1,5 +1,4 @@
-import { CustomerId } from "../domain/CustomerId";
-import { Stripe } from "../domain/Stripe";
+import { CustomerId } from "../domain/value-objects/CustomerId";
 import { StripePayments } from "../infrastructure/StripePayments";
 
 export class CreateStripeCustomer {

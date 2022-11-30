@@ -1,14 +1,7 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  campaignMetricsHandler,
-  findCampaignHandler,
-} from "@/src/modules/campaign/container";
-import { reqBodyParse } from "@/src/utils/utils";
-import { userSession } from "@/src/use-case/container";
-import { RoleType } from "@/src/domain/Role";
-import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/ErrorFindingCampaign";
-import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
+import { campaignMetricsHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
+import { reqBodyParse } from "@/src/utils/helpers";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +11,7 @@ export default async function handler(
 
   try {
     const reqBody: { campaignId: string } = reqBodyParse(req);
-console.log("INCREASE CLICKS :");
+    console.log("INCREASE CLICKS :");
     await MongoDB.connectAndDisconnect(async () => {
       await campaignMetricsHandler.increaseClicks(reqBody.campaignId);
     });

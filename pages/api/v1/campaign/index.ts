@@ -1,9 +1,9 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
-import { userSession } from "@/src/use-case/container";
-import { RoleType } from "@/src/domain/Role";
-import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/ErrorFindingCampaign";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { RoleType } from "@/src/common/domain/Role";
+import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/errors/ErrorFindingCampaign";
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,12 +1,12 @@
-import { Email } from "@/src/domain/Email";
-import { Role } from "@/src/domain/Role";
-import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/AuthToken";
-import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/ExpirationDate";
+import { Email } from "@/src/common/domain/Email";
+import { Role } from "@/src/common/domain/Role";
+import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
+import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/value-objects/ExpirationDate";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import {
   IVerificationEmailModel,
   VerificationEmailModel,
-} from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailModel";
+} from "@/src/modules/mailing/send-email-verification/infrastructure/db/VerificationEmailModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";

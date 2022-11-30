@@ -1,11 +1,11 @@
 import CreateAdForm from "../../components/ui/profile/advertiser/CreateAdForm";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
-import { RoleType } from "@/src/domain/Role";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
+import { RoleType } from "@/src/common/domain/Role";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useRef, useState } from "react";
 import { EmptyAds } from "../../components/ui/profile/advertiser/EmptyAds";
@@ -15,13 +15,13 @@ import {
   Notifications,
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { LaunchCampaign } from "../../components/ui/profile/advertiser/LaunchCampaign";
-import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/stripe-container";
+import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 

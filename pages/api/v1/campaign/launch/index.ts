@@ -1,10 +1,10 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { LaunchCampaignController } from "@/src/modules/campaign/controller/LaunchCampaignController";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
 import { CampaignBudgetProps, ICampaignBudgetPrimitives } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ErrorCreatingCampaign } from "@/src/modules/campaign/domain/value-objects/ErrorCreatingCampaign";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UniqId } from "@/src/utils/UniqId";
-import { reqBodyParse } from "@/src/utils/utils";
+import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

@@ -1,7 +1,7 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import { RemoveAdController } from "@/src/modules/ad/controller/RemoveAdController";
-import { ErrorRemovingAd } from "@/src/modules/ad/domain/ErrorRemovingAd";
+import { RemoveAdController } from "@/src/modules/ad/infraestructure/controllers/RemoveAdController";
+import { ErrorRemovingAd } from "@/src/modules/ad/domain/errors/ErrorRemovingAd";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "DELETE") return res.status(400);

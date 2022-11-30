@@ -1,8 +1,8 @@
-import { Email } from "@/src/domain/Email";
-import { Role } from "@/src/domain/Role";
+import { Email } from "@/src/common/domain/Email";
+import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "./AuthToken";
-import { ExpirationDate } from "./ExpirationDate";
+import { AuthToken } from "./value-objects/AuthToken";
+import { ExpirationDate } from "./value-objects/ExpirationDate";
 
 export interface IVerificationEmailPrimitives {
   id: string;

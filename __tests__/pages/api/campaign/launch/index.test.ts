@@ -3,12 +3,12 @@ import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Adver
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { TestCampaignMongoDBRepo } from "../../../../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
 import launchCampaign from "@/pages/api/v1/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { autoSetTestCampaignDB } from "../../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 
 describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
   let ad: AdPropsPrimitives;

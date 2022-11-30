@@ -1,12 +1,12 @@
-import { ErrorCreatingPayment } from "@/src/domain/ErrorCreatingPayment";
-import { CustomerId } from "../domain/CustomerId";
-import { IStripeMetadata } from "../domain/IStripeMetadata";
-import { PaymentAmount } from "../domain/PaymentAmount";
+import { CustomerId } from "../domain/value-objects/CustomerId";
+import { IStripeMetadata } from "../domain/interfaces/IStripeMetadata";
+import { PaymentAmount } from "../domain/value-objects/PaymentAmount";
 import { PaymentDetails } from "../domain/PaymentDetails";
-import { PaymentIntentId } from "../domain/PaymentIntentId";
+import { PaymentIntentId } from "../domain/value-objects/PaymentIntentId";
 import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
-import { PaymentStatus } from "../domain/PaymentStatus";
+import { PaymentStatus } from "../domain/value-objects/PaymentStatus";
 import { StripePayments } from "../infrastructure/StripePayments";
+import { ErrorPaymentIntent } from "../domain/errors/ErrorPaymentIntent";
 
 export class PaymentIntent {
   constructor(private stripe: StripePayments) {}
@@ -21,7 +21,7 @@ export class PaymentIntent {
       amount,
       metadata,
     });
-    if (!details) throw new ErrorCreatingPayment("Payment intent has failed");
+    if (!details) throw ErrorPaymentIntent.fail();
     return details;
   }
 
@@ -35,15 +35,15 @@ export class PaymentIntent {
       customerId,
       amount,
       paymentMethod,
-      metadata
+      metadata,
     });
-    if (!details) throw new ErrorCreatingPayment("Payment intent has failed");
+    if (!details) throw ErrorPaymentIntent.fail();
     return details;
   }
 
   async confirm(id: PaymentIntentId): Promise<void> {
     const status = await this.stripe.confirmPaymentIntent(id);
     if (status === PaymentStatus.Error)
-      throw new ErrorCreatingPayment("Payment confirmation error");
+      throw ErrorPaymentIntent.confirmationFail();
   }
 }

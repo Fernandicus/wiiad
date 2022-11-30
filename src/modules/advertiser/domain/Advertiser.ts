@@ -1,9 +1,9 @@
-import { RoleType } from "../../../domain/Role";
+import { RoleType } from "../../../common/domain/Role";
 import {
   GenericUser,
   IGenericUserProps,
   IGenericUserPrimitives,
-} from "@/src/domain/IGenericUser";
+} from "@/src/common/domain/interfaces/GenericUser";
 import { ErrorCreatingAdvertiser } from "./ErrorCreatingAdvertiser";
 
 

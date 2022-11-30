@@ -1,14 +1,8 @@
-import { Balance } from "@/src/domain/Balance";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import {
-  CampaignBudget,
-  CampaignBudgetProps,
-} from "@/src/modules/campaign/domain/value-objects/Budget";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { NotificationData } from "../../notifications/Notifications";
 import { AdCardItem } from "./AdCardItem";
-import { LoadingSpinnerAnimation } from "../../icons/LoadingSpinnerAnimation";
 import { useState } from "react";
 
 interface Props {
@@ -25,11 +19,6 @@ export const AdCard = ({
   onLaunchCampaign,
 }: Props) => {
   const [isLaunching, setIsLaunching] = useState(false);
-
-  /*   const budget = new CampaignBudget({
-    clicks: 1000,
-    balance: new Balance(5000),
-  }); */
 
   const deleteAd = async (id: string) => {
     try {

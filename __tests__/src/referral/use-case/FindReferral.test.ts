@@ -1,5 +1,5 @@
-import { ErrorFindingReferral } from "@/src/modules/referrals/domain/ErrorFindingReferral";
-import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
+import { ErrorFindingReferral } from "@/src/modules/referrals/domain/errors/ErrorFindingReferral";
+import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
 import { User } from "@/src/modules/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";

@@ -1,7 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { GenericUser } from "@/src/domain/IGenericUser";
-import { CustomerId } from "./CustomerId";
-import { PaymentMethodId } from "./value-objects/PaymentMethodId";
+import { CustomerId } from "./value-objects/CustomerId";
 import { CardDetails, ICardDetailsPrimitives } from "./CardDetails";
 
 export interface IStripePrimitives {

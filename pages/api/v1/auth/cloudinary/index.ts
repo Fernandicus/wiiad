@@ -1,9 +1,9 @@
-import { Folder } from "@/src/domain/Folder";
-import { Name } from "@/src/domain/Name";
-import { RoleType } from "@/src/domain/Role";
-import { CloudinaryCloudStorageRepo } from "@/src/infrastructure/CloudinaryCloudStorageRepo";
-import { userSession } from "@/src/use-case/container";
-import { reqBodyParse } from "@/src/utils/utils";
+import { Folder } from "@/src/modules/storage/domain/Folder";
+import { Name } from "@/src/common/domain/Name";
+import { RoleType } from "@/src/common/domain/Role";
+import { CloudinaryCloudStorageRepo } from "@/src/modules/storage/infrastructure/CloudinaryCloudStorageRepo";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

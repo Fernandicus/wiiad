@@ -1,5 +1,5 @@
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
-import { ICampaignRepo } from "@/src/modules/campaign/domain/ICampaignRepo";
+import { ICampaignRepo } from "@/src/modules/campaign/domain/interfaces/ICampaignRepo";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
 

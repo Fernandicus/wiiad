@@ -1,4 +1,4 @@
-import { IReferralRepo } from "../domain/IReferralRepo";
+import { IReferralRepo } from "../domain/interfaces/IReferralRepo";
 import { Referral } from "../domain/Referral";
 
 export class CreateReferral {

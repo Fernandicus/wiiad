@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
+import { IVerificationEmailRepo } from "../domain/interfaces/IVerificationEmailRepo";
 
 export class RemoveVerificationEmail{
     constructor(private verificationEmailRepo: IVerificationEmailRepo){}

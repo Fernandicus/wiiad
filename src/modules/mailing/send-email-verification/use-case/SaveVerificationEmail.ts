@@ -1,4 +1,4 @@
-import { IVerificationEmailRepo } from "../domain/IVerificationEmailRepo";
+import { IVerificationEmailRepo } from "../domain/interfaces/IVerificationEmailRepo";
 import { VerificationEmail } from "../domain/VerificationEmail";
 
 export class SaveVerificationEmail {
