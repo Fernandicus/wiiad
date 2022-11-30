@@ -13,6 +13,7 @@ import { ILogingInParams, LoginQueries } from "../../domain/LoginQueries";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import {
   createUserHandler,
+  findAdvertiserHandler,
   findUserHandler,
 } from "@/src/modules/users/user/container";
 
@@ -35,7 +36,7 @@ export class AuthController {
         queries: loginQueries,
         verificationEmail,
       });
-
+      
       this.userInitSession(context, advertiser);
       return advertiser;
     } else {
@@ -88,7 +89,7 @@ export class AuthController {
   private static async advertiserLogIn(
     data: UserData
   ): Promise<IUserPrimitives> {
-    const advertiserFound = await findUserHandler.byEmail(
+    const advertiserFound = await findAdvertiserHandler.byEmail(
       data.verificationEmail.email
     );
     const advertiserId = advertiserFound.id;
@@ -103,9 +104,10 @@ export class AuthController {
   }
 
   private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
-    const findUser = findUserHandler.byEmail(data.verificationEmail.email);
-    const response = await Promise.all([findUser]);
-    const userFound = response[0];
+    const userFound = await findUserHandler.byEmail(
+      data.verificationEmail.email
+    );
+
     const userId = userFound.id;
     await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.user(data, userId, userFound.profilePic);
@@ -129,34 +131,30 @@ export class AuthController {
   private static async getAndCreateNewAdvertiser(
     data: UserData
   ): Promise<IUserPrimitives> {
-    const advertiserId = UniqId.generate();
     const profilePic = ProfilePic.defaultAdvertiserPic;
-
-    await createUserHandler.create({
-      email: data.verificationEmail.email,
-      name: data.queries.userName,
-      id: advertiserId,
-      role: data.verificationEmail.role,
-      profilePic,
-    });
-
-    return this.user(data, advertiserId, profilePic);
+    return await this.getAndCreateUser(data, profilePic);
   }
 
   private static async getAndCreateNewUser(
     data: UserData
   ): Promise<IUserPrimitives> {
-    const userId = UniqId.generate();
     const profilePic = ProfilePic.defaultUserPic;
+    return await this.getAndCreateUser(data, profilePic);
+  }
+
+  private static async getAndCreateUser(
+    data: UserData,
+    profilePic: string
+  ): Promise<IUserPrimitives> {
+    const id = UniqId.generate();
     await createUserHandler.create({
       email: data.verificationEmail.email,
       name: data.queries.userName,
-      id: userId,
+      id,
       role: data.verificationEmail.role,
       profilePic,
     });
-
-    return this.user(data, userId, profilePic);
+    return this.user(data, id, profilePic);
   }
 
   private static user(
