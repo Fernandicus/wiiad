@@ -1,5 +1,5 @@
 import { LoginQueries } from "@/src/domain/LoginQueries";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { AuthController } from "@/src/controllers/AuthController";
 import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
@@ -11,7 +11,7 @@ import {
 import AdView from "../../components/ui/watch-ad/AdView";
 import { RoleType } from "@/src/domain/Role";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
 import { useEffect, useRef, useState } from "react";

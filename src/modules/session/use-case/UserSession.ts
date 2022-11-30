@@ -1,6 +1,6 @@
-import { IAuthCookies, IReqAndRes } from "../domain/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/GenericUser";
-import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
+import { IAuthCookies, IReqAndRes } from "../domain/interfaces/IAuthCookies";
+import { IGenericUserPrimitives } from "../../../domain/GenericUser";
+import { IJsonWebTokenRepo } from "../domain/interfaces/IJsonWebTokenRepo";
 
 export class UserSession {
   constructor(

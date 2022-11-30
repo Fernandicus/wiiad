@@ -1,6 +1,6 @@
 import createAdvertise from "@/pages/api/v1/ads/create/banner";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";

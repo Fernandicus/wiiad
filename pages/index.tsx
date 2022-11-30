@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "@/pages/index.module.css";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { RoleType } from "@/src/domain/Role";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { APISendEmailVerification } from "./api/v1/auth/login";

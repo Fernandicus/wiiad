@@ -1,5 +1,5 @@
-import { UploadFileHandler } from "../handler/UploadFileHandler";
-import { CloudinaryCloudStorageRepo } from "../infrastructure/CloudinaryCloudStorageRepo";
+import { UploadFileHandler } from "../use-case/handlers/UploadFileHandler";
+import { CloudinaryCloudStorageRepo } from "./CloudinaryCloudStorageRepo";
 import { UploadFile } from "../use-case/UploadFile";
 
 const cloudStorageRepo = new CloudinaryCloudStorageRepo();

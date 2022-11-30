@@ -1,5 +1,5 @@
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { IAuthCookies, IReqAndRes } from "../domain/IAuthCookies";
+import { IAuthCookies, IReqAndRes } from "../domain/interfaces/IAuthCookies";
 
 enum Cookie {
   AUTH_TOKEN = "authToken",

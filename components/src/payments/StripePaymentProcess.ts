@@ -1,4 +1,4 @@
-import { IPaymentIntent } from "@/src/controllers/StripePaymentController";
+import { IPaymentIntent } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripePaymentController";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";

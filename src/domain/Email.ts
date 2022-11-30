@@ -1,4 +1,3 @@
-import { ErrorCreatingAdvertiser } from "../modules/advertiser/domain/ErrorCreatingAdvertiser";
 
 export class Email {
   readonly email;

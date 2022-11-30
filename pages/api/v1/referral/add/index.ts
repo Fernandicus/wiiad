@@ -1,8 +1,8 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { reqBodyParse } from "@/src/utils/utils";
-import { userSession } from "@/src/use-case/container";
+import { reqBodyParse } from "@/src/utils/helpers";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { RoleType } from "@/src/domain/Role";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
@@ -45,7 +45,7 @@ export default async function handler(
     return res.status(200).json({ increasedBalance });
   } catch (err) {
     if (err instanceof ErrorCreatingReferral)
-      return res.status(401).json({ message: err.info });
+      return res.status(401).json({ message: err.message });
     if (err instanceof Error)
       return res.status(400).json({ message: err.message });
   }

@@ -1,4 +1,4 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorSendingEmail";
@@ -8,7 +8,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
 import { ErrorCreatingUser } from "@/src/modules/user/domain/ErrorCreatingUser";
-import { reqBodyParse } from "@/src/utils/utils";
+import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/domain/Role";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 

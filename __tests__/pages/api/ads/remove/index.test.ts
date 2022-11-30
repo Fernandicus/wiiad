@@ -7,7 +7,7 @@ import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ad
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 
 describe("On api/ads/remove-ad route", () => {

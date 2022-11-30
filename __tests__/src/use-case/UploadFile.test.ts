@@ -1,6 +1,6 @@
-import { Folder } from "@/src/domain/Folder";
-import { ICloudStorageRepo } from "@/src/domain/ICloudStorageRepo";
-import { UploadFile } from "@/src/use-case/UploadFile";
+import { Folder } from "@/src/modules/storage/domain/Folder";
+import { ICloudStorageRepo } from "@/src/modules/storage/domain/interfaces/ICloudStorageRepo";
+import { UploadFile } from "@/src/modules/storage/use-case/UploadFile";
 import { mockedCloudStorageRepo } from "../../../__mocks__/context/MockCloudStorageRepo";
 
 describe("On UploadFile, GIVEN an some 'files'", () => {

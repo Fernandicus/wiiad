@@ -1,5 +1,5 @@
-import { Folder } from "@/src/domain/Folder";
-import { ICloudStorageRepo } from "@/src/domain/ICloudStorageRepo";
+import { Folder } from "@/src/modules/storage/domain/Folder";
+import { ICloudStorageRepo } from "@/src/modules/storage/domain/interfaces/ICloudStorageRepo";
 import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 
 export const mockedCloudStorageRepo = (): ICloudStorageRepo => {

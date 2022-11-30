@@ -1,4 +1,4 @@
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { RemoveAdController } from "@/src/modules/ad/infraestructure/controllers/RemoveAdController";
 import { ErrorRemovingAd } from "@/src/modules/ad/domain/errors/ErrorRemovingAd";

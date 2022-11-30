@@ -1,7 +1,4 @@
-import { AdvertiserMongoDBRepo } from "@/src/modules/advertiser/infraestructure/AdvertiserMongoDBRepo";
 import mongoose from "mongoose";
-import { AdMongoDBRepository } from "../modules/ad/infraestructure/AdMongoDBRepository";
-import { VerificationEmailMongoDBRepo } from "../modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 
 export class MongoDB {
   static async connect() {
@@ -22,21 +19,6 @@ export class MongoDB {
     if (mongoIsConnected) {
       await mongoose.disconnect();
     }
-  }
-
-  static async verificationEmailRepo(): Promise<VerificationEmailMongoDBRepo> {
-    await this.connect();
-    return new VerificationEmailMongoDBRepo();
-  }
-
-  static async adRepository(): Promise<AdMongoDBRepository> {
-    await this.connect();
-    return new AdMongoDBRepository();
-  }
-
-  static async advertiserRepo(): Promise<AdvertiserMongoDBRepo> {
-    await this.connect();
-    return new AdvertiserMongoDBRepo();
   }
 
   static async connectAndDisconnect<T>(cb: ()=>Promise<T>): Promise<T> {

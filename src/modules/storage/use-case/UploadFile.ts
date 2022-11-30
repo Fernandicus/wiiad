@@ -1,7 +1,7 @@
 import { Folder } from "../domain/Folder";
-import { ICloudStorageRepo } from "../domain/ICloudStorageRepo";
-import { Name } from "../domain/Name";
-import { AdFileUrl } from "../modules/ad/domain/value-objects/AdFileUrl";
+import { ICloudStorageRepo } from "../domain/interfaces/ICloudStorageRepo";
+import { Name } from "../../../domain/Name";
+import { AdFileUrl } from "../../ad/domain/value-objects/AdFileUrl";
 
 export class UploadFile {
   constructor(private cloudStorageRepo: ICloudStorageRepo) {}

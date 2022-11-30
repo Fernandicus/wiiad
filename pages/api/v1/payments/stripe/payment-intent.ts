@@ -2,11 +2,11 @@
 //? https://stripe.com/docs/payments/save-during-payment
 
 
-import { StripePaymentController } from "@/src/controllers/StripePaymentController";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { StripePaymentController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripePaymentController";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
-import { userSession } from "@/src/use-case/container";
-import { reqBodyParse } from "@/src/utils/utils";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface IApiPaymentIntent {

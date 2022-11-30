@@ -1,5 +1,5 @@
-import { IReqAndRes } from "@/src/domain/IAuthCookies";
-import { userSession } from "@/src/use-case/container";
+import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { adFinderHandler } from "../ad-container";
 import { AdPropsPrimitives } from "../../domain/Ad";
 import { ErrorFindingAd } from "../../domain/errors/ErrorFindingAd";

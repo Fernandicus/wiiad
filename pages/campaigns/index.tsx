@@ -1,10 +1,10 @@
 import { AdCard } from "../../components/ui/profile/advertiser/AdCard";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
 import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";

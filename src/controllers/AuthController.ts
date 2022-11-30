@@ -3,14 +3,14 @@ import {
   findAdvertiserHandler,
 } from "../modules/advertiser/advertiser-container";
 import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
-import { IReqAndRes } from "../domain/IAuthCookies";
+import { IReqAndRes } from "../modules/session/domain/interfaces/IAuthCookies";
 import { IGenericUserPrimitives } from "../domain/GenericUser";
 import { RoleType } from "../domain/Role";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
 } from "../modules/mailing/send-email-verification/infrastructure/email-verification-container";
-import { userSession } from "../use-case/container";
+import { userSession } from "../modules/session/infrastructure/session-container";
 import { UniqId } from "../utils/UniqId";
 import { createUserHandler, findUserHandler } from "../modules/user/container";
 import { IUserPrimitives } from "../modules/user/domain/User";
@@ -20,7 +20,6 @@ import { createReferralHandler } from "../modules/referrals/infrastructure/refer
 import { Referral } from "../modules/referrals/domain/Referral";
 import { ReferralController } from "../modules/referrals/infrastructure/controllers/ReferralController";
 import { ILogingInParams, LoginQueries } from "../domain/LoginQueries";
-import { ErrorAuthentifying } from "../domain/ErrorAuthentifying";
 
 interface UserData {
   queries: ILogingInParams;

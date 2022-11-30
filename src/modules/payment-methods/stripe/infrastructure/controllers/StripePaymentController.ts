@@ -1,14 +1,14 @@
-import { ErrorFindingStripe } from "../modules/payment-methods/stripe/domain/errors/ErrorFindingStripe";
-import { IStripeMetadata } from "../modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
-import { IPaymentDetailsPrimitives } from "../modules/payment-methods/stripe/domain/PaymentDetails";
-import { StripePayments } from "../modules/payment-methods/stripe/infrastructure/StripePayments";
+import { ErrorFindingStripe } from "../../domain/errors/ErrorFindingStripe";
+import { IStripeMetadata } from "../../domain/interfaces/IStripeMetadata";
+import { IPaymentDetailsPrimitives } from "../../domain/PaymentDetails";
+import { StripePayments } from "../StripePayments";
 import {
   createStripeCustomerHandler,
   findCustomerHandler,
   paymentIntentHandler,
   saveStripeHandler,
-} from "../modules/payment-methods/stripe/infrastructure/stripe-container";
-import { UniqId } from "../utils/UniqId";
+} from "../stripe-container";
+import { UniqId } from "../../../../../utils/UniqId";
 
 export interface IPaymentIntent {
   clientSecret: string;

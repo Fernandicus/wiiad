@@ -1,5 +1,5 @@
 import { LoginQueries } from "@/src/domain/LoginQueries";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
 import { AuthController } from "@/src/controllers/AuthController";
 import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
@@ -7,7 +7,7 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import AdView from "../../components/ui/watch-ad/AdView";
 import { RoleType } from "@/src/domain/Role";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
 import { useRef } from "react";
@@ -18,7 +18,7 @@ import {
 } from "../../components/ui/notifications/Notifications";
 import { Logout } from "../../components/ui/login/Logout";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
-import { IReqAndRes } from "@/src/domain/IAuthCookies";
+import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 
 interface IAdsAndCampaigns {
   campaigns: ICampaignPrimitives[] | null;

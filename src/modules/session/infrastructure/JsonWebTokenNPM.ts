@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { IJsonWebTokenRepo } from "../domain/IJsonWebTokenRepo";
+import { IJsonWebTokenRepo } from "../domain/interfaces/IJsonWebTokenRepo";
 
 export class JsonWebTokenNPM implements IJsonWebTokenRepo {
   verify<T>(token: string): T {

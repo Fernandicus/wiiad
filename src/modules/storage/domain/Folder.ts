@@ -1,4 +1,4 @@
-import { Name } from "./Name";
+import { Name } from "../../../domain/Name";
 
 export class Folder {
   readonly path;

@@ -1,5 +1,5 @@
-import { AdFileUrl } from "../modules/ad/domain/value-objects/AdFileUrl";
-import { Folder } from "./Folder";
+import { AdFileUrl } from "../../../ad/domain/value-objects/AdFileUrl";
+import { Folder } from "../Folder";
 
 export interface ICloudStorageRepo {
   uploadBannerAndGetUrl(file: string, folder: Folder): Promise<AdFileUrl>;

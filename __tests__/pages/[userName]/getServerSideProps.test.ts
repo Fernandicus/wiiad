@@ -4,7 +4,7 @@ import httpMock, { MockRequest } from "node-mocks-http";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
-import { userSession } from "@/src/use-case/container";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";

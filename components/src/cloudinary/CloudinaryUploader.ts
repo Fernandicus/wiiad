@@ -1,4 +1,4 @@
-import { ICloudinarySignedParams } from "@/src/infrastructure/CloudinaryCloudStorageRepo";
+import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/CloudinaryCloudStorageRepo";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import {
   Cloudinary,
