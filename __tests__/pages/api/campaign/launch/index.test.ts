@@ -8,7 +8,7 @@ import { TestCampaignMongoDBRepo } from "../../../../../__mocks__/lib/modules/ca
 import launchCampaign from "@/pages/api/v1/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { autoSetTestCampaignDB } from "../../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 
 describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
   let ad: AdPropsPrimitives;

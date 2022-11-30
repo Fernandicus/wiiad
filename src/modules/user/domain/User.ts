@@ -1,6 +1,6 @@
-import { GenericUser, IGenericUserPrimitives, IGenericUserProps } from "@/src/domain/GenericUser";
-import { ProfilePic } from "@/src/domain/ProfilePic";
-import { RoleType } from "@/src/domain/Role";
+import { GenericUser, IGenericUserPrimitives, IGenericUserProps } from "@/src/common/domain/interfaces/GenericUser";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
+import { RoleType } from "@/src/common/domain/Role";
 import { BankAccount } from "./BankAccount";
 import { ErrorCreatingUser } from "./ErrorCreatingUser";
 

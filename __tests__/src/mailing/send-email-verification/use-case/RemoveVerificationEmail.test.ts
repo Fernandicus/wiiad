@@ -1,4 +1,4 @@
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailRepo";
 import { RemoveVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/RemoveVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";

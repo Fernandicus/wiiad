@@ -1,6 +1,6 @@
 import CreateAdForm from "../../components/ui/profile/advertiser/CreateAdForm";
-import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
-import { RoleType } from "@/src/domain/Role";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
+import { RoleType } from "@/src/common/domain/Role";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
@@ -21,7 +21,7 @@ import { LaunchCampaign } from "../../components/ui/profile/advertiser/LaunchCam
 import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 

@@ -1,7 +1,7 @@
 import sendEmailVerification from "@/pages/api/v1/auth/login";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
 import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
 import { autoSetTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";

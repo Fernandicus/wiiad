@@ -1,4 +1,4 @@
-import { ErrorCreatingAdvertiser } from "../modules/advertiser/domain/ErrorCreatingAdvertiser";
+import { ErrorCreatingAdvertiser } from "../../modules/advertiser/domain/ErrorCreatingAdvertiser";
 
 export class Name {
   readonly name;

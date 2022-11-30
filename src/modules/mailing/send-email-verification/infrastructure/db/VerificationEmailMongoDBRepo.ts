@@ -1,5 +1,5 @@
-import { Email } from "@/src/domain/Email";
-import { Role } from "@/src/domain/Role";
+import { Email } from "@/src/common/domain/Email";
+import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { AuthToken } from "../domain/value-objects/AuthToken";
 import { ExpirationDate } from "../domain/value-objects/ExpirationDate";

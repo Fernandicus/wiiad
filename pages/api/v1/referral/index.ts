@@ -1,7 +1,7 @@
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import {
@@ -48,7 +48,7 @@ export default async function handler(
   } catch (err) {
     console.error(err);
     if (err instanceof ErrorCreatingReferral)
-      return res.status(401).json({ message: err.info });
+      return res.status(401).json({ message: err.message });
     if (err instanceof Error)
       return res.status(400).json({ message: err.message });
   }

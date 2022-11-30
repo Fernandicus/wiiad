@@ -1,4 +1,4 @@
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import {

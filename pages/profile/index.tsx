@@ -1,11 +1,11 @@
-import { LoginQueries } from "@/src/domain/LoginQueries";
+import { LoginQueries } from "@/src/common/domain/LoginQueries";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
-import { AuthController } from "@/src/controllers/AuthController";
-import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
+import { AuthController } from "@/src/common/infrastructure/controllers/AuthController";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import AdView from "../../components/ui/watch-ad/AdView";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";

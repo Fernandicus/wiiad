@@ -1,8 +1,8 @@
-import { Email } from "@/src/domain/Email";
+import { Email } from "@/src/common/domain/Email";
 import { VerificationEmail } from "../../domain/VerificationEmail";
 import { ExpirationDate } from "../../domain/value-objects/ExpirationDate";
 import { SaveVerificationEmail } from "../SaveVerificationEmail";
-import { Role } from "@/src/domain/Role";
+import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { AuthToken } from "../../domain/value-objects/AuthToken";
 

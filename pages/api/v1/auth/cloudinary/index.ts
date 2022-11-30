@@ -1,6 +1,6 @@
 import { Folder } from "@/src/modules/storage/domain/Folder";
-import { Name } from "@/src/domain/Name";
-import { RoleType } from "@/src/domain/Role";
+import { Name } from "@/src/common/domain/Name";
+import { RoleType } from "@/src/common/domain/Role";
 import { CloudinaryCloudStorageRepo } from "@/src/modules/storage/infrastructure/CloudinaryCloudStorageRepo";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";

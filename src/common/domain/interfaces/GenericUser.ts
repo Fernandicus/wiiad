@@ -1,8 +1,8 @@
-import { UniqId } from "../utils/UniqId";
-import { Email } from "./Email";
-import { Name } from "./Name";
-import { ProfilePic } from "./ProfilePic";
-import { Role } from "./Role";
+import { UniqId } from "../../../utils/UniqId";
+import { Email } from "../Email";
+import { Name } from "../Name";
+import { ProfilePic } from "../ProfilePic";
+import { Role } from "../Role";
 
 export abstract class GenericUser {
   readonly id: UniqId;

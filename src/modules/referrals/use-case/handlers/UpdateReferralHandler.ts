@@ -1,4 +1,4 @@
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
 import { UpdateReferral } from "../UpdateReferral";
 

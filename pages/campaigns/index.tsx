@@ -1,25 +1,12 @@
-import { AdCard } from "../../components/ui/profile/advertiser/AdCard";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
-import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
 import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";
 import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
-import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
-import {
-  findCustomerHandler,
-  getPaymentDetailsHandler,
-  updateStripeHandler,
-} from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
-import { UniqId } from "@/src/utils/UniqId";
-import { RoleType } from "@/src/domain/Role";
-import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Balance } from "@/src/domain/Balance";
-import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+import { RoleType } from "@/src/common/domain/Role";
 
 export default function CampaignsPage(props: {
   campaigns: ICampaignPrimitives[];

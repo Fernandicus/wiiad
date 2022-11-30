@@ -2,7 +2,7 @@ import { ICloudStorageRepo } from "../domain/interfaces/ICloudStorageRepo";
 import { UploadApiOptions, v2 as cloudinary } from "cloudinary";
 import { Folder } from "../domain/Folder";
 import { AdFileUrl } from "../../ad/domain/value-objects/AdFileUrl";
-import { Name } from "../../../domain/Name";
+import { Name } from "../../../common/domain/Name";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

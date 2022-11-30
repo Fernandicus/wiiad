@@ -1,5 +1,5 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
 import { AuthToken } from "../../domain/value-objects/AuthToken";
 import { VerificationURL } from "../../domain/VerificationURL";
 import { SendlVerificationEmail } from "../SendVerificationEmail";

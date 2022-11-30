@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import styles from "@/pages/index.module.css";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
 import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";

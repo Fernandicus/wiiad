@@ -1,4 +1,4 @@
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailRepo";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";

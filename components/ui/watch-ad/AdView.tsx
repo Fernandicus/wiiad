@@ -1,5 +1,5 @@
 import { ProfileCard } from "../../../components/ui/profile/user/ProfileCard";
-import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 
 interface AdViewParams {
   user: IGenericUserPrimitives | null;

@@ -1,25 +1,23 @@
 import {
   createAdvertiserHandler,
   findAdvertiserHandler,
-} from "../modules/advertiser/advertiser-container";
-import { AdvertiserPropsPrimitives } from "../modules/advertiser/domain/Advertiser";
-import { IReqAndRes } from "../modules/session/domain/interfaces/IAuthCookies";
-import { IGenericUserPrimitives } from "../domain/GenericUser";
-import { RoleType } from "../domain/Role";
+} from "../../../modules/advertiser/advertiser-container";
+import { AdvertiserPropsPrimitives } from "../../../modules/advertiser/domain/Advertiser";
+import { IReqAndRes } from "../../../modules/session/domain/interfaces/IAuthCookies";
+import { IGenericUserPrimitives } from "../../domain/interfaces/GenericUser";
+import { RoleType } from "../../domain/Role";
 import {
   removeVerificationEmailHandler,
   validateEmailHandler,
-} from "../modules/mailing/send-email-verification/infrastructure/email-verification-container";
-import { userSession } from "../modules/session/infrastructure/session-container";
-import { UniqId } from "../utils/UniqId";
-import { createUserHandler, findUserHandler } from "../modules/user/container";
-import { IUserPrimitives } from "../modules/user/domain/User";
-import { ProfilePic } from "../domain/ProfilePic";
-import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmail";
-import { createReferralHandler } from "../modules/referrals/infrastructure/referral-container";
-import { Referral } from "../modules/referrals/domain/Referral";
-import { ReferralController } from "../modules/referrals/infrastructure/controllers/ReferralController";
-import { ILogingInParams, LoginQueries } from "../domain/LoginQueries";
+} from "../../../modules/mailing/send-email-verification/infrastructure/email-verification-container";
+import { userSession } from "../../../modules/session/infrastructure/session-container";
+import { UniqId } from "../../../utils/UniqId";
+import { createUserHandler, findUserHandler } from "../../../modules/user/container";
+import { IUserPrimitives } from "../../../modules/user/domain/User";
+import { ProfilePic } from "../../domain/ProfilePic";
+import { IVerificationEmailPrimitives } from "../../../modules/mailing/send-email-verification/domain/VerificationEmail";
+import { ReferralController } from "../../../modules/referrals/infrastructure/controllers/ReferralController";
+import { ILogingInParams, LoginQueries } from "../../domain/LoginQueries";
 
 interface UserData {
   queries: ILogingInParams;

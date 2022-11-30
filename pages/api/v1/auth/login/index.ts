@@ -9,7 +9,7 @@ import { FindUser } from "@/src/modules/user/use-case/FindUser";
 import { findUserHandler } from "@/src/modules/user/container";
 import { ErrorCreatingUser } from "@/src/modules/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/helpers";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export interface APISendEmailVerification {

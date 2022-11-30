@@ -1,5 +1,5 @@
-import { Email } from "@/src/domain/Email";
-import { Role } from "@/src/domain/Role";
+import { Email } from "@/src/common/domain/Email";
+import { Role } from "@/src/common/domain/Role";
 import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
 import { ExpirationDate } from "@/src/modules/mailing/send-email-verification/domain/value-objects/ExpirationDate";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";

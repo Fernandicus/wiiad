@@ -1,10 +1,10 @@
-import { Email } from "@/src/domain/Email";
+import { Email } from "@/src/common/domain/Email";
 import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeVerificationEmail } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmail";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { IVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailRepo";
 import { mockedVerificationEmailRepo } from "../../../../../__mocks__/context/MockVerificationEmailRepo";
 import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";

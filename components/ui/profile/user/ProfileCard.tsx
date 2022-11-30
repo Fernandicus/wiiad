@@ -1,4 +1,4 @@
-import { IGenericUserPrimitives } from "@/src/domain/GenericUser";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 
 interface Props {
   user: IGenericUserPrimitives;

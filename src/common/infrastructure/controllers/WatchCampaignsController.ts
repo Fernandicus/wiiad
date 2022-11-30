@@ -1,17 +1,17 @@
-import { ErrorWatchingCampaign } from "../domain/ErrorWatchingCampaign";
+import { ErrorWatchingCampaign } from "../../domain/ErrorWatchingCampaign";
 import {
   IGenericUserPrimitives,
   IGenericUserProps,
-} from "../domain/GenericUser";
-import { ICampaignPrimitives } from "../modules/campaign/domain/Campaign";
+} from "../../domain/interfaces/GenericUser";
+import { ICampaignPrimitives } from "../../../modules/campaign/domain/Campaign";
 import {
   campaignMetricsHandler,
   findCampaignHandler,
-} from "../modules/campaign/infrastructure/campaign-container";
-import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
-import { adFinderHandler } from "../modules/ad/infraestructure/ad-container";
-import { findUserHandler } from "../modules/user/container";
-import { updateReferralHandler } from "../modules/referrals/infrastructure/referral-container";
+} from "../../../modules/campaign/infrastructure/campaign-container";
+import { AdPropsPrimitives } from "../../../modules/ad/domain/Ad";
+import { adFinderHandler } from "../../../modules/ad/infraestructure/ad-container";
+import { findUserHandler } from "../../../modules/user/container";
+import { updateReferralHandler } from "../../../modules/referrals/infrastructure/referral-container";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;

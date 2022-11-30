@@ -1,7 +1,7 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
-import { ProfilePic } from "@/src/domain/ProfilePic";
-import { Role } from "@/src/domain/Role";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
+import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { BankAccount } from "../domain/BankAccount";
 import { IUserPrimitives, User } from "../domain/User";

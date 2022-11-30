@@ -1,6 +1,6 @@
 import { Folder } from "../domain/Folder";
 import { ICloudStorageRepo } from "../domain/interfaces/ICloudStorageRepo";
-import { Name } from "../../../domain/Name";
+import { Name } from "../../../common/domain/Name";
 import { AdFileUrl } from "../../ad/domain/value-objects/AdFileUrl";
 
 export class UploadFile {

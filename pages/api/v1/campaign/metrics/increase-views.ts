@@ -1,14 +1,7 @@
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  campaignMetricsHandler,
-  findCampaignHandler,
-} from "@/src/modules/campaign/infrastructure/campaign-container";
+import { campaignMetricsHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { reqBodyParse } from "@/src/utils/helpers";
-import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { RoleType } from "@/src/domain/Role";
-import { ErrorFindingCampaign } from "@/src/modules/campaign/domain/errors/ErrorFindingCampaign";
-import { ErrorWatchingCampaign } from "@/src/domain/ErrorWatchingCampaign";
 
 export default async function handler(
   req: NextApiRequest,

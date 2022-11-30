@@ -1,4 +1,4 @@
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";

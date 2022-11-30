@@ -1,4 +1,4 @@
-import { Balance } from "@/src/domain/Balance";
+import { Balance } from "@/src/common/domain/Balance";
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   Campaign,

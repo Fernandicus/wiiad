@@ -1,4 +1,4 @@
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { User } from "@/src/modules/user/domain/User";

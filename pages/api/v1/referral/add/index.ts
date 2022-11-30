@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { reqBodyParse } from "@/src/utils/helpers";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { RoleType } from "@/src/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ReferralController } from "@/src/modules/referrals/infrastructure/controllers/ReferralController";

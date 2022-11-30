@@ -1,6 +1,6 @@
 import { UploadFile } from "@/src/modules/storage/use-case/UploadFile";
 import { Folder } from "../../domain/Folder";
-import { Name } from "../../../../domain/Name";
+import { Name } from "../../../../common/domain/Name";
 
 export class UploadFileHandler {
   constructor(private uploadFile: UploadFile) {}
