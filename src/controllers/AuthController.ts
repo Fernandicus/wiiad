@@ -16,9 +16,9 @@ import { createUserHandler, findUserHandler } from "../modules/user/container";
 import { IUserPrimitives } from "../modules/user/domain/User";
 import { ProfilePic } from "../domain/ProfilePic";
 import { IVerificationEmailPrimitives } from "../modules/mailing/send-email-verification/domain/VerificationEmail";
-import { createReferralHandler } from "../modules/referrals/referral-container";
+import { createReferralHandler } from "../modules/referrals/infrastructure/referral-container";
 import { Referral } from "../modules/referrals/domain/Referral";
-import { ReferralController } from "../modules/referrals/controllers/ReferralController";
+import { ReferralController } from "../modules/referrals/infrastructure/controllers/ReferralController";
 import { ILogingInParams, LoginQueries } from "../domain/LoginQueries";
 import { ErrorAuthentifying } from "../domain/ErrorAuthentifying";
 

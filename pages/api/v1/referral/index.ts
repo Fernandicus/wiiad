@@ -3,13 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { userSession } from "@/src/use-case/container";
 import { RoleType } from "@/src/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/ErrorCreatingReferral";
+import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import {
   createReferralHandler,
   findReferralHandler,
-} from "@/src/modules/referrals/referral-container";
+} from "@/src/modules/referrals/infrastructure/referral-container";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
-import { ErrorFindingReferral } from "@/src/modules/referrals/domain/ErrorFindingReferral";
+import { ErrorFindingReferral } from "@/src/modules/referrals/domain/errors/ErrorFindingReferral";
 
 export default async function handler(
   req: NextApiRequest,

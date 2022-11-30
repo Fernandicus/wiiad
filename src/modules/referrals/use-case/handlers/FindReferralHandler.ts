@@ -1,6 +1,6 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { IReferralPrimitives, Referral } from "../domain/Referral";
-import { FindReferral } from "../use-case/FindReferral";
+import { IReferralPrimitives } from "../../domain/Referral";
+import { FindReferral } from "../FindReferral";
 
 export class FindReferralHandler {
   constructor(private findReferral: FindReferral) {}

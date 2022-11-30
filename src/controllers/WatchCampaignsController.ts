@@ -11,7 +11,7 @@ import {
 import { AdPropsPrimitives } from "../modules/ad/domain/Ad";
 import { adFinderHandler } from "../modules/ad/infraestructure/ad-container";
 import { findUserHandler } from "../modules/user/container";
-import { updateReferralHandler } from "../modules/referrals/referral-container";
+import { updateReferralHandler } from "../modules/referrals/infrastructure/referral-container";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;

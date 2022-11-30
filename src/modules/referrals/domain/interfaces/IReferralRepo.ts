@@ -1,7 +1,7 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { Referral } from "./Referral";
-import { ReferralCounter } from "./ReferralCounter";
+import { Referral } from "../Referral";
+import { ReferralCounter } from "../ReferralCounter";
 
 export interface IReferralRepo {
   save(referral: Referral): Promise<void>;

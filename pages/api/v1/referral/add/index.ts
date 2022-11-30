@@ -4,9 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { reqBodyParse } from "@/src/utils/utils";
 import { userSession } from "@/src/use-case/container";
 import { RoleType } from "@/src/domain/Role";
-import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/ErrorCreatingReferral";
+import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ReferralController } from "@/src/modules/referrals/controllers/ReferralController";
+import { ReferralController } from "@/src/modules/referrals/infrastructure/controllers/ReferralController";
 
 export default async function handler(
   req: NextApiRequest,

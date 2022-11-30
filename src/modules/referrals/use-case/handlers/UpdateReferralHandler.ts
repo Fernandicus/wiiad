@@ -1,6 +1,6 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { UpdateReferral } from "../use-case/UpdateReferral";
+import { UpdateReferral } from "../UpdateReferral";
 
 export class UpdateReferralHandler {
   constructor(private update: UpdateReferral) {}

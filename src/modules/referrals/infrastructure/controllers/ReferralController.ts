@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Referral } from "../domain/Referral";
+import { Referral } from "../../domain/Referral";
 import {
   createReferralHandler,
   findReferralHandler,

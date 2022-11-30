@@ -1,8 +1,8 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { IReferralPrimitives, Referral } from "../domain/Referral";
-import { ReferralCounter } from "../domain/ReferralCounter";
-import { CreateReferral } from "../use-case/CreateReferral";
+import { IReferralPrimitives, Referral } from "../../domain/Referral";
+import { ReferralCounter } from "../../domain/ReferralCounter";
+import { CreateReferral } from "../CreateReferral";
 
 export class CreateReferralHandler {
   constructor(private createReferral: CreateReferral) {}

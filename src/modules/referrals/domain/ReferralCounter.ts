@@ -1,4 +1,4 @@
-import { ErrorCreatingReferral } from "./ErrorCreatingReferral";
+import { ErrorCreatingReferral } from "./errors/ErrorCreatingReferral";
 
 export class ReferralCounter {
   private amount;

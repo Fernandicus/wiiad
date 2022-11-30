@@ -1,6 +1,6 @@
 import { Balance } from "@/src/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { IReferralRepo } from "../domain/IReferralRepo";
+import { IReferralRepo } from "../domain/interfaces/IReferralRepo";
 import { Referral } from "../domain/Referral";
 import { ReferralCounter } from "../domain/ReferralCounter";
 import { IReferralModel, ReferralModel } from "./ReferralModel";

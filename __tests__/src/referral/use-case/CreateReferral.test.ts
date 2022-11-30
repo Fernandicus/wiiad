@@ -1,4 +1,4 @@
-import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
+import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { CreateReferral } from "@/src/modules/referrals/use-case/CreateReferral";
 import { UniqId } from "@/src/utils/UniqId";
