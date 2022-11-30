@@ -4,7 +4,7 @@ import { SendVerificationEmailHandler } from "../use-case/handlers/SendVerificat
 import { ValidateEmailHandler } from "../use-case/handlers/ValidateEmailHandler";
 import { AuthTokenCrypto } from "./AuthTokenCrypto";
 import { NodemailerSendVerificationEmail } from "./NodemailerSendVerificationEmail";
-import { VerificationEmailMongoDBRepo } from "./VerificationEmailMongoDBRepo";
+import { VerificationEmailMongoDBRepo } from "./db/VerificationEmailMongoDBRepo";
 import { CreateAuthToken } from "../use-case/CreateAuthToken";
 import { RemoveVerificationEmail } from "../use-case/RemoveVerificationEmail";
 import { SaveVerificationEmail } from "../use-case/SaveVerificationEmail";

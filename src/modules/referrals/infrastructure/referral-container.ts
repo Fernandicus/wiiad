@@ -1,7 +1,7 @@
 import { CreateReferralHandler } from "../use-case/handlers/CreateReferralHandler";
 import { FindReferralHandler } from "../use-case/handlers/FindReferralHandler";
 import { UpdateReferralHandler } from "../use-case/handlers/UpdateReferralHandler";
-import { ReferralMongoDBRepo } from "./ReferralMongoDBRepo";
+import { ReferralMongoDBRepo } from "./db/ReferralMongoDBRepo";
 import { CreateReferral } from "../use-case/CreateReferral";
 import { FindReferral } from "../use-case/FindReferral";
 import { UpdateReferral } from "../use-case/UpdateReferral";

@@ -1,7 +1,7 @@
 import { AdCreatorHandler } from "../use-case/handlers/AdCreatorHandler";
 import { AdFinderHandler } from "../use-case/handlers/AdFinderHandler";
 import { AdRemoverHandler } from "../use-case/handlers/AdRemoverHandler";
-import { AdMongoDBRepository } from "./AdMongoDBRepository";
+import { AdMongoDBRepository } from "./db/AdMongoDBRepository";
 import { CreateAd } from "../use-case/CreateAd";
 import { FindAds } from "../use-case/FindAds";
 import { RemoveAd } from "../use-case/RemoveAd";

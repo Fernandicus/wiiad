@@ -1,7 +1,7 @@
 import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/v1/ads/remove";
 import { NextApiResponse } from "next";
-import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
+import { AdModel } from "@/src/modules/ad/infraestructure/db/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";

@@ -1,6 +1,6 @@
 import mongoose, { Model } from "mongoose";
-import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdTitle } from "../domain/value-objects/AdTitle";
+import { AdDescription } from "../../domain/value-objects/AdDescription";
+import { AdTitle } from "../../domain/value-objects/AdTitle";
 const { Schema } = mongoose;
 
 export interface IAdModelProps {

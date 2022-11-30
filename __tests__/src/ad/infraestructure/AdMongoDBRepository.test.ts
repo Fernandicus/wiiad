@@ -1,7 +1,7 @@
 import {
   AdModel,
   IAdModelProps,
-} from "@/src/modules/ad/infraestructure/AdModel";
+} from "@/src/modules/ad/infraestructure/db/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";

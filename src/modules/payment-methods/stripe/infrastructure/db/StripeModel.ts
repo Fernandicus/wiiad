@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
-import { ICardDetailsPrimitives } from "../domain/CardDetails";
+import { ICardDetailsPrimitives } from "../../domain/CardDetails";
 
 const cardDetailsSchema = new Schema<ICardDetailsPrimitives>(
   {

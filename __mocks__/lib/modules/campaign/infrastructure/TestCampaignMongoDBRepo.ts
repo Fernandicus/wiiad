@@ -1,15 +1,12 @@
 import { Balance } from "@/src/domain/Balance";
-import {
-  Campaign,
-  ICampaignPrimitives,
-} from "@/src/modules/campaign/domain/Campaign";
+import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import {
   CampaignModel,
   ICampaignModel,
-} from "@/src/modules/campaign/infrastructure/CampaignModel";
+} from "@/src/modules/campaign/infrastructure/db/CampaignModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
@@ -39,7 +36,7 @@ export class TestCampaignMongoDBRepo
 
   async getByStatus(status: CampaignStatus): Promise<Campaign[] | null> {
     await TestMongoDB.connectMongoDB();
-    
+
     const campaignModel = await CampaignModel.find<ICampaignModel>({
       status: status.status,
     } as ICampaignModel);

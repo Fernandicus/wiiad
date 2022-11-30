@@ -1,6 +1,6 @@
 import { SaveStripeHandler } from "../use-case/handlers/SaveStripeHandler";
 import { FindStripeCustomerHandler } from "../use-case/handlers/FindStripeCustomerHandler";
-import { StripeMongoDBRepo } from "./StripeMongoDBRepo";
+import { StripeMongoDBRepo } from "./db/StripeMongoDBRepo";
 import { FindStripeCustomer } from "../use-case/FindStripeCustomer";
 import { SaveStripe } from "../use-case/SaveStripe";
 import { PaymentIntent } from "../use-case/PaymentIntent";

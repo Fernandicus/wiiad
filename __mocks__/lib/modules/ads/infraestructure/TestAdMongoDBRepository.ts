@@ -7,7 +7,7 @@ import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import {
   AdModel,
   IAdModelProps,
-} from "@/src/modules/ad/infraestructure/AdModel";
+} from "@/src/modules/ad/infraestructure/db/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../infrastructure/TestMongoDB";

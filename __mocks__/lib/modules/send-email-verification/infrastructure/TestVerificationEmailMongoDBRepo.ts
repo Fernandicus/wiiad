@@ -6,7 +6,7 @@ import { VerificationEmail } from "@/src/modules/mailing/send-email-verification
 import {
   IVerificationEmailModel,
   VerificationEmailModel,
-} from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailModel";
+} from "@/src/modules/mailing/send-email-verification/infrastructure/db/VerificationEmailModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
