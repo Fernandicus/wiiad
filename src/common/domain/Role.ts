@@ -14,4 +14,5 @@ export class Role {
     if (!roleFound) throw new Error(`Rol do not exist: ${roleType}`);
     this.role = roleType;
   }
+
 }

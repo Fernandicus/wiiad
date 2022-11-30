@@ -5,15 +5,13 @@ import { VerificationEmail } from "@/src/modules/mailing/send-email-verification
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
-import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
+import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import { TestDBs } from "../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { TestVerificationEmailDB } from "__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 
 interface IServerSideResponse {
   props: {};
@@ -153,7 +151,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
       },
     })) as { props: IWatchCampaignPage };
 
-    const userResponse: IGenericUserPrimitives | null = resp.props.user;
+    const userResponse: IUserPrimitives | null = resp.props.user;
 
     expect(userResponse?.name).toEqual(myUser.name);
     expect(userResponse?.id).toEqual(myUser.id);
@@ -180,7 +178,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     const campaign = resp.props.campaign as ICampaignPrimitives;
     const ad = resp.props.ad as AdPropsPrimitives;
     const user = resp.props.user as IUserPrimitives;
-    const referrer = resp.props.referrer as IGenericUserPrimitives;
+    const referrer = resp.props.referrer as IUserPrimitives;
 
     expect(campaign).not.toBe(undefined);
     expect(ad.id).toBe(campaign.adId);

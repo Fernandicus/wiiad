@@ -1,9 +1,10 @@
-import { adFinderHandler } from "../../ad/infraestructure/ad-container";
-import { AdPropsPrimitives } from "../../ad/domain/Ad";
-import { findCampaignHandler } from "../../campaign/infrastructure/campaign-container";
-import { ICampaignPrimitives } from "../../campaign/domain/Campaign";
-import { IStripePrimitives } from "../../payment-methods/stripe/domain/Stripe";
-import { findCustomerHandler } from "../../payment-methods/stripe/infrastructure/stripe-container";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
+import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
+import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
+
 
 interface IAdsAndCampaigns {
   campaigns: ICampaignPrimitives[];
@@ -11,8 +12,9 @@ interface IAdsAndCampaigns {
   stripeCustomer: IStripePrimitives | null;
 }
 
-export class AdvertiserDataController {
-  static async getAll(advertiserId: string): Promise<IAdsAndCampaigns> {
+export class ProfileDataController {
+    
+  static async getAdvertiserData(advertiserId: string): Promise<IAdsAndCampaigns> {
     const findCampaigns = findCampaignHandler.byAdvertiserId(advertiserId);
     const findAds = adFinderHandler.findAll(advertiserId);
     const findStripeCustomer = findCustomerHandler.findByUserId(advertiserId);

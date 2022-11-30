@@ -1,4 +1,5 @@
-import {  User } from "@/src/modules/user/domain/User";
+import {  User } from "@/src/modules/users/user/domain/User";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { TestUserRepository } from "../../modules/user/domain/TestUserRepository";
 import { FakeUser } from "../../modules/user/FakeUser";
 import { TestUserMongoDBRepo } from "../../modules/user/infrastructure/TestUserMongoDBRepo";
@@ -22,7 +23,8 @@ export class TestUserDB {
     amount: number
   ): Promise<TestUserDB> {
     const users = this.setUsers(amount);
-    await testUserRepo.saveMany(users);
+    const advertisers = this.setAdvertisers();
+    await testUserRepo.saveMany([...users, ...advertisers]);
 
     return new TestUserDB(testUserRepo);
   }
@@ -31,12 +33,21 @@ export class TestUserDB {
     await this.testUserRepo.saveMany(users);
   }
 
-  async getAll(): Promise<User[] | null> {
-    const users = await this.testUserRepo.getAll();
+  async getAllUsers(): Promise<User[] | null> {
+    const users = await this.testUserRepo.getAllUsers();
+    return users;
+  }
+
+  async getAllAdvertisers(): Promise<User[] | null> {
+    const users = await this.testUserRepo.getAllAdvertisers();
     return users;
   }
 
   private static setUsers(amount: number): User[] {
     return FakeUser.createMany(amount);
+  }
+
+  private static setAdvertisers(): User[] {
+    return FakeAdvertiser.createMany();
   }
 }

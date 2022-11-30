@@ -8,6 +8,7 @@ export const mockedStripeRepo = (stripeToFind: Stripe): IStripeRepo => {
   const stripes = [...newStripes, stripeToFind];
   return {
     save: jest.fn(),
+    addNewCardDetails: jest.fn(),
     findByUserId: jest.fn().mockImplementation((uniqId): Stripe | null => {
       const stripeFound = stripes.find(
         (stripe) => stripe.userId.id == uniqId.id

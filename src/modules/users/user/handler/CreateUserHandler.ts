@@ -3,7 +3,6 @@ import { Name } from "@/src/common/domain/Name";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { BankAccount } from "../domain/BankAccount";
 import { IUserPrimitives, User } from "../domain/User";
 import { CreateUser } from "../use-case/CreateUser";
 
@@ -17,9 +16,6 @@ export class CreateUserHandler {
       email: new Email(user.email),
       role: new Role(user.role),
       profilePic: new ProfilePic(user.profilePic),
-      bankAccount: user.bankAccount
-        ? new BankAccount(user.bankAccount)
-        : undefined,
     });
     await this.createUser.create(newUser);
   }

@@ -1,7 +1,6 @@
 import { RoleType } from "@/src/common/domain/Role";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
-import { User } from "@/src/modules/user/domain/User";
+import { User } from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { TestVerificationEmailRepo } from "../../modules/send-email-verification/domain/TestVerificationEmailRepo";
 import { FakeVerificationEmail } from "../../modules/send-email-verification/FakeVerificationEmail";
@@ -20,8 +19,8 @@ export const autoSetTestVerificationEmailDB = async (
 };
 
 export const setTestVerificationEmailDB = async (params: {
-  expired: User[] | Advertiser[];
-  valid:  User[] | Advertiser[];
+  expired: User[];
+  valid:  User[];
 }): Promise<TestVerificationEmailDB> => {
   const { expired, valid } = params;
   const verificationEmailRepo = await TestVerificationEmailMongoDBRepo.init();
@@ -41,8 +40,8 @@ export class TestVerificationEmailDB {
 
   static async givenUsers(params: {
     verificationEmailRepo: TestVerificationEmailRepo;
-    validUsers:  User[] | Advertiser[];
-    expiredUsers:  User[] | Advertiser[];
+    validUsers:  User[];
+    expiredUsers:  User[];
   }): Promise<TestVerificationEmailDB> {
     const { expiredUsers, validUsers, verificationEmailRepo } = params;
     const validEmails = FakeVerificationEmail.createManyGivenUsers(

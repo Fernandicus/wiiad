@@ -5,12 +5,9 @@ import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification
 import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/controllers/SendVerificationEmailController";
 import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
 import { UniqId } from "@/src/utils/UniqId";
-import { FindUser } from "@/src/modules/user/use-case/FindUser";
-import { findUserHandler } from "@/src/modules/user/container";
-import { ErrorCreatingUser } from "@/src/modules/user/domain/ErrorCreatingUser";
+import { ErrorCreatingUser } from "@/src/modules/users/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/common/domain/Role";
-import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
 
 export interface APISendEmailVerification {
   data: ISendVerificationEmailRepo;

@@ -2,12 +2,11 @@ import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { Role, RoleType } from "@/src/common/domain/Role";
-import { BankAccount } from "@/src/modules/user/domain/BankAccount";
 import {
   IUserPrimitives,
   IUserProps,
   User,
-} from "@/src/modules/user/domain/User";
+} from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 
@@ -23,7 +22,6 @@ export class FakeUser extends User {
       email: new Email(userPrimitives.email),
       name: new Name(userPrimitives.name),
       role: new Role(userPrimitives.role),
-      bankAccount: new BankAccount(userPrimitives.bankAccount!),
       profilePic: ProfilePic.withDefaultUserPic(),
     });
   }
@@ -59,7 +57,6 @@ export class FakeUser extends User {
       name: faker.name.firstName(),
       role: RoleType.USER,
       profilePic: ProfilePic.defaultUserPic,
-      bankAccount: `ES${Math.floor(Math.random() * 1000000)}`,
     };
   }
 }

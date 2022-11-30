@@ -1,10 +1,4 @@
-import {
-  createAdvertiserHandler,
-  findAdvertiserHandler,
-} from "../../../modules/advertiser/advertiser-container";
-import { AdvertiserPropsPrimitives } from "../../../modules/advertiser/domain/Advertiser";
 import { IReqAndRes } from "../../../modules/session/domain/interfaces/IAuthCookies";
-import { IGenericUserPrimitives } from "../../domain/interfaces/GenericUser";
 import { RoleType } from "../../domain/Role";
 import {
   removeVerificationEmailHandler,
@@ -12,12 +6,15 @@ import {
 } from "../../../modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { userSession } from "../../../modules/session/infrastructure/session-container";
 import { UniqId } from "../../../utils/UniqId";
-import { createUserHandler, findUserHandler } from "../../../modules/user/container";
-import { IUserPrimitives } from "../../../modules/user/domain/User";
 import { ProfilePic } from "../../domain/ProfilePic";
 import { IVerificationEmailPrimitives } from "../../../modules/mailing/send-email-verification/domain/VerificationEmail";
 import { ReferralController } from "../../../modules/referrals/infrastructure/controllers/ReferralController";
 import { ILogingInParams, LoginQueries } from "../../domain/LoginQueries";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import {
+  createUserHandler,
+  findUserHandler,
+} from "@/src/modules/users/user/container";
 
 interface UserData {
   queries: ILogingInParams;
@@ -28,7 +25,7 @@ export class AuthController {
   static async logIn(
     loginQueries: ILogingInParams,
     context: IReqAndRes
-  ): Promise<IGenericUserPrimitives> {
+  ): Promise<IUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
       loginQueries.authToken
     );
@@ -56,7 +53,7 @@ export class AuthController {
   static async signUp(
     loginQueries: ILogingInParams,
     context: IReqAndRes
-  ): Promise<IGenericUserPrimitives> {
+  ): Promise<IUserPrimitives> {
     if (!loginQueries.authToken || !loginQueries.userName)
       throw new Error("No 'auth token or/and userName' queries provided");
 
@@ -90,8 +87,8 @@ export class AuthController {
 
   private static async advertiserLogIn(
     data: UserData
-  ): Promise<AdvertiserPropsPrimitives> {
-    const advertiserFound = await findAdvertiserHandler.findByEmail(
+  ): Promise<IUserPrimitives> {
+    const advertiserFound = await findUserHandler.byEmail(
       data.verificationEmail.email
     );
     const advertiserId = advertiserFound.id;
@@ -101,12 +98,12 @@ export class AuthController {
 
   private static async advertiserSignUp(
     data: UserData
-  ): Promise<AdvertiserPropsPrimitives> {
+  ): Promise<IUserPrimitives> {
     return this.getAndCreateNewAdvertiser(data);
   }
 
   private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
-    const findUser = findUserHandler.findByEmail(data.verificationEmail.email);
+    const findUser = findUserHandler.byEmail(data.verificationEmail.email);
     const response = await Promise.all([findUser]);
     const userFound = response[0];
     const userId = userFound.id;
@@ -121,7 +118,7 @@ export class AuthController {
 
   private static userInitSession(
     context: IReqAndRes,
-    payload: IGenericUserPrimitives
+    payload: IUserPrimitives
   ): void {
     if (userSession.getFromServer(context)) {
       userSession.remove(context);
@@ -131,11 +128,11 @@ export class AuthController {
 
   private static async getAndCreateNewAdvertiser(
     data: UserData
-  ): Promise<AdvertiserPropsPrimitives> {
+  ): Promise<IUserPrimitives> {
     const advertiserId = UniqId.generate();
     const profilePic = ProfilePic.defaultAdvertiserPic;
 
-    await createAdvertiserHandler.create({
+    await createUserHandler.create({
       email: data.verificationEmail.email,
       name: data.queries.userName,
       id: advertiserId,
@@ -148,7 +145,7 @@ export class AuthController {
 
   private static async getAndCreateNewUser(
     data: UserData
-  ): Promise<AdvertiserPropsPrimitives> {
+  ): Promise<IUserPrimitives> {
     const userId = UniqId.generate();
     const profilePic = ProfilePic.defaultUserPic;
     await createUserHandler.create({
@@ -166,7 +163,7 @@ export class AuthController {
     data: UserData,
     id: string,
     profilePic: string
-  ): IGenericUserPrimitives {
+  ): IUserPrimitives {
     return {
       id,
       email: data.verificationEmail.email,

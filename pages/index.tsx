@@ -1,17 +1,12 @@
-import Head from "next/head";
-import Image from "next/image";
 
-import styles from "@/pages/index.module.css";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { RoleType } from "@/src/common/domain/Role";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { APISendEmailVerification } from "./api/v1/auth/login";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { Notifications } from "../components/ui/notifications/Notifications";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
-export default function Home(props: { session: AdvertiserPropsPrimitives }) {
+export default function Home(props: { session: IUserPrimitives }) {
   const myEmail = useRef<HTMLInputElement>(null);
   const myName = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState({ message: "", status: 0 });

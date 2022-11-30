@@ -1,8 +1,8 @@
 import { FakeVerificationEmail } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationEmail";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
-import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/VerificationEmailMongoDBRepo";
 import { autoSetTestVerificationEmailDB } from "../../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { UniqId } from "@/src/utils/UniqId";
+import { VerificationEmailMongoDBRepo } from "@/src/modules/mailing/send-email-verification/infrastructure/db/VerificationEmailMongoDBRepo";
 
 describe("On VerificationEmailMongoDBRepo, GIVEN some verification emails in MongoDB", () => {
   let validEmails: VerificationEmail[];

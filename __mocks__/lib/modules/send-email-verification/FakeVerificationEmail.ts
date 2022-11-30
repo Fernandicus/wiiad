@@ -10,9 +10,9 @@ import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
-import { User } from "@/src/modules/user/domain/User";
+import { User } from "@/src/modules/users/user/domain/User";
 import { AuthToken } from "@/src/modules/mailing/send-email-verification/domain/value-objects/AuthToken";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
+import { Advertiser } from "@/src/modules/users/advertiser/domain/Advertiser";
 
 export class FakeVerificationEmail extends VerificationEmail {
   constructor(params: IVerificationEmailProps) {

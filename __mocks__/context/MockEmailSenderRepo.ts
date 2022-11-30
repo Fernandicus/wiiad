@@ -3,5 +3,6 @@ import { IEmailSenderRepo } from "@/src/modules/mailing/send-email-verification/
 export const mockedEmailSenderRepo = (): IEmailSenderRepo => {
   return {
     login: jest.fn(),
+    signUp:jest.fn(),
   };
 };

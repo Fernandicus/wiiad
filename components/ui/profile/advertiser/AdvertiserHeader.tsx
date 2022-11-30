@@ -1,10 +1,10 @@
 import { DataCardButton } from "../user/DataCardButton";
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { DataCard } from "../user/DataCard";
 import { ProfileCard } from "../user/ProfileCard";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 interface Props {
-  user: IGenericUserPrimitives;
+  user: IUserPrimitives;
   totalAds:number;
   totalCampaigns:number;
   children?: JSX.Element;

@@ -3,8 +3,8 @@ import { UniqId } from "@/src/utils/UniqId";
 import { FindAds } from "@/src/modules/ad/use-case/FindAds";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { Advertiser } from "@/src/modules/users/advertiser/domain/Advertiser";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { ErrorFindingAd } from "@/src/modules/ad/domain/errors/ErrorFindingAd";
 import { mockedAdRepo } from "../../../../__mocks__/context/MockAdRepo";
 

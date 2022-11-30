@@ -15,7 +15,7 @@ import { SubmitButton } from "./create-ad-form/SubmitButton";
 import * as Yup from "yup";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 interface FormNames {
   file: string;
@@ -26,7 +26,7 @@ interface FormNames {
 }
 
 export default function CreateAdForm(props: {
-  user: IGenericUserPrimitives;
+  user: IUserPrimitives;
   createAd: AdType;
   onBack(): void;
   handleResponse: (data: NotificationData) => void;
