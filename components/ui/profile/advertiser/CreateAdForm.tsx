@@ -1,6 +1,5 @@
 import { SelectImage } from "./create-ad-form/SelectImage";
 import { SelectVideo } from "./create-ad-form/SelectVideo";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import React, { FormEvent, useRef, useState } from "react";
 import { NotificationData } from "../../notifications/Notifications";
@@ -16,6 +15,7 @@ import { SubmitButton } from "./create-ad-form/SubmitButton";
 import * as Yup from "yup";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
+import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 
 interface FormNames {
   file: string;

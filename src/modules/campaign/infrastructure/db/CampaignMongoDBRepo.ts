@@ -1,10 +1,10 @@
 import { Balance } from "@/src/common/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { Campaign } from "../domain/Campaign";
-import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
-import { CampaignBudget } from "../domain/value-objects/Budget";
-import { CampaignMetrics } from "../domain/value-objects/CampaignMetrics";
-import { CampaignStatus } from "../domain/value-objects/CampaignStatus";
+import { Campaign } from "../../domain/Campaign";
+import { ICampaignRepo } from "../../domain/interfaces/ICampaignRepo";
+import { CampaignBudget } from "../../domain/value-objects/Budget";
+import { CampaignMetrics } from "../../domain/value-objects/CampaignMetrics";
+import { CampaignStatus } from "../../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {

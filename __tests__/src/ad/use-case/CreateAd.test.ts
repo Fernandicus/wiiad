@@ -1,4 +1,3 @@
-import { ErrorCreatingAd } from "@/src/modules/ad/domain/errors/ErrorCreatingAd";
 import { CreateAd } from "@/src/modules/ad/use-case/CreateAd";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { IAdRepository } from "@/src/modules/ad/domain/interfaces/IAdRepository";
@@ -27,9 +26,9 @@ describe("On CreateAd use case, GIVEN a repository and an ad", () => {
     expect(mockedRepo.save).toBeCalledWith(ad);
   });
 
-  it("WHEN try to create an empty Ad, THEN throw 'ErrorCreatingAd'", () => {
+  it("WHEN try to create an empty Ad, THEN throw 'Error'", () => {
     expect(() => {
       FakeAd.empty();
-    }).toThrowError(ErrorCreatingAd);
+    }).toThrowError(Error);
   });
 });

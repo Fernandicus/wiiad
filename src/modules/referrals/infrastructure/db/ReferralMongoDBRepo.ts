@@ -1,8 +1,8 @@
 import { Balance } from "@/src/common/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
-import { IReferralRepo } from "../domain/interfaces/IReferralRepo";
-import { Referral } from "../domain/Referral";
-import { ReferralCounter } from "../domain/ReferralCounter";
+import { IReferralRepo } from "../../domain/interfaces/IReferralRepo";
+import { Referral } from "../../domain/Referral";
+import { ReferralCounter } from "../../domain/ReferralCounter";
 import { IReferralModel, ReferralModel } from "./ReferralModel";
 
 export class ReferralMongoDBRepo implements IReferralRepo {

@@ -1,11 +1,11 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Ad } from "../domain/Ad";
-import { IAdRepository } from "../domain/interfaces/IAdRepository";
-import { AdDescription } from "../domain/value-objects/AdDescription";
-import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
-import { AdRedirectionUrl } from "../domain/value-objects/AdRedirectionUrl";
-import { AdSegments } from "../domain/value-objects/AdSegments";
-import { AdTitle } from "../domain/value-objects/AdTitle";
+import { AdTitle } from "../../domain/value-objects/AdTitle";
+import { Ad } from "../../domain/Ad";
+import { IAdRepository } from "../../domain/interfaces/IAdRepository";
+import { AdDescription } from "../../domain/value-objects/AdDescription";
+import { AdFileUrl } from "../../domain/value-objects/AdFileUrl";
+import { AdRedirectionUrl } from "../../domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "../../domain/value-objects/AdSegments";
 import { AdModel, IAdModelProps } from "./AdModel";
 
 export class AdMongoDBRepository implements IAdRepository {

@@ -1,10 +1,10 @@
 import { Email } from "@/src/common/domain/Email";
 import { Role } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { AuthToken } from "../domain/value-objects/AuthToken";
-import { ExpirationDate } from "../domain/value-objects/ExpirationDate";
-import { IVerificationEmailRepo } from "../domain/interfaces/IVerificationEmailRepo";
-import { VerificationEmail } from "../domain/VerificationEmail";
+import { AuthToken } from "../../domain/value-objects/AuthToken";
+import { ExpirationDate } from "../../domain/value-objects/ExpirationDate";
+import { IVerificationEmailRepo } from "../../domain/interfaces/IVerificationEmailRepo";
+import { VerificationEmail } from "../../domain/VerificationEmail";
 import {
   IVerificationEmailModel,
   VerificationEmailModel,
