@@ -4,16 +4,16 @@ import {
 } from "@/src/modules/ad/infraestructure/db/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
-import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
 import { setTestAdDB } from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
+import { User } from "@/src/modules/users/user/domain/User";
+import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/db/AdMongoDBRepository";
 
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {
   let fakeAds: Ad[];
   let adMongoDBRepo: AdMongoDBRepository;
-  let advertiser: Advertiser;
+  let advertiser: User;
 
   beforeAll(async () => {
     const testAdDB = await setTestAdDB(5);

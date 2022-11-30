@@ -4,16 +4,13 @@ import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { TestAdMongoDBRepository } from "../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import {
-  Advertiser,
-  AdvertiserPropsPrimitives,
-} from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { setTestAdDB } from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
+import { User } from "@/src/modules/users/user/domain/User";
 
 describe("On api/ads, GIVEN some Ads saved in MognoDB ", () => {
-  let advertiser: Advertiser;
+  let advertiser: User;
   let fakeAds: Ad[];
   beforeAll(async () => {
     const mockedAdDB = await setTestAdDB(5);

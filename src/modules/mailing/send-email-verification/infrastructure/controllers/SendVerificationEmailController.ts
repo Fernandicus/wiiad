@@ -1,5 +1,4 @@
-import { findAdvertiserHandler } from "@/src/modules/advertiser/advertiser-container";
-import { findUserHandler } from "@/src/modules/user/container";
+import { findAdvertiserHandler, findUserHandler } from "@/src/modules/users/user/container";
 import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
 import { ISendVerificationEmailRepo } from "../../domain/interfaces/ISendVerificationEmailRepo";
 import {
@@ -13,8 +12,8 @@ export class SendVerificationEmailController {
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
-    const findUserByName = findUserHandler.findByUserName(data.userName);
-    const findUserByEmail = findUserHandler.findByEmail(data.email);
+    const findUserByName = findUserHandler.byName(data.userName);
+    const findUserByEmail = findUserHandler.byEmail(data.email);
 
     const resp = await Promise.allSettled([findUserByName, findUserByEmail]);
 
@@ -39,7 +38,7 @@ export class SendVerificationEmailController {
     id: string
   ): Promise<void> {
     try {
-      const userFound = await findUserHandler.findByEmail(data.email);
+      const userFound = await findUserHandler.byEmail(data.email);
       const authToken = authTokenCreator.generate();
       await this.saveAndSendLogInEmail({
         verificationEmailId: id,
@@ -57,17 +56,22 @@ export class SendVerificationEmailController {
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
-    const advertiserFound = await findAdvertiserHandler.findByUserName(
-      data.userName
-    );
-    if (advertiserFound)
-      throw ErrorSendVerificationEmail.userNameAlreadyExists(data.userName);
-    const advertiserFoundByEmail = await findAdvertiserHandler.findByEmail(
-      data.email
-    );
-    if (advertiserFoundByEmail)
-      throw ErrorSendVerificationEmail.emailAlreadyExists(data.email);
+    const advertiserFound = findAdvertiserHandler.byName(data.userName);
+    const advertiserFoundByEmail = findAdvertiserHandler.byEmail(data.email);
+
+    const response = await Promise.allSettled([
+      advertiserFound,
+      advertiserFoundByEmail,
+    ]);
+
+    if (response[0].status == "fulfilled" || response[1].status == "fulfilled")
+      throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
+        data.userName,
+        data.email
+      );
+
     const authToken = authTokenCreator.generate();
+
     await this.saveAndSignUpSendEmail({
       email: data.email,
       verificationEmailId: id,
@@ -81,11 +85,7 @@ export class SendVerificationEmailController {
     data: ISendVerificationEmailRepo,
     id: string
   ): Promise<void> {
-    const advertiserFoundByEmail = await findAdvertiserHandler.findByEmail(
-      data.email
-    );
-    if (!advertiserFoundByEmail)
-      throw ErrorSendVerificationEmail.emailNotExists(data.email);
+    const advertiserFoundByEmail = await findAdvertiserHandler.byEmail(data.email);
     const authToken = authTokenCreator.generate();
     await this.saveAndSendLogInEmail({
       email: advertiserFoundByEmail.email,

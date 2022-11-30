@@ -1,6 +1,6 @@
-import { IUserRepo } from "@/src/modules/user/domain/IUserRepo";
-import { User } from "@/src/modules/user/domain/User";
-import { CreateUser } from "@/src/modules/user/use-case/CreateUser";
+import { IUserRepo } from "@/src/modules/users/user/domain/IUserRepo";
+import { User } from "@/src/modules/users/user/domain/User";
+import { CreateUser } from "@/src/modules/users/user/use-case/CreateUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { mockedUserRepo } from "../../../../__mocks__/context/MockUserRepo";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";

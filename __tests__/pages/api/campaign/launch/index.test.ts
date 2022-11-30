@@ -1,7 +1,6 @@
 import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { TestCampaignMongoDBRepo } from "../../../../../__mocks__/lib/modules/campaign/infrastructure/TestCampaignMongoDBRepo";
@@ -9,10 +8,11 @@ import launchCampaign from "@/pages/api/v1/campaign/launch";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { autoSetTestCampaignDB } from "../../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
 import { Balance } from "@/src/common/domain/Balance";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
   let ad: AdPropsPrimitives;
-  let advertiser: AdvertiserPropsPrimitives;
+  let advertiser: IUserPrimitives;
   let budget: CampaignBudget;
 
   beforeAll(async () => {
@@ -25,7 +25,7 @@ describe("On api/campaign/launch, GIVEN an advertiser and some ads", () => {
     });
   }, 20000);
 
-  it(`WHEN send a POST request with a valid ad id and a, 
+  it(`WHEN send a POST request with a valid ad id and budget, 
   THEN return status code 200`, async () => {
     const { req, res } = mockedContext({
       method: "POST",

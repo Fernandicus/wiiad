@@ -28,15 +28,15 @@ export class StripeMongoDBRepo implements IStripeRepo {
       userId: new UniqId(stripeModel.userId),
       customerId: new CustomerId(stripeModel.customerId),
       paymentMethods: stripeModel.paymentMethods.map(
-        (method) =>
-          new CardDetails({
-            paymentMethodId: new PaymentMethodId(method.paymentMethodId),
-            brand: new CardBrand(method.brand),
-            expMonth: new ExpMonth(method.expMonth),
-            expYear: new ExpYear(method.expYear),
-            last4: new Last4(method.last4),
-          })
-      ),
+              (method) =>
+                new CardDetails({
+                  paymentMethodId: new PaymentMethodId(method.paymentMethodId),
+                  brand: new CardBrand(method.brand),
+                  expMonth: new ExpMonth(method.expMonth),
+                  expYear: new ExpYear(method.expYear),
+                  last4: new Last4(method.last4),
+                })
+            ),
     });
   }
 

@@ -1,7 +1,7 @@
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 interface Props {
-  user: IGenericUserPrimitives;
+  user: IUserPrimitives;
   children?: JSX.Element;
 }
 

@@ -8,6 +8,7 @@ export class FakeStripe extends Stripe {
       id: UniqId.new(),
       userId,
       customerId: this.generateCustomerId(),
+      paymentMethods: []
     });
   }
 

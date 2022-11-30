@@ -1,5 +1,5 @@
+import { IUserPrimitives } from "../../users/user/domain/User";
 import { IAuthCookies, IReqAndRes } from "../domain/interfaces/IAuthCookies";
-import { IGenericUserPrimitives } from "../../../common/domain/interfaces/GenericUser";
 import { IJsonWebTokenRepo } from "../domain/interfaces/IJsonWebTokenRepo";
 
 export class UserSession {
@@ -8,14 +8,14 @@ export class UserSession {
     private jwtRepo: IJsonWebTokenRepo
   ) {}
 
-  getFromServer(context: IReqAndRes): IGenericUserPrimitives | null {
+  getFromServer(context: IReqAndRes): IUserPrimitives | null {
     const token = this.authCookie.getServerJWT(context);
     if (!token) return null;
-    const session = this.jwtRepo.verify<IGenericUserPrimitives>(token);
+    const session = this.jwtRepo.verify<IUserPrimitives>(token);
     return session;
   }
 
-  setFromServer(context: IReqAndRes, payload: IGenericUserPrimitives): void {
+  setFromServer(context: IReqAndRes, payload: IUserPrimitives): void {
     const token = this.jwtRepo.create(payload);
     this.authCookie.setServerJWT(context, token);
   }

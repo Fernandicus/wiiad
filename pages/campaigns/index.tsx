@@ -5,8 +5,8 @@ import { userSession } from "@/src/modules/session/infrastructure/session-contai
 import { GetServerSideProps } from "next";
 import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
 import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";
-import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 import { RoleType } from "@/src/common/domain/Role";
+import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
 
 export default function CampaignsPage(props: {
   campaigns: ICampaignPrimitives[];
@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const paymentIntent = context.query["payment_intent"] as string;
 
   const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-    const all = await AdvertiserDataController.getAll(session.id);
+    const all = await ProfileDataController.getAdvertiserData(session.id);
     return all;
   });
 

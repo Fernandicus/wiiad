@@ -1,55 +1,51 @@
-import {
-  Advertiser,
-  AdvertiserPropsPrimitives,
-} from "@/src/modules/advertiser/domain/Advertiser";
+
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
-import { IGenericUserProps } from "@/src/common/domain/interfaces/GenericUser";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
+import { IUserPrimitives, IUserProps, User } from "@/src/modules/users/user/domain/User";
 
-export class FakeAdvertiser extends Advertiser {
-  constructor(props: IGenericUserProps) {
+export class FakeAdvertiser extends User {
+  constructor(props: IUserProps) {
     super(props);
   }
 
-  static create(role = RoleType.BUSINESS): Advertiser {
+  static create(): User {
     const primaryData = this.generateFakeData();
     const advertiser = this.generateAdvertiser({
       ...primaryData,
-      role,
+      role: RoleType.BUSINESS,
     });
-    return new Advertiser({ ...advertiser });
+    return new User({ ...advertiser });
   }
 
-  static createMany(amount = 5, role = RoleType.BUSINESS): Advertiser[] {
-    let advertisers: Advertiser[] = [];
+  static createMany(amount = 5): User[] {
+    let advertisers: User[] = [];
 
     for (let i = 0; i < amount; i++) {
-      advertisers.push(this.create(role));
+      advertisers.push(this.create());
     }
 
     return advertisers;
   }
 
-  static createPrimitives(role = RoleType.BUSINESS): AdvertiserPropsPrimitives {
+  static createPrimitives(): IUserPrimitives {
     const primaryData = this.generateFakeData();
     return {
       ...primaryData,
-      role,
+      role: RoleType.BUSINESS,
     };
   }
 
   static createManyWithPrimitives(
-    rol = RoleType.BUSINESS,
     amount = 5
-  ): AdvertiserPropsPrimitives[] {
-    let advertisers: AdvertiserPropsPrimitives[] = [];
+  ): IUserPrimitives[] {
+    let advertisers: IUserPrimitives[] = [];
 
     for (let i = 0; i < amount; i++) {
-      advertisers.push(this.createPrimitives(rol));
+      advertisers.push(this.createPrimitives());
     }
     return advertisers;
   }
@@ -69,9 +65,9 @@ export class FakeAdvertiser extends Advertiser {
   }
 
   private static generateAdvertiser(
-    primitives: AdvertiserPropsPrimitives
-  ): Advertiser {
-    return new Advertiser({
+    primitives: IUserPrimitives
+  ): User {
+    return new User({
       id: new UniqId(primitives.id),
       email: new Email(primitives.email),
       name: new Name(primitives.name),

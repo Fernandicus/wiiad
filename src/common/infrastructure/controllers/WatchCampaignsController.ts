@@ -1,8 +1,4 @@
-import { ErrorWatchingCampaign } from "../../domain/ErrorWatchingCampaign";
-import {
-  IGenericUserPrimitives,
-  IGenericUserProps,
-} from "../../domain/interfaces/GenericUser";
+
 import { ICampaignPrimitives } from "../../../modules/campaign/domain/Campaign";
 import {
   campaignMetricsHandler,
@@ -10,23 +6,24 @@ import {
 } from "../../../modules/campaign/infrastructure/campaign-container";
 import { AdPropsPrimitives } from "../../../modules/ad/domain/Ad";
 import { adFinderHandler } from "../../../modules/ad/infraestructure/ad-container";
-import { findUserHandler } from "../../../modules/user/container";
+import { findUserHandler } from "../../../modules/users/user/container";
 import { updateReferralHandler } from "../../../modules/referrals/infrastructure/referral-container";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
-  referrer: IGenericUserPrimitives;
+  referrer: IUserPrimitives;
 }
 
 export class WatchCampaignsController {
   static async forInfluencer(params: {
     influencerName: string;
-    session: IGenericUserPrimitives | null;
+    session: IUserPrimitives | null;
   }): Promise<IWatchCampaignData> {
     const { influencerName, session } = params;
 
-    const referrer = await findUserHandler.findByUserName(influencerName);
+    const referrer = await findUserHandler.byName(influencerName);
     const campaignData = await this.randomActiveCampaign();
     
     updateReferralHandler.increaseReferredUsers(referrer.id)

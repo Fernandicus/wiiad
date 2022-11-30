@@ -7,7 +7,6 @@ export interface IUserModel {
   email: string;
   role: string;
   profilePic: string;
-  bankAccount?: string;
 }
 
 const userSchema = new Schema<IUserModel>(
@@ -32,7 +31,6 @@ const userSchema = new Schema<IUserModel>(
       required: true,
       min: 1,
     },
-    bankAccount: { type: String },
   },
   { _id: false }
 );

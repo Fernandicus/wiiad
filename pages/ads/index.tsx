@@ -1,10 +1,8 @@
 import CreateAdForm from "../../components/ui/profile/advertiser/CreateAdForm";
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { RoleType } from "@/src/common/domain/Role";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useRef, useState } from "react";
@@ -15,27 +13,23 @@ import {
   Notifications,
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
-import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { LaunchCampaign } from "../../components/ui/profile/advertiser/LaunchCampaign";
-import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { Balance } from "@/src/common/domain/Balance";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
 
 export type AdType = "banner" | "video";
 
 interface IAdsPageProps {
-  advertiser: AdvertiserPropsPrimitives;
+  advertiser: IUserPrimitives;
   ads: AdPropsPrimitives[];
   campaigns: ICampaignPrimitives[];
   stripeCustomer?: IStripePrimitives;
 }
 
 export default function Ads(props: IAdsPageProps) {
-  const advertiser: AdvertiserPropsPrimitives = props.advertiser;
+  const advertiser: IUserPrimitives = props.advertiser;
   const ads: AdPropsPrimitives[] = props.ads;
   const campaigns: ICampaignPrimitives[] = props.campaigns;
   const [createAd, setCreateAd] = useState<AdType | null>(null);
@@ -106,13 +100,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const { ads, campaigns, stripeCustomer } =
       await MongoDB.connectAndDisconnect(async () => {
-        const all = await AdvertiserDataController.getAll(session.id);
+        const all = await ProfileDataController.getAdvertiserData(session.id);
         return all;
       });
 
     return {
       props: {
-        advertiser: { ...session } as IGenericUserPrimitives,
+        advertiser: { ...session } as IUserPrimitives,
         ads,
         campaigns,
         stripeCustomer,

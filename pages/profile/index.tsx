@@ -2,7 +2,6 @@ import { LoginQueries } from "@/src/common/domain/LoginQueries";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
 import { AuthController } from "@/src/common/infrastructure/controllers/AuthController";
-import { IGenericUserPrimitives } from "@/src/common/domain/interfaces/GenericUser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import AdView from "../../components/ui/watch-ad/AdView";
 import { RoleType } from "@/src/common/domain/Role";
@@ -17,8 +16,9 @@ import {
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
 import { Logout } from "../../components/ui/login/Logout";
-import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
 
 interface IAdsAndCampaigns {
   campaigns: ICampaignPrimitives[] | null;
@@ -26,13 +26,13 @@ interface IAdsAndCampaigns {
 }
 
 interface ILoginData {
-  user: IGenericUserPrimitives;
+  user: IUserPrimitives;
   campaigns: ICampaignPrimitives[];
   ads: AdPropsPrimitives[];
 }
 
 export interface IUserProfilePage {
-  user: IGenericUserPrimitives;
+  user: IUserPrimitives;
   campaigns: ICampaignPrimitives[];
   ads: AdPropsPrimitives[];
 }
@@ -63,10 +63,6 @@ export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-
-  console.log("QUERY");
-  console.log(query);
-
   const loginQueries = new LoginQueries(query);
 
   try {
@@ -112,10 +108,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-async function initSession(session: IGenericUserPrimitives) {
+async function initSession(session: IUserPrimitives) {
   const { ads, campaigns } =
     await MongoDB.connectAndDisconnect<IAdsAndCampaigns>(
-      async () => await AdvertiserDataController.getAll(session.id)
+      async () => await ProfileDataController.getAdvertiserData(session.id)
     );
 
   return {
@@ -152,7 +148,7 @@ async function getLogInData(
   context: IReqAndRes
 ): Promise<ILoginData> {
   const user = await AuthController.logIn({ ...loginQueries }, context);
-  const { ads, campaigns } = await AdvertiserDataController.getAll(user.id);
+  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(user.id)
   return { user, ads, campaigns };
 }
 
@@ -161,6 +157,6 @@ async function getSingUpData(
   context: IReqAndRes
 ): Promise<ILoginData> {
   const user = await AuthController.signUp({ ...loginQueries }, context);
-  const { ads, campaigns } = await AdvertiserDataController.getAll(user.id);
+  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(user.id)
   return { user, campaigns, ads };
 }

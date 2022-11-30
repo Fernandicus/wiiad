@@ -1,5 +1,4 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import {
   CampaignStatus,
@@ -7,9 +6,8 @@ import {
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
-import { User } from "@/src/modules/user/domain/User";
+import { User } from "@/src/modules/users/user/domain/User";
 import { setTestAdDB } from "./TestAdDB";
-import { setTestAdvertiserDB } from "./TestAdvertiserDB";
 import { setTestCampaignDB, TestCampaignDB } from "./TestCampaignDB";
 import { setTestReferralDB } from "./TestReferralDB";
 import { setTestUserDB } from "./TestUserDB";
@@ -36,7 +34,7 @@ interface IVerificationEmailsByStatus {
 interface InitializedMongoTestDB {
   mocks: IMockedDB;
   campaigns: ICampaignsByStatus;
-  advertisers: Advertiser[];
+  advertisers: User[];
   ads: Ad[];
   users: User[];
   verificationEmails: IVerificationEmailsByStatus;
@@ -46,7 +44,7 @@ interface InitializedMongoTestDB {
 export class TestDBs {
   readonly mocks: IMockedDB;
   readonly campaigns: ICampaignsByStatus;
-  readonly advertisers: Advertiser[];
+  readonly advertisers: User[];
   readonly ads: Ad[];
   readonly users: User[];
   readonly verificationEmails: IVerificationEmailsByStatus;
@@ -66,9 +64,6 @@ export class TestDBs {
     const mockedAdDB = await setTestAdDB(totalAds);
     const mockedAds = await mockedAdDB.getAllAds();
 
-    const mockedAdvertisers = await setTestAdvertiserDB();
-    const advertisers = await mockedAdvertisers.getAllAdvertisers();
-
     const mockedCampaigns = await setTestCampaignDB({
       activeCampaignAds: mockedAds!.slice(0, 3),
       finishedCampaignAds: mockedAds!.slice(3, 6),
@@ -77,7 +72,8 @@ export class TestDBs {
     const campaigns = await this.findCampaignsByStatus(mockedCampaigns);
 
     const mockedUsers = await setTestUserDB(3);
-    const users = await mockedUsers.getAll();
+    const users = await mockedUsers.getAllUsers();
+    const advertisers = await mockedUsers.getAllAdvertisers();
 
     const mockedVerificationEmails = await setTestVerificationEmailDB({
       valid: users!,
