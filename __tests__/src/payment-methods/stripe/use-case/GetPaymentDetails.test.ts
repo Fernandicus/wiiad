@@ -33,7 +33,7 @@ describe("On GetPaymentDetails, GIVEN a stripe mocked repo", () => {
   });
 
   it(`WHEN call fromPaymentIntent,
-  THEN StripePayments getPaymentMethodDetails method should be called with Payment Method id`, async () => {
+  THEN StripePayments getPaymentIntentDetails method should be called with Payment Intent id`, async () => {
     const piId = FakePaymentIntentId.create();
     const paymentDetails = await getPaymentDetails.fromPaymentIntent(piId);
     expect(stripePayments.getPaymentIntentDetails).toBeCalledWith(piId);

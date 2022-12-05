@@ -14,7 +14,7 @@ export class FakePaymentMethodId extends PaymentMethodId {
     return new FakePaymentMethodId("pm_[no-exist]");
   }
 
-  checkIfExsits(): boolean {
+  checkIfNotExsits(): boolean {
     return this.id.includes("[no-exist]");
   }
 }

@@ -15,7 +15,7 @@ export class FakePaymentIntentId extends PaymentIntentId {
     return new FakePaymentIntentId("pi_[no-exist]");
   }
 
-  checkIfExsits(): boolean {
+  checkIfNotExsits(): boolean {
     return this.id.includes("[no-exist]");
   }
 }

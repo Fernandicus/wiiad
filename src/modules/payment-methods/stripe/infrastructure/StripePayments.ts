@@ -14,14 +14,14 @@ import { Last4 } from "../domain/value-objects/Last4";
 import { ExpYear } from "../domain/value-objects/ExpYear";
 import { ExpMonth } from "../domain/value-objects/ExpMonth";
 
-interface IPaymentWithPaymentMethod {
+export interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
   amount: PaymentAmount;
   paymentMethod: PaymentMethodId;
   metadata?: IStripeMetadata;
 }
 
-interface IPaymentWithoutPaymentMethod {
+export interface IPaymentWithoutPaymentMethod {
   customerId: CustomerId;
   amount: PaymentAmount;
   metadata?: IStripeMetadata;
