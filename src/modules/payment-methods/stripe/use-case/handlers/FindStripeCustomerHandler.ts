@@ -7,7 +7,7 @@ export class FindStripeCustomerHandler {
 
   async findByUserId(id : string ): Promise<IStripePrimitives> {
     const userId = new UniqId(id);
-    const stripeCustomer = await this.findStripeCustomer.findByUserId(userId);
+    const stripeCustomer = await this.findStripeCustomer.byUserId(userId);
     return stripeCustomer.toPrimitives();
   }
 }

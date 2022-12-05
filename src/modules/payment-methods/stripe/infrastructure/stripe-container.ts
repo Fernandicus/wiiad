@@ -12,13 +12,18 @@ import { GetPaymentDetailsHandler } from "../use-case/handlers/GetPaymentDetails
 import { GetPaymentDetails } from "../use-case/GetPaymentDetails";
 import { CreateStripeCustomer } from "../use-case/CreateStripeCustomer";
 import { CreateStripeCustomerHandler } from "../use-case/handlers/CreateStripeCustomerHandler";
+import Stripe from "stripe";
 
-const stripeRepo = new StripeMongoDBRepo();
-const stripePayments = new StripePayments();
-const saveStripe = new SaveStripe(stripeRepo);
-const findStripe = new FindStripeCustomer(stripeRepo);
+export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2022-08-01",
+});
+
+const stripeMongoRepo = new StripeMongoDBRepo();
+const stripePayments = new StripePayments(stripeRepo);
+const saveStripe = new SaveStripe(stripeMongoRepo);
+const findStripe = new FindStripeCustomer(stripeMongoRepo);
 const paymentIntent = new PaymentIntent(stripePayments);
-const updateStripe = new UpdateStripe(stripeRepo);
+const updateStripe = new UpdateStripe(stripeMongoRepo);
 const getDetails = new GetPaymentDetails(stripePayments);
 const createStripeCustomer = new CreateStripeCustomer(stripePayments);
 
@@ -26,5 +31,9 @@ export const saveStripeHandler = new SaveStripeHandler(saveStripe);
 export const findCustomerHandler = new FindStripeCustomerHandler(findStripe);
 export const paymentIntentHandler = new PaymentIntentHandler(paymentIntent);
 export const updateStripeHandler = new UpdateStripeHandler(updateStripe);
-export const getPaymentDetailsHandler = new GetPaymentDetailsHandler(getDetails);
-export const createStripeCustomerHandler = new CreateStripeCustomerHandler(createStripeCustomer);
+export const getPaymentDetailsHandler = new GetPaymentDetailsHandler(
+  getDetails
+);
+export const createStripeCustomerHandler = new CreateStripeCustomerHandler(
+  createStripeCustomer
+);

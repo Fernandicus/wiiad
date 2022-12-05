@@ -1,4 +1,3 @@
-import { AdvertiserPropsPrimitives } from "@/src/modules/users/advertiser/domain/Advertiser";
 import { AuthCookie } from "@/src/modules/session/infrastructure/AuthCookie";
 import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/modules/session/use-case/UserSession";
@@ -6,9 +5,10 @@ import { FakeAdvertiser } from "../../../__mocks__/lib/modules/user/FakeAdvertis
 import  {Mocks } from "node-mocks-http";
 import { NextApiRequest, NextApiResponse } from "next";
 import { mockedContext } from "../../../__mocks__/context/MockContext";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 describe("On UserSession, GIVEN an Advertiser", () => {
-  let fakeAdvertiser: AdvertiserPropsPrimitives;
+  let fakeAdvertiser: IUserPrimitives;
   let userSession: UserSession;
   let context: Mocks<NextApiRequest, NextApiResponse>
 

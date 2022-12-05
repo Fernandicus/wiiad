@@ -9,7 +9,7 @@ export interface IPaymentDetailsPrimitives {
   clientSecret: string;
 }
 
-interface IPaymentDetailsParams {
+export interface IPaymentDetailsParams {
   id: PaymentIntentId;
   amount: PaymentAmount;
   paymentMethodId?: PaymentMethodId;

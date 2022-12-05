@@ -1,5 +1,4 @@
 import { Email } from "@/src/common/domain/Email";
-import { ErrorEmailVerification } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { ValidateVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/ValidateVerificationEmail";
 import { UniqId } from "@/src/utils/UniqId";
@@ -27,10 +26,8 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
 
   it(`WHEN call the validate method for an non existing token, 
   THEN the mock findById method should throw an ErrorEmailVerification`, async () => {
-    const invalidToken = new AuthToken(UniqId.generate())
-    expect(verifyEmail.validate(invalidToken)).rejects.toThrowError(
-      ErrorEmailVerification
-    );
+    const invalidToken = new AuthToken(UniqId.generate());
+    expect(verifyEmail.validate(invalidToken)).rejects.toThrowError();
   });
 
   it(`WHEN call the validate method, 
@@ -48,7 +45,7 @@ describe("On ValidateVerificationEmail, GIVEN a Validation Email Mock Repo", () 
   THEN the mock findById method should throw an Error`, async () => {
     expect(
       verifyEmail.validate(expiredEmailTimer.authToken)
-    ).rejects.toThrowError(ErrorEmailVerification);
+    ).rejects.toThrowError();
   });
 
   test(`WHEN call the validate method for a non expired date, 

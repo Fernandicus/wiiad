@@ -12,7 +12,7 @@ export interface ICardDetailsPrimitives {
   paymentMethodId: string;
 }
 
-interface ICardDetailsParams {
+export interface ICardDetailsParams {
   brand: CardBrand;
   last4: Last4;
   expMonth: ExpMonth;

@@ -26,10 +26,7 @@ describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () =>
     const campaignsFound = await campaignRepo.findAllByAdvertiserId(
       newCampaign.advertiserId
     );
-    const newCampaignSaved = campaignsFound?.find(
-      (campaign) => campaign.id.id == newCampaign.id.id
-    );
-    expect(newCampaignSaved!).toEqual(newCampaign);
+    expect(campaignsFound).toContainEqual(newCampaign);
   }, 8000);
 
   it(`WHEN call findAllByStatus method, 

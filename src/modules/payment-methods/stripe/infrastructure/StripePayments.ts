@@ -27,18 +27,18 @@ interface IPaymentWithoutPaymentMethod {
   metadata?: IStripeMetadata;
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2022-08-01",
-});
-
 export class StripePayments {
+  constructor(private stripe: Stripe) {}
+
   async getPaymentMethodDetails(
     id: PaymentMethodId
   ): Promise<CardDetails | null> {
-    const paymentDetails = await stripe.paymentMethods.retrieve(id.id);
+    const paymentDetails = await this.stripe.paymentMethods.retrieve(id.id);
+
     if (!paymentDetails) return null;
     if (!paymentDetails.card) return null;
     const card = paymentDetails.card;
+
     return new CardDetails({
       paymentMethodId: new PaymentMethodId(paymentDetails.id),
       brand: new CardBrand(card.brand),
@@ -51,7 +51,7 @@ export class StripePayments {
   async getPaymentIntentDetails(
     id: PaymentIntentId
   ): Promise<PaymentDetails | null> {
-    const paymentDetails = await stripe.paymentIntents.retrieve(id.id);
+    const paymentDetails = await this.stripe.paymentIntents.retrieve(id.id);
     if (!paymentDetails) return null;
 
     return new PaymentDetails({
@@ -69,7 +69,7 @@ export class StripePayments {
     amount,
     metadata,
   }: IPaymentWithoutPaymentMethod): Promise<PaymentDetails | null> {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await this.stripe.paymentIntents.create({
       metadata,
       customer: customerId.id,
       setup_future_usage: "off_session",
@@ -98,7 +98,7 @@ export class StripePayments {
     paymentMethod,
     metadata,
   }: IPaymentWithPaymentMethod): Promise<PaymentDetails | null> {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await this.stripe.paymentIntents.create({
       metadata, //* { adId: "123-456" },
       amount: amount.amount,
       currency: "eur",
@@ -119,7 +119,7 @@ export class StripePayments {
   }
 
   async confirmPaymentIntent(id: PaymentIntentId): Promise<PaymentStatus> {
-    const stripeIntent = await stripe.paymentIntents.confirm(id.id);
+    const stripeIntent = await this.stripe.paymentIntents.confirm(id.id);
 
     switch (stripeIntent.status) {
       case "succeeded":
@@ -130,7 +130,7 @@ export class StripePayments {
   }
 
   async createCustomer(): Promise<CustomerId> {
-    const customer = await stripe.customers.create();
+    const customer = await this.stripe.customers.create();
     return new CustomerId(customer.id);
   }
 }
