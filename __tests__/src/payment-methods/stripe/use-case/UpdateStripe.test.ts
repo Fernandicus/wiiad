@@ -8,12 +8,10 @@ import { FakeStripe } from "../../../../../__mocks__/lib/modules/payment-methods
 
 describe("On UpdateStripe, GIVEN a stripe mocked repo", () => {
   let updateStripe: UpdateStripe;
-  let stripe: Stripe;
   let mockedRepo: IStripeRepo;
 
   beforeAll(async () => {
-    stripe = FakeStripe.create(UniqId.new());
-    mockedRepo = mockedStripeRepo(stripe);
+    mockedRepo = mockedStripeRepo();
     updateStripe = new UpdateStripe(mockedRepo);
   });
 

@@ -1,14 +1,22 @@
 import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/value-objects/CustomerId";
-import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
+import {
+  IStripeParams,
+  Stripe,
+} from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { UniqId } from "@/src/utils/UniqId";
+import { FakeCustomerId } from "./FakeCustomerId";
 
 export class FakeStripe extends Stripe {
+  constructor(params: IStripeParams) {
+    super(params);
+  }
+
   static create(userId: UniqId): Stripe {
     return new Stripe({
       id: UniqId.new(),
       userId,
-      customerId: this.generateCustomerId(),
-      paymentMethods: []
+      customerId: FakeCustomerId.create(),
+      paymentMethods: [],
     });
   }
 
@@ -22,8 +30,16 @@ export class FakeStripe extends Stripe {
     return stripes;
   }
 
-  private static generateCustomerId(): CustomerId {
-    const customerId = "cus_" + UniqId.generate();
-    return new CustomerId(customerId);
+  static noExist(): FakeStripe {
+    return new FakeStripe({
+      id: UniqId.new(),
+      userId: UniqId.new(),
+      customerId: FakeCustomerId.noExist(),
+      paymentMethods: [],
+    });
+  }
+
+  checkIfNotExsits(): boolean {
+    return this.customerId.id.includes("[no-exist]");
   }
 }
