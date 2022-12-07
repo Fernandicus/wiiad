@@ -1,4 +1,3 @@
-import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/value-objects/CustomerId";
 import {
   IStripeParams,
   Stripe,

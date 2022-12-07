@@ -16,4 +16,8 @@ export class FakeUniqId extends UniqId {
   checkIfNotExsits(): boolean {
     return this.id.includes("[no-exist]");
   }
+
+  static checkIfIdNotExist(id: string): boolean {
+    return id.includes("[no-exist]");
+  }
 }

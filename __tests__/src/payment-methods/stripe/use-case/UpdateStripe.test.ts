@@ -1,10 +1,8 @@
 import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeRepo";
-import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { UpdateStripe } from "@/src/modules/payment-methods/stripe/use-case/UpdateStripe";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeCardDetails } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { mockedStripeRepo } from "../../../../../__mocks__/context/MockStripeRepo";
-import { FakeStripe } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeStripe";
 
 describe("On UpdateStripe, GIVEN a stripe mocked repo", () => {
   let updateStripe: UpdateStripe;
