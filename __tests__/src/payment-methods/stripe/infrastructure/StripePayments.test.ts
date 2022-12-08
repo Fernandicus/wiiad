@@ -16,6 +16,10 @@ import { FakePaymentMethodId } from "../../../../../__mocks__/lib/modules/paymen
 import { UniqId } from "@/src/utils/UniqId";
 import { PaymentDetails } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";
 import { CardDetails } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
+import { FakeWebhookEvent } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
+import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
+import { stripeRepo } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
+import { ErrorPaymentValidation } from "@/src/modules/payment-methods/stripe/domain/errors/ErrorPaymentValidation";
 
 describe("On CreateStripeCustomer, GIVEN a stripe mocked repo", () => {
   let stripePayments: StripePayments;
@@ -157,5 +161,32 @@ describe("On CreateStripeCustomer, GIVEN a stripe mocked repo", () => {
     const pm_Id = FakePaymentMethodId.noExist();
     const details = await stripePayments.getPaymentMethodDetails(pm_Id);
     expect(details).toBeNull();
+  });
+
+  it(`WHEN call validateWebhookEvent with event type 'payment_intent.succeeded',
+  THEN a Budget and CardDetails should be returned`, async () => {
+    stripePayments = new StripePayments(stripeRepo);
+    const payload = FakeWebhookEvent.createRandom("payment_intent.succeeded");
+
+    const details = await stripePayments.validateWebhookEvent({
+      header: "header",
+      payload: payload.stringify(),
+    });
+
+    expect(details.budget).toBeInstanceOf(CampaignBudget);
+    expect(details.card).toBeInstanceOf(CardDetails);
+  });
+
+  it(`WHEN call validateWebhookEvent with an invalid event type,
+  THEN an ErrorPaymentValidation should be thrown`, async () => {
+    stripePayments = new StripePayments(stripeRepo);
+    const payload = FakeWebhookEvent.createRandom("payment_intent.created");
+
+    expect(
+      stripePayments.validateWebhookEvent({
+        header: "header",
+        payload: payload.stringify(),
+      })
+    ).rejects.toThrowError(ErrorPaymentValidation);
   });
 });

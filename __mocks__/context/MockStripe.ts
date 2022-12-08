@@ -1,19 +1,18 @@
-import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/value-objects/CustomerId";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
-import { faker } from "@faker-js/faker";
 import Stripe from "stripe";
 import { FakeCustomerId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeCustomerId";
 import { FakeCardDetails } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { FakePaymentIntentId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
-import { PaymentStatus } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentStatus";
-import { UniqId } from "@/src/utils/UniqId";
 import { FakeUniqId } from "../../__mocks__/lib/domain/FakeUniqId";
 import { FakePaymentDetails } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
-import { IPaymentWithPaymentMethod } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
-import { PaymentDetails } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";
-import { FakePaymentMethodId } from "__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
 import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentIntentId";
+import { FakeWebhookEvent } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
+
+type StripeEventType =
+  | "payment_intent.succeeded"
+  | "payment_intent.cancelled"
+  | "payment_intent.created";
 
 interface IStripePaymentIntentParams {
   id?: string;
@@ -36,7 +35,7 @@ interface IStripeCardDetails {
   last4: string;
 }
 
-const jestFn = <T, R>(callBack: (vals: T) => R) => {
+const jestFn = <R>(callBack: (...vals: any) => R) => {
   return jest.fn().mockImplementation(callBack);
 };
 
@@ -112,38 +111,6 @@ export const mockedStripe = jestFn(() => {
     paymentMethods: {
       retrieve: paymentMethods_retrieve,
     },
+    webhooks: { constructEvent: jest.fn() },
   };
 });
-
-/* 
-(): Stripe => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2022-08-01",
-  });
-
-  stripe.customers.create = jest.fn().mockImplementationOnce(() => {
-    return {
-      id: "cus_" + faker.random.numeric(10),
-    };
-  });
-
-  stripe.paymentMethods.retrieve = jest
-    .fn()
-    .mockImplementationOnce((id: string) => {
-      const pmId = new PaymentMethodId(id);
-      const fakeCardDetails =
-        FakeCardDetails.withGivenPaymentId(pmId).toPrimitives();
-      return {
-        id: fakeCardDetails.paymentMethodId,
-        card: {
-          exp_month: fakeCardDetails.expMonth,
-          exp_year: fakeCardDetails.expYear,
-          brand: fakeCardDetails.brand,
-          last4: fakeCardDetails.last4,
-        } as Stripe.PaymentMethod.Card,
-      };
-    });
-
-  return stripe;
-};
- */

@@ -5,10 +5,10 @@ import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { FakeStripe } from "../../../../__mocks__/lib/modules/payment-methods/stripe/FakeStripe";
 
 export const setTestStripeDB = async (
-  userId: UniqId
+  userIds: UniqId[]
 ): Promise<TestStripeDB> => {
   const testStripeRepo = await TestStripeMongoDBRepo.init();
-  return TestStripeDB.setAndInit(testStripeRepo, userId);
+  return TestStripeDB.setAndInit(testStripeRepo, userIds);
 };
 
 export class TestStripeDB {
@@ -20,13 +20,21 @@ export class TestStripeDB {
 
   static async setAndInit(
     stripeRepo: TestStripeRepository,
-    userId: UniqId
+    userIds: UniqId[]
   ): Promise<TestStripeDB> {
-    await stripeRepo.save(this.stripe(userId));
+    await stripeRepo.saveMany(this.stripe(userIds));
     return new TestStripeDB(stripeRepo);
   }
 
-  private static stripe(userId: UniqId): Stripe {
-    return FakeStripe.create(userId);
+  async getByUserId(userId: UniqId): Promise<Stripe | null> {
+    return await this.stripeRepo.getByUserId(userId);
+  }
+
+  async getAll(): Promise<Stripe[] | null> {
+    return await this.stripeRepo.getAllUsers();
+  }
+
+  private static stripe(userId: UniqId[]): Stripe[] {
+    return FakeStripe.createMany(userId);
   }
 }

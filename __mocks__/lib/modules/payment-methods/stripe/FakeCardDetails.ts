@@ -46,7 +46,7 @@ export class FakeCardDetails extends CardDetails {
 
   private static generateRandom(): ICardDetailsPrimitives {
     const expYear = new Date(Date.now()).getFullYear() + 4;
-    const expMonth = Math.round(Math.random() * 11);
+    const expMonth = Math.floor(Math.random() * 12) + 1;
     const last4 = faker.random.numeric(4)
     const paymentMethodId = "pm_" + faker.random.numeric(7);
 

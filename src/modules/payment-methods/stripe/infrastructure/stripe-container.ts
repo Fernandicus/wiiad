@@ -13,6 +13,7 @@ import { GetPaymentDetails } from "../use-case/GetPaymentDetails";
 import { CreateStripeCustomer } from "../use-case/CreateStripeCustomer";
 import { CreateStripeCustomerHandler } from "../use-case/handlers/CreateStripeCustomerHandler";
 import Stripe from "stripe";
+import { PaymentSucceeded } from "../use-case/PaymentSucceeded";
 
 export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-08-01",
@@ -26,6 +27,7 @@ const paymentIntent = new PaymentIntent(stripePayments);
 const updateStripe = new UpdateStripe(stripeMongoRepo);
 const getDetails = new GetPaymentDetails(stripePayments);
 const createStripeCustomer = new CreateStripeCustomer(stripePayments);
+export const paymentSucceeded = new PaymentSucceeded(stripePayments);
 
 export const saveStripeHandler = new SaveStripeHandler(saveStripe);
 export const findCustomerHandler = new FindStripeCustomerHandler(findStripe);

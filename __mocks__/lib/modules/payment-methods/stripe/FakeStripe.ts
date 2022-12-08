@@ -19,6 +19,11 @@ export class FakeStripe extends Stripe {
     });
   }
 
+  static createMany(userIds: UniqId[]): Stripe[] {
+    const stripes = userIds.map((id) => this.create(id));
+    return stripes;
+  }
+
   static createManyRandom(amount = 5): Stripe[] {
     const ids = Array(amount)
       .fill("")

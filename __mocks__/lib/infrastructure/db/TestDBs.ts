@@ -5,11 +5,13 @@ import {
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
+import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { User } from "@/src/modules/users/user/domain/User";
 import { setTestAdDB } from "./TestAdDB";
 import { setTestCampaignDB, TestCampaignDB } from "./TestCampaignDB";
 import { setTestReferralDB } from "./TestReferralDB";
+import { setTestStripeDB } from "./TestStripeDB";
 import { setTestUserDB } from "./TestUserDB";
 import {
   setTestVerificationEmailDB,
@@ -39,6 +41,7 @@ interface InitializedMongoTestDB {
   users: User[];
   verificationEmails: IVerificationEmailsByStatus;
   referrals: Referral[];
+  stripes: Stripe[];
 }
 
 export class TestDBs {
@@ -48,6 +51,7 @@ export class TestDBs {
   readonly ads: Ad[];
   readonly users: User[];
   readonly verificationEmails: IVerificationEmailsByStatus;
+  readonly stripes: Stripe[];
 
   constructor(params: InitializedMongoTestDB) {
     this.mocks = params.mocks;
@@ -56,6 +60,7 @@ export class TestDBs {
     this.ads = params.ads;
     this.users = params.users;
     this.verificationEmails = params.verificationEmails;
+    this.stripes = params.stripes;
   }
 
   static async setAndInitAll(): Promise<TestDBs> {
@@ -86,6 +91,10 @@ export class TestDBs {
     );
     const referrals = await mockedReferrals.getAll();
 
+    const advertiserIds = advertisers!.map((advertiser) => advertiser.id);
+    const mockedStripe = await setTestStripeDB([...advertiserIds]);
+    const stripeModels = await mockedStripe.getAll();
+
     return new TestDBs({
       mocks: {
         verificationEmailsDB: mockedVerificationEmails,
@@ -103,6 +112,7 @@ export class TestDBs {
         valids: verificationEmails!.valid,
       },
       referrals: referrals!,
+      stripes: stripeModels!,
     });
   }
 

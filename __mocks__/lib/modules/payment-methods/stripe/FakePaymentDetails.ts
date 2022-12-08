@@ -24,7 +24,7 @@ export class FakePaymentDetails extends PaymentDetails {
   }
 
   static create(id: PaymentIntentId): FakePaymentDetails {
-    const amount = parseInt(faker.random.numeric(5000));
+    const amount = parseInt(faker.random.numeric(5));
     return new FakePaymentDetails({
       id,
       amount: new PaymentAmount(amount),
