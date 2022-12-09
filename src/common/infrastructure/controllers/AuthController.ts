@@ -13,6 +13,7 @@ import { ILogingInParams, LoginQueries } from "../../domain/LoginQueries";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import {
   createUserHandler,
+  findAdvertiserHandler,
   findUserHandler,
 } from "@/src/modules/users/user/container";
 
@@ -88,7 +89,7 @@ export class AuthController {
   private static async advertiserLogIn(
     data: UserData
   ): Promise<IUserPrimitives> {
-    const advertiserFound = await findUserHandler.byEmail(
+    const advertiserFound = await findAdvertiserHandler.byEmail(
       data.verificationEmail.email
     );
     const advertiserId = advertiserFound.id;
