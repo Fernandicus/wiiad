@@ -13,9 +13,6 @@ export default async function handler(
 ) {
   if (req.method !== "GET") return res.status(400).end();
 
-  const session = userSession.getFromServer({ req, res });
-  if (!session) return res.status(400).end({ message: "No session provided" });
-
   try {
     const session = userSession.getFromServer({ req, res });
 
