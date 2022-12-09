@@ -1,4 +1,4 @@
-import api_v1_CloudinarySignBannerRequest from "@/pages/api/v1/auth/cloudinary/banner-sign-request";
+import api_v1_CloudinarySignVideoRequest from "@/pages/api/v1/auth/cloudinary/video-sign-request";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../../__mocks__/lib/modules/user/FakeUser";
@@ -7,12 +7,12 @@ import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAd
 import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { Folder } from "@/src/modules/storage/domain/Folder";
 
-describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
+describe("On api/v1/auth/cloudinary/video-sign-request", () => {
   it(`WHEN send a not 'GET' request,
   THEN a 400 status code should be returned`, async () => {
     const { req, res } = mockedContext({ method: "POST" });
 
-    await api_v1_CloudinarySignBannerRequest(req, res);
+    await api_v1_CloudinarySignVideoRequest(req, res);
 
     expect(res.statusCode).toBe(400);
   });
@@ -21,7 +21,7 @@ describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
   THEN a 400 status code should be returned`, async () => {
     const { req, res } = mockedContext({ method: "GET" });
 
-    await api_v1_CloudinarySignBannerRequest(req, res);
+    await api_v1_CloudinarySignVideoRequest(req, res);
 
     expect(res.statusCode).toBe(400);
   });
@@ -32,7 +32,7 @@ describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
     const { req, res } = mockedContext({ method: "GET" });
     userSession.setFromServer({ req, res }, user.toPrimitives());
 
-    await api_v1_CloudinarySignBannerRequest(req, res);
+    await api_v1_CloudinarySignVideoRequest(req, res);
 
     expect(res.statusCode).toBe(400);
   });
@@ -43,7 +43,7 @@ describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
     const { req, res } = mockedContext({ method: "GET" });
     userSession.setFromServer({ req, res }, advertiser.toPrimitives());
 
-    await api_v1_CloudinarySignBannerRequest(req, res);
+    await api_v1_CloudinarySignVideoRequest(req, res);
 
     const responseJSON = res._getData();
     const response: ICloudinarySignedParams = JSON.parse(responseJSON);
@@ -53,7 +53,7 @@ describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
     expect(response.signature).not.toBeUndefined();
     expect(response.signedParams).not.toBeUndefined();
     expect(response.timestamp).not.toBeUndefined();
-    expect(response.signedParams.folder).toEqual(Folder.bannerAd(advertiser.name).path)
+    expect(response.signedParams.folder).toEqual(Folder.videoAd(advertiser.name).path)
     
   });
 });
