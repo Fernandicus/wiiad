@@ -1,5 +1,5 @@
 import { Folder } from "@/src/modules/storage/domain/Folder";
-import { CloudinaryCloudStorageRepo } from "@/src/modules/storage/infrastructure/CloudinaryCloudStorageRepo";
+import { CloudinaryCloudStorageRepo } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../__mocks__/lib/modules/ads/FakeAd";
 
