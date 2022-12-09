@@ -65,7 +65,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
         $inc: { "metrics.totalViews": 1 },
       }
     );
-    if (!campaignFound) throw ErrorFindingCampaign.byId(id.id);
+    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   async increaseClicks(id: UniqId): Promise<void> {
@@ -75,7 +75,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
         $inc: { "metrics.totalClicks": 1 },
       }
     );
-    if (!campaignFound) throw ErrorFindingCampaign.byId(id.id);
+    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   private toCampaign(campaignModel: ICampaignModel): Campaign {

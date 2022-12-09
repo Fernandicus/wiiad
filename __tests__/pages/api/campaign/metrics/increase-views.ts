@@ -1,4 +1,4 @@
-import api_v1_IncreaseClicks from "@/pages/api/v1/campaign/metrics/increase-clicks";
+import api_v1_IncreaseViews from "@/pages/api/v1/campaign/metrics/increase-views";
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import {
@@ -31,7 +31,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       method: "GET",
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
     expect(res.statusCode).toBe(400);
   });
 
@@ -41,7 +41,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       method: "POST",
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
     expect(res.statusCode).toBe(400);
   });
 
@@ -54,12 +54,12 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       },
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
     expect(res.statusCode).toBe(400);
   });
 
   it(`WHEN send POST request with an active campaign id, 
-  THEN campaign  total clicks should be increased by one and status code should be 200`, async () => {
+  THEN campaign total views should be increased by one and status code should be 200`, async () => {
     const campaign = activeCampaigns![0];
     const { req, res } = mockedContext({
       method: "POST",
@@ -68,12 +68,12 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       },
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
     const campaignFound = await campaignsRepo.findById(campaign.id);
 
     expect(res.statusCode).toBe(200);
-    expect(campaignFound!.metrics.totalClicks).toBe(
-      campaign.metrics.totalClicks + 1
+    expect(campaignFound!.metrics.totalViews).toBe(
+      campaign.metrics.totalViews + 1
     );
   });
 
@@ -87,7 +87,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       },
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
 
     expect(res.statusCode).toBe(400);
   });
@@ -102,7 +102,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
       },
     });
 
-    await api_v1_IncreaseClicks(req, res);
+    await api_v1_IncreaseViews(req, res);
 
     expect(res.statusCode).toBe(400);
   });
