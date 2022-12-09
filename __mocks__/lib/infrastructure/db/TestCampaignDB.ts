@@ -76,6 +76,10 @@ export class TestCampaignDB {
     return campaigns;
   }
 
+  async findById(id: UniqId): Promise<Campaign | null> {
+    return await this.campaignRepo.findById(id);
+  }
+
   private static setActiveCampaigns(ads: Ad[]): Campaign[] {
     return FakeCampaign.createManyFromGivenAds(ads, CampaignStatusType.ACTIVE);
   }

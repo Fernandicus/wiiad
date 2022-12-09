@@ -44,22 +44,33 @@ export class TestCampaignMongoDBRepo
     if (campaignModel.length == 0) return null;
 
     const campaigns = campaignModel.map((campaign): Campaign => {
-      return new Campaign({
-        id: new UniqId(campaign._id),
-        adId: new UniqId(campaign.adId),
-        advertiserId: new UniqId(campaign.advertiserId),
-        referrals: campaign.referrals.map((referral) => new UniqId(referral)),
-        status: new CampaignStatus(campaign.status),
-        budget: new CampaignBudget({
-          clicks: campaign.budget.clicks,
-          balance: new Balance(campaign.budget.balance),
-        }),
-        metrics: new CampaignMetrics({
-          totalClicks: campaign.metrics.totalClicks,
-          totalViews: campaign.metrics.totalViews,
-        }),
-      });
+      return this.toCampaign(campaign);
     });
     return campaigns;
+  }
+
+  async findById(id: UniqId): Promise<Campaign | null> {
+    await TestMongoDB.connectMongoDB();
+    const campaignFound = await CampaignModel.findById(id.id);
+    if (!campaignFound) return null;
+    return this.toCampaign(campaignFound);
+  }
+
+  private toCampaign(campaign: ICampaignModel): Campaign {
+    return new Campaign({
+      id: new UniqId(campaign._id),
+      adId: new UniqId(campaign.adId),
+      advertiserId: new UniqId(campaign.advertiserId),
+      referrals: campaign.referrals.map((referral) => new UniqId(referral)),
+      status: new CampaignStatus(campaign.status),
+      budget: new CampaignBudget({
+        clicks: campaign.budget.clicks,
+        balance: new Balance(campaign.budget.balance),
+      }),
+      metrics: new CampaignMetrics({
+        totalClicks: campaign.metrics.totalClicks,
+        totalViews: campaign.metrics.totalViews,
+      }),
+    });
   }
 }
