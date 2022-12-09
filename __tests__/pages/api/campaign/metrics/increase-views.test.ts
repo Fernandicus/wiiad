@@ -8,7 +8,7 @@ import {
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { UniqId } from "@/src/utils/UniqId";
 
-describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () => {
+describe("On api/v1/campaign/metrics/increase-views, GIVEN some Campaigns", () => {
   let activeCampaigns: Campaign[] | null;
   let finisehdCampaigns: Campaign[] | null;
   let standByCampaigns: Campaign[] | null;
@@ -58,7 +58,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     expect(res.statusCode).toBe(400);
   });
 
-  it(`WHEN send POST request with an active campaign id, 
+  it(`WHEN send POST request with or without user session an with an active campaign id, 
   THEN campaign total views should be increased by one and status code should be 200`, async () => {
     const campaign = activeCampaigns![0];
     const { req, res } = mockedContext({
