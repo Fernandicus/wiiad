@@ -5,8 +5,7 @@ import { User } from "@/src/modules/users/user/domain/User";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { TestDBs } from "../../../../../__mocks__/lib/infrastructure/db/TestDBs";
 
-//TODO: Tests for api/v1/auth/login/index
-describe("On api/v1/auth/login/index, GIVEN ....", () => {
+describe("On api/v1/auth/login/index, GIVEN some existing users and advertisers...", () => {
   let users: User[];
   let advertisers: User[];
 
