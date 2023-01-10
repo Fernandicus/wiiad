@@ -3,11 +3,11 @@ import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RoleType } from "@/src/common/domain/Role";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
-import { ISendVerificationEmailRepo } from "@/src/modules/mailing/send-email-verification/domain/interfaces/ISendVerificationEmailRepo";
+import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { autoSetTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
-  let user: ISendVerificationEmailRepo;
+  let user: IVerificationEmailData;
 
   beforeAll(async () => {
     await autoSetTestVerificationEmailDB(2, 2);

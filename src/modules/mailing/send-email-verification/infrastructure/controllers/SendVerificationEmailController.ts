@@ -1,6 +1,6 @@
 import { findAdvertiserHandler, findUserHandler } from "@/src/modules/users/user/container";
 import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
-import { ISendVerificationEmailRepo } from "../../domain/interfaces/ISendVerificationEmailRepo";
+import { IVerificationEmailData } from "../../domain/interfaces/IVerificationEmailData";
 import {
   authTokenCreator,
   sendEmailHandler,
@@ -9,7 +9,7 @@ import {
 
 export class SendVerificationEmailController {
   static async sendToNewUser(
-    data: ISendVerificationEmailRepo,
+    data: IVerificationEmailData,
     id: string
   ): Promise<void> {
     const findUserByName = findUserHandler.byName(data.userName);
@@ -34,7 +34,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToUser(
-    data: ISendVerificationEmailRepo,
+    data: IVerificationEmailData,
     id: string
   ): Promise<void> {
     try {
@@ -53,7 +53,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToNewAdvertiser(
-    data: ISendVerificationEmailRepo,
+    data: IVerificationEmailData,
     id: string
   ): Promise<void> {
     const advertiserFound = findAdvertiserHandler.byName(data.userName);
@@ -82,7 +82,7 @@ export class SendVerificationEmailController {
   }
 
   static async sendToAdvertiser(
-    data: ISendVerificationEmailRepo,
+    data: IVerificationEmailData,
     id: string
   ): Promise<void> {
     const advertiserFoundByEmail = await findAdvertiserHandler.byEmail(data.email);
