@@ -8,7 +8,7 @@ import { FakePaymentIntentId } from "../../../../../__mocks__/lib/modules/paymen
 import { TestDBs } from "../../../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 
-describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", () => {
+describe("On /api/payments/stripe/payment-success, GIVEN a mocked DB", () => {
   let db: TestDBs;
 
   beforeAll(async () => {
@@ -17,12 +17,12 @@ describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", 
 
   it(`WHEN send 'GET' request, 
   THEN response should be status code 400`, async () => {
-    const context = mockedContext({
+    const { req, res } = mockedContext({
       method: "GET",
     });
 
-    await paymentSuccess(context.req, context.res);
-    expect(context.res.statusCode).toBe(400);
+    await paymentSuccess(req, res);
+    expect(res.statusCode).toBe(400);
   });
 
   it(`WHEN send 'POST' request with an invalid webhook event type, 
@@ -32,7 +32,7 @@ describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", 
       advertiserId: db.stripes[0].userId.id,
     };
 
-    const context = mockedContext({
+    const { req, res } = mockedContext({
       method: "POST",
       body: FakeWebhookEvent.create({
         type: "payment_intent.created",
@@ -42,8 +42,8 @@ describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", 
       }),
     });
 
-    await paymentSuccess(context.req, context.res);
-    expect(context.res.statusCode).toBe(400);
+    await paymentSuccess(req, res);
+    expect(res.statusCode).toBe(400);
   });
 
   it(`WHEN send 'POST' request with a valid webhook event type and existing stripe customer user, 
@@ -53,7 +53,7 @@ describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", 
       advertiserId: db.stripes[0].userId.id,
     };
 
-    const context = mockedContext({
+    const { req, res } = mockedContext({
       method: "POST",
       body: FakeWebhookEvent.create({
         type: "payment_intent.succeeded",
@@ -63,7 +63,7 @@ describe("On /api/payments/stripe/payment-success, GIVEN a stripe mocked repo", 
       }),
     });
 
-    await paymentSuccess(context.req, context.res);
-    expect(context.res.statusCode).toBe(200);
+    await paymentSuccess(req, res);
+    expect(res.statusCode).toBe(200);
   });
 });

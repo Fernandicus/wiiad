@@ -37,7 +37,7 @@ export class FakeAd extends Ad {
     const fakeAdData = this.generateFakeAdData();
     let ads: Ad[] = [];
 
-    for (var i = 0; i <= amount; i++) {
+    for (var i = 1; i <= amount; i++) {
       const ad = this.getAd({
         ...fakeAdData,
         advertiserId: advertiserId.id,

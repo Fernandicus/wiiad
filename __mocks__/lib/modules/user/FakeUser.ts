@@ -26,7 +26,7 @@ export class FakeUser extends User {
     });
   }
 
-  static createMany(amount: number): User[] {
+  static createMany(amount = 5): User[] {
     let users: User[] = [];
 
     for (let i = 0; i < amount; i++) {

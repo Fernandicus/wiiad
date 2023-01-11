@@ -27,6 +27,7 @@ export class TestStripeMongoDBRepo
   }
 
   async save(stripe: Stripe): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     await StripeModel.create({
       ...stripe.toPrimitives(),
       _id: stripe.id,
@@ -34,6 +35,7 @@ export class TestStripeMongoDBRepo
   }
 
   async getByUserId(userId: UniqId): Promise<any> {
+    await TestMongoDB.connectMongoDB();
     const stripeModel = await StripeModel.findOne<IStripeModel>({
       userId: userId.id,
     } as IStripeModel);
@@ -42,12 +44,14 @@ export class TestStripeMongoDBRepo
   }
 
   async getAllUsers(): Promise<Stripe[] | null> {
+    await TestMongoDB.connectMongoDB();
     const stripeModels = await StripeModel.find<IStripeModel>();
     if (stripeModels.length == 0) return null;
     return stripeModels.map((model) => this.toStripe(model));
   }
 
   async saveMany(stripes: Stripe[]): Promise<void> {
+    await TestMongoDB.connectMongoDB();
     const stripeModels: IStripeModel[] = stripes.map((s) => {
       return {
         ...s.toPrimitives(),

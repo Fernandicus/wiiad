@@ -11,6 +11,7 @@ import {
   paymentSucceeded,
   updateStripeHandler,
 } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
+import { reqBodyParse } from "@/src/utils/helpers";
 
 interface IChargesData {
   payment_method_details: {
@@ -46,10 +47,7 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400).end();
 
   const sig = req.headers["stripe-signature"] as string | Buffer | string[];
-  const bufferRequest =
-    process.env.NODE_ENV === "test"
-      ? JSON.stringify(req.body)
-      : await buffer(req);
+  const bufferRequest = await getBufferRequest(req);
 
   try {
     //TODO => Create PaymentSuccessController and Refactorize
@@ -91,4 +89,10 @@ export default async function handler(
     res.status(400).send(`Webhook Error`);
     return;
   }
+}
+
+async function getBufferRequest(req: NextApiRequest): Promise<string | Buffer> {
+  return process.env.NODE_ENV === "test"
+    ? JSON.stringify(req.body)
+    : await buffer(req);
 }

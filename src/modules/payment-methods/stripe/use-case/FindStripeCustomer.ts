@@ -8,7 +8,6 @@ export class FindStripeCustomer {
 
   async byUserId(id: UniqId): Promise<Stripe> {
     const stripeFound = await this.stripeRepo.findByUserId(id);
-    if (!stripeFound) throw ErrorFindingStripe.byUserId(id.id);
     return stripeFound;
   }
 }

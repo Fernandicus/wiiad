@@ -9,6 +9,7 @@ import { CardBrand } from "../../domain/value-objects/CardBrand";
 import { ExpMonth } from "../../domain/value-objects/ExpMonth";
 import { ExpYear } from "../../domain/value-objects/ExpYear";
 import { Last4 } from "../../domain/value-objects/Last4";
+import { ErrorFindingStripe } from "../../domain/errors/ErrorFindingStripe";
 
 export class StripeMongoDBRepo implements IStripeRepo {
   async save(stripe: Stripe): Promise<void> {
@@ -18,25 +19,27 @@ export class StripeMongoDBRepo implements IStripeRepo {
     } as IStripeModel);
   }
 
-  async findByUserId(userId: UniqId): Promise<Stripe | null> {
+  async findByUserId(userId: UniqId): Promise<Stripe> {
     const stripeModel = await StripeModel.findOne<IStripeModel>({
       userId: userId.id,
     } as IStripeModel);
-    if (!stripeModel) return null;
+    
+    if (!stripeModel) throw ErrorFindingStripe.byUserId(userId.id);
+
     return new Stripe({
       id: new UniqId(stripeModel._id),
       userId: new UniqId(stripeModel.userId),
       customerId: new CustomerId(stripeModel.customerId),
       paymentMethods: stripeModel.paymentMethods.map(
-              (method) =>
-                new CardDetails({
-                  paymentMethodId: new PaymentMethodId(method.paymentMethodId),
-                  brand: new CardBrand(method.brand),
-                  expMonth: new ExpMonth(method.expMonth),
-                  expYear: new ExpYear(method.expYear),
-                  last4: new Last4(method.last4),
-                })
-            ),
+        (method) =>
+          new CardDetails({
+            paymentMethodId: new PaymentMethodId(method.paymentMethodId),
+            brand: new CardBrand(method.brand),
+            expMonth: new ExpMonth(method.expMonth),
+            expYear: new ExpYear(method.expYear),
+            last4: new Last4(method.last4),
+          })
+      ),
     });
   }
 
