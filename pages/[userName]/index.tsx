@@ -9,7 +9,8 @@ import {
 import AdView from "../../components/ui/watch-ad/AdView";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { IUserPrimitives } from "@/src/modules/users/user/domain/User";;
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;
@@ -36,37 +37,10 @@ export default function Profile({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-
   const queryParams = new LoginQueries(query);
 
   try {
-    const session = userSession.getFromServer(context);
-
-    if (session && isUserNamePath(session, queryParams))
-      return {
-        props: {},
-        redirect: { destination: "/profile", permanent: false },
-      };
-
-    const { ad, activeCampaign, referrer } = await getCampaignToWatch(
-      queryParams,
-      session
-    );
-
-    return {
-      props: {
-        user: session,
-        campaign: activeCampaign,
-        ad,
-        referrer: {
-          email: referrer.email,
-          id: referrer.id,
-          name: referrer.name,
-          role: referrer.role,
-          profilePic: referrer.profilePic,
-        },
-      } as IWatchCampaignPage,
-    };
+    return await getSSPropsData({ context, queryParams });
   } catch (err) {
     console.error(err);
     await MongoDB.disconnect();
@@ -76,6 +50,39 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 };
+
+async function getSSPropsData(params: {
+  context: IReqAndRes;
+  queryParams: LoginQueries;
+}) {
+  const { queryParams, context } = params;
+  const session = userSession.getFromServer(context);
+  if (session && isUserNamePath(session, queryParams))
+    return {
+      props: {},
+      redirect: { destination: "/profile", permanent: false },
+    };
+
+  const { ad, activeCampaign, referrer } = await getCampaignToWatch(
+    queryParams,
+    session
+  );
+
+  return {
+    props: {
+      user: session,
+      campaign: activeCampaign,
+      ad,
+      referrer: {
+        email: referrer.email,
+        id: referrer.id,
+        name: referrer.name,
+        role: referrer.role,
+        profilePic: referrer.profilePic,
+      },
+    } as IWatchCampaignPage,
+  };
+}
 
 async function getCampaignToWatch(
   loginQueries: LoginQueries,
