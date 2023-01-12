@@ -1,29 +1,32 @@
+import apiPayWithoutPMethod, {
+  IApiStripePaymentWithoutPMethod,
+} from "@/pages/api/v1/payments/stripe/campaign/without-pmethod";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
 import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";
-import apiPayWithPMethod, {
-  IApiStripePaymentWithPMethod,
-} from "@/pages/api/v1/payments/stripe/pay-campaign/with-pmethod";
-import { FakePaymentMethodId } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
 import { getEnumValues } from "@/src/utils/helpers";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { User } from "@/src/modules/users/user/domain/User";
-import { FakeAdvertiser } from "./../../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
-import { FakeAd } from "./../../../../../../__mocks__/lib/modules/ads/FakeAd";
+import { FakeAdvertiser } from "../../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
+import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
 
-describe("On /api/payments/stripe/pay-campaign/with-pmethod, GIVEN a mocked DB:", () => {
+describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,", () => {
+  let testDB: TestDBs;
   let savedStripeModel: Stripe;
   let newAdvertiser: User;
   let newAdvertiserAd: Ad;
   let stripeDB: TestStripeDB;
-  let testDB: TestDBs;
+  let users: User[];
+  let ads: Ad[];
 
   beforeAll(async () => {
     testDB = await TestDBs.setAndInitAll();
+    ads = testDB.ads;
+    users = testDB.users;
     newAdvertiser = FakeAdvertiser.create();
     newAdvertiserAd = FakeAd.createWithGivenIds({
       advertiserId: newAdvertiser.id,
@@ -36,127 +39,98 @@ describe("On /api/payments/stripe/pay-campaign/with-pmethod, GIVEN a mocked DB:"
   });
 
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
-    const ad = testDB.ads[0];
-    const body: IApiStripePaymentWithPMethod = {
-      adId: ad.id.id,
+    const body: IApiStripePaymentWithoutPMethod = {
+      adId: ads[0].id.id,
       budgetItem: AvailableAmounts.Fifty,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "GET", body });
 
-    await apiPayWithPMethod(req, res);
+    await apiPayWithoutPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
   });
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
-    const ad = testDB.ads[0];
-    const body: IApiStripePaymentWithPMethod = {
-      adId: ad.id.id,
+    const body: IApiStripePaymentWithoutPMethod = {
+      adId: ads[0].id.id,
       budgetItem: getEnumValues(AvailableAmounts).length - 1,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 
-    await apiPayWithPMethod(req, res);
+    await apiPayWithoutPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
   });
 
   it("WHEN send a not valid budget item, THEN status code should be 400", async () => {
-    const ad = testDB.ads[0];
-    const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
-      adId: ad.id.id,
+    const body: IApiStripePaymentWithoutPMethod = {
+      adId: ads[0].id.id,
       budgetItem: 10,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 
-    userSession.setFromServer({ req, res }, { ...user.toPrimitives() });
+    userSession.setFromServer({ req, res }, { ...users[0].toPrimitives() });
 
-    await apiPayWithPMethod(req, res);
+    await apiPayWithoutPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
   });
 
   it("WHEN send request without an adId, THEN status code should be 400", async () => {
-    const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiStripePaymentWithoutPMethod = {
       adId: "",
       budgetItem: 10,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 
     userSession.remove({ req, res });
-    userSession.setFromServer({ req, res }, { ...user.toPrimitives() });
+    userSession.setFromServer({ req, res }, { ...users[0].toPrimitives() });
 
-    await apiPayWithPMethod(req, res);
+    await apiPayWithoutPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
   });
 
   it(`WHEN send request without an existing ad id for the advertiser id, 
-  THEN status code should be 400`, async () => {
-    const ad = testDB.ads[0];
-    const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
-      adId: ad.id.id,
+    THEN status code should be 400`, async () => {
+    const body: IApiStripePaymentWithoutPMethod = {
+      adId: ads[0].id.id,
       budgetItem: 0,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 
     userSession.remove({ req, res });
-    userSession.setFromServer({ req, res }, { ...user.toPrimitives() });
+    userSession.setFromServer({ req, res }, { ...users[0].toPrimitives() });
 
-    await apiPayWithPMethod(req, res);
+    await apiPayWithoutPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
   });
 
-  it(`- WHEN send a request without a valid Payment Method, 
-  THEN status code should be 400`, async () => {
-    const body: IApiStripePaymentWithPMethod = {
+  it(`WHEN send a request without Stripe Model, 
+      THEN status code should be 200, response should have property 'clientSecret' and stripe model should be saved`, async () => {
+    const body: IApiStripePaymentWithoutPMethod = {
       adId: newAdvertiserAd.id.id,
       budgetItem: 0,
-      paymentMethod: FakePaymentMethodId.noExist().id,
     };
     const ctx = mockedContext({ method: "PUT", body });
 
     userSession.remove(ctx);
     userSession.setFromServer(ctx, { ...newAdvertiser.toPrimitives() });
 
-    const { req, res } = ctx;
-    await apiPayWithPMethod(req, res);
-
-    expect(res.statusCode).toBe(400);
-  });
-
-  it(`- WHEN send a request without Stripe Model, 
-  THEN status code should be 200`, async () => {
-    const body: IApiStripePaymentWithPMethod = {
-      adId: newAdvertiserAd.id.id,
-      budgetItem: 0,
-      paymentMethod: FakePaymentMethodId.create().id,
-    };
-    const ctx = mockedContext({ method: "PUT", body });
-
-    userSession.remove(ctx);
-    userSession.setFromServer(ctx, { ...newAdvertiser.toPrimitives() });
-
-    await apiPayWithPMethod(ctx.req, ctx.res);
+    await apiPayWithoutPMethod(ctx.req, ctx.res);
     const stripeModels = await stripeDB.getAll();
     savedStripeModel = stripeModels?.find(
       (model) => model.userId.id === newAdvertiser.id.id
     )!;
 
     expect(ctx.res.statusCode).toBe(200);
+    expect(ctx.res._getJSONData()["clientSecret"]).not.toBeNull();
+    expect(savedStripeModel).not.toBeUndefined();
   });
 
-  it(`- WHEN send a request with a saved Stripe Model, 
-  THEN status code should be 200`, async () => {
+  it(`WHEN send request with a saved Stripe Model, 
+      THEN status code should be 200 and response should have property 'clientSecret'`, async () => {
     const updatedAdvertisers = testDB.dbs.users.getAllAdvertisers();
     const updatedAds = testDB.dbs.ads.getAllAds();
     const updated = await Promise.all([updatedAdvertisers, updatedAds]);
@@ -168,18 +142,18 @@ describe("On /api/payments/stripe/pay-campaign/with-pmethod, GIVEN a mocked DB:"
       (ad) => ad.advertiserId.id === advertiser?.id.id
     );
 
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiStripePaymentWithoutPMethod = {
       adId: advertiserAd!.id.id,
       budgetItem: 0,
-      paymentMethod: FakePaymentMethodId.create().id,
     };
     const ctx = mockedContext({ method: "PUT", body });
 
     userSession.remove(ctx);
     userSession.setFromServer(ctx, { ...advertiser!.toPrimitives() });
 
-    await apiPayWithPMethod(ctx.req, ctx.res);
+    await apiPayWithoutPMethod(ctx.req, ctx.res);
 
     expect(ctx.res.statusCode).toBe(200);
+    expect(ctx.res._getJSONData()["clientSecret"]).not.toBeNull();
   });
 });

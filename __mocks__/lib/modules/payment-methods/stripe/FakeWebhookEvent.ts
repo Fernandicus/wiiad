@@ -1,4 +1,4 @@
-import { IWebHookPaymentSuccess } from "@/pages/api/v1/payments/stripe/payment-success";
+import { IWebHookPaymentSuccess } from "@/pages/api/v1/payments/stripe/campaign/payment-success";
 import { CardDetails } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 import { PaymentDetails } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";

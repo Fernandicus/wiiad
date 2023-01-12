@@ -12,6 +12,7 @@ import {
   updateStripeHandler,
 } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { reqBodyParse } from "@/src/utils/helpers";
+import { StripeCampaignPaymentSuccessController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripeCampaignPaymentSuccessController";
 
 interface IChargesData {
   payment_method_details: {
@@ -46,41 +47,24 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400).end();
 
-  const sig = req.headers["stripe-signature"] as string | Buffer | string[];
-  const bufferRequest = await getBufferRequest(req);
-
   try {
-    //TODO => Create PaymentSuccessController and Refactorize
-    console.log(": : : :  : ::  ::  : : : : : :");
-    console.log(bufferRequest);
-    console.log(": : : :  : ::  ::  : : : : : :");
+    const sig = getStripeSignature(req);
+    const bufferRequest = await getBufferRequest(req);
+
     await MongoDB.connectAndDisconnect(async () => {
-      const paymentData = await paymentSucceeded.validateWebhook({
-        header: sig,
-        payload: bufferRequest,
-      });
+      const controller =
+        await StripeCampaignPaymentSuccessController.validateWebhook({
+          stripeSig: sig,
+          payload: bufferRequest,
+        });
+
       await LaunchCampaignController.launch({
         id: UniqId.generate(),
-        advertiserId: paymentData.metadata.advertiserId, //session!.id,
-        adId: paymentData.metadata.adId,
-        budget: paymentData.budget.toPrimitives(),
+        ...controller.paymentData.metadata,
+        budget: controller.paymentData.budget.toPrimitives(),
       });
 
-      const stripeCustomer = await findCustomerHandler.findByUserId(
-        paymentData.metadata.advertiserId
-      );
-
-      const savedMethod = stripeCustomer.paymentMethods.find(
-        (method) =>
-          method.paymentMethodId == paymentData.card.paymentMethodId.id
-      );
-
-      if (!savedMethod && paymentData.card.paymentMethodId.id) {
-        await updateStripeHandler.saveCardDetails(
-          paymentData.metadata.advertiserId,
-          paymentData.card.toPrimitives()
-        );
-      }
+      await controller.savePaymentMethod();
     });
 
     res.status(200).end();
@@ -89,6 +73,10 @@ export default async function handler(
     res.status(400).send(`Webhook Error`);
     return;
   }
+}
+
+function getStripeSignature(req: NextApiRequest): string | Buffer | string[] {
+  return req.headers["stripe-signature"] as string | Buffer | string[];
 }
 
 async function getBufferRequest(req: NextApiRequest): Promise<string | Buffer> {

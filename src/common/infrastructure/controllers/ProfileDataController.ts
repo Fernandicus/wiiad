@@ -17,7 +17,7 @@ export class ProfileDataController {
   static async getAdvertiserData(advertiserId: string): Promise<IAdsAndCampaigns> {
     const findCampaigns = findCampaignHandler.byAdvertiserId(advertiserId);
     const findAds = adFinderHandler.findAll(advertiserId);
-    const findStripeCustomer = findCustomerHandler.findByUserId(advertiserId);
+    const findStripeCustomer = findCustomerHandler.ByUserId(advertiserId);
 
     const response = await Promise.allSettled([
       findCampaigns,

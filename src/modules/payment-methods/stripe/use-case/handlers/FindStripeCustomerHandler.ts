@@ -5,7 +5,7 @@ import { FindStripeCustomer } from "../FindStripeCustomer";
 export class FindStripeCustomerHandler {
   constructor(private findStripeCustomer: FindStripeCustomer) {}
 
-  async findByUserId(id : string ): Promise<IStripePrimitives> {
+  async ByUserId(id : string ): Promise<IStripePrimitives> {
     const userId = new UniqId(id);
     const stripeCustomer = await this.findStripeCustomer.byUserId(userId);
     return stripeCustomer.toPrimitives();

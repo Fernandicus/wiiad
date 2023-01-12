@@ -24,8 +24,8 @@ interface IPayWithPMethod {
 }
 
 export class StripeCampaignPaymentController {
-  private adId: string;
-  private session: IUserPrimitives;
+  private readonly adId: string;
+  private readonly session: IUserPrimitives;
 
   private constructor({ adId, session }: IStripeControllerParams) {
     this.adId = adId;
@@ -83,7 +83,7 @@ export class StripeCampaignPaymentController {
   }): Promise<IPaymentDetailsPrimitives> {
     const { userId, amount, metadata } = params;
     try {
-      const stripeFound = await findCustomerHandler.findByUserId(params.userId);
+      const stripeFound = await findCustomerHandler.ByUserId(params.userId);
       const paymentDetails = await paymentIntentHandler.withoutPaymentMethod(
         stripeFound.customerId,
         amount,
@@ -113,7 +113,7 @@ export class StripeCampaignPaymentController {
   }): Promise<IPaymentDetailsPrimitives> {
     const { userId, amount, paymentMethodId, metadata } = params;
     try {
-      const stripeFound = await findCustomerHandler.findByUserId(params.userId);
+      const stripeFound = await findCustomerHandler.ByUserId(params.userId);
       const paymentDetails = await paymentIntentHandler.withPaymentMethod(
         stripeFound.customerId,
         amount,

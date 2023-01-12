@@ -1,14 +1,14 @@
-import paymentSuccess from "@/pages/api/v1/payments/stripe/payment-success";
-import { FakeWebhookEvent } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
-import { mockedContext } from "../../../../../__mocks__/context/MockContext";
-import { FakeCardDetails } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
+import paymentSuccess from "@/pages/api/v1/payments/stripe/campaign/payment-success";
+import { FakeWebhookEvent } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
+import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
+import { FakeCardDetails } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { UniqId } from "@/src/utils/UniqId";
-import { FakePaymentDetails } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
-import { FakePaymentIntentId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
-import { TestDBs } from "../../../../../__mocks__/lib/infrastructure/db/TestDBs";
+import { FakePaymentDetails } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
+import { FakePaymentIntentId } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
+import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 
-describe("On /api/payments/stripe/payment-success, GIVEN a mocked DB", () => {
+describe("On /api/payments/stripe/campaign/payment-success, GIVEN a mocked DB", () => {
   let db: TestDBs;
 
   beforeAll(async () => {
