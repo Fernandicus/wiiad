@@ -125,15 +125,16 @@ async function logInOrSignUp(params: {
   context: IReqAndRes;
 }): Promise<ILoginData> {
   const { loginQueries, context } = params;
+  const authController = new AuthController({ context, loginQueries });
 
   const data = await MongoDB.connectAndDisconnect<ILoginData>(async () => {
     if (loginQueries.isLogin()) {
-      const loginData = await getLogInData(loginQueries, context);
+      const loginData = await getLogInData(authController);
       return loginData;
     }
 
     if (loginQueries.isSignUp()) {
-      const signUpData = await getSingUpData(loginQueries, context);
+      const signUpData = await getSingUpData(authController);
       return signUpData;
     }
 
@@ -144,19 +145,21 @@ async function logInOrSignUp(params: {
 }
 
 async function getLogInData(
-  loginQueries: LoginQueries,
-  context: IReqAndRes
+  authController: AuthController
 ): Promise<ILoginData> {
-  const user = await AuthController.logIn({ ...loginQueries }, context);
-  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(user.id)
+  const user = await authController.logIn();
+  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(
+    user.id
+  );
   return { user, ads, campaigns };
 }
 
 async function getSingUpData(
-  loginQueries: LoginQueries,
-  context: IReqAndRes
+  authController: AuthController
 ): Promise<ILoginData> {
-  const user = await AuthController.signUp({ ...loginQueries }, context);
-  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(user.id)
+  const user = await authController.signUp();
+  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(
+    user.id
+  );
   return { user, campaigns, ads };
 }

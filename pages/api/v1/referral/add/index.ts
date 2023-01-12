@@ -8,6 +8,9 @@ import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/Err
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ReferralController } from "@/src/modules/referrals/infrastructure/controllers/ReferralController";
 
+//!     *** ESTA CONEXIÓN API ES TEMPORAL Y NO ES VÁLIDA
+//TODO:     ** ESTA LOGICA DEBE IR EN EL WEBSOCKET
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -32,8 +35,8 @@ export default async function handler(
       const campaignBalance = reqBody.campaign.budget.balance;
       const clicks = reqBody.campaign.budget.clicks;
       const balanceToAdd = Math.floor(campaignBalance / clicks);
-
-      await ReferralController.updateBalance({
+      const referralController = new ReferralController();
+      await referralController.updateBalance({
         balance: balanceToAdd,
         refereeId: session.id,
         referrerId: reqBody.referrerId,

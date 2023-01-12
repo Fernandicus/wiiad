@@ -23,72 +23,74 @@ interface UserData {
 }
 
 export class AuthController {
-  static async logIn(
-    loginQueries: ILogingInParams,
-    context: IReqAndRes
-  ): Promise<IUserPrimitives> {
+  readonly loginQueries;
+  readonly context;
+
+  constructor(params: { loginQueries: ILogingInParams; context: IReqAndRes }) {
+    const { loginQueries, context } = params;
+    this.loginQueries = loginQueries;
+    this.context = context;
+  }
+
+  async logIn(): Promise<IUserPrimitives> {
     const verificationEmail = await validateEmailHandler.validate(
-      loginQueries.authToken
+      this.loginQueries.authToken
     );
 
     if (verificationEmail.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn({
-        queries: loginQueries,
+        queries: this.loginQueries,
         verificationEmail,
       });
 
-      this.userInitSession(context, advertiser);
+      this.userInitSession(this.context, advertiser);
       return advertiser;
     } else {
       const user = await this.userLogIn({
-        queries: loginQueries,
+        queries: this.loginQueries,
         verificationEmail,
       });
 
-      this.userInitSession(context, user);
+      this.userInitSession(this.context, user);
 
       return user;
     }
   }
 
-  static async signUp(
-    loginQueries: ILogingInParams,
-    context: IReqAndRes
-  ): Promise<IUserPrimitives> {
-    if (!loginQueries.authToken || !loginQueries.userName)
+  async signUp(): Promise<IUserPrimitives> {
+    if (!this.loginQueries.authToken || !this.loginQueries.userName)
       throw new Error("No 'auth token or/and userName' queries provided");
 
     const verificationEmail = await validateEmailHandler.validate(
-      loginQueries.authToken
+      this.loginQueries.authToken
     );
 
     if (verificationEmail.role !== RoleType.USER) {
       console.log("business");
       const advertiser = await this.advertiserSignUp({
-        queries: loginQueries,
+        queries: this.loginQueries,
         verificationEmail,
       });
 
-      this.userInitSession(context, advertiser);
+      this.userInitSession(this.context, advertiser);
       return advertiser;
     } else {
       console.log("user");
       const user = await this.userSignUp({
-        queries: loginQueries,
+        queries: this.loginQueries,
         verificationEmail,
       });
 
-      await ReferralController.createNew(user.id);
+      const controller = new ReferralController();
+      await controller.createNew(user.id);
 
-      this.userInitSession(context, user);
+      this.userInitSession(this.context, user);
 
       return user;
     }
   }
 
-  private static async advertiserLogIn(
-    data: UserData
-  ): Promise<IUserPrimitives> {
+  private async advertiserLogIn(data: UserData): Promise<IUserPrimitives> {
     const advertiserFound = await findAdvertiserHandler.byEmail(
       data.verificationEmail.email
     );
@@ -97,13 +99,11 @@ export class AuthController {
     return this.user(data, advertiserId, advertiserFound.profilePic);
   }
 
-  private static async advertiserSignUp(
-    data: UserData
-  ): Promise<IUserPrimitives> {
+  private async advertiserSignUp(data: UserData): Promise<IUserPrimitives> {
     return this.getAndCreateNewAdvertiser(data);
   }
 
-  private static async userLogIn(data: UserData): Promise<IUserPrimitives> {
+  private async userLogIn(data: UserData): Promise<IUserPrimitives> {
     const findUser = findUserHandler.byEmail(data.verificationEmail.email);
     const response = await Promise.all([findUser]);
     const userFound = response[0];
@@ -112,22 +112,19 @@ export class AuthController {
     return this.user(data, userId, userFound.profilePic);
   }
 
-  private static async userSignUp(data: UserData): Promise<IUserPrimitives> {
+  private async userSignUp(data: UserData): Promise<IUserPrimitives> {
     await removeVerificationEmailHandler.removeById(data.verificationEmail.id);
     return this.getAndCreateNewUser(data);
   }
 
-  private static userInitSession(
-    context: IReqAndRes,
-    payload: IUserPrimitives
-  ): void {
+  private userInitSession(context: IReqAndRes, payload: IUserPrimitives): void {
     if (userSession.getFromServer(context)) {
       userSession.remove(context);
     }
     userSession.setFromServer(context, payload);
   }
 
-  private static async getAndCreateNewAdvertiser(
+  private async getAndCreateNewAdvertiser(
     data: UserData
   ): Promise<IUserPrimitives> {
     const advertiserId = UniqId.generate();
@@ -144,9 +141,7 @@ export class AuthController {
     return this.user(data, advertiserId, profilePic);
   }
 
-  private static async getAndCreateNewUser(
-    data: UserData
-  ): Promise<IUserPrimitives> {
+  private async getAndCreateNewUser(data: UserData): Promise<IUserPrimitives> {
     const userId = UniqId.generate();
     const profilePic = ProfilePic.defaultUserPic;
     await createUserHandler.create({
@@ -160,7 +155,7 @@ export class AuthController {
     return this.user(data, userId, profilePic);
   }
 
-  private static user(
+  private user(
     data: UserData,
     id: string,
     profilePic: string

@@ -12,7 +12,7 @@ export class ApiRoutes {
   static login = "/api/v1/auth/login/";
   static logout = "/api/v1/auth/logout/";
   static addReferral = "/api/v1/referral/add";
-  static getUserReferralData = "/api/v1/referral/";
+  static getUserReferralData = "/api/v1/referral/get-data";
   static cloudinaryCloudName = "fernanprojects";
   static cloudinarySignedVideoData =
     "/api/v1/auth/cloudinary/video-sign-request";
