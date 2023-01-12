@@ -13,105 +13,70 @@ import { PaymentAmount } from "../../domain/value-objects/PaymentAmount";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { ErrorFindingAd } from "@/src/modules/ad/domain/errors/ErrorFindingAd";
 
-interface IPaymentParams {
-  session: IUserPrimitives;
-  budgetItem: number;
-  adId: string;
-}
-
-interface IPaymentWithPMethod {
-  paymentParams: IPaymentParams;
-  paymentMethod?: string;
-}
-
-interface IPayParams {
+interface IStripeControllerParams {
   adId: string;
   session: IUserPrimitives;
-  paymentMethod?: string;
+}
+
+interface IPayWithPMethod {
   budgetItem: number;
+  paymentMethod: string;
 }
 
-export interface IPaymentIntent {
-  clientSecret: string;
-  paymentIntent: string;
-}
+export class StripeCampaignPaymentController {
+  private adId: string;
+  private session: IUserPrimitives;
 
-export class StripePaymentController {
-  static async pay(params: IPayParams): Promise<IPaymentDetailsPrimitives> {
-    const { adId, session, paymentMethod, budgetItem } = params;
+  private constructor({ adId, session }: IStripeControllerParams) {
+    this.adId = adId;
+    this.session = session;
+  }
+
+  static async validate(params: IStripeControllerParams) {
+    const { adId, session } = params;
     await this.checkIfUserOwnsAd({ adId, session });
-    const paymentData: IPaymentWithPMethod = {
-      paymentMethod,
-      paymentParams: {
-        adId,
-        budgetItem,
-        session,
-      },
-    };
-    const details = await this.throwPayment(paymentData);
-    return details;
+    return new StripeCampaignPaymentController({ adId, session });
   }
 
   private static async checkIfUserOwnsAd({
     adId,
     session,
-  }: {
-    adId: string;
-    session: IUserPrimitives;
-  }): Promise<void> {
+  }: IStripeControllerParams): Promise<void> {
     const adFound = await adFinderHandler.findByAdId(adId);
     if (adFound.advertiserId !== session.id)
       throw ErrorFindingAd.byAdvertiserId(session.id);
   }
 
-  private static async throwPayment(
-    params: IPaymentWithPMethod
-  ): Promise<IPaymentDetailsPrimitives> {
-    const { paymentMethod, paymentParams } = params;
-    if (!paymentMethod) {
-      const details = await this.payWithoutPMethod(paymentParams);
-      return details;
-    } else {
-      const details = await this.payWithPMethod({
-        paymentParams,
-        paymentMethod,
-      });
-      return details;
-    }
-  }
-
-  private static async payWithPMethod({
-    paymentParams,
+  async payWithPaymentMethod({
+    budgetItem,
     paymentMethod,
-  }: IPaymentWithPMethod): Promise<IPaymentDetailsPrimitives> {
-    const { adId, budgetItem, session } = paymentParams;
+  }: IPayWithPMethod): Promise<IPaymentDetailsPrimitives> {
     const paymentAmount = PaymentAmount.fromItem(budgetItem);
-    return await this.paymentWithPaymentMethod({
-      userId: session!.id,
+    return await this.paymentWithPMethod({
+      userId: this.session.id,
       paymentMethodId: paymentMethod!,
       amount: paymentAmount.amount,
-      metadata: { adId, advertiserId: session!.id },
+      metadata: { adId: this.adId, advertiserId: this.session.id },
     });
   }
 
-  private static async payWithoutPMethod(
-    params: IPaymentParams
+  async payWithoutPaymentMethod(
+    budgetItem: number
   ): Promise<IPaymentDetailsPrimitives> {
-    const { adId, budgetItem, session } = params;
     const paymentAmount = PaymentAmount.fromItem(budgetItem);
-    const details = await this.paymentWithoutPaymentMethod({
-      userId: session!.id,
+    const details = await this.paymentWithoutPMethod({
+      userId: this.session.id,
       amount: paymentAmount.amount,
       metadata: {
-        adId,
-        advertiserId: session.id,
+        adId: this.adId,
+        advertiserId: this.session.id,
       },
     });
 
     return details;
   }
 
-  private static async paymentWithoutPaymentMethod(params: {
+  private async paymentWithoutPMethod(params: {
     userId: string;
     amount: number;
     metadata: IStripeMetadata;
@@ -140,7 +105,7 @@ export class StripePaymentController {
     }
   }
 
-  private static async paymentWithPaymentMethod(params: {
+  private async paymentWithPMethod(params: {
     userId: string;
     amount: number;
     paymentMethodId: string;
@@ -171,9 +136,7 @@ export class StripePaymentController {
     }
   }
 
-  private static async createNewStripeCustomer(
-    userId: string
-  ): Promise<string> {
+  private async createNewStripeCustomer(userId: string): Promise<string> {
     const customerId = await createStripeCustomerHandler.create();
     await saveStripeHandler.save({
       id: UniqId.generate(),

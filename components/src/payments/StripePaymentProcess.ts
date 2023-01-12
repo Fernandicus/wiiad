@@ -1,4 +1,3 @@
-import { IPaymentIntent } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripePaymentController";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
@@ -8,6 +7,17 @@ import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
+
+interface IPaymentParams {
+  budgetItem: number;
+  adId: string;
+  paymentMethod?: string;
+}
+
+interface IPaymentIntent {
+  clientSecret: string;
+  paymentIntent: string;
+}
 
 export const stripePromise = loadStripe(PublicKeys.stripe);
 
@@ -51,27 +61,36 @@ export class StripePaymentProcess {
     }
   }
 
-  private async pay(params: {
-    budgetItem: number;
-    adId: string;
-    paymentMethod?: string;
+  private async pay(paymentParams: IPaymentParams): Promise<Response> {
+    if (!paymentParams.paymentMethod) {
+      return await this.fetchPayment({
+        route: ApiRoutes.stripePayWithoutPMethod,
+        paymentParams,
+      });
+    } else {
+      return await this.fetchPayment({
+        route: ApiRoutes.stripePayWithPMethod,
+        paymentParams,
+      });
+    }
+  }
+
+  private async fetchPayment(params: {
+    route: string;
+    paymentParams: IPaymentParams;
   }): Promise<Response> {
-    const { adId, budgetItem, paymentMethod } = params;
-    return await fetch(ApiRoutes.stripePaymentIntent, {
+    const resp = await fetch(params.route, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        budgetItem,
-        paymentMethod,
-        adId,
-      }),
+      body: JSON.stringify(params.paymentParams),
     });
+    return resp;
   }
 
   //? https://stripe.com/docs/payments/save-during-payment?platform=web&client=react#web-submit-payment
   async confirmPayment(
     useStripe: Stripe,
-    useElements: StripeElements,
+    useElements: StripeElements
   ): Promise<{ message: string; status: number }> {
     const path = ApiRoutes.paymentCompleted();
     try {

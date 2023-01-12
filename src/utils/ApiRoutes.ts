@@ -20,7 +20,8 @@ export class ApiRoutes {
     "/api/v1/auth/cloudinary/banner-sign-request";
   static cloudinaryVideoEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/video/upload/`;
   static cloudinaryImageEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload/`;
-  static stripePaymentIntent = "/api/v1/payments/stripe/payment-intent/";
+  static stripePayWithPMethod = "/api/v1/payments/stripe/pay-campaign/with-pmethod";
+  static stripePayWithoutPMethod = "/api/v1/payments/stripe/pay-campaign/without-pmethod";
   static paymentCompleted = () => {
     const host = window.location.host;
     if (host === "localhost:3000") return `http://${host}/campaigns`;
