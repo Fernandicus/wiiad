@@ -53,7 +53,7 @@ export const LaunchCampaign = ({
           setIsPaying(false);
           const splitedPath = window.location.pathname.split("/");
           const path = `/${splitedPath[1]}/campaigns`;
-          router.push(path);
+        //  router.push(path);
           return;
         }
       } catch (err) {

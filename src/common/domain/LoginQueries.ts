@@ -1,10 +1,16 @@
 import { ParsedUrlQuery } from "querystring";
 import { LogStates } from "./LogStates";
 
-export interface ILogingInParams {
+export enum LoginQuery {
+  AuthToken = "authToken",
+  UserName = "userName",
+  Log = "log",
+}
+
+/* export interface ILogingInParams {
   authToken: string;
   userName: string;
-}
+} */
 
 export class LoginQueries {
   readonly authToken: string;
@@ -12,9 +18,9 @@ export class LoginQueries {
   readonly userName: string;
 
   constructor(query: ParsedUrlQuery) {
-    const userName = query["userName"];
-    const authToken = query["authToken"];
-    const log = query["log"];
+    const userName = query[LoginQuery.UserName];
+    const authToken = query[LoginQuery.AuthToken];
+    const log = query[LoginQuery.Log];
 
     this.userName = this.getQuery(userName)!;
     this.authToken = this.getQuery(authToken);
@@ -33,6 +39,4 @@ export class LoginQueries {
   isSignUp(): boolean {
     return this.log === LogStates.SignUp;
   }
-
-  
 }

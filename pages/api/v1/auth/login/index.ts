@@ -8,6 +8,8 @@ import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingUser } from "@/src/modules/users/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/common/domain/Role";
+import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { verificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 
 export interface APISendEmailVerification {
   data: IVerificationEmailData;
@@ -21,32 +23,20 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   const { data, isNewUser }: APISendEmailVerification = reqBodyParse(req);
-  
+
   try {
     await MongoDB.connectAndDisconnect(async () => {
       if (data.role === RoleType.USER) {
         if (isNewUser) {
-          await SendVerificationEmailController.sendToNewUser(
-            data,
-            UniqId.generate()
-          );
+          await verificationEmailController.sendToNewUser(data);
         } else {
-          await SendVerificationEmailController.sendToUser(
-            data,
-            UniqId.generate()
-          );
+          await verificationEmailController.sendToUser(data);
         }
       } else {
         if (isNewUser) {
-          await SendVerificationEmailController.sendToNewAdvertiser(
-            data,
-            UniqId.generate()
-          );
+          await verificationEmailController.sendToNewAdvertiser(data);
         } else {
-          await SendVerificationEmailController.sendToAdvertiser(
-            data,
-            UniqId.generate()
-          );
+          await verificationEmailController.sendToAdvertiser(data);
         }
       }
     });

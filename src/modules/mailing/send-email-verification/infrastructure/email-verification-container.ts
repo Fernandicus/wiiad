@@ -10,6 +10,8 @@ import { RemoveVerificationEmail } from "../use-case/RemoveVerificationEmail";
 import { SaveVerificationEmail } from "../use-case/SaveVerificationEmail";
 import { SendlVerificationEmail } from "../use-case/SendVerificationEmail";
 import { ValidateVerificationEmail } from "../use-case/ValidateVerificationEmail";
+import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { SendVerificationEmailController } from "./controllers/SendVerificationEmailController";
 
 const verificationEmailRepo = new VerificationEmailMongoDBRepo();
 const saveVerificationEmail = new SaveVerificationEmail(verificationEmailRepo);
@@ -32,3 +34,6 @@ const removeVerificationEmail = new RemoveVerificationEmail(
 );
 export const removeVerificationEmailHandler =
   new RemoveVerificationEmailHandler(removeVerificationEmail);
+
+const jwt = new JsonWebTokenNPM();
+export const verificationEmailController = new SendVerificationEmailController(jwt);

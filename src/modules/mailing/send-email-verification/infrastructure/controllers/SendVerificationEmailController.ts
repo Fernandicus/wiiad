@@ -1,17 +1,68 @@
-import { findAdvertiserHandler, findUserHandler } from "@/src/modules/users/user/container";
+import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import {
+  findAdvertiserHandler,
+  findUserHandler,
+} from "@/src/modules/users/user/container";
+import { ErrorFindingUser } from "@/src/modules/users/user/domain/ErrorFindingUser";
 import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
 import { IVerificationEmailData } from "../../domain/interfaces/IVerificationEmailData";
-import {
-  authTokenCreator,
-  sendEmailHandler,
-  verificationEmailHandler,
-} from "../email-verification-container";
+import { sendEmailHandler } from "../email-verification-container";
 
 export class SendVerificationEmailController {
-  static async sendToNewUser(
-    data: IVerificationEmailData,
-    id: string
-  ): Promise<void> {
+  constructor(private jwt: JsonWebTokenNPM) {}
+
+  async sendToNewUser(data: IVerificationEmailData): Promise<void> {
+    await this.checkIsNewUser(data);
+    const authToken = this.jwt.withExpirationDate(data, 900);
+    await sendEmailHandler.sendSignUp({
+      ...data,
+      authToken,
+    });
+  }
+
+  async sendToUser(data: IVerificationEmailData): Promise<void> {
+    try {
+      const { name } = await findUserHandler.byEmail(data.email);
+      const payload = { ...data, userName: name };
+      const authToken = this.jwt.withExpirationDate(payload, 900);
+
+      await sendEmailHandler.sendLogin({
+        ...data,
+        authToken,
+      });
+    } catch (error) {
+      if (error instanceof ErrorFindingUser)
+        throw ErrorSendVerificationEmail.emailNotExists(data.email);
+      throw error;
+    }
+  }
+
+  async sendToNewAdvertiser(data: IVerificationEmailData): Promise<void> {
+    const authToken = this.jwt.withExpirationDate(data, 900);
+    await this.checkIsNewAdvertiser(data);
+    await sendEmailHandler.sendSignUp({
+      ...data,
+      authToken,
+    });
+  }
+
+  async sendToAdvertiser(data: IVerificationEmailData): Promise<void> {
+    try {
+      const { name } = await findAdvertiserHandler.byEmail(data.email);
+      const payload = { ...data, userName: name };
+      const authToken = this.jwt.withExpirationDate(payload, 900);
+      await sendEmailHandler.sendSignUp({
+        ...data,
+        authToken,
+      });
+    } catch (err) {
+      if (err instanceof ErrorFindingUser)
+        throw ErrorSendVerificationEmail.emailNotExists(data.email);
+      throw err;
+    }
+  }
+
+  private async checkIsNewUser(data: IVerificationEmailData): Promise<void> {
     const findUserByName = findUserHandler.byName(data.userName);
     const findUserByEmail = findUserHandler.byEmail(data.email);
 
@@ -22,123 +73,23 @@ export class SendVerificationEmailController {
         data.userName,
         data.email
       );
-
-    const authToken = authTokenCreator.generate();
-    await this.saveAndSignUpSendEmail({
-      email: data.email,
-      verificationEmailId: id,
-      name: data.userName,
-      role: data.role,
-      authToken: authToken.token,
-    });
   }
 
-  static async sendToUser(
-    data: IVerificationEmailData,
-    id: string
-  ): Promise<void> {
-    try {
-      const userFound = await findUserHandler.byEmail(data.email);
-      const authToken = authTokenCreator.generate();
-      await this.saveAndSendLogInEmail({
-        verificationEmailId: id,
-        email: userFound.email,
-        name: userFound.name,
-        role: userFound.role,
-        authToken: authToken.token,
-      });
-    } catch (error) {
-      throw ErrorSendVerificationEmail.emailNotExists(data.email);
-    }
-  }
-
-  static async sendToNewAdvertiser(
-    data: IVerificationEmailData,
-    id: string
+  private async checkIsNewAdvertiser(
+    data: IVerificationEmailData
   ): Promise<void> {
     const advertiserFound = findAdvertiserHandler.byName(data.userName);
     const advertiserFoundByEmail = findAdvertiserHandler.byEmail(data.email);
 
-    const response = await Promise.allSettled([
+    const resp = await Promise.allSettled([
       advertiserFound,
       advertiserFoundByEmail,
     ]);
 
-    if (response[0].status == "fulfilled" || response[1].status == "fulfilled")
+    if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
       throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
         data.userName,
         data.email
       );
-
-    const authToken = authTokenCreator.generate();
-
-    await this.saveAndSignUpSendEmail({
-      email: data.email,
-      verificationEmailId: id,
-      name: data.userName,
-      role: data.role,
-      authToken: authToken.token,
-    });
-  }
-
-  static async sendToAdvertiser(
-    data: IVerificationEmailData,
-    id: string
-  ): Promise<void> {
-    const advertiserFoundByEmail = await findAdvertiserHandler.byEmail(data.email);
-    const authToken = authTokenCreator.generate();
-    await this.saveAndSendLogInEmail({
-      email: advertiserFoundByEmail.email,
-      verificationEmailId: id,
-      name: advertiserFoundByEmail.name,
-      role: advertiserFoundByEmail.role,
-      authToken: authToken.token,
-    });
-  }
-
-  private static async saveAndSendLogInEmail(params: {
-    email: string;
-    name: string;
-    role: string;
-    verificationEmailId: string;
-    authToken: string;
-  }): Promise<void> {
-    const { email, verificationEmailId, name, role, authToken } = params;
-
-    await verificationEmailHandler.saveWithExpirationIn5min({
-      email,
-      id: verificationEmailId,
-      role,
-      authToken,
-    });
-
-    await sendEmailHandler.sendLogin({
-      authToken,
-      email,
-      userName: name,
-    });
-  }
-
-  private static async saveAndSignUpSendEmail(params: {
-    email: string;
-    name: string;
-    role: string;
-    verificationEmailId: string;
-    authToken: string;
-  }): Promise<void> {
-    const { email, verificationEmailId, name, role, authToken } = params;
-
-    await verificationEmailHandler.saveWithExpirationIn5min({
-      email,
-      id: verificationEmailId,
-      role,
-      authToken,
-    });
-
-    await sendEmailHandler.sendSignUp({
-      authToken,
-      email,
-      userName: name,
-    });
   }
 }

@@ -21,11 +21,14 @@ export class WatchCampaignsController {
     influencerName: string;
     session: IUserPrimitives | null;
   }): Promise<IWatchCampaignData> {
-    const { influencerName, session } = params;
-
+    const { influencerName, session } = params;;
     const referrer = await findUserHandler.byName(influencerName);
-    const campaignData = await this.randomActiveCampaign();
+
+
+    console.log("DATA", { referrer })
     
+    const campaignData = await this.randomActiveCampaign();
+
     updateReferralHandler.increaseReferredUsers(referrer.id)
     if (session) updateReferralHandler.increaseWatchedAds(session.id);
 

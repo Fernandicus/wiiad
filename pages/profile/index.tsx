@@ -1,11 +1,7 @@
 import { LoginQueries } from "@/src/common/domain/LoginQueries";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
-import { AuthController } from "@/src/common/infrastructure/controllers/AuthController";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import AdView from "../../components/ui/watch-ad/AdView";
 import { RoleType } from "@/src/common/domain/Role";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UserProfile } from "../../components/ui/profile/user/UserProfile";
 import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
@@ -19,23 +15,8 @@ import { Logout } from "../../components/ui/login/Logout";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
-
-interface IAdsAndCampaigns {
-  campaigns: ICampaignPrimitives[] | null;
-  ads: AdPropsPrimitives[] | null;
-}
-
-interface ILoginData {
-  user: IUserPrimitives;
-  campaigns: ICampaignPrimitives[];
-  ads: AdPropsPrimitives[];
-}
-
-export interface IUserProfilePage {
-  user: IUserPrimitives;
-  campaigns: ICampaignPrimitives[];
-  ads: AdPropsPrimitives[];
-}
+import { LogInController } from "@/src/common/infrastructure/controllers/LogInController";
+import { IUserProfilePage } from "@/src/common/domain/interfaces/IUserProfilePage";
 
 export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
   const notificationHandler = useRef<RefNotifications>({
@@ -53,8 +34,8 @@ export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
       <main className="h-screen bg-slate-100 p-10 w-full ">
         <AdvertiserHeader
           user={user}
-          totalAds={ads.length}
-          totalCampaigns={campaigns.length}
+          totalAds={ads!.length}
+          totalCampaigns={campaigns!.length}
         />
       </main>
     </div>
@@ -63,41 +44,17 @@ export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-  const loginQueries = new LoginQueries(query);
+  const { authToken, isLogin, isSignUp, log } = new LoginQueries(query);
 
   try {
-    if (!loginQueries.authToken || !loginQueries.userName) {
-      const session = userSession.getFromServer(context);
-
-      if (!session) throw new Error("No session provided");
-
-      const { ads, campaigns } = await initSession(session);
-
-      return {
-        props: {
-          user: session,
-          ads,
-          campaigns,
-        } as IUserProfilePage,
-      };
+    if (!authToken) {
+      return await visitProfile(context);
     }
-
-    const data = await logInOrSignUp({
-      loginQueries,
+    const loginController = LogInController.verifyJWT({
+      authToken,
       context,
     });
-
-    return {
-      props: {
-        user: data.user,
-        ads: data.ads,
-        campaigns: data.campaigns,
-      } as IUserProfilePage,
-      redirect: {
-        destination: "/profile",
-        permanent: false,
-      },
-    };
+    return await loginOrSingup({ isLogin, isSignUp, loginController });
   } catch (err) {
     console.error(err);
     await MongoDB.disconnect();
@@ -108,58 +65,66 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-async function initSession(session: IUserPrimitives) {
-  const { ads, campaigns } =
-    await MongoDB.connectAndDisconnect<IAdsAndCampaigns>(
-      async () => await ProfileDataController.getAdvertiserData(session.id)
+async function visitProfile(
+  context: IReqAndRes
+): Promise<{ props: IUserProfilePage }> {
+  const session = userSession.getFromServer(context);
+  if (!session) throw new Error("No session provided");
+
+  if (session.role !== RoleType.USER) {
+    const profileController = new ProfileDataController();
+    const { ads, campaigns } = await profileController.getAdvertiserData(
+      session.id
     );
+    return {
+      props: {
+        user: session,
+        ads,
+        campaigns,
+      } as IUserProfilePage,
+    };
+  }
 
   return {
-    ads,
-    campaigns,
+    props: {
+      user: session,
+      ads: null,
+      campaigns: null,
+    } as IUserProfilePage,
   };
 }
 
-async function logInOrSignUp(params: {
-  loginQueries: LoginQueries;
-  context: IReqAndRes;
-}): Promise<ILoginData> {
-  const { loginQueries, context } = params;
-  const authController = new AuthController({ context, loginQueries });
+async function loginOrSingup(params: {
+  isLogin(): boolean;
+  isSignUp(): boolean;
+  loginController: LogInController;
+}) {
+  const { isLogin, isSignUp, loginController } = params;
+  let data: IUserProfilePage;
 
-  const data = await MongoDB.connectAndDisconnect<ILoginData>(async () => {
-    if (loginQueries.isLogin()) {
-      const loginData = await getLogInData(authController);
-      return loginData;
-    }
+  if (isLogin()) {
+    data = await loginController.logIn();
+    return getSSRData(data);
+  }
 
-    if (loginQueries.isSignUp()) {
-      const signUpData = await getSingUpData(authController);
-      return signUpData;
-    }
+  if (isSignUp()) {
+    data = await loginController.signUp();
+    return getSSRData(data);
+  }
 
-    throw new Error("No 'log' query param provided");
-  });
-
-  return data;
+  throw new Error(`Something went wrong Singing Up or Logging In.`);
 }
 
-async function getLogInData(
-  authController: AuthController
-): Promise<ILoginData> {
-  const user = await authController.logIn();
-  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(
-    user.id
-  );
-  return { user, ads, campaigns };
-}
-
-async function getSingUpData(
-  authController: AuthController
-): Promise<ILoginData> {
-  const user = await authController.signUp();
-  const { ads, campaigns } = await ProfileDataController.getAdvertiserData(
-    user.id
-  );
-  return { user, campaigns, ads };
+function getSSRData(data: IUserProfilePage) {
+  return {
+    props: {
+      user: data.user,
+      ads: data.ads,
+      campaigns: data.campaigns,
+    } as IUserProfilePage,
+    redirect: {
+      destination: "/profile",
+      permanent: false,
+    },
+  };
 }
