@@ -44,17 +44,21 @@ export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-  const { authToken, isLogin, isSignUp, log } = new LoginQueries(query);
+  const loginQueries = new LoginQueries(query);
 
   try {
-    if (!authToken) {
-      return await visitProfile(context);
-    }
-    const loginController = LogInController.verifyJWT({
-      authToken,
-      context,
+    const userData = await MongoDB.connectAndDisconnect(async () => {
+      if (!loginQueries.authToken) {
+        return await visitProfile(context);
+      }
+      const loginController = LogInController.verifyJWT({
+        authToken: loginQueries.authToken,
+        context,
+      });
+      return await loginOrSingup({ loginQueries, loginController });
     });
-    return await loginOrSingup({ isLogin, isSignUp, loginController });
+
+    return userData;
   } catch (err) {
     console.error(err);
     await MongoDB.disconnect();
@@ -95,19 +99,18 @@ async function visitProfile(
 }
 
 async function loginOrSingup(params: {
-  isLogin(): boolean;
-  isSignUp(): boolean;
+  loginQueries: LoginQueries;
   loginController: LogInController;
 }) {
-  const { isLogin, isSignUp, loginController } = params;
+  const { loginQueries, loginController } = params;
   let data: IUserProfilePage;
 
-  if (isLogin()) {
+  if (loginQueries.isLogin()) {
     data = await loginController.logIn();
     return getSSRData(data);
   }
 
-  if (isSignUp()) {
+  if (loginQueries.isSignUp()) {
     data = await loginController.signUp();
     return getSSRData(data);
   }
