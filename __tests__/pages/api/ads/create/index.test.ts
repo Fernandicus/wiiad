@@ -10,8 +10,9 @@ describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser"
   let advertiser: IUserPrimitives;
 
   beforeAll(async () => {
-    await setTestAdDB(5);
-    advertiser = FakeAdvertiser.createPrimitives();
+    const advertisers = FakeAdvertiser.createMany(5);
+    await setTestAdDB(advertisers);
+    advertiser = advertisers[0].toPrimitives();
   }, 8000);
 
   it(`WHEN sending a 'POST' request with all the required params and a valid user session, 

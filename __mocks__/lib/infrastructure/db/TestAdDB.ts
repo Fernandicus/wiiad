@@ -27,8 +27,9 @@ export class TestAdDB {
     return new TestAdDB(adRepo);
   }
 
-  async getAllAds(): Promise<Ad[] | null> {
+  async getAllAds(): Promise<Ad[]> {
     const allAds = await this.adRepo.getAllAds();
+    if(!allAds) throw new Error("No ads available");
     return allAds;
   }
 

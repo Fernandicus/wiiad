@@ -4,7 +4,6 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { User } from "@/src/modules/users/user/domain/User";
@@ -13,13 +12,8 @@ import { setTestCampaignDB, TestCampaignDB } from "./TestCampaignDB";
 import { setTestReferralDB } from "./TestReferralDB";
 import { setTestStripeDB, TestStripeDB } from "./TestStripeDB";
 import { setTestUserDB, TestUserDB } from "./TestUserDB";
-import {
-  setTestVerificationEmailDB,
-  TestVerificationEmailDB,
-} from "./TestVerificationEmailDB";
 
 interface IDBs {
-  verificationEmailsDB: TestVerificationEmailDB;
   users: TestUserDB;
   ads:TestAdDB;
   stripe: TestStripeDB;
@@ -31,18 +25,12 @@ interface ICampaignsByStatus {
   standBy: Campaign[];
 }
 
-interface IVerificationEmailsByStatus {
-  expired: VerificationEmail[];
-  valids: VerificationEmail[];
-}
-
 interface InitializedMongoTestDB {
   dbs: IDBs;
   campaigns: ICampaignsByStatus;
   advertisers: User[];
   ads: Ad[];
   users: User[];
-  verificationEmails: IVerificationEmailsByStatus;
   referrals: Referral[];
   stripes: Stripe[];
 }
@@ -53,7 +41,6 @@ export class TestDBs {
   readonly advertisers: User[];
   readonly ads: Ad[];
   readonly users: User[];
-  readonly verificationEmails: IVerificationEmailsByStatus;
   readonly stripes: Stripe[];
 
   constructor(params: InitializedMongoTestDB) {
@@ -62,7 +49,6 @@ export class TestDBs {
     this.advertisers = params.advertisers;
     this.ads = params.ads;
     this.users = params.users;
-    this.verificationEmails = params.verificationEmails;
     this.stripes = params.stripes;
   }
 
@@ -84,12 +70,6 @@ export class TestDBs {
     });
     const campaigns = await this.findCampaignsByStatus(mockedCampaigns);
 
-    const mockedVerificationEmails = await setTestVerificationEmailDB({
-      valid: users!,
-      expired: advertisers!,
-    });
-    const verificationEmails = await mockedVerificationEmails.getAll();
-
     const mockedReferrals = await setTestReferralDB(
       users!.map((user) => user.id)
     );
@@ -101,7 +81,6 @@ export class TestDBs {
 
     return new TestDBs({
       dbs: {
-        verificationEmailsDB: mockedVerificationEmails,
         users: mockedUsers,
         ads: mockedAdDB,
         stripe: mockedStripe,
@@ -114,10 +93,6 @@ export class TestDBs {
       advertisers: advertisers!,
       users: users!,
       ads: ads!,
-      verificationEmails: {
-        expired: verificationEmails!.expired,
-        valids: verificationEmails!.valid,
-      },
       referrals: referrals!,
       stripes: stripeModels!,
     });

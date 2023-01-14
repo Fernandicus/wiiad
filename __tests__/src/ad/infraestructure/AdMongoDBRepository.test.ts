@@ -16,8 +16,9 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
   let advertiser: User;
 
   beforeAll(async () => {
-    const testAdDB = await setTestAdDB(5);
-    advertiser = FakeAdvertiser.create();
+    const advertisers = FakeAdvertiser.createMany(5);
+    const testAdDB = await setTestAdDB(advertisers);
+    advertiser = advertisers[0];
     fakeAds = FakeAd.createMany(advertiser.id, 5);
     await testAdDB.saveMany(fakeAds);
     adMongoDBRepo = new AdMongoDBRepository();

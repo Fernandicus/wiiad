@@ -4,13 +4,13 @@ import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modu
 import { RoleType } from "@/src/common/domain/Role";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
-import { autoSetTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
+//import { autoSetTestVerificationEmailDB } from "../../../../__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 
 describe("On api/mailing/send-email-verification, GIVEN an user", () => {
   let user: IVerificationEmailData;
 
   beforeAll(async () => {
-    await autoSetTestVerificationEmailDB(2, 2);
+    //await autoSetTestVerificationEmailDB(2, 2);
     user = {
       email: faker.internet.email(),
       userName: faker.name.firstName(),
