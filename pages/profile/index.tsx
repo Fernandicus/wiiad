@@ -55,12 +55,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         authToken: loginQueries.authToken,
         context,
       });
-      return await loginOrSingup({ loginQueries, loginController });
+      const userData = await loginController.signIn(loginQueries);
+      return getSSRData(userData);
     });
 
     return userData;
   } catch (err) {
-    console.error(err);
     await MongoDB.disconnect();
     return {
       props: {},
@@ -96,26 +96,6 @@ async function visitProfile(
       campaigns: null,
     } as IUserProfilePage,
   };
-}
-
-async function loginOrSingup(params: {
-  loginQueries: LoginQueries;
-  loginController: LogInController;
-}) {
-  const { loginQueries, loginController } = params;
-  let data: IUserProfilePage;
-
-  if (loginQueries.isLogin()) {
-    data = await loginController.logIn();
-    return getSSRData(data);
-  }
-
-  if (loginQueries.isSignUp()) {
-    data = await loginController.signUp();
-    return getSSRData(data);
-  }
-
-  throw new Error(`Something went wrong Singing Up or Logging In.`);
 }
 
 function getSSRData(data: IUserProfilePage) {

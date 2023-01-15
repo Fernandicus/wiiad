@@ -49,7 +49,7 @@ describe("IN ProfilePage, GIVEN some verification emails in MongoDB", () => {
       role: user.role.role,
       userName: user.name.name,
     };
-    const expiredToken = createAuthTokenHandler.jwtExpiresIn(payload, 1);
+    const expiredToken = createAuthTokenHandler.jwtExpiresIn(payload, 0);
     const resp = (await profilePage({
       req,
       res,

@@ -3,7 +3,6 @@ import {
   IWatchCampaignPage,
 } from "@/pages/[userName]/index";
 import httpMock, { MockRequest } from "node-mocks-http";
-import { VerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/VerificationEmail";
 import { NextApiRequest, NextApiResponse } from "next";
 import { faker } from "@faker-js/faker";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
@@ -11,7 +10,6 @@ import { FakeUser } from "../../../__mocks__/lib/modules/user/FakeUser";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import { TestDBs } from "../../../__mocks__/lib/infrastructure/db/TestDBs";
-import { TestVerificationEmailDB } from "__mocks__/lib/infrastructure/db/TestVerificationEmailDB";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 

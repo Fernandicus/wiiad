@@ -15,6 +15,7 @@ import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verific
 import { IUserProfilePage } from "../../domain/interfaces/IUserProfilePage";
 import { ProfileDataController } from "./ProfileDataController";
 import { IJsonWebTokenRepo } from "@/src/modules/session/domain/interfaces/IJsonWebTokenRepo";
+import { LoginQueries } from "../../domain/LoginQueries";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;
@@ -48,6 +49,30 @@ export class LogInController {
     return new LogInController({ jwtData: data, context });
   }
 
+  async signIn(loginQueries: LoginQueries): Promise<IUserProfilePage> {
+    let data: IUserProfilePage;
+    
+    if (loginQueries.isLogin()) {
+      data = await this.logIn();
+      return {
+        user: data.user,
+        ads: data.ads,
+        campaigns: data.campaigns,
+      };
+    }
+
+    if (loginQueries.isSignUp()) {
+      data = await this.signUp();
+      return {
+        user: data.user,
+        ads: data.ads,
+        campaigns: data.campaigns,
+      };
+    }
+
+    throw new Error(`Something went wrong Singing Up or Logging In.`);
+  }
+
   async logIn(): Promise<IUserProfilePage> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn(this.jwtData);
@@ -74,7 +99,6 @@ export class LogInController {
 
   async signUp(): Promise<IUserProfilePage> {
     if (this.jwtData.role !== RoleType.USER) {
-      console.log("business");
       const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
       const advertiserData = await this.profileController.getAdvertiserData(
         advertiser.id
@@ -85,7 +109,6 @@ export class LogInController {
         user: advertiser,
       };
     } else {
-      console.log("user");
       const user = await this.getAndCreateNewUser(this.jwtData);
 
       const controller = new ReferralController();
