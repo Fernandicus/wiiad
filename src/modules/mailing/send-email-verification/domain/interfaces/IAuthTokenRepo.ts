@@ -1,4 +1,4 @@
-import { IJsonWebTokenRepo } from "@/src/modules/session/domain/interfaces/IJsonWebTokenRepo";
+import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenRepo";
 import { AuthToken } from "../value-objects/AuthToken";
 
 export interface IAuthJWTParams<T> {

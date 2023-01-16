@@ -7,7 +7,7 @@ import { AuthTokenRepo } from "@/src/modules/mailing/send-email-verification/inf
 import { createAuthTokenHandler } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { CreateAuthToken } from "@/src/modules/mailing/send-email-verification/use-case/CreateAuthToken";
 import { SendlVerificationEmail } from "@/src/modules/mailing/send-email-verification/use-case/SendVerificationEmail";
-import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { mockedEmailSenderRepo } from "../../../../../__mocks__/context/MockEmailSenderRepo";
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
 

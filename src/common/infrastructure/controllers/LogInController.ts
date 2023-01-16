@@ -10,11 +10,11 @@ import {
   findAdvertiserHandler,
   findUserHandler,
 } from "@/src/modules/users/user/container";
-import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { IUserProfilePage } from "../../domain/interfaces/IUserProfilePage";
 import { ProfileDataController } from "./ProfileDataController";
-import { IJsonWebTokenRepo } from "@/src/modules/session/domain/interfaces/IJsonWebTokenRepo";
+import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenRepo";
 import { LoginQueries } from "../../domain/LoginQueries";
 
 interface ILogingInParams {

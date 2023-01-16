@@ -1,4 +1,4 @@
-import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import {
   findAdvertiserHandler,
   findUserHandler,

@@ -8,7 +8,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingUser } from "@/src/modules/users/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/common/domain/Role";
-import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { verificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 
 export interface APISendEmailVerification {

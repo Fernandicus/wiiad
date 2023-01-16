@@ -1,5 +1,5 @@
 import { AuthCookie } from "@/src/modules/session/infrastructure/AuthCookie";
-import { JsonWebTokenNPM } from "@/src/modules/session/infrastructure/JsonWebTokenNPM";
+import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { UserSession } from "@/src/modules/session/use-case/UserSession";
 import { FakeAdvertiser } from "../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import  {Mocks } from "node-mocks-http";
