@@ -28,7 +28,7 @@ interface IVerifyJWTParams {
   jwtManager?: IJsonWebTokenRepo;
 }
 
-export class LogInController {
+export class SignInController {
   private readonly context;
   private readonly profileController;
   private readonly jwtData;
@@ -46,7 +46,7 @@ export class LogInController {
   }: IVerifyJWTParams) {
     if (!authToken) throw new Error("No 'auth token query provided");
     const data = jwtManager.verify(authToken) as IVerificationEmailData;
-    return new LogInController({ jwtData: data, context });
+    return new SignInController({ jwtData: data, context });
   }
 
   async signIn(loginQueries: LoginQueries): Promise<IUserProfilePage> {

@@ -15,7 +15,7 @@ import { Logout } from "../../components/ui/login/Logout";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
-import { LogInController } from "@/src/common/infrastructure/controllers/LogInController";
+import { SignInController } from "@/src/common/infrastructure/controllers/LogInController";
 import { IUserProfilePage } from "@/src/common/domain/interfaces/IUserProfilePage";
 
 export default function Profile({ user, ads, campaigns }: IUserProfilePage) {
@@ -51,11 +51,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       if (!loginQueries.authToken) {
         return await visitProfile(context);
       }
-      const loginController = LogInController.verifyJWT({
+      const singInController = SignInController.verifyJWT({
         authToken: loginQueries.authToken,
         context,
       });
-      const userData = await loginController.signIn(loginQueries);
+      const userData = await singInController.signIn(loginQueries);
       return getSSRData(userData);
     });
 

@@ -1,5 +1,5 @@
 export interface IVerificationEmailData {
   email: string;
-  userName: string;
+  userName?: string;
   role: string;
 }
