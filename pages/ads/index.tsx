@@ -98,18 +98,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session || session.role === RoleType.USER)
       throw new Error("The session do not have access");
 
-    const { ads, campaigns, stripeCustomer } =
-      await MongoDB.connectAndDisconnect(async () => {
-        const all = await ProfileDataController.getAdvertiserData(session.id);
-        return all;
-      });
+    const advertiserData = await MongoDB.connectAndDisconnect(async () => {
+      const profileController = new ProfileDataController();
+      const advertiserData = await profileController.getAdvertiserData(
+        session.id
+      );
+      return advertiserData;
+    });
 
     return {
       props: {
+        ...advertiserData,
         advertiser: { ...session } as IUserPrimitives,
-        ads,
-        campaigns,
-        stripeCustomer,
       },
     };
   } catch (err) {

@@ -13,6 +13,7 @@ interface IAdsAndCampaigns {
 
 export class ProfileDataController {
   constructor() {}
+  
   async getAdvertiserData(advertiserId: string): Promise<IAdsAndCampaigns> {
     const findCampaigns = findCampaignHandler.byAdvertiserId(advertiserId);
     const findAds = adFinderHandler.findAll(advertiserId);
