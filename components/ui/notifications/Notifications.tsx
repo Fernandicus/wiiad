@@ -1,14 +1,14 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { ForwardedRef, forwardRef, useImperativeHandle, useState } from "react";
 
 interface INotificationProps {
-  props?: string;
+  //props?: string;
   children?: JSX.Element | null;
 }
 
 export type NotificationStatus = "error" | "info" | "success";
 
 export interface RefNotifications {
-  showNotification: (data: NotificationData) => void;
+  showNotification(data: NotificationData): void;
 }
 
 export interface NotificationData {
@@ -17,19 +17,21 @@ export interface NotificationData {
 }
 
 export const Notifications = forwardRef(
-  (props: INotificationProps, ref: React.ForwardedRef<RefNotifications>) => {
+  (props: INotificationProps, ref: ForwardedRef<RefNotifications>) => {
     const [message, setMessage] = useState<NotificationData>({
       message: "",
       status: "error",
     });
 
-    const showNotification = (data: NotificationData) => {
-      console.log(data);
-      setMessage(data);
-    };
-
-    useImperativeHandle(ref, () => {
-      return { showNotification };
+    useImperativeHandle(ref, (): RefNotifications => {
+      return {
+        showNotification: (data: NotificationData): void => {
+          setMessage(data);
+          setTimeout(() => {
+            setMessage({ ...message, message: "" });
+          }, 5000);
+        },
+      };
     });
 
     return (

@@ -1,11 +1,11 @@
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { APISendEmailVerification } from "@/pages/api/v1/auth/login";
 import {  RoleType } from "@/src/common/domain/Role";
-import { IApiCalls } from "../domain/interfaces/IApiCalls";
+import { ISignInApiCalls } from "../domain/interfaces/ISignInApiCalls";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { Email } from "@/src/common/domain/Email";
 
-export class FetchApiCall implements IApiCalls {
+export class FetchSignInApiCalls implements ISignInApiCalls {
   constructor() {}
 
   async logInUser(email: Email): Promise<void> {

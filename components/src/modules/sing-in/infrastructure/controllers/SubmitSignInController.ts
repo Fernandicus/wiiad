@@ -2,7 +2,7 @@ import { RoleType } from "@/src/common/domain/Role";
 import {
   logInHandler,
   signUpHandler,
-} from "../../../modules/sing-in/infrastructure/sign-in-container";
+} from "../sign-in-container";
 
 interface ISingUpParams {
   email: string;
@@ -15,7 +15,7 @@ interface ILogInParams {
   role: RoleType;
 }
 
-export class SubmitFormController {
+export class SubmitSignInController {
   constructor() {}
 
   async singUp(params: ISingUpParams): Promise<void> {

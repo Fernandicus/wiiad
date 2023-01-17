@@ -1,6 +1,5 @@
-import { IApiCalls } from "@/components/src/common/domain/interfaces/IApiCalls";
+import { IApiCalls } from "@/components/src/modules/sing-in/domain/interfaces/ISignInApiCalls";
 import { Email } from "@/src/common/domain/Email";
-import { ISignInUsers } from "../domain/interfaces/ISignInUsers";
 
 export class LogIn {
   constructor(private apiCall: IApiCalls) {}
