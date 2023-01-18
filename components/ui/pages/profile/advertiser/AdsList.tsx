@@ -2,7 +2,7 @@ import { AdCard } from "./AdCard";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { CampaignBudgetProps } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { Dispatch, SetStateAction } from "react";
-import { NotificationData } from "../../notifications/Notifications";
+import { NotificationData } from "../../../notifications/Notifications";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { AdResourceSelector } from "./AdResourceSelector";
 import { AdType } from "@/pages/ads";

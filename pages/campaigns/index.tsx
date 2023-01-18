@@ -3,8 +3,8 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
-import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
-import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";
+import { AdCardItem } from "../../components/ui/pages/profile/advertiser/AdCardItem";
+import { CampaignTags } from "../../components/ui/pages/profile/advertiser/CampaignTags";
 import { RoleType } from "@/src/common/domain/Role";
 import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
 

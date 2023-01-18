@@ -2,8 +2,8 @@ import { RoleType } from "@/src/common/domain/Role";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { AdvertiserHeader } from "../../profile/advertiser/AdvertiserHeader";
-import { UserProfile } from "../../profile/user/UserProfile";
+import { AdvertiserHeader } from "./advertiser/AdvertiserHeader";
+import { UserProfile } from "./user/UserProfile";
 
 interface IProfileSectionParams {
   userData: IUserPrimitives;

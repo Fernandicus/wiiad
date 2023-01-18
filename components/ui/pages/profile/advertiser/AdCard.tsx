@@ -1,7 +1,7 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { NotificationData } from "../../notifications/Notifications";
+import { NotificationData } from "../../../notifications/Notifications";
 import { AdCardItem } from "./AdCardItem";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Logout } from "../../login/Logout";
+import { Logout } from "../../../login/Logout";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { useEffect, useState } from "react";
 import { DataCard } from "./DataCard";
