@@ -31,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const userData = await singInController.signIn(loginQueries);
       return getSSRData(userData);
     });
-
     return userData;
   } catch (err) {
     await MongoDB.disconnect();
