@@ -1,11 +1,12 @@
 import { Email } from "@/src/common/domain/Email";
-import { AuthToken } from "../../domain/value-objects/AuthToken";
+import { IVerificationEmailData } from "../../domain/interfaces/IVerificationEmailData";
 import { VerificationURL } from "../../domain/VerificationURL";
+import { createAuthTokenHandler } from "../../infrastructure/email-verification-container";
 import { SendlVerificationEmail } from "../SendVerificationEmail";
 
 interface ISendVerificationParams {
-  email: string;
-  authToken: string;
+  sendTo: string;
+  payload: IVerificationEmailData;
 }
 
 export class SendVerificationEmailHandler {
@@ -22,9 +23,11 @@ export class SendVerificationEmailHandler {
   }
 
   private getVerificationURL(props: ISendVerificationParams): VerificationURL {
+    const { sendTo, payload } = props;
+    const authToken = createAuthTokenHandler.jwtExpiresIn15Min(payload);
     return new VerificationURL({
-      to: new Email(props.email),
-      authToken: new AuthToken(props.authToken),
+      to: new Email(sendTo),
+      authToken,
     });
   }
 }

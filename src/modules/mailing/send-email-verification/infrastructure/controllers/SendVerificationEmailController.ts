@@ -6,17 +6,19 @@ import {
 import { ErrorFindingUser } from "@/src/modules/users/user/domain/ErrorFindingUser";
 import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
 import { IVerificationEmailData } from "../../domain/interfaces/IVerificationEmailData";
-import { sendEmailHandler } from "../email-verification-container";
+import {
+  createAuthTokenHandler,
+  sendVerificationEmailHandler,
+} from "../email-verification-container";
 
 export class SendVerificationEmailController {
   constructor(private jwt: JsonWebTokenNPM) {}
 
   async sendToNewUser(data: IVerificationEmailData): Promise<void> {
     await this.checkIsNewUser(data);
-    const authToken = this.jwt.withExpirationDate(data, 900);
-    await sendEmailHandler.sendSignUp({
-      ...data,
-      authToken,
+    await sendVerificationEmailHandler.sendSignUp({
+      sendTo: data.email,
+      payload: data,
     });
   }
 
@@ -24,11 +26,10 @@ export class SendVerificationEmailController {
     try {
       const { name } = await findUserHandler.byEmail(data.email);
       const payload = { ...data, userName: name };
-      const authToken = this.jwt.withExpirationDate(payload, 900);
 
-      await sendEmailHandler.sendLogin({
-        ...data,
-        authToken,
+      await sendVerificationEmailHandler.sendLogin({
+        sendTo: data.email,
+        payload,
       });
     } catch (error) {
       if (error instanceof ErrorFindingUser)
@@ -38,11 +39,10 @@ export class SendVerificationEmailController {
   }
 
   async sendToNewAdvertiser(data: IVerificationEmailData): Promise<void> {
-    const authToken = this.jwt.withExpirationDate(data, 900);
     await this.checkIsNewAdvertiser(data);
-    await sendEmailHandler.sendSignUp({
-      ...data,
-      authToken,
+    await sendVerificationEmailHandler.sendSignUp({
+      sendTo: data.email,
+      payload: data,
     });
   }
 
@@ -50,10 +50,9 @@ export class SendVerificationEmailController {
     try {
       const { name } = await findAdvertiserHandler.byEmail(data.email);
       const payload = { ...data, userName: name };
-      const authToken = this.jwt.withExpirationDate(payload, 900);
-      await sendEmailHandler.sendSignUp({
-        ...data,
-        authToken,
+      await sendVerificationEmailHandler.sendSignUp({
+        sendTo: data.email,
+        payload,
       });
     } catch (err) {
       if (err instanceof ErrorFindingUser)
@@ -63,14 +62,14 @@ export class SendVerificationEmailController {
   }
 
   private async checkIsNewUser(data: IVerificationEmailData): Promise<void> {
-    const findUserByName = findUserHandler.byName(data.userName);
+    const findUserByName = findUserHandler.byName(data.userName!);
     const findUserByEmail = findUserHandler.byEmail(data.email);
 
     const resp = await Promise.allSettled([findUserByName, findUserByEmail]);
 
     if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
       throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
-        data.userName,
+        data.userName!,
         data.email
       );
   }
@@ -78,7 +77,7 @@ export class SendVerificationEmailController {
   private async checkIsNewAdvertiser(
     data: IVerificationEmailData
   ): Promise<void> {
-    const advertiserFound = findAdvertiserHandler.byName(data.userName);
+    const advertiserFound = findAdvertiserHandler.byName(data.userName!);
     const advertiserFoundByEmail = findAdvertiserHandler.byEmail(data.email);
 
     const resp = await Promise.allSettled([
@@ -88,7 +87,7 @@ export class SendVerificationEmailController {
 
     if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
       throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
-        data.userName,
+        data.userName!,
         data.email
       );
   }

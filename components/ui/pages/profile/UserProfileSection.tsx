@@ -1,7 +1,9 @@
+import { ICampaignsState } from "@/components/hooks/reducers/advertiser/campaigns-reducer";
 import { RoleType } from "@/src/common/domain/Role";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { useSelector } from "react-redux";
 import { AdvertiserHeader } from "./advertiser/AdvertiserHeader";
 import { UserProfile } from "./user/UserProfile";
 
@@ -30,13 +32,18 @@ export const UserProfileSection = (props: IProfileSectionParams) => {
     }
   };
 
+  const campaignsState = useSelector(
+    (state: ICampaignsState) => state.campaigns
+  );
+
   const profile: Record<RoleType, JSX.Element | null> = {
     user: <UserProfile user={userData} />,
     business: !ads ? null : (
       <AdvertiserHeader
         user={userData}
         totalAds={ads!.length}
-        totalCampaigns={campaigns!.length}
+        //totalCampaigns={campaigns!.length}
+        totalCampaigns={campaignsState.length}
       />
     ),
     agency: null,

@@ -10,8 +10,26 @@ import {
   IProfilePageParams,
   UserProfilePage,
 } from "@/components/ui/pages/profile/UserProfilePage";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCampaigns,
+  ICampaignsState,
+} from "@/components/hooks/reducers/advertiser/campaigns-reducer";
 
 export default function Profile({ user, ads, campaigns }: IProfilePageParams) {
+  const campaignsState = useSelector(
+    (state: ICampaignsState) => state.campaigns
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (campaignsState.length === 0 && campaigns) {
+      console.log(campaignsState);
+      console.log(campaigns);
+      dispatch(addCampaigns({ campaigns }));
+    }
+  }, [campaigns, campaignsState]);
+
   return <UserProfilePage user={user} ads={ads} campaigns={campaigns} />;
 }
 
@@ -47,7 +65,7 @@ async function visitProfile(
   const session = userSession.getFromServer(context);
   if (!session) throw new Error("No session provided");
 
-  if (session.role !== RoleType.USER) {
+  /* if (session.role !== RoleType.USER) {
     const profileController = new ProfileDataController();
     const { ads, campaigns } = await profileController.getAdvertiserData(
       session.id
@@ -59,7 +77,7 @@ async function visitProfile(
         campaigns,
       } as IProfilePageParams,
     };
-  }
+  } */
 
   return {
     props: {
@@ -72,8 +90,8 @@ function getSSRData(data: IProfilePageParams) {
   return {
     props: {
       user: data.user,
-      ads: data.ads,
-      campaigns: data.campaigns,
+     /*  ads: data.ads,
+      campaigns: data.campaigns, */
     } as IProfilePageParams,
     redirect: {
       destination: "/profile",

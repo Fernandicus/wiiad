@@ -10,7 +10,7 @@ import { AuthTokenRepo } from "./AuthTokenRepo";
 const nodemailerSender = new NodemailerSendVerificationEmail();
 const sendEmail = new SendlVerificationEmail(nodemailerSender);
 
-export const sendEmailHandler = new SendVerificationEmailHandler(sendEmail);
+export const sendVerificationEmailHandler = new SendVerificationEmailHandler(sendEmail);
 
 const jwt = new JsonWebTokenNPM();
 export const verificationEmailController = new SendVerificationEmailController(

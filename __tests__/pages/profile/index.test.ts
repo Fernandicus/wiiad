@@ -1,5 +1,5 @@
+import { IProfilePageParams } from "@/components/ui/pages/profile/UserProfilePage";
 import { getServerSideProps as profilePage } from "@/pages/profile";
-import { IUserProfilePage } from "@/src/common/domain/interfaces/IUserProfilePage";
 import { LogStates } from "@/src/common/domain/LogStates";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { createAuthTokenHandler } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
@@ -89,7 +89,7 @@ describe("IN ProfilePage, GIVEN some verification emails in MongoDB", () => {
         authToken: validToken.token,
         log: LogStates.SignUp,
       },
-    })) as { props: IUserProfilePage };
+    })) as { props: IProfilePageParams };
 
     const userData = resp.props.user;
     expect(userData).not.toBe(undefined);

@@ -12,10 +12,10 @@ import {
 } from "@/src/modules/users/user/container";
 import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
-import { IUserProfilePage } from "../../domain/interfaces/IUserProfilePage";
 import { ProfileDataController } from "./ProfileDataController";
 import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenRepo";
 import { LoginQueries } from "../../domain/LoginQueries";
+import { IProfilePageParams } from "@/components/ui/pages/profile/UserProfilePage";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;
@@ -49,9 +49,9 @@ export class SignInController {
     return new SignInController({ jwtData: data, context });
   }
 
-  async signIn(loginQueries: LoginQueries): Promise<IUserProfilePage> {
-    let data: IUserProfilePage;
-    
+  async signIn(loginQueries: LoginQueries): Promise<IProfilePageParams> {
+    let data: IProfilePageParams;
+
     if (loginQueries.isLogin()) {
       data = await this.logIn();
       return {
@@ -73,7 +73,7 @@ export class SignInController {
     throw new Error(`Something went wrong Singing Up or Logging In.`);
   }
 
-  async logIn(): Promise<IUserProfilePage> {
+  async logIn(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn(this.jwtData);
       const advertiserData = await this.profileController.getAdvertiserData(
@@ -89,15 +89,11 @@ export class SignInController {
 
       this.userInitSession(this.context, user);
 
-      return {
-        user,
-        ads: null,
-        campaigns: null,
-      };
+      return { user };
     }
   }
 
-  async signUp(): Promise<IUserProfilePage> {
+  async signUp(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
       const advertiserData = await this.profileController.getAdvertiserData(
@@ -118,8 +114,8 @@ export class SignInController {
 
       return {
         user,
-        ads: null,
-        campaigns: null,
+        /* ads: null,
+        campaigns: null, */
       };
     }
   }
@@ -157,7 +153,7 @@ export class SignInController {
 
     await createUserHandler.create({
       email: data.email,
-      name: data.userName,
+      name: data.userName!,
       id: advertiserId,
       role: data.role,
       profilePic,
@@ -177,7 +173,7 @@ export class SignInController {
     const profilePic = ProfilePic.defaultUserPic;
     await createUserHandler.create({
       email: data.email,
-      name: data.userName,
+      name: data.userName!,
       id: userId,
       role: data.role,
       profilePic,
@@ -199,7 +195,7 @@ export class SignInController {
     return {
       id,
       email: data.email,
-      name: data.userName,
+      name: data.userName!,
       role: data.role,
       profilePic,
     };
