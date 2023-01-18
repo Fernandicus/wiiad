@@ -4,6 +4,11 @@ import { FormEvent, useRef, useState } from "react";
 import { PrimaryButton } from "../../buttons/PrimaryButton";
 import { SecondaryButton } from "../../buttons/SecondaryButton";
 
+enum Loader {
+  isLoading,
+  notLoading,
+}
+
 export const SignInForm = (params: {
   userRole: RoleType;
   logIn: boolean;
@@ -14,6 +19,7 @@ export const SignInForm = (params: {
   const emailRef = useRef<HTMLInputElement>(null);
   const userNameRef = useRef<HTMLInputElement>(null);
   const [isNewAccount, setNewAccount] = useState<boolean>(logIn);
+  const [isLoading, setLoader] = useState<boolean>(false);
 
   const primaryButtonLabel = isNewAccount
     ? "Recibe tu email de confirmación"
@@ -52,13 +58,17 @@ export const SignInForm = (params: {
     e: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
+    if (isLoading) return;
     const email = emailRef.current?.value;
     const userName = userNameRef.current?.value;
     if (!email) return;
     try {
+      setLoader(true);
       await signIn(isNewAccount, { role: userRole, userName, email });
+      setLoader(false);
       onSuccess();
     } catch (err) {
+      setLoader(false);
       if (err instanceof Error) onError(err);
     }
   };
@@ -94,16 +104,19 @@ export const SignInForm = (params: {
         </div>
       </div>
       <div className="space-y-2">
-        <PrimaryButton label={primaryButtonLabel} type="submit"></PrimaryButton>
+        <PrimaryButton isLoading={isLoading} type="submit">
+          {primaryButtonLabel}
+        </PrimaryButton>
         <div className="text-center">
           <SecondaryButton
-            label={secondaryButtonLabel}
             type="button"
             onClick={(e) => {
               e.preventDefault();
               switcher();
             }}
-          ></SecondaryButton>
+          >
+            {secondaryButtonLabel}
+          </SecondaryButton>
         </div>
       </div>
     </form>

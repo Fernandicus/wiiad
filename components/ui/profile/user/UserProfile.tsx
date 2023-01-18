@@ -37,24 +37,21 @@ export function UserProfile({ user }: Props) {
   }, []);
 
   return (
-    <div className=" bg-slate-100 h-screen p-10 w-full ">
-      <Logout />
-      <div className="flex justify-center h-full items-center">
-        <div className="h-28 space-x-4 inline-flex items-center">
-          <ProfileCard user={user} />
-          <DataCard
-            title="Dinero acumulado"
-            data={totalBalance ? (totalBalance/100).toString()+'€' : "0"}
-          />
-          <DataCard
-            title="Anuncios vistos"
-            data={campaignsWatched ? campaignsWatched.toString() : "0"}
-          />
-          <DataCard
-            title="Clicks en tus enlaces"
-            data={ totalReferrers ? totalReferrers.toString() : "0"}
-          />
-        </div>
+    <div className="flex justify-center h-full items-center">
+      <div className="h-28 space-x-4 inline-flex items-center">
+        <ProfileCard user={user} />
+        <DataCard
+          title="Dinero acumulado"
+          data={totalBalance ? (totalBalance / 100).toString() + "€" : "0"}
+        />
+        <DataCard
+          title="Anuncios vistos"
+          data={campaignsWatched ? campaignsWatched.toString() : "0"}
+        />
+        <DataCard
+          title="Clicks en tus enlaces"
+          data={totalReferrers ? totalReferrers.toString() : "0"}
+        />
       </div>
     </div>
   );

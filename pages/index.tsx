@@ -44,13 +44,14 @@ export default function Home(props: { session: IUserPrimitives }) {
           />
           <div className="space-x-2 w-full text-center">
             <TertiaryButton
-              label={tertiaryButtonLabel}
               type="button"
               onClick={() => {
                 if (!isUserRole) setRole(RoleType.USER);
                 else setRole(RoleType.BUSINESS);
               }}
-            />
+            >
+              {tertiaryButtonLabel}
+            </TertiaryButton>
           </div>
         </div>
       </div>
