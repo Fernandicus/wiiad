@@ -18,4 +18,10 @@ export class ErrorFindingCampaign extends Error {
   static byAllActives(): ErrorFindingCampaign {
     return new ErrorFindingCampaign("There are no active campaigns");
   }
+
+  static byActiveStatus(id: string): ErrorFindingCampaign {
+    return new ErrorFindingCampaign(
+      `The campaign with ${id} do not exist or has not an ACTIVE status`
+    );
+  }
 }

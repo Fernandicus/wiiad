@@ -12,6 +12,15 @@ export class ErrorSendVerificationEmail extends Error {
     );
   }
 
+  static userOrEmailDoNotExists(
+    userName: string,
+    email: string
+  ): ErrorSendVerificationEmail {
+    return new ErrorSendVerificationEmail(
+      `The user name '${userName}' or the email '${email}' do not exist`
+    );
+  }
+
   static emailNotExists(email: string): ErrorSendVerificationEmail {
     return new ErrorSendVerificationEmail(`The email '${email}' do not exist`);
   }

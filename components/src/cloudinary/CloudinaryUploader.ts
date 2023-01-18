@@ -1,4 +1,4 @@
-import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/CloudinaryCloudStorageRepo";
+import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import {
   Cloudinary,
@@ -18,7 +18,7 @@ export class CloudinaryUploader {
   constructor() {
     this.cld = new Cloudinary({
       cloud: {
-        cloudName: "fernanprojects",
+        cloudName: ApiRoutes.cloudinaryCloudName,
       },
       /*  url: {
         secureDistribution: "http://localhost:3000/",
@@ -28,7 +28,7 @@ export class CloudinaryUploader {
   }
 
   async uploadBanner(file: string): Promise<string> {
-    const data = await this.getSignedData();
+    const data = await this.getSignedData(ApiRoutes.cloudinarySignedBannerData);
     const formData = this.formDataParse({ file, data });
 
     const uploadResp = await fetch(ApiRoutes.cloudinaryImageEndPoint, {
@@ -44,7 +44,7 @@ export class CloudinaryUploader {
   }
 
   async uploadVideo(file: string): Promise<string> {
-    const data = await this.getSignedData();
+    const data = await this.getSignedData(ApiRoutes.cloudinarySignedVideoData);
     const formData = this.formDataParse({ file, data });
 
     const uploadResp = await fetch(ApiRoutes.cloudinaryVideoEndPoint, {
@@ -62,8 +62,10 @@ export class CloudinaryUploader {
     return url;
   }
 
-  private async getSignedData(): Promise<ICloudinarySignedParams> {
-    const apiResponse = await fetch(ApiRoutes.getCloudinarySignedData, {
+  private async getSignedData(
+    apiUrl: string
+  ): Promise<ICloudinarySignedParams> {
+    const apiResponse = await fetch(apiUrl, {
       method: "GET",
     });
 

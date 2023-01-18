@@ -1,7 +1,7 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { UniqId } from "@/src/utils/UniqId";
 import Stripe from "stripe";
-import { CardDetails } from "../domain/CardDetails";
+import { CardDetails, ICardDetailsPrimitives } from "../domain/CardDetails";
 import { CustomerId } from "../domain/value-objects/CustomerId";
 import { IStripeMetadata } from "../domain/interfaces/IStripeMetadata";
 import { PaymentAmount } from "../domain/value-objects/PaymentAmount";
@@ -13,32 +13,80 @@ import { CardBrand } from "../domain/value-objects/CardBrand";
 import { Last4 } from "../domain/value-objects/Last4";
 import { ExpYear } from "../domain/value-objects/ExpYear";
 import { ExpMonth } from "../domain/value-objects/ExpMonth";
+import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
+import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
+import { findCustomerHandler, updateStripeHandler } from "./stripe-container";
+import { ErrorPaymentValidation } from "../domain/errors/ErrorPaymentValidation";
 
-interface IPaymentWithPaymentMethod {
+
+export interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
   amount: PaymentAmount;
   paymentMethod: PaymentMethodId;
   metadata?: IStripeMetadata;
 }
 
-interface IPaymentWithoutPaymentMethod {
+export interface IPaymentWithoutPaymentMethod {
   customerId: CustomerId;
   amount: PaymentAmount;
   metadata?: IStripeMetadata;
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2022-08-01",
-});
+interface IChargesData {
+  payment_method_details: {
+    card: {
+      brand: string;
+      exp_month: number;
+      exp_year: number;
+      fingerprint: string;
+      last4: string;
+    };
+  };
+}
 
+export interface IWebHookPaymentSuccess {
+  metadata: IStripeMetadata;
+  amount: number;
+  payment_method: string;
+  charges: {
+    data: IChargesData[];
+  };
+}
+
+export interface IValidatedPaymentData {
+  budget: CampaignBudget;
+  metadata: IStripeMetadata;
+  card: CardDetails;
+}
+
+export interface IStripePayload {
+  type: StripeEventType;
+  data: {
+    object: IWebHookPaymentSuccess;
+  };
+}
+
+export type StripeEventType =
+  | "payment_intent.succeeded"
+  | "payment_intent.cancelled"
+  | "payment_intent.created";
+
+
+
+//?https://stripe.com/docs/cli/trigger
 export class StripePayments {
+  constructor(private stripe: Stripe) {}
+
   async getPaymentMethodDetails(
     id: PaymentMethodId
   ): Promise<CardDetails | null> {
-    const paymentDetails = await stripe.paymentMethods.retrieve(id.id);
+    const paymentDetails = await this.stripe.paymentMethods.retrieve(id.id);
+
     if (!paymentDetails) return null;
     if (!paymentDetails.card) return null;
     const card = paymentDetails.card;
+
     return new CardDetails({
       paymentMethodId: new PaymentMethodId(paymentDetails.id),
       brand: new CardBrand(card.brand),
@@ -51,7 +99,7 @@ export class StripePayments {
   async getPaymentIntentDetails(
     id: PaymentIntentId
   ): Promise<PaymentDetails | null> {
-    const paymentDetails = await stripe.paymentIntents.retrieve(id.id);
+    const paymentDetails = await this.stripe.paymentIntents.retrieve(id.id);
     if (!paymentDetails) return null;
 
     return new PaymentDetails({
@@ -69,7 +117,7 @@ export class StripePayments {
     amount,
     metadata,
   }: IPaymentWithoutPaymentMethod): Promise<PaymentDetails | null> {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await this.stripe.paymentIntents.create({
       metadata,
       customer: customerId.id,
       setup_future_usage: "off_session",
@@ -98,7 +146,7 @@ export class StripePayments {
     paymentMethod,
     metadata,
   }: IPaymentWithPaymentMethod): Promise<PaymentDetails | null> {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await this.stripe.paymentIntents.create({
       metadata, //* { adId: "123-456" },
       amount: amount.amount,
       currency: "eur",
@@ -119,7 +167,7 @@ export class StripePayments {
   }
 
   async confirmPaymentIntent(id: PaymentIntentId): Promise<PaymentStatus> {
-    const stripeIntent = await stripe.paymentIntents.confirm(id.id);
+    const stripeIntent = await this.stripe.paymentIntents.confirm(id.id);
 
     switch (stripeIntent.status) {
       case "succeeded":
@@ -130,7 +178,79 @@ export class StripePayments {
   }
 
   async createCustomer(): Promise<CustomerId> {
-    const customer = await stripe.customers.create();
+    const customer = await this.stripe.customers.create();
     return new CustomerId(customer.id);
+  }
+
+  async validateWebhookEvent(params: {
+    payload: string | Buffer;
+    header: string | Buffer | string[];
+  }): Promise<IValidatedPaymentData> {
+    const { event, object } = this.getWebhookEvent(params);
+    try {
+      switch (event.type as StripeEventType) {
+        case "payment_intent.succeeded":
+          return this.validatePaymentData(object);
+        default:
+          throw ErrorPaymentValidation.eventType(event.type);
+      }
+    } catch (err) {
+      if (err instanceof Error) throw new ErrorPaymentValidation(err.message);
+      else throw err;
+    }
+  }
+
+  private getWebhookEvent(params: {
+    payload: string | Buffer;
+    header: string | Buffer | string[];
+  }): { event: Stripe.Event; object: IWebHookPaymentSuccess } {
+    try {
+      const event = this.webhookEvent(params);
+      const object = event.data.object as IWebHookPaymentSuccess;
+      return {
+        event,
+        object,
+      };
+    } catch (err) {
+      if (err instanceof Error)
+        throw ErrorPaymentValidation.webhookEvent(err.message);
+      else throw err;
+    }
+  }
+
+  private validatePaymentData(
+    data: IWebHookPaymentSuccess
+  ): IValidatedPaymentData {
+    const amount = new PaymentAmount(data.amount);
+    const budget = CampaignBudget.fromAmount(amount);
+    const card = data.charges.data[0].payment_method_details.card;
+    return {
+      budget,
+      metadata: data.metadata,
+      card: new CardDetails({
+        brand: new CardBrand(card.brand),
+        expMonth: new ExpMonth(card.exp_month),
+        expYear: new ExpYear(card.exp_year),
+        last4: new Last4(card.last4),
+        paymentMethodId: new PaymentMethodId(data.payment_method),
+      }),
+    };
+  }
+
+  private webhookEvent(params: {
+    payload: string | Buffer;
+    header: string | Buffer | string[];
+  }) {
+    let { header, payload } = params;
+    const webhookSecret = process.env.STRIPE_SUCCESS_WEBHOOK_SECRET!;
+
+    if (process.env.NODE_ENV === "test") {
+      header = this.stripe.webhooks.generateTestHeaderString({
+        payload: payload as string,
+        secret: webhookSecret,
+      });
+    }
+
+    return this.stripe.webhooks.constructEvent(payload, header, webhookSecret);
   }
 }

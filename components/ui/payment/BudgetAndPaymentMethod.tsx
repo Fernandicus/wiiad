@@ -56,7 +56,8 @@ export const BudgetAndPaymentMethod = ({
           paymentMethod: method!,
         });
         setIsPaying(false);
-        router.push(`/campaigns`);
+        //router.push(`/ads`);
+        //router.reload();
         return;
       }
     } catch (err) {

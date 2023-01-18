@@ -13,8 +13,9 @@ describe("On api/ads/remove-ad route", () => {
   let advertiser: IUserPrimitives;
 
   beforeEach(async () => {
-    await setTestAdDB(5);
-    advertiser = FakeAdvertiser.createPrimitives();
+    const advertisers = FakeAdvertiser.createMany(5);
+    await setTestAdDB(advertisers);
+    advertiser = advertisers[0].toPrimitives();
   }, 8000);
 
   it("WHEN send 'DELETE' method with correct ad id and a user session, THEN response with status 200", async () => {

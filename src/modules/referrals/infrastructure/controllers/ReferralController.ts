@@ -2,12 +2,13 @@ import { UniqId } from "@/src/utils/UniqId";
 import { Referral } from "../../domain/Referral";
 import {
   createReferralHandler,
-  findReferralHandler,
   updateReferralHandler,
 } from "../referral-container";
 
 export class ReferralController {
-  static async updateBalance(params: {
+  constructor() {}
+
+  async updateBalance(params: {
     referrerId: string;
     refereeId: string;
     balance: number;
@@ -25,7 +26,7 @@ export class ReferralController {
     await Promise.all([increaseReferrer, increaseReferee]);
   }
 
-  static async createNew(userId: string): Promise<void> {
+  async createNew(userId: string): Promise<void> {
     const referral = Referral.empty({
       id: UniqId.new(),
       userId: new UniqId(userId),

@@ -10,14 +10,14 @@ import {
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { FakeCampaign } from "../../modules/campaign/FakeCampaign";
 
-interface ITestCampaignDB {
+interface ICampaignSorted {
   activeCampaignAds: Ad[];
   finishedCampaignAds: Ad[];
   standByCampaignAds: Ad[];
 }
 
 export const setTestCampaignDB = async (
-  campaigns: ITestCampaignDB
+  campaigns: ICampaignSorted
 ): Promise<TestCampaignDB> => {
   const testCampaignRepo = await TestCampaignMongoDBRepo.init();
   return TestCampaignDB.setAndInit({
@@ -74,6 +74,10 @@ export class TestCampaignDB {
   async findByStatus(status: CampaignStatus): Promise<Campaign[] | null> {
     const campaigns = await this.campaignRepo.getByStatus(status);
     return campaigns;
+  }
+
+  async findById(id: UniqId): Promise<Campaign | null> {
+    return await this.campaignRepo.findById(id);
   }
 
   private static setActiveCampaigns(ads: Ad[]): Campaign[] {

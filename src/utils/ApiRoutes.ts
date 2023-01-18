@@ -12,13 +12,16 @@ export class ApiRoutes {
   static login = "/api/v1/auth/login/";
   static logout = "/api/v1/auth/logout/";
   static addReferral = "/api/v1/referral/add";
-  static getUserReferralData = "/api/v1/referral/";
-  static getCloudinarySignedData = "/api/v1/auth/cloudinary/";
-  static cloudinaryVideoEndPoint =
-    "https://api.cloudinary.com/v1_1/fernanprojects/video/upload/";
-  static cloudinaryImageEndPoint =
-    "https://api.cloudinary.com/v1_1/fernanprojects/image/upload/";
-  static stripePaymentIntent = "/api/v1/payments/stripe/payment-intent/";
+  static getUserReferralData = "/api/v1/referral/get-data";
+  static cloudinaryCloudName = "fernanprojects";
+  static cloudinarySignedVideoData =
+    "/api/v1/auth/cloudinary/video-sign-request";
+  static cloudinarySignedBannerData =
+    "/api/v1/auth/cloudinary/banner-sign-request";
+  static cloudinaryVideoEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/video/upload/`;
+  static cloudinaryImageEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload/`;
+  static stripePayWithPMethod = "/api/v1/payments/stripe/campaign/with-pmethod";
+  static stripePayWithoutPMethod = "/api/v1/payments/stripe/campaign/without-pmethod";
   static paymentCompleted = () => {
     const host = window.location.host;
     if (host === "localhost:3000") return `http://${host}/campaigns`;

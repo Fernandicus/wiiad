@@ -1,10 +1,14 @@
 import { Balance } from "@/src/common/domain/Balance";
 import { UniqId } from "@/src/utils/UniqId";
 import { Campaign } from "../../domain/Campaign";
+import { ErrorFindingCampaign } from "../../domain/errors/ErrorFindingCampaign";
 import { ICampaignRepo } from "../../domain/interfaces/ICampaignRepo";
 import { CampaignBudget } from "../../domain/value-objects/Budget";
 import { CampaignMetrics } from "../../domain/value-objects/CampaignMetrics";
-import { CampaignStatus } from "../../domain/value-objects/CampaignStatus";
+import {
+  CampaignStatus,
+  CampaignStatusType,
+} from "../../domain/value-objects/CampaignStatus";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
@@ -43,24 +47,35 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
     campaignId: UniqId;
     referralId: UniqId;
   }): Promise<void> {
-    const campaign = await CampaignModel.findById(params.campaignId.id);
-    if (campaign) {
-      campaign.referrals.push(params.referralId.id);
-      await campaign.save();
-    }
+    /*  const campaign = await CampaignModel.findById(params.campaignId.id);
+    if (!campaign) throw ErrorFindingCampaign.byId(params.campaignId.id);
+    campaign.referrals.push(params.referralId.id);
+    await campaign.save(); */
+    const campaignId = params.campaignId.id;
+    const campaign = await CampaignModel.findByIdAndUpdate(campaignId, {
+      $push: { referrals: campaignId },
+    });
+    if (!campaign) throw ErrorFindingCampaign.byId(params.campaignId.id);
   }
 
   async increaseViews(id: UniqId): Promise<void> {
-    console.log(" increaseViews ");
-    await CampaignModel.findByIdAndUpdate(id.id, {
-      $inc: { "metrics.totalViews": 1 },
-    });
+    const campaignFound = await CampaignModel.findOneAndUpdate(
+      { _id: id.id, status: CampaignStatusType.ACTIVE },
+      {
+        $inc: { "metrics.totalViews": 1 },
+      }
+    );
+    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   async increaseClicks(id: UniqId): Promise<void> {
-    await CampaignModel.findByIdAndUpdate(id.id, {
-      $inc: { "metrics.totalClicks": 1 },
-    });
+    const campaignFound = await CampaignModel.findOneAndUpdate(
+      { _id: id.id, status: CampaignStatusType.ACTIVE },
+      {
+        $inc: { "metrics.totalClicks": 1 },
+      }
+    );
+    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   private toCampaign(campaignModel: ICampaignModel): Campaign {

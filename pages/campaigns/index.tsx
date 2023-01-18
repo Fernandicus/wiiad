@@ -3,8 +3,8 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps } from "next";
-import { AdCardItem } from "../../components/ui/profile/advertiser/AdCardItem";
-import { CampaignTags } from "../../components/ui/profile/advertiser/CampaignTags";
+import { AdCardItem } from "../../components/ui/pages/profile/advertiser/AdCardItem";
+import { CampaignTags } from "../../components/ui/pages/profile/advertiser/CampaignTags";
 import { RoleType } from "@/src/common/domain/Role";
 import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
 
@@ -61,18 +61,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const paymentIntent = context.query["payment_intent"] as string;
 
-  const { campaigns, ads } = await MongoDB.connectAndDisconnect(async () => {
-    const all = await ProfileDataController.getAdvertiserData(session.id);
-    return all;
+  const advertiserData = await MongoDB.connectAndDisconnect(async () => {
+    const profileController = new ProfileDataController();
+    const advertiserData = await profileController.getAdvertiserData(
+      session.id
+    );
+    return advertiserData;
   });
 
   if (paymentIntent)
     return {
-      props: { campaigns, ads },
+      props: advertiserData,
       redirect: { destination: `/${session.name}/campaigns`, permanent: false },
     };
   else
     return {
-      props: { campaigns, ads },
+      props: advertiserData,
     };
 };

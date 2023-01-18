@@ -16,11 +16,11 @@ export class PaymentIntentHandler {
   ): Promise<IPaymentDetailsPrimitives> {
     const customer = new CustomerId(customerId);
     const totalAmount = new PaymentAmount(amount);
-    const details = await this.paymentIntent.withoutPaymentMethod(
-      customer,
-      totalAmount,
-      metadata
-    );
+    const details = await this.paymentIntent.withoutPaymentMethod({
+      customerId: customer,
+      amount: totalAmount,
+      metadata,
+    });
     return details.toPrimitives();
   }
 
@@ -34,12 +34,12 @@ export class PaymentIntentHandler {
     const totalAmount = new PaymentAmount(amount);
     const methodId = new PaymentMethodId(paymentMethodId);
 
-    const details = await this.paymentIntent.withPaymentMethod(
-      customer,
-      totalAmount,
-      methodId,
-      metadata
-    );
+    const details = await this.paymentIntent.withPaymentMethod({
+      customerId: customer,
+      amount: totalAmount,
+      paymentMethod: methodId,
+      metadata,
+    });
     return details.toPrimitives();
   }
 

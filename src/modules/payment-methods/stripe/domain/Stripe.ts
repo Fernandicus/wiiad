@@ -9,7 +9,7 @@ export interface IStripePrimitives {
   paymentMethods: ICardDetailsPrimitives[];
 }
 
-interface IStripeParams {
+export interface IStripeParams {
   id: UniqId;
   userId: UniqId;
   customerId: CustomerId;

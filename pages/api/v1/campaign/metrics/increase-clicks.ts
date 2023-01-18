@@ -10,10 +10,10 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   try {
-    const reqBody: { campaignId: string } = reqBodyParse(req);
-    console.log("INCREASE CLICKS :");
+    const { campaignId } = reqBodyParse(req);
+    
     await MongoDB.connectAndDisconnect(async () => {
-      await campaignMetricsHandler.increaseClicks(reqBody.campaignId);
+      await campaignMetricsHandler.increaseClicks(campaignId);
     });
 
     return res.status(200).json({});

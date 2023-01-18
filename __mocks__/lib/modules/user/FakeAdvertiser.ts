@@ -1,11 +1,14 @@
-
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
-import { IUserPrimitives, IUserProps, User } from "@/src/modules/users/user/domain/User";
+import {
+  IUserPrimitives,
+  IUserProps,
+  User,
+} from "@/src/modules/users/user/domain/User";
 
 export class FakeAdvertiser extends User {
   constructor(props: IUserProps) {
@@ -13,9 +16,14 @@ export class FakeAdvertiser extends User {
   }
 
   static create(): User {
+    return new User({ ...this.createWithId(UniqId.new()) });
+  }
+
+  static createWithId(id: UniqId): User {
     const primaryData = this.generateFakeData();
     const advertiser = this.generateAdvertiser({
       ...primaryData,
+      id: id.id,
       role: RoleType.BUSINESS,
     });
     return new User({ ...advertiser });
@@ -39,9 +47,7 @@ export class FakeAdvertiser extends User {
     };
   }
 
-  static createManyWithPrimitives(
-    amount = 5
-  ): IUserPrimitives[] {
+  static createManyWithPrimitives(amount = 5): IUserPrimitives[] {
     let advertisers: IUserPrimitives[] = [];
 
     for (let i = 0; i < amount; i++) {
@@ -64,9 +70,7 @@ export class FakeAdvertiser extends User {
     };
   }
 
-  private static generateAdvertiser(
-    primitives: IUserPrimitives
-  ): User {
+  private static generateAdvertiser(primitives: IUserPrimitives): User {
     return new User({
       id: new UniqId(primitives.id),
       email: new Email(primitives.email),

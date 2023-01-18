@@ -9,7 +9,6 @@ export class UpdateStripe {
     userId: UniqId;
     cardDetails: CardDetails;
   }): Promise<void> {
-    const { userId, cardDetails } = params;
-    await this.stripe.addNewCardDetails({ userId, cardDetails });
+    await this.stripe.addNewCardDetails(params);
   }
 }

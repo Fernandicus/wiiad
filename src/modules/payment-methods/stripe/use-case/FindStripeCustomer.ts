@@ -6,9 +6,8 @@ import { Stripe } from "../domain/Stripe";
 export class FindStripeCustomer {
   constructor(private stripeRepo: IStripeRepo) {}
 
-  async findByUserId(id: UniqId): Promise<Stripe> {
+  async byUserId(id: UniqId): Promise<Stripe> {
     const stripeFound = await this.stripeRepo.findByUserId(id);
-    if (!stripeFound) throw ErrorFindingStripe.byUserId(id.id);
     return stripeFound;
   }
 }
