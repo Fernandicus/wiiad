@@ -8,19 +8,19 @@ import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/Cam
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { UniqId } from "@/src/utils/UniqId";
-import { ErrorFetchingCampaigns } from "../domain/interfaces/ErrorFetchingCampaigs";
-import { ICampaignsApiCall } from "../domain/interfaces/ICampaignsApiCall";
+import { ErrorFetchingAdvertiser } from "../domain/interfaces/ErrorFetchingAdvertiser";
+import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
 
-export class FetchCampaignsApiCalls implements ICampaignsApiCall {
-  async getAll(): Promise<Campaign[]> {
+export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
+  async getCampaigns(): Promise<Campaign[]> {
     const resp = await fetch(ApiRoutes.advertiserCampaigns, { method: "GET" });
     if (resp.status !== 200)
-      throw ErrorFetchingCampaigns.gettingAll()
-    const campaignsPrimitives = await this.getCampaigns(resp);
+      throw ErrorFetchingAdvertiser.gettingAll()
+    const campaignsPrimitives = await this.responseToPrimitives(resp);
     return this.toCampaign(campaignsPrimitives);
   }
 
-  private async getCampaigns(
+  private async responseToPrimitives(
     response: Response
   ): Promise<ICampaignPrimitives[]> {
     const respJSON = await response.json();

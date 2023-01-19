@@ -1,4 +1,4 @@
-import { getCampaignsHandler } from "@/components/src/modules/campaigns/infrastructure/campaigns-container";
+import { getCampaignsHandler } from "@/components/src/modules/advertiser/infrastructure/campaigns-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { ICampaignsState } from "context/advertisers/reducers/campaigns-reducer";
