@@ -30,13 +30,13 @@ interface IVerifyJWTParams {
 
 export class SignInController {
   private readonly context;
-  private readonly profileController;
+  /* private readonly profileController; */
   private readonly jwtData;
 
   private constructor({ jwtData, context }: ILogingInParams) {
     this.jwtData = jwtData;
     this.context = context;
-    this.profileController = new ProfileDataController();
+    /* this.profileController = new ProfileDataController(); */
   }
 
   static verifyJWT({
@@ -56,8 +56,8 @@ export class SignInController {
       data = await this.logIn();
       return {
         user: data.user,
-        ads: data.ads,
-        campaigns: data.campaigns,
+        /* ads: data.ads,
+        campaigns: data.campaigns, */
       };
     }
 
@@ -65,8 +65,8 @@ export class SignInController {
       data = await this.signUp();
       return {
         user: data.user,
-        ads: data.ads,
-        campaigns: data.campaigns,
+       /*  ads: data.ads,
+        campaigns: data.campaigns, */
       };
     }
 
@@ -76,12 +76,12 @@ export class SignInController {
   async logIn(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn(this.jwtData);
-      const advertiserData = await this.profileController.getAdvertiserData(
+      /* const advertiserData = await this.profileController.getAdvertiserData(
         advertiser.id
-      );
+      ); */
       this.userInitSession(this.context, advertiser);
       return {
-        ...advertiserData,
+        /* ...advertiserData, */
         user: advertiser,
       };
     } else {
@@ -96,12 +96,12 @@ export class SignInController {
   async signUp(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
-      const advertiserData = await this.profileController.getAdvertiserData(
+      /* const advertiserData = await this.profileController.getAdvertiserData(
         advertiser.id
-      );
+      ); */
       this.userInitSession(this.context, advertiser);
       return {
-        ...advertiserData,
+        /* ...advertiserData, */
         user: advertiser,
       };
     } else {

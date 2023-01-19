@@ -1,4 +1,3 @@
-import { ICampaignsState } from "@/components/hooks/reducers/advertiser/campaigns-reducer";
 import { RoleType } from "@/src/common/domain/Role";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
@@ -9,12 +8,10 @@ import { UserProfile } from "./user/UserProfile";
 
 interface IProfileSectionParams {
   userData: IUserPrimitives;
-  ads?: AdPropsPrimitives[]; // | null;
-  campaigns?: ICampaignPrimitives[]; // | null;
 }
 
 export const UserProfileSection = (props: IProfileSectionParams) => {
-  const { ads, campaigns, userData } = props;
+  const { userData } = props;
   const role = userData.role as RoleType;
   function assertUnreachable(role: never): never {
     throw new Error("Missing RoleType in switch case");
@@ -32,20 +29,9 @@ export const UserProfileSection = (props: IProfileSectionParams) => {
     }
   };
 
-  const campaignsState = useSelector(
-    (state: ICampaignsState) => state.campaigns
-  );
-
   const profile: Record<RoleType, JSX.Element | null> = {
     user: <UserProfile user={userData} />,
-    business: !ads ? null : (
-      <AdvertiserHeader
-        user={userData}
-        totalAds={ads!.length}
-        //totalCampaigns={campaigns!.length}
-        totalCampaigns={campaignsState.length}
-      />
-    ),
+    business: <AdvertiserHeader user={userData} />,
     agency: null,
   };
 

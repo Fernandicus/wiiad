@@ -1,5 +1,5 @@
-import { campaignsStore } from "@/components/hooks/reducers/advertiser/campaigns-reducer";
 import "@/styles/global.css";
+import { campaignsStore } from "context/advertisers/slices/campaigns-slices";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 

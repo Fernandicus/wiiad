@@ -1,11 +1,11 @@
-export const LoadingSpinnerAnimation = () => {
+export const LoadingSpinnerAnimation = ({strokeWith = 1.5}:{strokeWith?:number}) => {
   return (
     <div className="animate-spin">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        strokeWidth={1.5}
+        strokeWidth={strokeWith}
         stroke="currentColor"
         className="w-full h-full"
       >
