@@ -1,5 +1,5 @@
-import { IAdsState } from "store/advertisers/modules/ads/domain/interfaces/IAdsState";
-import { ICampaignsState } from "store/advertisers/modules/campaigns/domain/interfaces/ICampaignsState";
+import { IAdsState } from "context/advertisers/modules/ads/domain/interfaces/IAdsState";
+import { ICampaignsState } from "context/advertisers/modules/campaigns/domain/interfaces/ICampaignsState";
 
 type TCampaigns<T> = { campaigns: T };
 type TAds<T> = { ads: T };

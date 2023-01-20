@@ -1,9 +1,9 @@
 import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/infrastructure/advertiser-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { addCampaignsReducer } from "store/advertisers/modules/campaigns/infrastructure/campaigns-slices";
+import { addCampaignsReducer } from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IAdvertiserState } from "store/advertisers/common/domain/interfaces/IAdvertiserStoreState";
+import { IAdvertiserState } from "context/advertisers/common/domain/interfaces/IAdvertiserStoreState";
 
 type TUseAdvertiserStatus = "non-init" | "init";
 

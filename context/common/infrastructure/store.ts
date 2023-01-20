@@ -1,7 +1,7 @@
 import { AnyAction, configureStore } from "@reduxjs/toolkit";
 import { Reducer } from "react";
-import { IAdvertiserStore } from "store/advertisers/common/domain/interfaces/IAdvertiserStoreState";
-import { adsSlice } from "store/advertisers/modules/ads/infrastructure/ads-slices";
+import { IAdvertiserStore } from "context/advertisers/common/domain/interfaces/IAdvertiserStoreState";
+import { adsSlice } from "context/advertisers/modules/ads/infrastructure/ads-slices";
 import { campaignsSlice } from "../../advertisers/modules/campaigns/infrastructure/campaigns-slices";
 
 type TReducer = Reducer<any, AnyAction>;
