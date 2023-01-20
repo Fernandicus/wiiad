@@ -1,6 +1,6 @@
 import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/infrastructure/advertiser-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { addCampaignsReducer } from "store/advertisers/modules/campaigns/slices/campaigns-slices";
+import { addCampaignsReducer } from "store/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IAdvertiserState } from "store/advertisers/common/domain/interfaces/IAdvertiserStoreState";
@@ -16,10 +16,9 @@ interface IUseCampaigns {
 
 export const useAdvertiser = (): IUseCampaigns => {
   const [status, setStatus] = useState<TUseAdvertiserStatus>("non-init");
-  const campaignsState = useSelector((state: IAdvertiserState ) => {
-    console.log(state.campaigns.campaigns[0]);
-    return state.campaigns.campaigns;
-  });
+  const campaignsState = useSelector(
+    (state: IAdvertiserState) => state.campaigns.campaigns
+  );
   const dispatch = useDispatch();
 
   //TODO: CALL API ROUTE THAT RETURN ALL ProfileDataController .getAdvertiserData()

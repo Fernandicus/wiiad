@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { campaignInitialState } from "../reducers/campaigns-reducer";
-import { campaignsReducers } from "../reducers/campaigns-reducer";
+import { campaignInitialState } from "../domain/CampaignInitialState";
+import { campaignsReducers } from "./campaigns-reducer";
 
 export const campaignsSlice = createSlice({
   name: "campaigns",
