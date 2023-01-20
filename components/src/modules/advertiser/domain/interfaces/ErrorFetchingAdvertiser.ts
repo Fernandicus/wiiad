@@ -4,9 +4,23 @@ export class ErrorFetchingAdvertiser extends Error {
     super(message, { cause });
   }
 
-  static gettingAll(cause?: string): ErrorFetchingAdvertiser {
+  static gettingAllCampaigns(cause?: string): ErrorFetchingAdvertiser {
     return new ErrorFetchingAdvertiser({
       message: "Something went wrong getting campaigns",
+      cause,
+    });
+  }
+
+  static getAdvertiserProfileData(cause?:string):ErrorFetchingAdvertiser{
+    return new ErrorFetchingAdvertiser({
+      message: "Something went wrong getting advertiser profile",
+      cause,
+    });
+  }
+
+  static noDataAvailable(cause?:string):ErrorFetchingAdvertiser{
+    return new ErrorFetchingAdvertiser({
+      message: "Advertiser data is empty",
       cause,
     });
   }

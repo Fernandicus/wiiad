@@ -1,6 +1,5 @@
-import { Campaign } from "@/src/modules/campaign/domain/Campaign";
-import { UniqId } from "@/src/utils/UniqId";
+import { IAdvertiserData } from "@/src/common/domain/interfaces/IAdvertiserData";
 
 export interface IAdvertiserApiCall {
-  getCampaigns(): Promise<Campaign[]>;
+  getAdvertiserProfileData(): Promise<IAdvertiserData>;
 }

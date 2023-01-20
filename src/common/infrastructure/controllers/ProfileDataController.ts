@@ -4,17 +4,12 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { findCampaignHandler } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
-
-interface IAdsAndCampaigns {
-  campaigns: ICampaignPrimitives[];
-  ads: AdPropsPrimitives[];
-  stripeCustomer: IStripePrimitives | null;
-}
+import { IAdvertiserDataPrimitives } from "../../domain/interfaces/IAdvertiserData";
 
 export class ProfileDataController {
   constructor() {}
-  
-  async getAdvertiserData(advertiserId: string): Promise<IAdsAndCampaigns> {
+
+  async getAdvertiserData(advertiserId: string): Promise<IAdvertiserDataPrimitives> {
     const findCampaigns = findCampaignHandler.byAdvertiserId(advertiserId);
     const findAds = adFinderHandler.findAll(advertiserId);
     const findStripeCustomer = findCustomerHandler.ByUserId(advertiserId);
@@ -36,7 +31,7 @@ export class ProfileDataController {
     return resp.status == "rejected" ? [] : resp.value;
   }
 
-  private getValue<T>(resp: PromiseSettledResult<T>): T | null {
-    return resp.status == "rejected" ? null : resp.value;
+  private getValue<T>(resp: PromiseSettledResult<T>): T | undefined {
+    return resp.status === "rejected" ? undefined : resp.value;
   }
 }

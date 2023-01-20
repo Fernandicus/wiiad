@@ -1,4 +1,15 @@
+import { IApiProfileResp } from "@/pages/api/v1/profile";
 import { Balance } from "@/src/common/domain/Balance";
+import {
+  IAdvertiserData,
+  IAdvertiserDataPrimitives,
+} from "@/src/common/domain/interfaces/IAdvertiserData";
+import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
+import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
+import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
+import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
+import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import {
   Campaign,
   ICampaignPrimitives,
@@ -6,28 +17,50 @@ import {
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import {
+  CardDetails,
+  ICardDetailsParams,
+  ICardDetailsPrimitives,
+} from "@/src/modules/payment-methods/stripe/domain/CardDetails";
+import {
+  IStripePrimitives,
+  Stripe,
+} from "@/src/modules/payment-methods/stripe/domain/Stripe";
+import { CardBrand } from "@/src/modules/payment-methods/stripe/domain/value-objects/CardBrand";
+import { CustomerId } from "@/src/modules/payment-methods/stripe/domain/value-objects/CustomerId";
+import { ExpMonth } from "@/src/modules/payment-methods/stripe/domain/value-objects/ExpMonth";
+import { ExpYear } from "@/src/modules/payment-methods/stripe/domain/value-objects/ExpYear";
+import { Last4 } from "@/src/modules/payment-methods/stripe/domain/value-objects/Last4";
+import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { getApiResponse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorFetchingAdvertiser } from "../domain/interfaces/ErrorFetchingAdvertiser";
 import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
 
 export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
-  async getCampaigns(): Promise<Campaign[]> {
-    const resp = await fetch(ApiRoutes.advertiserCampaigns, { method: "GET" });
+
+  async getAdvertiserProfileData(): Promise<IAdvertiserData> {
+    const resp = await fetch(ApiRoutes.advertiserDataProfile, {
+      method: "GET",
+    });
+    const apiResp = await getApiResponse<IApiProfileResp>(resp);
+    
     if (resp.status !== 200)
-      throw ErrorFetchingAdvertiser.gettingAll()
-    const campaignsPrimitives = await this.responseToPrimitives(resp);
-    return this.toCampaign(campaignsPrimitives);
+      throw ErrorFetchingAdvertiser.getAdvertiserProfileData(apiResp.message);
+    if (!apiResp.data)
+      throw ErrorFetchingAdvertiser.noDataAvailable(apiResp.message);
+
+    const { ads, campaigns, stripeCustomer } = apiResp.data;
+    const data: IAdvertiserData = {
+      campaigns: this.toCampaigns(campaigns),
+      ads: this.toAds(ads),
+      stripeCustomer: this.toStripe(stripeCustomer),
+    };
+    return data;
   }
 
-  private async responseToPrimitives(
-    response: Response
-  ): Promise<ICampaignPrimitives[]> {
-    const respJSON = await response.json();
-    return respJSON["campaigns"] as ICampaignPrimitives[];
-  }
-
-  private toCampaign(campaigns: ICampaignPrimitives[]): Campaign[] {
+  private toCampaigns(campaigns: ICampaignPrimitives[]): Campaign[] {
     return campaigns.map((campaign) => {
       return new Campaign({
         id: new UniqId(campaign.id),
@@ -44,6 +77,40 @@ export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
         referrals: campaign.referrals.map((ref) => new UniqId(ref)),
         status: new CampaignStatus(campaign.status),
       });
+    });
+  }
+
+  private toAds(ads: AdPropsPrimitives[]): Ad[] {
+    return ads.map((ad) => {
+      return new Ad({
+        id: new UniqId(ad.id),
+        advertiserId: new UniqId(ad.advertiserId),
+        title: new AdTitle(ad.title),
+        description: new AdDescription(ad.description),
+        file: new AdFileUrl(ad.file),
+        redirectionUrl: new AdRedirectionUrl(ad.redirectionUrl),
+        segments: AdSegments.filterByAvailables(ad.segments),
+      });
+    });
+  }
+
+  private toStripe(stripe?: IStripePrimitives): Stripe | undefined {
+    if (!stripe) return;
+    return new Stripe({
+      customerId: new CustomerId(stripe.customerId),
+      paymentMethods: stripe.paymentMethods.map((pm) => this.toCardDetails(pm)),
+      userId: new UniqId(stripe.userId),
+      id: new UniqId(stripe.id),
+    });
+  }
+
+  private toCardDetails(paymentMethod: ICardDetailsPrimitives): CardDetails {
+    return new CardDetails({
+      brand: new CardBrand(paymentMethod.brand),
+      expMonth: new ExpMonth(paymentMethod.expMonth),
+      expYear: new ExpYear(paymentMethod.expYear),
+      last4: new Last4(paymentMethod.last4),
+      paymentMethodId: new PaymentMethodId(paymentMethod.paymentMethodId),
     });
   }
 }

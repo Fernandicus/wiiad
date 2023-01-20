@@ -4,7 +4,7 @@ export interface ICampaignsState {
   campaigns: ICampaignPrimitives[];
 }
 
-export interface ICampaignsActions {
+export interface ICampaignsAction {
   type: string;
   payload: ICampaignsState;
 }
@@ -15,11 +15,11 @@ export const campaignInitialState: ICampaignsState = {
 
 const addCampaignsReducer = (
   state: ICampaignsState,
-  action: ICampaignsActions
+  action: ICampaignsAction
 ): void => {
   const newCampaigns = action.payload.campaigns;
   newCampaigns.forEach((campaign) => {
-    state.campaigns!.push(campaign);
+    state.campaigns.push(campaign);
   });
 };
 

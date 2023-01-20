@@ -27,4 +27,5 @@ export class ApiRoutes {
     if (host === "localhost:3000") return `http://${host}/campaigns`;
     else return `https://${host}/campaigns`;
   };
+  static readonly advertiserDataProfile = "/api/v1/profile"
 }

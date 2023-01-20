@@ -4,7 +4,7 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useEffect } from "react";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { LoadingSpinnerAnimation } from "@/components/ui/icons/LoadingSpinnerAnimation";
-import { useCampaigns } from "@/components/hooks/campaigns/useCampaigns";
+import { useAdvertiser } from "@/components/hooks/campaigns/useAdvertiser";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;
@@ -12,16 +12,7 @@ interface IAdvertiserSectionProps {
 }
 
 export function AdvertiserHeader({ user }: IAdvertiserSectionProps) {
-  const {init, campaigns, status } = useCampaigns();
-
-  async function getAds(): Promise<void> {
-    const resp = await fetch(ApiRoutes.advertiserAds, { method: "GET" });
-    if (resp.status !== 200)
-      throw new Error("Something went wrong getting campaigns");
-    const respJSON = await resp.json();
-    const advertise = respJSON["ads"];
-    //setAds(advertise);
-  }
+  const {init, campaigns, status } = useAdvertiser();
 
   useEffect(() => {
     init()

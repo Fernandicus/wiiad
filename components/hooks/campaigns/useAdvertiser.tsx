@@ -1,25 +1,25 @@
-import { getCampaignsHandler } from "@/components/src/modules/advertiser/infrastructure/campaigns-container";
+import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/infrastructure/advertiser-container";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { ICampaignsState } from "context/advertisers/reducers/campaigns-reducer";
-import { addCampaignsReducer } from "context/advertisers/slices/campaigns-slices";
+import { addCampaignsReducer } from "store/advertisers/modules/campaigns/slices/campaigns-slices";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { IAdvertiserState } from "store/advertisers/common/domain/interfaces/IAdvertiserStoreState";
 
-type TUseCampaignsStatus = "non-init" | "init";
+type TUseAdvertiserStatus = "non-init" | "init";
 
 interface IUseCampaigns {
-  status: TUseCampaignsStatus;
+  status: TUseAdvertiserStatus;
   init(): Promise<void>;
   campaigns: ICampaignPrimitives[];
   addCampaigns(campaigns: ICampaignPrimitives[]): void;
 }
 
-export const useCampaigns = (): IUseCampaigns => {
-  const [status, setStatus] = useState<TUseCampaignsStatus>("non-init");
-  const campaignsState = useSelector(
-    (state: ICampaignsState) => state.campaigns
-  );
+export const useAdvertiser = (): IUseCampaigns => {
+  const [status, setStatus] = useState<TUseAdvertiserStatus>("non-init");
+  const campaignsState = useSelector((state: IAdvertiserState ) => {
+    console.log(state.campaigns.campaigns[0]);
+    return state.campaigns.campaigns;
+  });
   const dispatch = useDispatch();
 
   //TODO: CALL API ROUTE THAT RETURN ALL ProfileDataController .getAdvertiserData()
@@ -27,8 +27,8 @@ export const useCampaigns = (): IUseCampaigns => {
   const init = async (): Promise<void> => {
     if (status !== "non-init") return;
     try {
-      const campaigns = await getCampaignsHandler.getAll();
-      dispatch(addCampaignsReducer({ campaigns }));
+      const profileData = await getAdvertiserProfileDataHandler.getAll();
+      dispatch(addCampaignsReducer({ campaigns: profileData.campaigns }));
       if (status === "non-init") setStatus("init");
     } catch (err) {
       console.error(err);
