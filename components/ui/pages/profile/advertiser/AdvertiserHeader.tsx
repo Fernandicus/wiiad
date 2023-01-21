@@ -4,7 +4,7 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useEffect } from "react";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { LoadingSpinnerAnimation } from "@/components/ui/icons/LoadingSpinnerAnimation";
-import { useAdvertiser } from "@/components/hooks/campaigns/useAdvertiser";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;
@@ -12,10 +12,10 @@ interface IAdvertiserSectionProps {
 }
 
 export function AdvertiserHeader({ user }: IAdvertiserSectionProps) {
-  const {init, campaigns, status } = useAdvertiser();
+  const {initStore, campaigns, status } = useAdvertiser();
 
   useEffect(() => {
-    init()
+    initStore()
   }, []);
 
   return (

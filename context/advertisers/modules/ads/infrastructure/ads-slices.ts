@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { adsInitialState } from "../domain/AdInitialState";
-import { adsReducers } from "./ads-reducer";
+import { adsReducers } from "../use-case/ads-reducer";
 
 export const adsSlice = createSlice({
   name: "ads",
@@ -8,4 +8,4 @@ export const adsSlice = createSlice({
   reducers: adsReducers,
 });
 
-export const { addAdsReducer } = adsSlice.actions;
+export const { storeAdsReducer } = adsSlice.actions;

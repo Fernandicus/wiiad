@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { campaignInitialState } from "../domain/CampaignInitialState";
-import { campaignsReducers } from "./campaigns-reducer";
+import { campaignsReducers } from "../use-case/campaigns-reducer";
 
 export const campaignsSlice = createSlice({
   name: "campaigns",
@@ -8,4 +8,4 @@ export const campaignsSlice = createSlice({
   reducers: campaignsReducers,
 });
 
-export const { addCampaignsReducer } = campaignsSlice.actions;
+export const { storeCampaignsReducer } = campaignsSlice.actions;

@@ -1,7 +1,7 @@
 import { IAdsAction } from "../domain/interfaces/IAdsAction";
 import { IAdsState } from "../domain/interfaces/IAdsState";
 
-const addAdsReducer = (state: IAdsState, action: IAdsAction) => {
+const storeAdsReducer = (state: IAdsState, action: IAdsAction) => {
   const newAds = action.payload.ads;
   newAds.forEach((ad) => {
     state.ads.push(ad);
@@ -9,5 +9,5 @@ const addAdsReducer = (state: IAdsState, action: IAdsAction) => {
 };
 
 export const adsReducers = {
-  addAdsReducer,
+  storeAdsReducer,
 };

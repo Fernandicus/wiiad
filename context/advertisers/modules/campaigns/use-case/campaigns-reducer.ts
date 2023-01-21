@@ -1,7 +1,7 @@
 import { ICampaignsAction } from "../domain/interfaces/ICampaignsAction";
 import { ICampaignsState } from "../domain/interfaces/ICampaignsState";
 
-const addCampaignsReducer = (
+const storeCampaignsReducer = (
   state: ICampaignsState,
   action: ICampaignsAction
 ): void => {
@@ -12,5 +12,5 @@ const addCampaignsReducer = (
 };
 
 export const campaignsReducers = {
-  addCampaignsReducer,
+  storeCampaignsReducer,
 };

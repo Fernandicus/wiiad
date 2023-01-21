@@ -6,7 +6,7 @@ import { campaignsSlice } from "../../advertisers/modules/campaigns/infrastructu
 
 type TReducer = Reducer<any, AnyAction>;
 
-//? Extend more interfaces to add more reducers to the store
+//* Extend more interfaces to add more reducers to the store
 interface IStore<T> extends IAdvertiserStore<T> {}
 
 const reducer: IStore<TReducer> = {
