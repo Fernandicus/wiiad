@@ -1,11 +1,11 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { IAdvertiserState } from "context/advertisers/common/domain/interfaces/IAdvertiserStoreState";
+import { ICampaignsCtxState } from "context/advertisers/modules/campaigns/domain/interfaces/ICampaignsContext";
 import { storeCampaignsReducer } from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useDispatch, useSelector } from "react-redux";
 
 export const useCampaigns = () => {
   const campaigns = useSelector(
-    (state: IAdvertiserState) => state.campaigns.campaigns
+    (state: ICampaignsCtxState) => state.campaigns.campaigns
   );
   const dispatch = useDispatch();
 

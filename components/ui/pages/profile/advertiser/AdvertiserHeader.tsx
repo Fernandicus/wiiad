@@ -12,11 +12,7 @@ interface IAdvertiserSectionProps {
 }
 
 export function AdvertiserHeader({ user }: IAdvertiserSectionProps) {
-  const {initStore, campaigns, status } = useAdvertiser();
-
-  useEffect(() => {
-    initStore()
-  }, []);
+  const { campaigns, status } = useAdvertiser();
 
   return (
     <div className="flex justify-center h-full items-center">

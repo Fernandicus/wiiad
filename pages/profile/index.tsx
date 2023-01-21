@@ -8,8 +8,17 @@ import {
   IProfilePageParams,
   UserProfilePage,
 } from "@/components/ui/pages/profile/UserProfilePage";
+import {  RoleType } from "@/src/common/domain/Role";
+import { useEffect } from "react";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 
 export default function Profile({ user }: IProfilePageParams) {
+  const advertiser = useAdvertiser();
+
+  useEffect(() => {
+    if (user.role !== RoleType.USER) advertiser.initStore();
+  }, []);
+
   return <UserProfilePage user={user} />;
 }
 
@@ -18,18 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const loginQueries = new LoginQueries(query);
 
   try {
-    const userData = await MongoDB.connectAndDisconnect(async () => {
-      if (!loginQueries.authToken) {
-        return await visitProfile(context);
-      }
-      const singInController = SignInController.verifyJWT({
-        authToken: loginQueries.authToken,
-        context,
-      });
-      const userData = await singInController.signIn(loginQueries);
-      return getSSRData(userData);
-    });
-    return userData;
+    return await serverSideResponse({ context, loginQueries });
   } catch (err) {
     await MongoDB.disconnect();
     return {
@@ -39,26 +37,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
+async function serverSideResponse(params: {
+  loginQueries: LoginQueries;
+  context: IReqAndRes;
+}) {
+  const { context, loginQueries } = params;
+  const userData = await MongoDB.connectAndDisconnect(async () => {
+    if (!loginQueries.authToken) {
+      return await visitProfile(context);
+    }
+    const singInController = SignInController.verifyJWT({
+      authToken: loginQueries.authToken,
+      context,
+    });
+    const userData = await singInController.signIn(loginQueries);
+    return getSSRData(userData);
+  });
+  return userData;
+}
+
 async function visitProfile(
   context: IReqAndRes
 ): Promise<{ props: IProfilePageParams }> {
   const session = userSession.getFromServer(context);
   if (!session) throw new Error("No session provided");
-
-  /* if (session.role !== RoleType.USER) {
-    const profileController = new ProfileDataController();
-    const { ads, campaigns } = await profileController.getAdvertiserData(
-      session.id
-    );
-    return {
-      props: {
-        user: session,
-        ads,
-        campaigns,
-      } as IProfilePageParams,
-    };
-  } */
-
   return {
     props: {
       user: session,
@@ -70,8 +72,6 @@ function getSSRData(data: IProfilePageParams) {
   return {
     props: {
       user: data.user,
-      /*  ads: data.ads,
-      campaigns: data.campaigns, */
     } as IProfilePageParams,
     redirect: {
       destination: "/profile",
