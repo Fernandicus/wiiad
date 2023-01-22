@@ -1,10 +1,11 @@
-import StripePaymentElement from "../../../payment/StripePaymentElement";
-import { BudgetAndPaymentMethod } from "../../../payment/BudgetAndPaymentMethod";
+
 import { useState } from "react";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
-import { StripePaymentProcess } from "../../../../src/payments/StripePaymentProcess";
 import { useRouter } from "next/router";
+import { StripePaymentProcess } from "@/components/src/payments/StripePaymentProcess";
+import StripePaymentElement from "../../payment/StripePaymentElement";
+import { BudgetAndPaymentMethod } from "../../payment/BudgetAndPaymentMethod";
 
 interface ILaunchCampaign {
   paymentMethods?: ICardDetailsPrimitives[];

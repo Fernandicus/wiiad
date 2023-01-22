@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { PlayIcon } from "../../../icons/PlayIcon";
-import { PauseIcon } from "../../../icons/PauseIcon";
+import { PauseIcon } from "../../icons/PauseIcon";
+import { PlayIcon } from "../../icons/PlayIcon";
 
 interface AdCardItemProps {
   image: string;

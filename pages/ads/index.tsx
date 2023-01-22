@@ -6,32 +6,24 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect, useRef, useState } from "react";
-import { EmptyAds } from "../../components/ui/pages/profile/advertiser/EmptyAds";
-import { AdsList } from "../../components/ui/pages/profile/advertiser/AdsList";
 import {
   NotificationData,
   Notifications,
   RefNotifications,
 } from "../../components/ui/notifications/Notifications";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { LaunchCampaign } from "../../components/ui/pages/profile/advertiser/LaunchCampaign";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ProfileDataController } from "@/src/common/infrastructure/controllers/ProfileDataController";
+import { EmptyAds } from "@/components/ui/pages/ads/EmptyAds";
+import { AdsList } from "@/components/ui/pages/ads/AdsList";
+import { LaunchCampaign } from "@/components/ui/pages/campaigns/LaunchCampaign";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 
 export type AdType = "banner" | "video";
 
-interface IAdsPageProps {
-  advertiser: IUserPrimitives;
-  ads: AdPropsPrimitives[];
-  campaigns: ICampaignPrimitives[];
-  stripeCustomer?: IStripePrimitives;
-}
-
-export default function Ads(props: IAdsPageProps) {
-  const advertiser: IUserPrimitives = props.advertiser;
-  const ads: AdPropsPrimitives[] = props.ads;
-  const campaigns: ICampaignPrimitives[] = props.campaigns;
+export default function Ads(advertiser: IUserPrimitives) {
+  const { ads, campaigns, userStripe, initStore, status } = useAdvertiser();
   const [createAd, setCreateAd] = useState<AdType | null>(null);
   const notificationsRef = useRef<RefNotifications>({
     showNotification: (data: NotificationData) => {},
@@ -44,6 +36,10 @@ export default function Ads(props: IAdsPageProps) {
     setPaymentProcess(true);
     setLaunchAd(ad);
   };
+
+  useEffect(() => {
+    if (status === "non-init") initStore();
+  }, []);
 
   return (
     <div>
@@ -84,7 +80,8 @@ export default function Ads(props: IAdsPageProps) {
           <LaunchCampaign
             userName={advertiser.name}
             adToLaunch={launchAd!}
-            paymentMethods={props.stripeCustomer?.paymentMethods}
+            // paymentMethods={props.stripeCustomer?.paymentMethods}
+            paymentMethods={userStripe.paymentMethods}
           />
         </div>
       ) : null}
@@ -96,20 +93,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const session = userSession.getFromServer(context);
     if (!session || session.role === RoleType.USER)
-      throw new Error("The session do not have access");
-
-    const advertiserData = await MongoDB.connectAndDisconnect(async () => {
-      const profileController = new ProfileDataController();
-      const advertiserData = await profileController.getAdvertiserData(
-        session.id
-      );
-      return advertiserData;
-    });
+      throw new Error("The user is not do not have access");
 
     return {
       props: {
-        ...advertiserData,
-        advertiser: { ...session } as IUserPrimitives,
+        advertiser: session,
       },
     };
   } catch (err) {
