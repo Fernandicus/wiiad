@@ -7,13 +7,14 @@ import { advertiserStatusSlices } from "context/advertisers/modules/status/infra
 
 type TReducer = Reducer<any, AnyAction>;
 
-//* Extend more interfaces to add more reducers to the store
-interface IStore<T> extends IAdvertiserStore<T> {}
+//? Extend more interfaces to add more reducers to the store
+interface IStore extends IAdvertiserStore<TReducer> {}
 
-const reducer: IStore<TReducer> = {
+const reducer: IStore = {
   campaigns: campaignsSlice.reducer,
   ads: adsSlice.reducer,
   status: advertiserStatusSlices.reducer,
+  
 };
 
 export const store = configureStore({ reducer });
