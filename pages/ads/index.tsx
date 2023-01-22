@@ -1,4 +1,4 @@
-import CreateAdForm from "../../components/ui/pages/profile/advertiser/CreateAdForm";
+import CreateAdForm from "../../components/ui/pages/ads/CreateAdForm";
 import { RoleType } from "@/src/common/domain/Role";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";

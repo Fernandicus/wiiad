@@ -1,18 +1,14 @@
-import { DataCardButton } from "../user/DataCardButton";
-import { ProfileCard } from "../user/ProfileCard";
+import { ProfileCard } from "../ProfileCard";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useEffect } from "react";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { LoadingSpinnerAnimation } from "@/components/ui/icons/LoadingSpinnerAnimation";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
-import { LoadDataCardButton } from "../user/LoadDataCardButton";
+import { LoadDataCardButton } from "./items/LoadDataCardButton";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;
   children?: JSX.Element;
 }
 
-export function AdvertiserHeader({ user }: IAdvertiserSectionProps) {
+export function AdvertiserProfile({ user }: IAdvertiserSectionProps) {
   const { ads, campaigns, status } = useAdvertiser();
   const isLoading = status === "non-init";
 

@@ -1,9 +1,6 @@
 import { RoleType } from "@/src/common/domain/Role";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useSelector } from "react-redux";
-import { AdvertiserHeader } from "./advertiser/AdvertiserHeader";
+import { AdvertiserProfile } from "./advertiser/AdvertiserProfile";
 import { UserProfile } from "./user/UserProfile";
 
 interface IProfileSectionParams {
@@ -31,7 +28,7 @@ export const UserProfileSection = (props: IProfileSectionParams) => {
 
   const profile: Record<RoleType, JSX.Element | null> = {
     user: <UserProfile user={userData} />,
-    business: <AdvertiserHeader user={userData} />,
+    business: <AdvertiserProfile user={userData} />,
     agency: null,
   };
 
