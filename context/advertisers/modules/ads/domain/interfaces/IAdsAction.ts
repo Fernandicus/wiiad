@@ -1,4 +1,4 @@
-import { IActionReducer } from "context/advertisers/common/domain/interfaces/IActionReducer";
+import { IActionReducer } from "context/common/domain/interface/IActionReducer";
 import { IAdsState } from "./IAdsState";
 
 export interface IAdsAction extends IActionReducer<IAdsState> {}
