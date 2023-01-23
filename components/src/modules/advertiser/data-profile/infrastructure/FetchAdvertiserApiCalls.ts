@@ -35,7 +35,7 @@ import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/val
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { getApiResponse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
-import { ErrorFetchingAdvertiser } from "../domain/interfaces/ErrorFetchingAdvertiser";
+import { ErrorFetchingAdvertiser } from "../domain/errors/ErrorFetchingAdvertiser";
 import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
 
 export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {

@@ -28,7 +28,7 @@ export default async function handler(
     const data = await MongoDB.connectAndDisconnect(
       async () => await profileController.getAdvertiserData(session.id)
     );
-    return res.status(200).json({ data });
+    return res.status(200).json({ data } as IApiProfileResp);
   } catch (err) {
     console.error(err);
     return res.status(400);

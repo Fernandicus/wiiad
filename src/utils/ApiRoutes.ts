@@ -7,6 +7,7 @@ export class ApiRoutes {
   static readonly removeAds = "/api/v1/ads/remove";
   static readonly advertiserAds = "/api/v1/ads/";
   static readonly advertiserCampaigns = "/api/v1/campaign";
+  static readonly createAd = "/api/v1/ads/create/";
   static readonly createBannerAd = "/api/v1/ads/create/banner";
   static readonly createVideoAd = "/api/v1/ads/create/video";
   static readonly login = "/api/v1/auth/login/";

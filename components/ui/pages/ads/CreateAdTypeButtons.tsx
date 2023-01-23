@@ -1,22 +1,17 @@
-import { Dispatch, SetStateAction } from "react";
-
-interface AdResourceSelectorProps {
+interface CreateAdTypeButtonsProps {
   onCreateVideoAd(): void;
   onCreateImageAd(): void;
 }
 
-export const AdResourceSelector = ({
-  onCreateVideoAd,
-  onCreateImageAd,
-}: AdResourceSelectorProps) => {
+export const CreateAdTypeButtons = (params: CreateAdTypeButtonsProps) => {
   return (
-    <div className=" flex justify-center ">
+    <div className=" flex justify-center">
       <div className=" bg-white  rounded-lg py-2 px-5 shadow-lg shadow-slate-200">
-        <div className=" space-x-7">
+        <div className=" space-x-7 ">
           <button className="text-center group">
             <div
               className="text-sky-500 mx-auto group-hover:text-white group-hover:bg-sky-400 p-1 w-7 rounded-md transform ease-in duration-75"
-              onClick={() => onCreateVideoAd()}
+              onClick={() => params.onCreateVideoAd()}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +27,7 @@ export const AdResourceSelector = ({
           <button className="text-center group ">
             <div
               className="text-sky-500 mx-auto group-hover:text-white group-hover:bg-sky-400 p-1 w-7 rounded-md transform ease-in duration-75"
-              onClick={() => onCreateImageAd()}
+              onClick={() => params.onCreateImageAd()}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

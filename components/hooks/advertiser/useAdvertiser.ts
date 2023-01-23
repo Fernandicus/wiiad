@@ -1,30 +1,34 @@
-import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/infrastructure/advertiser-container";
+import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/data-profile/infrastructure/advertiser-container";
 import { IAdvertiserDataPrimitives } from "@/src/common/domain/interfaces/IAdvertiserData";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserStatusState";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserStatusAction";
 import { store } from "context/common/infrastructure/store";
 import { useAds } from "./modules/ads/useAds";
 import { useCampaigns } from "./modules/campaigns/useCampaigns";
 import { useUserStripe } from "./modules/payments/stripe/useUserStripe";
-import { useAdvertiserStatus } from "./modules/state/useAdvertiserStatus";
+import { useAdvertiserState } from "./modules/state/useAdvertiserState";
 
 interface IUseAdvertiser {
   status: TAdvertiserStatusState;
-  initStore(): Promise<void>;
+  initStore(session:IUserPrimitives): Promise<void>;
   campaigns: ICampaignPrimitives[];
-  saveCampaigns(campaigns: ICampaignPrimitives[]): void;
+  storeCampaigns(campaigns: ICampaignPrimitives[]): void;
   ads: AdPropsPrimitives[];
-  saveAds(ads: AdPropsPrimitives[]): void;
+  createAd(ad: AdPropsPrimitives): Promise<void>;
+  storeAds(ads: AdPropsPrimitives[]): void;
   userStripe: IStripePrimitives;
+  session: IUserPrimitives;
 }
 
 export const useAdvertiser = (): IUseAdvertiser => {
   const { campaigns, storeCampaigns } = useCampaigns();
-  const { ads, storeAds } = useAds();
+  const { ads, storeAds, createAd } = useAds();
   const { initStripeStore, userStripe } = useUserStripe();
-  const { status, changeStatus } = useAdvertiserStatus();
+  const { status, changeStatus, storeSession, session } = useAdvertiserState();
 
   const storeProfile = async () => {
     const profileData = await getAdvertiserProfileDataHandler.getAll();
@@ -33,9 +37,10 @@ export const useAdvertiser = (): IUseAdvertiser => {
     if (profileData.stripeCustomer) initStripeStore(profileData.stripeCustomer);
   };
 
-  const initStore = async (): Promise<void> => {
+  const initStore = async (session:IUserPrimitives): Promise<void> => {
     if (status === "init") return;
     try {
+      storeSession(session);
       await storeProfile();
       changeStatus("init");
     } catch (err) {
@@ -52,12 +57,14 @@ export const useAdvertiser = (): IUseAdvertiser => {
     status,
     campaigns,
     ads,
+    createAd,
     userStripe,
-    saveCampaigns: (newCampaigns: ICampaignPrimitives[]) => {
+    session,
+    storeCampaigns: (newCampaigns: ICampaignPrimitives[]) => {
       storeCampaigns(newCampaigns);
       changeNonInitStatus();
     },
-    saveAds: (newAds: AdPropsPrimitives[]) => {
+    storeAds: (newAds: AdPropsPrimitives[]) => {
       storeAds(newAds);
       changeNonInitStatus();
     },

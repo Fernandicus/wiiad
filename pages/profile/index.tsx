@@ -8,7 +8,7 @@ import {
   IProfilePageParams,
   UserProfilePage,
 } from "@/components/ui/pages/profile/UserProfilePage";
-import {  RoleType } from "@/src/common/domain/Role";
+import { RoleType } from "@/src/common/domain/Role";
 import { useEffect } from "react";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 
@@ -16,7 +16,8 @@ export default function Profile({ user }: IProfilePageParams) {
   const advertiser = useAdvertiser();
 
   useEffect(() => {
-    if (user.role !== RoleType.USER) advertiser.initStore();
+    if (user.role !== RoleType.USER && advertiser.status === "non-init")
+      advertiser.initStore();
   }, []);
 
   return <UserProfilePage user={user} />;

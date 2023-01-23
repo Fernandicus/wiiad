@@ -1,82 +1,20 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { NotificationData } from "../../../notifications/Notifications";
 import { AdCardItem } from "./AdCardItem";
-import { useState } from "react";
 
 interface Props {
   ad: AdPropsPrimitives;
-  handleResponse: (data: NotificationData) => void;
   campaign: ICampaignPrimitives | null;
   onLaunchCampaign(ad: AdPropsPrimitives): void;
+  onDeleteAd(id: string): void;
 }
 
 export const AdCard = ({
   ad,
-  handleResponse,
   campaign,
   onLaunchCampaign,
+  onDeleteAd,
 }: Props) => {
-  const [isLaunching, setIsLaunching] = useState(false);
-
-  const deleteAd = async (id: string) => {
-    try {
-      const resp = await fetch(ApiRoutes.removeAds, {
-        method: "DELETE",
-        body: JSON.stringify({ adId: id }),
-      });
-      if (resp.status !== 200) {
-        handleResponse({
-          message: "No se pudo eliminar el anuncio",
-          status: "error",
-        });
-      } else {
-        handleResponse({
-          message: "Anuncio eliminado",
-          status: "success",
-        });
-        window.location.reload();
-      }
-    } catch (err) {
-      handleResponse({
-        message: "No se pudo eliminar el anuncio",
-        status: "error",
-      });
-    }
-  };
-
-  /* const launchCampaign = async (ad: AdPropsPrimitives) => {
-    console.log("LAUNCH ", ad.id);
-    if (isLaunching) return;
-    setIsLaunching(true);
-    handleResponse({ message: "Lanzando campaña ...", status: "info" });
-    try {
-      const resp = await fetch(ApiRoutes.launchCampaign, {
-        method: "POST",
-        body: JSON.stringify({
-          id: ad.id,
-          budget,
-        }),
-      });
-      setIsLaunching(false);
-      if (resp.status === 200) {
-        console.log("NEW CAMPAIGN LAUNCHED");
-        handleResponse({
-          message: "Nueva campaña lanzada!",
-          status: "success",
-        });
-      }
-      window.location.reload();
-    } catch (err) {
-      setIsLaunching(false);
-      handleResponse({
-        message: "No se pudo lanzar la campaña",
-        status: "error",
-      });
-    }
-  }; */
-
   return (
     <AdCardItem image={ad.file}>
       <div className="space-y-2">
@@ -91,7 +29,7 @@ export const AdCard = ({
           <button
             className="text-sm bg-red-100 hover:bg-red-500 text-red-500 hover:text-white py-1 px-2 rounded-md font-medium w-full"
             type="button"
-            onClick={() => deleteAd(ad.id)}
+            onClick={() => onDeleteAd(ad.id)}
           >
             Eliminar anuncio
           </button>
@@ -105,7 +43,7 @@ export const AdCard = ({
           type="button"
           onClick={campaign ? undefined : () => onLaunchCampaign(ad)}
         >
-          {!campaign && !isLaunching ? (
+          {!campaign ? (
             <span>Lanzar campaña</span>
           ) : (
             <span>Campaña lanzada</span>
