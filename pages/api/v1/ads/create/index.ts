@@ -19,6 +19,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const reqBody: AdPropsPrimitives = reqBodyParse(req);
 
+    console.log("create ad");
+
     await MongoDB.connectAndDisconnect(
       async () => await adCreatorHandler.create(reqBody)
     );

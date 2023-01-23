@@ -2,8 +2,8 @@ import Image from "next/image";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface Props {
-  onSelectImage(image: string | null): void;
-  imagePreview: string | null;
+  onSelectImage(image: string): void;
+  imagePreview?: string;
   onSuccess(): void;
   inputName: string;
 }

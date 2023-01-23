@@ -1,8 +1,8 @@
 import { ChangeEvent, useRef, useState } from "react";
 
 interface Props {
-  onSelectVideo(video: string  | null): void;
-  videoPreview: string | null;
+  onSelectVideo(video: string): void;
+  videoPreview?: string;
   onSuccess(): void;
   inputName: string;
 }

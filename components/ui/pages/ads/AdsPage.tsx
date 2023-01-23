@@ -1,7 +1,6 @@
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdType } from "@/pages/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useRef, useState } from "react";
 import {
   NotificationData,
@@ -13,6 +12,7 @@ import CreateAdForm from "./CreateAdForm";
 import { AdsSection } from "./AdsSection";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { CreateAdSelector } from "./CreateAdSelector";
+import CreateAdSection from "./CreateAdSection";
 
 export const AdsPage = () => {
   const { userStripe, session } = useAdvertiser();
@@ -77,7 +77,7 @@ export const AdsPage = () => {
             />
           </div>
         ) : (
-          <CreateAdForm
+          <CreateAdSection
             adType={adType}
             onBack={() => {
               setCreateAd(false);

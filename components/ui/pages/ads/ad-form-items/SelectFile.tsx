@@ -4,10 +4,10 @@ import { SelectVideo } from "./SelectVideo";
 
 interface ISelectFileProps {
   adType: AdType;
-  filePreview: string | null;
+  filePreview?: string;
   onSuccess(): void;
   inputName:string;
-  onSelectFile(file: string | null): void;
+  onSelectFile(file: string): void;
 }
 
 export const SelectFile = ({

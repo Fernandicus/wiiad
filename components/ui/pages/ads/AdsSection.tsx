@@ -1,4 +1,5 @@
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
+import { AdType } from "@/pages/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { AdsList } from "./AdsList";
 import { EmptyAds } from "./EmptyAds";
