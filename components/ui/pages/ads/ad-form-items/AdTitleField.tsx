@@ -1,18 +1,9 @@
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
-import { ChangeEvent } from "react";
 import { ErrorLabel } from "./ErrorLabel";
+import { IFieldComponentProps } from "./interfaces/IFieldComponentProps";
 import { MaxLengthCounterLabel } from "./MaxLengthCounterLabel";
 
-interface IAdTitleFieldProps {
-  title: string;
-  inputName: string;
-  hasError: boolean;
-  errorText: string;
-  onChange(e: ChangeEvent<any>): void;
-  value: string;
-}
-
-export const AdTitleField = (params: IAdTitleFieldProps) => {
+export const AdTitleField = (params: IFieldComponentProps) => {
   const { errorText, hasError, inputName, title, onChange, value } = params;
   return (
     <div className="space-y-2">

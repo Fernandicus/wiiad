@@ -44,9 +44,10 @@ export default function CreateAdForm(props: {
         }}
       />
       <AdSegmentsField
+        title="A qué nichos va dirigido este anuncio?"
         inputName={formNames.segments}
         onChange={handleChange}
-        segmentsSelected={values.segments}
+        value={values.segments}
         errorText={error("segments")}
         hasError={hasError("segments")}
       />

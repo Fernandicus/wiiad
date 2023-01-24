@@ -1,18 +1,9 @@
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
-import { ChangeEvent } from "react";
 import { ErrorLabel } from "./ErrorLabel";
+import { IFieldComponentProps } from "./interfaces/IFieldComponentProps";
 import { MaxLengthCounterLabel } from "./MaxLengthCounterLabel";
 
-interface IAdDescriptionField {
-  title: string;
-  inputName: string;
-  hasError: boolean;
-  errorText: string;
-  onChange(e: ChangeEvent<any>): void;
-  value: string;
-}
-
-export const AdDescriptionField = (params: IAdDescriptionField) => {
+export const AdDescriptionField = (params: IFieldComponentProps) => {
   const { errorText, hasError, inputName, onChange, title, value } = params;
   return (
     <div className="space-y-2">

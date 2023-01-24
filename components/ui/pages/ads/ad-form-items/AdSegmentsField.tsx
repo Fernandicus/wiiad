@@ -1,32 +1,18 @@
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
-import { ChangeEvent, useState } from "react";
 import { ErrorLabel } from "./ErrorLabel";
+import { IFieldComponentProps } from "./interfaces/IFieldComponentProps";
 import { MaxLengthCounterLabel } from "./MaxLengthCounterLabel";
-import { SegmentCheckBox } from "./SegmentCheckBox";
 import { SegmentsCheckBoxList } from "./SegmentsCheckBoxList";
 
-interface IAdSegmentsFieldProps {
-  onChange(e: ChangeEvent<any>): void;
-  inputName: string;
-  segmentsSelected: string[];
-  errorText: string;
-  hasError:boolean;
-}
-
-export const AdSegmentsField = ({
-  inputName,
-  onChange,
-  segmentsSelected,
-  errorText,
-  hasError
-}: IAdSegmentsFieldProps) => {
+export const AdSegmentsField = (params: IFieldComponentProps<string[]>) => {
+  const { value, title, inputName, onChange, errorText, hasError } = params;
   const segments = AdSegments.withAllAvailables().segments;
-  const segmentsLength = segmentsSelected.length;
+  const segmentsLength = value.length;
 
   return (
     <div className="space-y-2 ">
       <MaxLengthCounterLabel
-        title="A qué nichos va dirigido este anuncio?"
+        title={title}
         length={segmentsLength}
         maxLength={3}
       />
@@ -34,7 +20,7 @@ export const AdSegmentsField = ({
         inputName={inputName}
         onChange={onChange}
         segments={segments}
-        segmentsSelected={segmentsSelected}
+        segmentsSelected={value}
       />
       {hasError && <ErrorLabel errorText={errorText} />}
     </div>

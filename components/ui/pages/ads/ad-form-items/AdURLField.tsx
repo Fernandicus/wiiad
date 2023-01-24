@@ -1,16 +1,7 @@
-import { ChangeEvent } from "react";
 import { ErrorLabel } from "./ErrorLabel";
+import { IFieldComponentProps } from "./interfaces/IFieldComponentProps";
 
-interface IAdURLFieldProps {
-  title: string;
-  onChange(e: ChangeEvent<any>): void;
-  value: string;
-  inputName: string;
-  hasError: boolean;
-  errorText: string;
-}
-
-export const AdURLField = (params: IAdURLFieldProps) => {
+export const AdURLField = (params: IFieldComponentProps) => {
   const { errorText, hasError, inputName, onChange, title, value } = params;
   return (
     <div className="space-y-2">
