@@ -8,6 +8,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { useFormik } from "formik";
 import { ChangeEvent, FormEvent, useState } from "react";
 import * as Yup from "yup";
+import { useForm } from "../../../../hooks/useForm";
 
 interface IFormNames {
   file: string;
@@ -44,7 +45,7 @@ export const useCreateAdForm = (params: {
 }): IUseCreateAdForm => {
   const { createAd, session } = useAdvertiser();
   const [adType, setAdType] = useState<AdType | null>(null);
-  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [filePreview, setFilePreview] = useState<string>();
   const [isSendingAd, setIsSendingAd] = useState(false);
 
   const formNames: AdFormNames = {
@@ -55,7 +56,7 @@ export const useCreateAdForm = (params: {
     description: "description",
   };
 
-  const initialValues: Record<keyof typeof formNames, string | string[]> = {
+  const initialValues: Record<keyof AdFormNames, string | string[]> = {
     file: "",
     description: "",
     segments: [],
@@ -99,7 +100,7 @@ export const useCreateAdForm = (params: {
       message: "Creando anuncio . . .",
       status: "info",
     });
-
+    console.log("values", values);
     let fileUrl = await uploadFile();
     const formData: IFormNames = {
       ...values,
@@ -121,27 +122,30 @@ export const useCreateAdForm = (params: {
     window.location.reload();
   };
 
-  const formik = useFormik({
+  const onSubmit = async (values: IFormNames) => {
+    if (isSendingAd) return;
+    setIsSendingAd(true);
+    await submitAd({
+      description: values.description as string,
+      segments: values.segments as string[],
+      title: values.title as string,
+      url: values.url as string,
+      file: filePreview!,
+    });
+    console.log("object");
+    setIsSendingAd(false);
+  };
+
+  const form = useForm({
     initialValues,
-    validationSchema: SignupSchema,
-    onSubmit: async (values) => {
-      if (isSendingAd) return;
-      setIsSendingAd(true);
-      await submitAd({
-        description: values.description as string,
-        segments: values.segments as string[],
-        title: values.title as string,
-        url: values.url as string,
-        file: filePreview!,
-      });
-      setIsSendingAd(false);
-    },
+    onSubmit,
+    schema: SignupSchema,
   });
 
   return {
     formNames,
-    values: formik.values as IFormNames,
-    handleChange: formik.handleChange,
+    values: form.formValues as IFormNames,
+    handleChange: form.handleFormChange,
     handleSubmit: (
       e: FormEvent<HTMLFormElement> | undefined,
       adType: AdType,
@@ -149,12 +153,10 @@ export const useCreateAdForm = (params: {
     ) => {
       setAdType(adType);
       setFilePreview(filePreview);
-      formik.handleSubmit(e);
+      form.handleFormSubmit(e);
     },
-    hasError: (formName: keyof AdFormNames) => {
-      return formik.errors[formName] && formik.touched[formName] ? true : false;
-    },
-    error: (formName: keyof AdFormNames) => formik.errors[formName] as string,
+    hasError: form.hasError,
+    error: form.formError,
     isSubmitting: isSendingAd,
   };
 };
