@@ -1,17 +1,25 @@
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 import { IButtonProps } from "./interfaces/IButtonProps";
 
-export const PrimaryButton = ({
-  isLoading = false,
-  children,
-  onClick,
-  onSumbit,
-  type,
-}: IButtonProps) => {
+export const PrimaryButton = (props: IButtonProps) => {
+  const {
+    isLoading = false,
+    disabled = false,
+    children,
+    onClick,
+    onSumbit,
+    type,
+  } = props;
+
   return (
     <button
-      className="bg-sky-500 text-white p-1 w-full h-10 rounded-md hover:bg-sky-400 transition ease-in duration-150"
+      className={`${
+        disabled
+          ? "bg-gray-300 text-gray-500"
+          : "bg-sky-500 text-white hover:bg-sky-400 transition ease-in duration-150"
+      } p-1 w-full h-10 rounded-md`}
       type={type}
+      disabled={disabled}
       onClick={onClick}
       onSubmit={onSumbit}
     >

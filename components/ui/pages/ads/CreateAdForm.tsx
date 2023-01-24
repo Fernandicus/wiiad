@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { NotificationData } from "../../notifications/Notifications";
 import { AdType } from "@/pages/ads";
-import { SelectFile } from "./ad-form-items/SelectFile";
+import { SelectFileField } from "./ad-form-items/SelectFileField";
 import { AdSegmentsField } from "./ad-form-items/AdSegmentsField";
-import { SubmitButton } from "./ad-form-items/SubmitButton";
-import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useCreateAdForm } from "./hooks/useCreateAdForm";
 import { AdTitleField } from "./ad-form-items/AdTitleField";
 import { AdURLField } from "./ad-form-items/AdURLField";
 import { AdDescriptionField } from "./ad-form-items/AdDescriptionField";
+import { PrimaryButton } from "../../buttons/PrimaryButton";
 
 interface ICreateAdFormProps {
   adType: AdType;
@@ -18,15 +17,7 @@ interface ICreateAdFormProps {
 
 export default function CreateAdForm(props: ICreateAdFormProps) {
   const { adType, handleResponse, onSuccess } = props;
-  const {
-    formNames,
-    handleChange,
-    handleSubmit,
-    values,
-    hasError,
-    error,
-    isSubmitting,
-  } = useCreateAdForm({
+  const { formNames, handle, values, error, isSubmitting } = useCreateAdForm({
     handleResponse,
     onSuccess,
   });
@@ -35,60 +26,58 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
 
   return (
     <form
-      className="w-full space-y-5"
+      className="w-full space-y-5 pt-5"
       onSubmit={(e) => {
         const submitParams = { adType, filePreview };
-        handleSubmit(e, submitParams);
+        handle.submit(e, submitParams);
       }}
     >
-      <SelectFile
+      <SelectFileField
         inputName={formNames.file}
         adType={adType}
-        filePreview={filePreview}
-        onSelectFile={(image) => setFilePreview(image)}
-        onSuccess={() => {
+        onSuccess={(image) => {
+          setFilePreview(image);
           setIsFileOk(true);
         }}
       />
       <AdSegmentsField
         title="A qué nichos va dirigido este anuncio?"
         inputName={formNames.segments}
-        onChange={handleChange}
+        onChange={handle.change}
         value={values.segments}
-        errorText={error("segments")}
-        hasError={hasError("segments")}
+        errorText={error.message("segments")}
+        hasError={error.hasError("segments")}
       />
       <AdTitleField
         title="Título"
         value={values.title}
-        onChange={handleChange}
+        onChange={handle.change}
         inputName={formNames.title}
-        hasError={hasError("title")}
-        errorText={error("title")}
+        hasError={error.hasError("title")}
+        errorText={error.message("title")}
       />
       <AdURLField
-        hasError={hasError("url")}
+        hasError={error.hasError("url")}
         inputName={formNames.url}
-        onChange={handleChange}
+        onChange={handle.change}
         title="URL de redirección"
-        errorText={error("url")}
+        errorText={error.message("url")}
         value={values.url}
       />
       <AdDescriptionField
-        hasError={hasError("description")}
+        hasError={error.hasError("description")}
         inputName={formNames.description}
-        onChange={handleChange}
+        onChange={handle.change}
         title="Description"
         value={values.description}
-        errorText={error("description")}
+        errorText={error.message("description")}
       />
-      <div className="flex justify-end">
-        <SubmitButton
-          label="Crear anuncio"
-          isFile={isFileOk}
-          isSendingAd={isSubmitting}
-        />
-      </div>
+      <PrimaryButton
+        isLoading={isSubmitting}
+        disabled={isFileOk ? false : true}
+      >
+        Crear anuncio
+      </PrimaryButton>
     </form>
   );
 }

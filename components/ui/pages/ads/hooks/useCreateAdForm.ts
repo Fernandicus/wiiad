@@ -29,13 +29,17 @@ interface AdFormNames {
 interface IUseCreateAdForm {
   formNames: AdFormNames;
   values: IFormNames;
-  hasError(formName: keyof AdFormNames): boolean;
-  handleSubmit(
-    e: FormEvent<HTMLFormElement> | undefined,
-    params: { adType: AdType; filePreview?: string }
-  ): void;
-  handleChange(e: ChangeEvent<any>): void;
-  error(formName: keyof AdFormNames): string;
+  handle: {
+    submit(
+      e: FormEvent<HTMLFormElement> | undefined,
+      params: { adType: AdType; filePreview?: string }
+    ): void;
+    change(e: ChangeEvent<any>): void;
+  };
+  error: {
+    message(formName: keyof AdFormNames): string;
+    hasError(formName: keyof AdFormNames): boolean;
+  };
   isSubmitting: boolean;
 }
 
@@ -44,29 +48,14 @@ interface IUseCreateAdFormProps {
   onSuccess(): void;
 }
 
-export const useCreateAdForm = (params: IUseCreateAdFormProps): IUseCreateAdForm => {
+export const useCreateAdForm = (
+  params: IUseCreateAdFormProps
+): IUseCreateAdForm => {
   const { createAd, session } = useAdvertiser();
   const [adType, setAdType] = useState<AdType | null>(null);
   const [filePreview, setFilePreview] = useState<string>();
-  const [isSendingAd, setIsSendingAd] = useState(false);
-
-  const formNames: AdFormNames = {
-    file: "file",
-    title: "title",
-    url: "url",
-    segments: "segments",
-    description: "description",
-  };
-
-  const initialValues: Record<keyof AdFormNames, string | string[]> = {
-    file: "",
-    description: "",
-    segments: [],
-    title: "",
-    url: "",
-  };
-
-  const SignupSchema = Yup.object().shape({
+  const [isLoading, setIsLoading] = useState(false);
+  const schema = Yup.object().shape({
     title: Yup.string()
       .required("Campo obligatorio")
       .min(3, "Demasiado corto")
@@ -83,6 +72,22 @@ export const useCreateAdForm = (params: IUseCreateAdFormProps): IUseCreateAdForm
       .min(10, "Demasiado corta")
       .max(AdDescription.maxLength, "Demasiado larga"),
   });
+  const formNames: AdFormNames = {
+    file: "file",
+    title: "title",
+    url: "url",
+    segments: "segments",
+    description: "description",
+  };
+  const initialValues: Record<keyof AdFormNames, string | string[]> = {
+    file: "",
+    description: "",
+    segments: [],
+    title: "",
+    url: "",
+  };
+
+  const form = useForm({ initialValues, schema, onSubmit: onHandleSubmit });
 
   const uploadFile = async (): Promise<string> => {
     const cloudinaryVideoUploader = new CloudinaryUploader();
@@ -123,9 +128,9 @@ export const useCreateAdForm = (params: IUseCreateAdFormProps): IUseCreateAdForm
     params.onSuccess();
   };
 
-  const onHandleSubmit = async (values: IFormNames) => {
-    if (isSendingAd) return;
-    setIsSendingAd(true);
+  async function onHandleSubmit(values: IFormNames) {
+    if (isLoading) return;
+    setIsLoading(true);
     await submitAd({
       description: values.description as string,
       segments: values.segments as string[],
@@ -133,26 +138,24 @@ export const useCreateAdForm = (params: IUseCreateAdFormProps): IUseCreateAdForm
       url: values.url as string,
       file: filePreview!,
     });
-    setIsSendingAd(false);
-  };
-
-  const form = useForm({
-    initialValues,
-    onSubmit: onHandleSubmit,
-    schema: SignupSchema,
-  });
+    setIsLoading(false);
+  }
 
   return {
     formNames,
     values: form.formValues as IFormNames,
-    handleChange: form.handleFormChange,
-    handleSubmit: (e, params) => {
-      setAdType(params.adType);
-      setFilePreview(params.filePreview);
-      form.handleFormSubmit(e);
+    handle: {
+      change: form.handleFormChange,
+      submit: (e, params) => {
+        setAdType(params.adType);
+        setFilePreview(params.filePreview);
+        form.handleFormSubmit(e);
+      },
     },
-    hasError: form.hasError,
-    error: form.formError,
-    isSubmitting: isSendingAd,
+    error: {
+      hasError: form.hasError,
+      message: form.formError,
+    },
+    isSubmitting: isLoading,
   };
 };
