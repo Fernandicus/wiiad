@@ -10,11 +10,14 @@ import { AdTitleField } from "./ad-form-items/AdTitleField";
 import { AdURLField } from "./ad-form-items/AdURLField";
 import { AdDescriptionField } from "./ad-form-items/AdDescriptionField";
 
-export default function CreateAdForm(props: {
-  user: IUserPrimitives;
+interface ICreateAdFormProps {
   adType: AdType;
   handleResponse(data: NotificationData): void;
-}) {
+  onSuccess(): void;
+}
+
+export default function CreateAdForm(props: ICreateAdFormProps) {
+  const { adType, handleResponse, onSuccess } = props;
   const {
     formNames,
     handleChange,
@@ -24,7 +27,8 @@ export default function CreateAdForm(props: {
     error,
     isSubmitting,
   } = useCreateAdForm({
-    feedback: props.handleResponse,
+    handleResponse,
+    onSuccess,
   });
   const [isFileOk, setIsFileOk] = useState<boolean>(false);
   const [filePreview, setFilePreview] = useState<string>();
@@ -32,11 +36,14 @@ export default function CreateAdForm(props: {
   return (
     <form
       className="w-full space-y-5"
-      onSubmit={(e) => handleSubmit(e, props.adType, filePreview)}
+      onSubmit={(e) => {
+        const submitParams = { adType, filePreview };
+        handleSubmit(e, submitParams);
+      }}
     >
       <SelectFile
         inputName={formNames.file}
-        adType={props.adType}
+        adType={adType}
         filePreview={filePreview}
         onSelectFile={(image) => setFilePreview(image)}
         onSuccess={() => {

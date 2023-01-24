@@ -24,7 +24,7 @@ export default function CreateAdSection(props: ICreateAdSectionProps) {
           <CreateAdForm
             adType={adType}
             handleResponse={handleResponse}
-            user={user}
+            onSuccess={onBack}
           />
         </div>
       </div>

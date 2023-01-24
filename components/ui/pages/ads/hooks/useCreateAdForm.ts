@@ -32,17 +32,19 @@ interface IUseCreateAdForm {
   hasError(formName: keyof AdFormNames): boolean;
   handleSubmit(
     e: FormEvent<HTMLFormElement> | undefined,
-    adType: AdType,
-    filePreview?: string
+    params: { adType: AdType; filePreview?: string }
   ): void;
   handleChange(e: ChangeEvent<any>): void;
   error(formName: keyof AdFormNames): string;
   isSubmitting: boolean;
 }
 
-export const useCreateAdForm = (params: {
-  feedback(data: NotificationData): void;
-}): IUseCreateAdForm => {
+interface IUseCreateAdFormProps {
+  handleResponse(data: NotificationData): void;
+  onSuccess(): void;
+}
+
+export const useCreateAdForm = (params: IUseCreateAdFormProps): IUseCreateAdForm => {
   const { createAd, session } = useAdvertiser();
   const [adType, setAdType] = useState<AdType | null>(null);
   const [filePreview, setFilePreview] = useState<string>();
@@ -96,11 +98,10 @@ export const useCreateAdForm = (params: {
 
   const submitAd = async (values: IFormNames) => {
     if (!filePreview) return;
-    params.feedback({
+    params.handleResponse({
       message: "Creando anuncio . . .",
       status: "info",
     });
-    console.log("values", values);
     let fileUrl = await uploadFile();
     const formData: IFormNames = {
       ...values,
@@ -115,14 +116,14 @@ export const useCreateAdForm = (params: {
       redirectionUrl: formData.url,
       segments: formData.segments,
     });
-    params.feedback({
+    params.handleResponse({
       message: "Anuncio creado!",
       status: "success",
     });
-    window.location.reload();
+    params.onSuccess();
   };
 
-  const onSubmit = async (values: IFormNames) => {
+  const onHandleSubmit = async (values: IFormNames) => {
     if (isSendingAd) return;
     setIsSendingAd(true);
     await submitAd({
@@ -132,13 +133,12 @@ export const useCreateAdForm = (params: {
       url: values.url as string,
       file: filePreview!,
     });
-    console.log("object");
     setIsSendingAd(false);
   };
 
   const form = useForm({
     initialValues,
-    onSubmit,
+    onSubmit: onHandleSubmit,
     schema: SignupSchema,
   });
 
@@ -146,13 +146,9 @@ export const useCreateAdForm = (params: {
     formNames,
     values: form.formValues as IFormNames,
     handleChange: form.handleFormChange,
-    handleSubmit: (
-      e: FormEvent<HTMLFormElement> | undefined,
-      adType: AdType,
-      filePreview: string
-    ) => {
-      setAdType(adType);
-      setFilePreview(filePreview);
+    handleSubmit: (e, params) => {
+      setAdType(params.adType);
+      setFilePreview(params.filePreview);
       form.handleFormSubmit(e);
     },
     hasError: form.hasError,
