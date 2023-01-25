@@ -1,4 +1,5 @@
 import { IActionReducer } from "context/common/domain/interface/IActionReducer";
-import { IAdsState } from "./IAdsState";
+import { IRemoveAdState, IStoreAdsState } from "./IAdsState";
 
-export interface IAdsAction extends IActionReducer<IAdsState> {}
+export interface IStoreAdsAction extends IActionReducer<IStoreAdsState> {}
+export interface IRemoveAdAction extends IActionReducer<IRemoveAdState> {}

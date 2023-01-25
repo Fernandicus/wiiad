@@ -1,12 +1,13 @@
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdType } from "@/pages/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { NotificationData } from "../../notifications/Notifications";
 import { AdsList } from "./AdsList";
 import { EmptyAds } from "./EmptyAds";
 
 export const AdsSection = (params: {
   onLaunchCampaign(ad: AdPropsPrimitives): void;
-  onDeleteAd(id: string): void;
+  handleResponse(data: NotificationData): void;
 }) => {
   const { ads, campaigns } = useAdvertiser();
 
@@ -16,7 +17,7 @@ export const AdsSection = (params: {
         <EmptyAds />
       ) : (
         <AdsList
-          onDeleteAd={params.onDeleteAd}
+        handleResponse={params.handleResponse}
           onLaunchCampaign={params.onLaunchCampaign}
           campaigns={campaigns.all}
           ads={ads}

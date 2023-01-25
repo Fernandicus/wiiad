@@ -1,19 +1,20 @@
 import { AdCard } from "./AdCard";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { NotificationData } from "../../notifications/Notifications";
 
 interface Props {
   ads: AdPropsPrimitives[];
   campaigns: ICampaignPrimitives[];
   onLaunchCampaign(ad: AdPropsPrimitives): void;
-  onDeleteAd(id: string): void;
+  handleResponse(data: NotificationData): void;
 }
 
 export function AdsList({
   ads,
   campaigns,
   onLaunchCampaign,
-  onDeleteAd,
+  handleResponse,
 }: Props) {
   const gridCols =
     ads.length == 1
@@ -36,7 +37,7 @@ export function AdsList({
                   ad={ad}
                   campaign={!campaign ? null : campaign}
                   onLaunchCampaign={onLaunchCampaign}
-                  onDeleteAd={onDeleteAd}
+                 handleResponse={handleResponse}
                 />
               </div>
             );

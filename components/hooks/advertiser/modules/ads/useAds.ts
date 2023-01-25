@@ -1,12 +1,19 @@
-import { createAdHandler } from "@/components/src/modules/advertiser/ads/infrastructure/ads-container";
+import {
+  createAdHandler,
+  removeAdHandler,
+} from "@/components/src/modules/advertiser/ads/infrastructure/ads-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { IAdsCtxState } from "context/advertisers/modules/ads/domain/interfaces/IAdsContext";
-import { storeAdsReducer } from "context/advertisers/modules/ads/infrastructure/ads-slices";
+import {
+  removeAdReducer,
+  storeAdsReducer,
+} from "context/advertisers/modules/ads/infrastructure/ads-slices";
 import { useDispatch, useSelector } from "react-redux";
 
 interface IUseAds {
   ads: AdPropsPrimitives[];
   createAd(ads: AdPropsPrimitives): Promise<void>;
+  removeAd(adId: string): Promise<void>;
   storeAds(ads: AdPropsPrimitives[]): void;
 }
 
@@ -20,9 +27,16 @@ export const useAds = (): IUseAds => {
     dispatch(storeAdsReducer({ ads: [ad] }));
   };
 
+  const removeAd = async (adId: string) => {
+    if (!adId) throw new Error("Remove ad can't contain an empty ad id");
+    await removeAdHandler.remove(adId);
+    dispatch(removeAdReducer({ ads, adId }));
+  };
+
   return {
     ads,
     createAd,
+    removeAd,
     storeAds: (ads: AdPropsPrimitives[]): void => {
       if (ads.length == 0)
         throw new Error("Store ads can't contain an empty array");

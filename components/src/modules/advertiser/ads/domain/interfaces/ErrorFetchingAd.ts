@@ -7,4 +7,8 @@ export class ErrorFetchingAdvertiser extends Error {
   static creatingAd(cause?: string): ErrorFetchingAdvertiser {
     return new ErrorFetchingAdvertiser({ message: "Error creating ad", cause });
   }
+
+  static remoingAd(cause?: string): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser({ message: "Error removing ad", cause });
+  }
 }

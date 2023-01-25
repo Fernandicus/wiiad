@@ -1,4 +1,4 @@
-export interface IApiResp<T> {
-    message?: string;
+export interface IApiResp<T = undefined> {
+    message: string;
     data?: T;
   }

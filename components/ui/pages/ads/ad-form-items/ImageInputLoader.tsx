@@ -12,10 +12,11 @@ interface IImageInputLoaderProps {
 export const ImageInputLoader = (params: IImageInputLoaderProps) => {
   const { imageClassName, filePreview, inputName, onSelectFile, children } =
     params;
+  const idRef = "image-input";
 
   return (
-    <div>
-      <label htmlFor="file_input">
+    <div className="relative">
+      <label htmlFor={idRef}>
         {filePreview ? (
           <div className="bg-white">
             <img
@@ -29,9 +30,9 @@ export const ImageInputLoader = (params: IImageInputLoaderProps) => {
         )}
       </label>
       <input
-        required
         className="hidden"
-        id="image-input"
+        required
+        id={idRef}
         accept=".png, .jpg, .jpeg"
         type="file"
         name={inputName}

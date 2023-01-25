@@ -8,4 +8,4 @@ export const adsSlice = createSlice({
   reducers: adsReducers,
 });
 
-export const { storeAdsReducer } = adsSlice.actions;
+export const { storeAdsReducer, removeAdReducer } = adsSlice.actions;

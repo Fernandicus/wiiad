@@ -16,24 +16,19 @@ export const CampaignsPage = () => {
     selectedCampaign === status ? "text-sky-500" : "text-gray-500";
 
   const getComponent = (campaignList: ICampaignPrimitives[]): JSX.Element => {
-    return campaignList.length == 0 ? (
+    return campaigns.all.length == 0 ? (
+      <EmptyCampaigns noCampaignsCreated />
+    ) : campaignList.length == 0 ? (
       <EmptyCampaigns />
     ) : (
       <CampaignsList ads={ads} campaigns={campaignList} />
     );
   };
 
-  const campaignList = (campaign: CampaignStatusType): JSX.Element => {
-    switch (campaign) {
-      case CampaignStatusType.ACTIVE:
-        return getComponent(campaigns.actives);
-      case CampaignStatusType.STAND_BY:
-        return getComponent(campaigns.standBy);
-      case CampaignStatusType.FINISHED:
-        return getComponent(campaigns.finished);
-      default:
-        assertUnreachable(campaign);
-    }
+  const campaignList: Record<CampaignStatusType, JSX.Element> = {
+    active: getComponent(campaigns.actives),
+    finished: getComponent(campaigns.finished),
+    standBy: getComponent(campaigns.standBy),
   };
 
   return (
@@ -60,7 +55,7 @@ export const CampaignsPage = () => {
         </button>
       </div>
       <div className="w-full inline-flex justify-center py-10">
-      {campaignList(selectedCampaign)}
+        {campaignList[selectedCampaign]}
       </div>
     </div>
   );

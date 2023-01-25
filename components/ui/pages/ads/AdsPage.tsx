@@ -23,6 +23,7 @@ export const AdsPage = () => {
   const notificationsRef = useRef<RefNotifications>({
     showNotification: () => {},
   });
+  const handleResponse = notificationsRef.current.showNotification;
 
   const onCreateAd = (adType: AdType) => {
     setAdType(adType);
@@ -34,7 +35,7 @@ export const AdsPage = () => {
     setLaunchAd(ad);
   };
 
-  const deleteAd = async (id: string) => {
+/*   const deleteAd = async (id: string) => {
     const handleResponse = notificationsRef.current.showNotification;
     try {
       const resp = await fetch(ApiRoutes.removeAds, {
@@ -59,7 +60,7 @@ export const AdsPage = () => {
         status: "error",
       });
     }
-  };
+  }; */
 
   return (
     <main>
@@ -72,7 +73,7 @@ export const AdsPage = () => {
               onCreateImageAd={() => onCreateAd("banner")}
             />
             <AdsSection
-              onDeleteAd={deleteAd}
+              handleResponse={handleResponse}
               onLaunchCampaign={onLaunchCampaign}
             />
           </div>
