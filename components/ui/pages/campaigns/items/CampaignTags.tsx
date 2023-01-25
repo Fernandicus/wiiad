@@ -3,7 +3,7 @@ import { CampaignTagItem } from "./CampaignTagItem";
 
 export const CampaignTags = ({campaign}:{campaign: ICampaignPrimitives}) => {
   return (
-    <div className=" w-full  inline-flex justify-between">
+    <div className="w-full inline-flex justify-between space-x-2">
       <CampaignTagItem color="lime">
         <p className="text-center">
           {Math.floor(campaign.budget.balance / 100)} €

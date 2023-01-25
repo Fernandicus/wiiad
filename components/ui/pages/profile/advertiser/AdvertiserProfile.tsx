@@ -25,7 +25,7 @@ export function AdvertiserProfile({ user }: IAdvertiserSectionProps) {
         <LoadDataCardButton
           title="Campañas"
           redirection="/campaigns"
-          data={campaigns}
+          data={campaigns.all}
           isLoading={isLoading}
         />
       </div>

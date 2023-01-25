@@ -15,18 +15,17 @@ export function AdsList({
   onLaunchCampaign,
   onDeleteAd,
 }: Props) {
+  const gridCols =
+    ads.length == 1
+      ? "grid-cols-1"
+      : ads.length == 2
+      ? "grid-cols-2"
+      : "grid-cols-3";
+
   return (
     <div className="w-full  flex items-center">
       <div className="w-full inline-flex justify-center">
-        <div
-          className={` grid ${
-            ads.length == 1
-              ? "grid-cols-1"
-              : ads.length == 2
-              ? "grid-cols-2"
-              : "grid-cols-3"
-          }`}
-        >
+        <div className={` grid ${gridCols}`}>
           {ads.map((ad) => {
             const campaign = campaigns.find(
               (campaign) => campaign.adId == ad.id

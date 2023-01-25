@@ -11,7 +11,7 @@ export const CreateAdSelector = ({
   onCreateImageAd,
 }: CreateAdSelectorProps) => {
   return (
-    <div className="space-y-3 py-5">
+    <div className="space-y-3 p-5">
       <h1 className="font-bold text-center text-slate-600">Crea un anuncio</h1>
       <CreateAdTypeButtons
         onCreateImageAd={onCreateImageAd}

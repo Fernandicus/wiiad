@@ -1,46 +1,66 @@
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
-import { AdCardItem } from "../ads/AdCardItem";
-import { CampaignTags } from "./CampaignTags";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { assertUnreachable } from "@/src/utils/helpers";
+import { useEffect, useState } from "react";
+import { CampaignsList } from "./CampaignsList";
+import { EmptyCampaigns } from "./items/EmptyCampaigns";
 
 export const CampaignsPage = () => {
   const { ads, campaigns } = useAdvertiser();
+  const [selectedCampaign, setCampaign] = useState<CampaignStatusType>(
+    CampaignStatusType.ACTIVE
+  );
+
+  const selected = (status: CampaignStatusType): string =>
+    selectedCampaign === status ? "text-sky-500" : "text-gray-500";
+
+  const getComponent = (campaignList: ICampaignPrimitives[]): JSX.Element => {
+    return campaignList.length == 0 ? (
+      <EmptyCampaigns />
+    ) : (
+      <CampaignsList ads={ads} campaigns={campaignList} />
+    );
+  };
+
+  const campaignList = (campaign: CampaignStatusType): JSX.Element => {
+    switch (campaign) {
+      case CampaignStatusType.ACTIVE:
+        return getComponent(campaigns.actives);
+      case CampaignStatusType.STAND_BY:
+        return getComponent(campaigns.standBy);
+      case CampaignStatusType.FINISHED:
+        return getComponent(campaigns.finished);
+      default:
+        assertUnreachable(campaign);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-10">
-      <div className="flex justify-center space-x-3">
-        <h1 className="font-bold text-center">Estas son tus campañas</h1>
+    <div className="min-h-screen bg-slate-100">
+      <h1 className="font-bold text-center py-5">Estas son tus campañas</h1>
+      <div className="flex justify-center space-x-5">
+        <button
+          className={selected(CampaignStatusType.ACTIVE)}
+          onClick={() => setCampaign(CampaignStatusType.ACTIVE)}
+        >
+          Activas ({campaigns.actives.length})
+        </button>
+        <button
+          className={selected(CampaignStatusType.STAND_BY)}
+          onClick={() => setCampaign(CampaignStatusType.STAND_BY)}
+        >
+          Detenidas ({campaigns.standBy.length})
+        </button>
+        <button
+          className={selected(CampaignStatusType.FINISHED)}
+          onClick={() => setCampaign(CampaignStatusType.FINISHED)}
+        >
+          Finalizadas ({campaigns.finished.length})
+        </button>
       </div>
-      <div className="py-20 w-full inline-flex justify-center">
-        {campaigns.length == 0 ? (
-          <h1 className="text-center">Aún no has lanzado ninguna campaña</h1>
-        ) : (
-          <div
-            className={` grid ${
-              campaigns.length == 1
-                ? "grid-cols-1"
-                : campaigns.length == 2
-                ? "grid-cols-2"
-                : "grid-cols-3"
-            } `}
-          >
-            {campaigns.map((campaign) => {
-              const ad = ads.find((ad) => ad.id == campaign.adId);
-              return (
-                <div key={campaign.id} className="p-5 w-80">
-                  <AdCardItem image={ad!.file}>
-                    <CampaignTags campaign={campaign} />
-                    <p className="text-md font-semibold truncate">
-                      {ad!.title}
-                    </p>
-                    <p className="text-sm text-gray-500 italic">
-                      {ad!.description}
-                    </p>
-                  </AdCardItem>
-                </div>
-              );
-            })}
-          </div>
-        )}
+      <div className="w-full inline-flex justify-center py-10">
+      {campaignList(selectedCampaign)}
       </div>
     </div>
   );

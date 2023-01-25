@@ -16,3 +16,7 @@ export async function getApiResponse<T extends IApiResp<unknown>>(
   const respJSON = (await response.json()) as T;
   return respJSON;
 }
+
+export function assertUnreachable(assert: never): never {
+  throw new Error("Missing switch case");
+}

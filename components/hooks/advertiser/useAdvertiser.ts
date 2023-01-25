@@ -8,15 +8,13 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserStatusAction";
 import { store } from "context/common/infrastructure/store";
 import { useAds } from "./modules/ads/useAds";
-import { useCampaigns } from "./modules/campaigns/useCampaigns";
+import { IUseCampaigns, useCampaigns } from "./modules/campaigns/useCampaigns";
 import { useUserStripe } from "./modules/payments/stripe/useUserStripe";
 import { useAdvertiserState } from "./modules/state/useAdvertiserState";
 
-interface IUseAdvertiser {
+interface IUseAdvertiser extends IUseCampaigns {
   status: TAdvertiserStatusState;
-  initStore(session:IUserPrimitives): Promise<void>;
-  campaigns: ICampaignPrimitives[];
-  storeCampaigns(campaigns: ICampaignPrimitives[]): void;
+  initStore(session: IUserPrimitives): Promise<void>;
   ads: AdPropsPrimitives[];
   createAd(ad: AdPropsPrimitives): Promise<void>;
   storeAds(ads: AdPropsPrimitives[]): void;
@@ -37,7 +35,7 @@ export const useAdvertiser = (): IUseAdvertiser => {
     if (profileData.stripeCustomer) initStripeStore(profileData.stripeCustomer);
   };
 
-  const initStore = async (session:IUserPrimitives): Promise<void> => {
+  const initStore = async (session: IUserPrimitives): Promise<void> => {
     if (status === "init") return;
     try {
       storeSession(session);

@@ -21,7 +21,7 @@ export const AdvertiserNavBar = () => {
 
   return (
     <nav className="bg-slate-100 w-full px-7 py-3">
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 max-w-5xl m-auto">
         <div className="space-x-5 flex">
           <NavBarButton
             onClick={() => setActivePage("profile")}

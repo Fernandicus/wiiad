@@ -16,7 +16,7 @@ export const CampaignTagItem = ({ children, color }: ICampaignTag) => {
       : "bg-red-100 text-red-600";
   return (
     <div
-      className={`${tagColor} w-full  py-1 px-2 mx-1 rounded-md text-xs font-medium`}
+      className={`${tagColor} w-full  py-1 px-2 rounded-md text-xs font-medium`}
     >
       {children}
     </div>

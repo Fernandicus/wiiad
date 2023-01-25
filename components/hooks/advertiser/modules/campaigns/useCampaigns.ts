@@ -1,10 +1,16 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignsCtxState } from "context/advertisers/modules/campaigns/domain/interfaces/ICampaignsContext";
 import { storeCampaignsReducer } from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useDispatch, useSelector } from "react-redux";
 
-interface IUseCampaigns {
-  campaigns: ICampaignPrimitives[];
+export interface IUseCampaigns {
+  campaigns: {
+    all: ICampaignPrimitives[];
+    actives: ICampaignPrimitives[];
+    standBy: ICampaignPrimitives[];
+    finished: ICampaignPrimitives[];
+  };
   storeCampaigns(campaigns: ICampaignPrimitives[]): void;
 }
 
@@ -13,9 +19,23 @@ export const useCampaigns = (): IUseCampaigns => {
     (state: ICampaignsCtxState) => state.campaigns.campaigns
   );
   const dispatch = useDispatch();
+  const activeCampaigns = campaigns.filter(
+    (campaign) => campaign.status === CampaignStatusType.ACTIVE
+  );
+  const standByCampaigns = campaigns.filter(
+    (campaign) => campaign.status === CampaignStatusType.STAND_BY
+  );
+  const finishedCampaigns = campaigns.filter(
+    (campaign) => campaign.status === CampaignStatusType.FINISHED
+  );
 
   return {
-    campaigns,
+    campaigns: {
+      all: campaigns,
+      actives: activeCampaigns,
+      standBy: standByCampaigns,
+      finished: finishedCampaigns,
+    },
     storeCampaigns: (campaigns: ICampaignPrimitives[]): void => {
       if (campaigns.length == 0)
         throw new Error("Store campaigns can't contain an empty array");

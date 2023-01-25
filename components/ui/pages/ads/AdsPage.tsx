@@ -66,7 +66,7 @@ export const AdsPage = () => {
       <div className=" min-h-screen bg-slate-100 w-full">
         <Notifications ref={notificationsRef} />
         {!createAd ? (
-          <div className="w-full">
+          <div>
             <CreateAdSelector
               onCreateVideoAd={() => onCreateAd("video")}
               onCreateImageAd={() => onCreateAd("banner")}

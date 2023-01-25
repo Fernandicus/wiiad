@@ -11,14 +11,14 @@ export const AdsSection = (params: {
   const { ads, campaigns } = useAdvertiser();
 
   return (
-    <div className="w-full py-10">
+    <div className="py-10">
       {!ads || ads.length == 0 ? (
         <EmptyAds />
       ) : (
         <AdsList
           onDeleteAd={params.onDeleteAd}
           onLaunchCampaign={params.onLaunchCampaign}
-          campaigns={campaigns}
+          campaigns={campaigns.all}
           ads={ads}
         />
       )}
