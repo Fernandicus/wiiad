@@ -1,3 +1,5 @@
+import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
@@ -7,7 +9,8 @@ import { CampaignsList } from "./CampaignsList";
 import { EmptyCampaigns } from "./items/EmptyCampaigns";
 
 export const CampaignsPage = () => {
-  const { ads, campaigns } = useAdvertiser();
+  const { campaigns } = useCampaigns();
+  const { ads } = useAds();
   const [selectedCampaign, setCampaign] = useState<CampaignStatusType>(
     CampaignStatusType.ACTIVE
   );

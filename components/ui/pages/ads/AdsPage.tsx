@@ -13,9 +13,11 @@ import { AdsSection } from "./AdsSection";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { CreateAdSelector } from "./CreateAdSelector";
 import CreateAdSection from "./CreateAdSection";
+import { useUserStripe } from "@/components/hooks/advertiser/modules/payments/stripe/useUserStripe";
 
 export const AdsPage = () => {
-  const { userStripe, session } = useAdvertiser();
+  const { session } = useAdvertiser();
+  const { userStripe } = useUserStripe();
   const [createAd, setCreateAd] = useState<boolean>(false);
   const [adType, setAdType] = useState<AdType>("banner");
   const [showPaymentProcess, setPaymentProcess] = useState<boolean>(false);
@@ -35,33 +37,6 @@ export const AdsPage = () => {
     setLaunchAd(ad);
   };
 
-/*   const deleteAd = async (id: string) => {
-    const handleResponse = notificationsRef.current.showNotification;
-    try {
-      const resp = await fetch(ApiRoutes.removeAds, {
-        method: "DELETE",
-        body: JSON.stringify({ adId: id }),
-      });
-      if (resp.status !== 200) {
-        handleResponse({
-          message: "No se pudo eliminar el anuncio",
-          status: "error",
-        });
-      } else {
-        handleResponse({
-          message: "Anuncio eliminado",
-          status: "success",
-        });
-        window.location.reload();
-      }
-    } catch (err) {
-      handleResponse({
-        message: "No se pudo eliminar el anuncio",
-        status: "error",
-      });
-    }
-  }; */
-
   return (
     <main>
       <div className=" min-h-screen bg-slate-100 w-full">
@@ -80,12 +55,12 @@ export const AdsPage = () => {
         ) : (
           <CreateAdSection
             adType={adType}
-            onBack={() => {
-              setCreateAd(false);
-            }}
             user={session}
             handleResponse={(data: NotificationData) => {
               notificationsRef.current!.showNotification(data);
+            }}
+            onBack={() => {
+              setCreateAd(false);
             }}
           />
         )}

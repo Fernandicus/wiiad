@@ -2,6 +2,8 @@ import { ProfileCard } from "../ProfileCard";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { LoadDataCardButton } from "./items/LoadDataCardButton";
+import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
+import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;
@@ -9,7 +11,9 @@ interface IAdvertiserSectionProps {
 }
 
 export function AdvertiserProfile({ user }: IAdvertiserSectionProps) {
-  const { ads, campaigns, status } = useAdvertiser();
+  const { status } = useAdvertiser();
+  const { campaigns } = useCampaigns();
+  const { ads } = useAds();
   const isLoading = status === "non-init";
 
   return (

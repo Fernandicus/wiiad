@@ -1,3 +1,5 @@
+import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdType } from "@/pages/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
@@ -9,7 +11,8 @@ export const AdsSection = (params: {
   onLaunchCampaign(ad: AdPropsPrimitives): void;
   handleResponse(data: NotificationData): void;
 }) => {
-  const { ads, campaigns } = useAdvertiser();
+  const { campaigns } = useCampaigns();
+  const { ads } = useAds();
 
   return (
     <div className="py-10">

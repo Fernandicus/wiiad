@@ -1,3 +1,4 @@
+import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { CloudinaryUploader } from "@/components/src/cloudinary/CloudinaryUploader";
 import { NotificationData } from "@/components/ui/notifications/Notifications";
@@ -51,7 +52,8 @@ interface IUseCreateAdFormProps {
 export const useCreateAdForm = (
   params: IUseCreateAdFormProps
 ): IUseCreateAdForm => {
-  const { createAd, session } = useAdvertiser();
+  const { session } = useAdvertiser();
+  const { createAd } = useAds();
   const [adType, setAdType] = useState<AdType | null>(null);
   const [filePreview, setFilePreview] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);

@@ -12,27 +12,23 @@ import { IUseCampaigns, useCampaigns } from "./modules/campaigns/useCampaigns";
 import { useUserStripe } from "./modules/payments/stripe/useUserStripe";
 import { useAdvertiserState } from "./modules/state/useAdvertiserState";
 
-interface IUseAdvertiser extends IUseCampaigns {
+interface IUseAdvertiser {
   status: TAdvertiserStatusState;
   initStore(session: IUserPrimitives): Promise<void>;
-  ads: AdPropsPrimitives[];
-  createAd(ad: AdPropsPrimitives): Promise<void>;
-  storeAds(ads: AdPropsPrimitives[]): void;
-  userStripe: IStripePrimitives;
   session: IUserPrimitives;
 }
 
 export const useAdvertiser = (): IUseAdvertiser => {
-  const { campaigns, storeCampaigns } = useCampaigns();
-  const { ads, storeAds, createAd } = useAds();
-  const { initStripeStore, userStripe } = useUserStripe();
+  const { storeCampaigns } = useCampaigns();
+  const { storeAds } = useAds();
+  const { storeStripe } = useUserStripe();
   const { status, changeStatus, storeSession, session } = useAdvertiserState();
 
   const storeProfile = async () => {
     const profileData = await getAdvertiserProfileDataHandler.getAll();
     storeCampaigns(profileData.campaigns);
     storeAds(profileData.ads);
-    if (profileData.stripeCustomer) initStripeStore(profileData.stripeCustomer);
+    if (profileData.stripeCustomer) storeStripe(profileData.stripeCustomer);
   };
 
   const initStore = async (session: IUserPrimitives): Promise<void> => {
@@ -45,26 +41,10 @@ export const useAdvertiser = (): IUseAdvertiser => {
       console.error(err);
     }
   };
-
-  function changeNonInitStatus() {
-    if (status === "non-init") changeStatus("init");
-  }
-
+  
   return {
     initStore,
     status,
-    campaigns,
-    ads,
-    createAd,
-    userStripe,
     session,
-    storeCampaigns: (newCampaigns: ICampaignPrimitives[]) => {
-      storeCampaigns(newCampaigns);
-      changeNonInitStatus();
-    },
-    storeAds: (newAds: AdPropsPrimitives[]) => {
-      storeAds(newAds);
-      changeNonInitStatus();
-    },
   };
 };

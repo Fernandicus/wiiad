@@ -8,4 +8,4 @@ export const stripeSlice = createSlice({
   reducers: stripeReducers,
 });
 
-export const { initStoreStripeReducer } = stripeSlice.actions;
+export const { storeStripeReducer } = stripeSlice.actions;
