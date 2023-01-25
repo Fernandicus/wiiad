@@ -1,6 +1,6 @@
 import { NotificationData } from "../../notifications/Notifications";
 import { AdType } from "@/pages/ads";
-import { BackButtonIcon } from "../../icons/BackButtonIcon";
+import { BackIcon } from "../../icons/BackIcon";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import CreateAdForm from "./CreateAdForm";
 
@@ -18,7 +18,7 @@ export default function CreateAdSection(props: ICreateAdSectionProps) {
       <div className="max-w-xl py-10">
         <div className="pb-5">
           <button onClick={onBack} className="w-6 h-auto hover:text-sky-500">
-            <BackButtonIcon />
+            <BackIcon />
           </button>
           <div className="font-bold text-xl">Crea tu anuncio</div>
           <CreateAdForm
