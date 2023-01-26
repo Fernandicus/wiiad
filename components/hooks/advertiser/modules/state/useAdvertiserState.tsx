@@ -2,8 +2,8 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import {
   IAdvertiserSessionCtxState,
   IAdvertiserStatusCtxState,
-} from "context/advertisers/modules/status/domain/interfaces/IAdvertiserSessionContext";
-import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserStatusAction";
+} from "context/advertisers/modules/status/domain/interfaces/IAdvertiserContext";
+import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserAction";
 import {
   changeSessionReducer,
   storeAdvertiserSession,
@@ -28,6 +28,7 @@ export const useAdvertiserState = (): IUseAdvertiserState => {
   );
 
   const changeStatus = (newStatus: TAdvertiserStatusState) => {
+    console.log(newStatus);
     dispatch(changeSessionReducer({ status: newStatus }));
   };
   const storeSession = (user: IUserPrimitives) => {

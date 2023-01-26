@@ -38,8 +38,6 @@ export const useAds = (): IUseAds => {
     createAd,
     removeAd,
     storeAds: (ads: AdPropsPrimitives[]): void => {
-      if (ads.length == 0)
-        throw new Error("Store ads can't contain an empty array");
       dispatch(storeAdsReducer({ ads }));
     },
   };

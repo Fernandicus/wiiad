@@ -37,8 +37,6 @@ export const useCampaigns = (): IUseCampaigns => {
       finished: finishedCampaigns,
     },
     storeCampaigns: (campaigns: ICampaignPrimitives[]): void => {
-      if (campaigns.length == 0)
-        throw new Error("Store campaigns can't contain an empty array");
       dispatch(storeCampaignsReducer({ campaigns }));
     },
   };

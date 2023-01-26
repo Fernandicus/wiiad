@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { advertiserSessionInitialState } from "../domain/AdvertiserSessionInitialState";
+import { advertiserInitialState } from "../domain/AdvertiserInitialState";
 import { statusReducers } from "../use-case/session-reducer";
 
 export const advertiserSessionSlices = createSlice({
   name: "advertiser-status",
-  initialState: advertiserSessionInitialState,
+  initialState: advertiserInitialState,
   reducers: statusReducers,
 });
 

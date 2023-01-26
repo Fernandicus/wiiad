@@ -1,14 +1,9 @@
 import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/data-profile/infrastructure/advertiser-container";
-import { IAdvertiserDataPrimitives } from "@/src/common/domain/interfaces/IAdvertiserData";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserStatusAction";
-import { store } from "context/common/infrastructure/store";
+import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserState";
 import { useAds } from "./modules/ads/useAds";
-import { IUseCampaigns, useCampaigns } from "./modules/campaigns/useCampaigns";
+import { useCampaigns } from "./modules/campaigns/useCampaigns";
 import { useUserStripe } from "./modules/payments/stripe/useUserStripe";
 import { useAdvertiserState } from "./modules/state/useAdvertiserState";
 
@@ -32,7 +27,7 @@ export const useAdvertiser = (): IUseAdvertiser => {
   };
 
   const initStore = async (session: IUserPrimitives): Promise<void> => {
-    if (status === "init") return;
+    if (session.role === RoleType.USER || status === "init") return;
     try {
       storeSession(session);
       await storeProfile();
@@ -41,7 +36,7 @@ export const useAdvertiser = (): IUseAdvertiser => {
       console.error(err);
     }
   };
-  
+
   return {
     initStore,
     status,

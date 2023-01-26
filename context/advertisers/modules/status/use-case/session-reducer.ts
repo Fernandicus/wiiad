@@ -1,11 +1,11 @@
 import {
   IAdvertiserSessionAction,
-  IAdvertiserSessionState,
-} from "../domain/interfaces/IAdvertiserSessionAction";
-import {
   IAdvertiserStatusAction,
+} from "../domain/interfaces/IAdvertiserAction";
+import {
+  IAdvertiserSessionState,
   IAdvertiserStatusState,
-} from "../domain/interfaces/IAdvertiserStatusAction";
+} from "../domain/interfaces/IAdvertiserState";
 
 const changeSessionReducer = (
   state: IAdvertiserStatusState,

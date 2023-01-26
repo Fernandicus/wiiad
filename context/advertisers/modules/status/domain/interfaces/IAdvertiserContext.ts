@@ -1,5 +1,5 @@
-import { IAdvertiserSessionState } from "./IAdvertiserSessionAction";
-import { IAdvertiserStatusState } from "./IAdvertiserStatusAction";
+import { IAdvertiserSessionState, IAdvertiserStatusState } from "./IAdvertiserState";
+
 
 export interface IAdvertiserSessionContext<T> {
   session: T;
