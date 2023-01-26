@@ -16,7 +16,7 @@ export class AdMongoDBRepository implements IAdRepository {
     } as IAdModelProps);
   }
 
-  public async findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null> {
+  async findAllByAdvertiserId(id: UniqId): Promise<Ad[] | null> {
     const adModel = await AdModel.find<IAdModelProps>({
       advertiserId: id.id,
     } as IAdModelProps);
@@ -36,7 +36,7 @@ export class AdMongoDBRepository implements IAdRepository {
     return this.toAd(adModel);
   }
 
-  public async remove(id: UniqId): Promise<void> {
+  async remove(id: UniqId): Promise<void> {
     await AdModel.findByIdAndRemove({ _id: id.id } as IAdModelProps);
   }
 
@@ -47,7 +47,7 @@ export class AdMongoDBRepository implements IAdRepository {
       description: new AdDescription(adModel.description),
       file: new AdFileUrl(adModel.file),
       redirectionUrl: new AdRedirectionUrl(adModel.redirectionUrl),
-      segments:  AdSegments.filterByAvailables(adModel.segments),
+      segments: AdSegments.filterByAvailables(adModel.segments),
       advertiserId: new UniqId(adModel.advertiserId),
     });
   }

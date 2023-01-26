@@ -16,7 +16,8 @@ export default async function (
     if (!adId) throw new ErrorRemovingAd("Ad id is mandatory");
 
     await MongoDB.connectAndDisconnect(
-      async () => await RemoveAdController.remove({ req, res }, adId)
+      async () =>
+        await RemoveAdController.removeAdAndCampaign({ req, res }, adId)
     );
 
     res.status(200).json({ message: `Ad ${adId} removed` });

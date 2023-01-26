@@ -17,7 +17,7 @@ export const PrimaryButton = (props: IButtonProps) => {
         disabled
           ? "bg-gray-300 text-gray-500"
           : "bg-sky-500 text-white hover:bg-sky-400 transition ease-in duration-150"
-      } p-1 w-full h-10 rounded-md`}
+      } btn`}
       type={type}
       disabled={disabled}
       onClick={onClick}

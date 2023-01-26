@@ -7,11 +7,13 @@ import { ApiRoutes } from "@/src/utils/ApiRoutes";
 
 interface IRemoveAdButton {
   adId: string;
+  andCampaign?:boolean;
   handleResponse(data: NotificationData): void;
 }
 
-export const RemoveAdButton = ({ adId, handleResponse }: IRemoveAdButton) => {
+export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IRemoveAdButton) => {
   const { removeAd } = useAds();
+  const {  } = useCampaigns();
 
   const deleteAd = async (id: string) => {
     try {
@@ -27,6 +29,22 @@ export const RemoveAdButton = ({ adId, handleResponse }: IRemoveAdButton) => {
       });
     }
   };
+
+ /*  //TODO: Remove Ads and Campaigns
+  const deleteAdAndCampaign = async (id: string) => {
+    try {
+      await removeAd(id);
+      handleResponse({
+        message: "Anuncio eliminado",
+        status: "success",
+      });
+    } catch (err) {
+      handleResponse({
+        message: "No se pudo eliminar el anuncio",
+        status: "error",
+      });
+    }
+  }; */
 
   return (
     <RemoveButton onRemove={() => deleteAd(adId)}>

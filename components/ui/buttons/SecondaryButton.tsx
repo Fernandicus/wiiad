@@ -10,7 +10,7 @@ export const SecondaryButton = ({
 }: IButtonProps) => {
   return (
     <button
-      className="p-1 w-full h-10 text-sky-500  bg-sky-50 hover:bg-sky-100 transition ease-in duration-150 rounded-md"
+      className="text-sky-500  bg-sky-50 hover:bg-sky-100 transition ease-in duration-150 btn"
       type={type}
       onClick={onClick}
       onSubmit={onSumbit}

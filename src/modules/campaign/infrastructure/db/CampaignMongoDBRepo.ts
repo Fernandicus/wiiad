@@ -19,6 +19,11 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
     } as ICampaignModel);
   }
 
+  async removeByAdId(adId: UniqId): Promise<void> {
+    const id = adId.id;
+    await CampaignModel.deleteOne({ adId: id } as ICampaignModel);
+  }
+
   async findAllByStatus(status: CampaignStatus): Promise<Campaign[] | null> {
     const campaignModels = await CampaignModel.find<ICampaignModel>({
       status: status.status,

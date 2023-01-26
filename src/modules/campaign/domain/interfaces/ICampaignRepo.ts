@@ -4,6 +4,7 @@ import { CampaignStatus } from "../value-objects/CampaignStatus";
 
 export interface ICampaignRepo {
   save(campaign: Campaign): Promise<void>;
+  removeByAdId(adId: UniqId): Promise<void>;
   findAllByStatus(status: CampaignStatus): Promise<Campaign[] | null>;
   findAllByAdvertiserId(id: UniqId): Promise<Campaign[] | null>;
   byId(id: UniqId): Promise<Campaign | null>;

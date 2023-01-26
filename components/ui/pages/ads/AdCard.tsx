@@ -1,5 +1,6 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { PrimaryButton } from "../../buttons/PrimaryButton";
 import { NotificationData } from "../../notifications/Notifications";
 import { RemoveAdButton } from "./ad-card-items/RemoveAdButton";
 import { AdCardItem } from "./AdCardItem";
@@ -23,22 +24,17 @@ export const AdCard = (props: Props) => {
         </a>
       </div>
       <div className="space-x-5 flex justify-center pt-3">
-        {!campaign && <RemoveAdButton handleResponse={handleResponse} adId={ad.id} />}
-        <button
-          className={`text-sm ${
-            campaign
-              ? "bg-slate-200 text-slate-400"
-              : "bg-sky-500 hover:bg-sky-400 text-white"
-          }   p-2 rounded-md font-medium w-full`}
-          type="button"
-          onClick={campaign ? undefined : () => onLaunchCampaign(ad)}
-        >
-          {!campaign ? (
-            <span>Lanzar campaña</span>
-          ) : (
-            <span>Campaña lanzada</span>
-          )}
-        </button>
+        <RemoveAdButton handleResponse={handleResponse} adId={ad.id} />
+        {!campaign && (
+          <PrimaryButton
+            type="button"
+            onClick={() => {
+              onLaunchCampaign(ad);
+            }}
+          >
+            Lanzar campaña
+          </PrimaryButton>
+        )}
       </div>
     </AdCardItem>
   );
