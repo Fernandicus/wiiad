@@ -13,7 +13,7 @@ interface IRemoveAdButton {
 
 export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IRemoveAdButton) => {
   const { removeAd } = useAds();
-  const {  } = useCampaigns();
+  const { storeCampaigns } = useCampaigns();
 
   const deleteAd = async (id: string) => {
     try {

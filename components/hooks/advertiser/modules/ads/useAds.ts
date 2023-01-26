@@ -9,6 +9,7 @@ import {
   storeAdsReducer,
 } from "context/advertisers/modules/ads/infrastructure/ads-slices";
 import { useDispatch, useSelector } from "react-redux";
+import { useCampaigns } from "../campaigns/useCampaigns";
 
 interface IUseAds {
   ads: AdPropsPrimitives[];
@@ -18,6 +19,7 @@ interface IUseAds {
 }
 
 export const useAds = (): IUseAds => {
+  const { removeCampaigns_byAdId } = useCampaigns();
   const ads = useSelector((state: IAdsCtxState) => state.ads.ads);
   const dispatch = useDispatch();
 
@@ -31,6 +33,7 @@ export const useAds = (): IUseAds => {
     if (!adId) throw new Error("Remove ad can't contain an empty ad id");
     await removeAdHandler.remove(adId);
     dispatch(removeAdReducer({ ads, adId }));
+    removeCampaigns_byAdId(adId);
   };
 
   return {

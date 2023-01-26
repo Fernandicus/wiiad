@@ -1,4 +1,5 @@
 import { IActionReducer } from "context/common/domain/interface/IActionReducer";
-import { ICampaignsState } from "./ICampaignsState";
+import { ICampaignsState, IRemoveCampaignsState, IStoreCampaignsState } from "./ICampaignsState";
 
-export interface ICampaignsAction extends IActionReducer<ICampaignsState> {}
+export interface IStoreCampaignsAction extends IActionReducer<IStoreCampaignsState> {}
+export interface IRemoveCampaignsAction extends IActionReducer<IRemoveCampaignsState> {}

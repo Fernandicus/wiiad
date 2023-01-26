@@ -8,4 +8,4 @@ export const campaignsSlice = createSlice({
   reducers: campaignsReducers,
 });
 
-export const { storeCampaignsReducer } = campaignsSlice.actions;
+export const { storeCampaignsReducer, removeCampaignsReducer_byAdId } = campaignsSlice.actions;

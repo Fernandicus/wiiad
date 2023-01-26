@@ -1,7 +1,10 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { ICampaignsCtxState } from "context/advertisers/modules/campaigns/domain/interfaces/ICampaignsContext";
-import { storeCampaignsReducer } from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
+import {
+  removeCampaignsReducer_byAdId,
+  storeCampaignsReducer,
+} from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface IUseCampaigns {
@@ -12,32 +15,42 @@ export interface IUseCampaigns {
     finished: ICampaignPrimitives[];
   };
   storeCampaigns(campaigns: ICampaignPrimitives[]): void;
+  removeCampaigns_byAdId(adId: string): void;
 }
 
 export const useCampaigns = (): IUseCampaigns => {
-  const campaigns = useSelector(
-    (state: ICampaignsCtxState) => state.campaigns.campaigns
-  );
   const dispatch = useDispatch();
-  const activeCampaigns = campaigns.filter(
-    (campaign) => campaign.status === CampaignStatusType.ACTIVE
-  );
-  const standByCampaigns = campaigns.filter(
-    (campaign) => campaign.status === CampaignStatusType.STAND_BY
-  );
-  const finishedCampaigns = campaigns.filter(
-    (campaign) => campaign.status === CampaignStatusType.FINISHED
-  );
+  const campaigns = useSelector((state: ICampaignsCtxState) => {
+    const campaigns = state.campaigns.campaigns;
+    return {
+      all: campaigns,
+      actives: filterByStatus(campaigns, CampaignStatusType.ACTIVE),
+      standBy: filterByStatus(campaigns, CampaignStatusType.STAND_BY),
+      finished: filterByStatus(campaigns, CampaignStatusType.FINISHED),
+    };
+  });
+
+  function filterByStatus(
+    campaigns: ICampaignPrimitives[],
+    status: CampaignStatusType
+  ): ICampaignPrimitives[] {
+    return campaigns.filter((campaign) => campaign.status === status);
+  }
 
   return {
     campaigns: {
-      all: campaigns,
-      actives: activeCampaigns,
-      standBy: standByCampaigns,
-      finished: finishedCampaigns,
+      all: campaigns.all,
+      actives: campaigns.actives,
+      standBy: campaigns.standBy,
+      finished: campaigns.finished,
     },
     storeCampaigns: (campaigns: ICampaignPrimitives[]): void => {
       dispatch(storeCampaignsReducer({ campaigns }));
+    },
+    removeCampaigns_byAdId: (adId: string): void => {
+      dispatch(
+        removeCampaignsReducer_byAdId({ campaigns: campaigns.all, adId })
+      );
     },
   };
 };
