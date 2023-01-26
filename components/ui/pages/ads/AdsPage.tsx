@@ -7,7 +7,7 @@ import {
   Notifications,
   RefNotifications,
 } from "../../notifications/Notifications";
-import { LaunchCampaign } from "../campaigns/LaunchCampaign";
+import { LaunchCampaignSection } from "../campaigns/LaunchCampaignSection";
 import CreateAdForm from "./CreateAdForm";
 import { AdsSection } from "./AdsSection";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
@@ -38,42 +38,41 @@ export const AdsPage = () => {
   };
 
   return (
-    <main>
-      <div className=" min-h-screen bg-slate-100 w-full">
-        <Notifications ref={notificationsRef} />
-        {!createAd ? (
-          <div>
-            <CreateAdSelector
-              onCreateVideoAd={() => onCreateAd("video")}
-              onCreateImageAd={() => onCreateAd("banner")}
-            />
-            <AdsSection
-              handleResponse={handleResponse}
-              onLaunchCampaign={onLaunchCampaign}
-            />
-          </div>
-        ) : (
-          <CreateAdSection
-            adType={adType}
-            user={session}
-            handleResponse={(data: NotificationData) => {
-              notificationsRef.current!.showNotification(data);
-            }}
-            onBack={() => {
-              setCreateAd(false);
-            }}
-          />
-        )}
-      </div>
+    <main className="bg-slate-100 min-h-screen w-full">
       {showPaymentProcess ? (
-        <div className=" fixed w-full ">
-          <LaunchCampaign
-            userName={session.name}
-            adToLaunch={launchAd!}
-            paymentMethods={userStripe.paymentMethods}
-          />
+        <LaunchCampaignSection
+          userName={session.name}
+          adToLaunch={launchAd}
+          paymentMethods={userStripe.paymentMethods}
+        />
+      ) : (
+        <div className="">
+          <Notifications ref={notificationsRef} />
+          {!createAd ? (
+            <div>
+              <CreateAdSelector
+                onCreateVideoAd={() => onCreateAd("video")}
+                onCreateImageAd={() => onCreateAd("banner")}
+              />
+              <AdsSection
+                handleResponse={handleResponse}
+                onLaunchCampaign={onLaunchCampaign}
+              />
+            </div>
+          ) : (
+            <CreateAdSection
+              adType={adType}
+              user={session}
+              handleResponse={(data: NotificationData) => {
+                notificationsRef.current!.showNotification(data);
+              }}
+              onBack={() => {
+                setCreateAd(false);
+              }}
+            />
+          )}
         </div>
-      ) : null}
+      )}
     </main>
   );
 };

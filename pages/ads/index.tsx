@@ -8,11 +8,11 @@ import { AdsPage } from "@/components/ui/pages/ads/AdsPage";
 
 export type AdType = "banner" | "video";
 
-export default function Ads(props: {advertiser: IUserPrimitives}) {
-  const { initStore, status } = useAdvertiser();
+export default function Ads(props: { advertiser: IUserPrimitives }) {
+  const advertiser = useAdvertiser();
 
   useEffect(() => {
-    if (status === "non-init") initStore(props.advertiser);
+    advertiser.initStore(props.advertiser);
   }, []);
 
   return <AdsPage />;

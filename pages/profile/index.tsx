@@ -18,8 +18,7 @@ export default function Profile({ user }: IProfilePageParams) {
   const advertiser = useAdvertiser();
 
   useEffect(() => {
-    if (user.role !== RoleType.USER && advertiser.status === "non-init")
-      advertiser.initStore(user);
+    advertiser.initStore(user);
   }, []);
 
   return <UserProfilePage user={user} />;

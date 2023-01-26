@@ -9,9 +9,22 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
   const [amount, setAmount] = useState<number>(50);
   const [clicks, setClicks] = useState<number>(1000);
 
+  const defaultStyle = "border rounded-lg w-full text-sm py-1";
+  const selectedStyle = "bg-sky-50 text-sky-500 border-sky-500 font-bold";
+  const unSelectedStyle = "bg-white text-slate-700 border-slate-100";
+
+  const getSelected = (num: number): string => {
+    const style =
+      budget === num ? selectedStyle + defaultStyle : unSelectedStyle;
+    const styles = [style, defaultStyle];
+    return styles.join(" ");
+  };
+
   return (
     <div>
-      <h1 className="font-bold text-lg text-gray-700">Calcula tu presupuesto</h1>
+      <h1 className="font-bold text-lg text-gray-700">
+        Calcula tu presupuesto
+      </h1>
       <div className="h-48 w-full flex items-center justify-center">
         <div className="text-center space-y-2">
           <h2 className="text-4xl text-gray-600 font-semibold">{amount}€</h2>
@@ -24,11 +37,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
         <h2 className="text-sm">Visualizaciones:</h2>
         <div className="space-x-1 flex ">
           <button
-            className={`${
-              budget === 0
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-bold"
-                : "bg-white  text-slate-700 border-slate-100"
-            } border rounded-lg w-full text-sm py-1`}
+            className={getSelected(0)}
             onClick={() => {
               setBudget(0);
               setAmount(50);
@@ -39,11 +48,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
             <p>1 mil</p>
           </button>
           <button
-            className={`${
-              budget === 1
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-bold"
-                : "bg-white  text-slate-700 border-slate-100"
-            } border rounded-lg w-full text-sm py-1`}
+            className={getSelected(1)}
             onClick={() => {
               setBudget(1);
               setAmount(70);
@@ -54,11 +59,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
             <p>2 mil</p>
           </button>
           <button
-            className={`${
-              budget === 2
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-bold"
-                : "bg-white  text-slate-700 border-slate-100"
-            } border rounded-lg w-full text-sm py-1`}
+            className={getSelected(2)}
             onClick={() => {
               setBudget(2);
               setAmount(100);
@@ -69,11 +70,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
             <p>5 mil</p>
           </button>
           <button
-            className={`${
-              budget === 3
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-bold"
-                : "bg-white  text-slate-700 border-slate-100"
-            } border rounded-lg w-full text-sm py-1`}
+            className={getSelected(3)}
             onClick={() => {
               setBudget(3);
               setAmount(150);
@@ -84,11 +81,7 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
             <p>7,5 mil</p>
           </button>
           <button
-            className={`${
-              budget === 4
-                ? "bg-slate-200 text-gray-700 border-slate-200 font-bold"
-                : "bg-white  text-slate-700 border-slate-100"
-            } border rounded-lg w-full text-sm py-1`}
+            className={getSelected(4)}
             onClick={() => {
               setBudget(4);
               setAmount(200);

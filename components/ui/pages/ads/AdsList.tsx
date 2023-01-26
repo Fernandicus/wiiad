@@ -32,7 +32,7 @@ export function AdsList({
               (campaign) => campaign.adId == ad.id
             );
             return (
-              <div key={ad.id} className="relative p-5 w-96">
+              <div key={ad.id} className="p-5 w-96">
                 <AdCard
                   ad={ad}
                   campaign={!campaign ? null : campaign}
