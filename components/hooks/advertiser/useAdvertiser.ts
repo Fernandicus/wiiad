@@ -1,7 +1,7 @@
 import { getAdvertiserProfileDataHandler } from "@/components/src/modules/advertiser/data-profile/infrastructure/advertiser-container";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserState";
+import { TAdvertiserStatusState } from "@/context/advertisers/modules/status/domain/interfaces/IAdvertiserState";
 import { useAds } from "./modules/ads/useAds";
 import { useCampaigns } from "./modules/campaigns/useCampaigns";
 import { useUserStripe } from "./modules/payments/stripe/useUserStripe";

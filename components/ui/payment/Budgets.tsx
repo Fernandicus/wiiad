@@ -1,23 +1,27 @@
-import { useState } from "react";
+import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
+import {
+  // AvailableAmounts,
+  PaymentAmount,
+} from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+import { getValuesForNumericEnum } from "@/src/utils/helpers";
+import { useEffect, useState } from "react";
+import { ViewsButton } from "./items/ViewsButton";
 
 interface IBudgetParams {
-  onSelectBudget(amount: number): void;
+  onSelectBudget(budget: { amount: number; clicks: number }): void;
 }
 
 export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
-  const [budget, setBudget] = useState<number>(0);
-  const [amount, setAmount] = useState<number>(50);
-  const [clicks, setClicks] = useState<number>(1000);
+  const [selectedBudget, setBudget] = useState<number>(0);
+  const isSelected = (val: number) => amount === val && true;
+  const amount = amountsAndPPClick[selectedBudget][0] / 100;
+  const clicks = amountsAndPPClick[selectedBudget][1];
 
-  const defaultStyle = "border rounded-lg w-full text-sm py-1";
-  const selectedStyle = "bg-sky-50 text-sky-500 border-sky-500 font-bold";
-  const unSelectedStyle = "bg-white text-slate-700 border-slate-100";
-
-  const getSelected = (num: number): string => {
-    const style =
-      budget === num ? selectedStyle + defaultStyle : unSelectedStyle;
-    const styles = [style, defaultStyle];
-    return styles.join(" ");
+  const getViews = (budgetNum: number) => {
+    const amount = amountsAndPPClick[budgetNum][0] / 100;
+    const privePerClick = amountsAndPPClick[budgetNum][1];
+    const clicks = amount / privePerClick;
+    return Math.round(clicks);
   };
 
   return (
@@ -28,69 +32,52 @@ export const Budgets = ({ onSelectBudget }: IBudgetParams) => {
       <div className="h-48 w-full flex items-center justify-center">
         <div className="text-center space-y-2">
           <h2 className="text-4xl text-gray-600 font-semibold">{amount}€</h2>
-          <p className=" text-gray-600 italic">
-            {amount / clicks}€ por visualizacion
-          </p>
+          <p className=" text-gray-600 italic">{clicks}€ por visualizacion</p>
         </div>
       </div>
       <div className="space-y-2">
         <h2 className="text-sm">Visualizaciones:</h2>
         <div className="space-x-1 flex ">
-          <button
-            className={getSelected(0)}
-            onClick={() => {
+          <ViewsButton
+            isSelected={isSelected(50)}
+            onSelect={() => {
               setBudget(0);
-              setAmount(50);
-              setClicks(1000);
-              onSelectBudget(0);
+              onSelectBudget({ amount, clicks });
             }}
-          >
-            <p>1 mil</p>
-          </button>
-          <button
-            className={getSelected(1)}
-            onClick={() => {
+            views={getViews(0) / 1000}
+          />
+          <ViewsButton
+            isSelected={isSelected(70)}
+            onSelect={() => {
               setBudget(1);
-              setAmount(70);
-              setClicks(2000);
-              onSelectBudget(1);
+              onSelectBudget({ amount, clicks });
             }}
-          >
-            <p>2 mil</p>
-          </button>
-          <button
-            className={getSelected(2)}
-            onClick={() => {
+            views={getViews(1) / 1000}
+          />
+          <ViewsButton
+            isSelected={isSelected(100)}
+            onSelect={() => {
               setBudget(2);
-              setAmount(100);
-              setClicks(5000);
-              onSelectBudget(2);
+              onSelectBudget({ amount, clicks });
             }}
-          >
-            <p>5 mil</p>
-          </button>
-          <button
-            className={getSelected(3)}
-            onClick={() => {
+            views={getViews(2) / 1000}
+          />
+          <ViewsButton
+            isSelected={isSelected(150)}
+            onSelect={() => {
               setBudget(3);
-              setAmount(150);
-              setClicks(7500);
-              onSelectBudget(3);
+              onSelectBudget({ amount, clicks });
             }}
-          >
-            <p>7,5 mil</p>
-          </button>
-          <button
-            className={getSelected(4)}
-            onClick={() => {
+            views={getViews(3) / 1000}
+          />
+          <ViewsButton
+            isSelected={isSelected(200)}
+            onSelect={() => {
               setBudget(4);
-              setAmount(200);
-              setClicks(10000);
-              onSelectBudget(4);
+              onSelectBudget({ amount, clicks });
             }}
-          >
-            <p>10 mil</p>
-          </button>
+            views={getViews(4) / 1000}
+          />
         </div>
       </div>
     </div>

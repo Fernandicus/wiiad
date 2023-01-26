@@ -1,13 +1,13 @@
+import { TAdvertiserStatusState } from "@/context/advertisers/modules/status/domain/interfaces/IAdvertiserState";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import {
   IAdvertiserSessionCtxState,
   IAdvertiserStatusCtxState,
-} from "context/advertisers/modules/status/domain/interfaces/IAdvertiserContext";
-import { TAdvertiserStatusState } from "context/advertisers/modules/status/domain/interfaces/IAdvertiserAction";
+} from "@/context/advertisers/modules/status/domain/interfaces/IAdvertiserContext";
 import {
   changeSessionReducer,
   storeAdvertiserSession,
-} from "context/advertisers/modules/status/infrastructure/session-slices";
+} from "@/context/advertisers/modules/status/infrastructure/session-slices";
 import { useDispatch, useSelector } from "react-redux";
 
 interface IUseAdvertiserState {

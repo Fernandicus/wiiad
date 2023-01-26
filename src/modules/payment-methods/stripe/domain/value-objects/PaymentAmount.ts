@@ -1,12 +1,5 @@
-import { getEnumValues } from "@/src/utils/helpers";
-
-export enum AvailableAmounts {
-  Fifty = 5000,
-  Seventy = 7000,
-  OneHundred = 10000,
-  OneHundredFifty = 15000,
-  TwoHundred = 20000,
-}
+import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
+import { getValuesForNumericEnum } from "@/src/utils/helpers";
 
 export class PaymentAmount {
   readonly amount;
@@ -19,14 +12,8 @@ export class PaymentAmount {
   }
 
   static fromItem(item: number): PaymentAmount {
-    const entries = getEnumValues(AvailableAmounts) as number[];
-
-    if (item > entries.length - 1 || item < 0) {
-      throw new Error(
-        `Payment amount item '${item}' do not exist. These are '${entries.length}' available items: ${entries}`
-      );
-    }
-    const amount = entries[item];
+    const amountAndPPClick = amountsAndPPClick[item];
+    const amount = amountAndPPClick[0];
     return new PaymentAmount(amount);
   }
 }

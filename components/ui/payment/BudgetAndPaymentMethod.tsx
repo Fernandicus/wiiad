@@ -8,116 +8,23 @@ import { useRouter } from "next/router";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { stat } from "fs";
+import { useSetBudgetAndPM } from "./hooks/useSetBudgetAndPM";
 
 interface IBudgetAndPMethods {
+  setBudget(params: { budget: number; clicks: number }): void;
   paymentMethods?: ICardDetailsPrimitives[];
   onContinue(clientSecret: string): void;
   onSelectedPaymentMethod(selectedMethod?: string): void;
   ad?: AdPropsPrimitives;
 }
 
-type TBudgetAction =
-  | "set-budget"
-  | "set-pm"
-  | "set-payWithPM"
-  | "set-payWithNewCard"
-  | "remove-payWithNewCard"
-  | "set-isCardPage"
-  | "set-isPaying"
-  | "remove-isPaying";
-
-interface IBudgetAction {
-  type: TBudgetAction;
-  payload?: IBudgetState;
-}
-
-interface IBudgetState {
-  budget: number;
-  clicks: number;
-  paymentMethod: string;
-  isCardPage: boolean;
-  isPaying: boolean;
-  isPayingWithPM: boolean;
-  isPayingWithNewCard: boolean;
-}
-
-export const BudgetAndPaymentMethod = ({
-  paymentMethods,
-  onContinue,
-  onSelectedPaymentMethod,
-  ad,
-}: IBudgetAndPMethods) => {
-
-  const initBudgetState: IBudgetState = {
-    budget: 50,
-    clicks: 1000,
-    paymentMethod: "",
-    isCardPage: false,
-    isPaying: false,
-    isPayingWithPM: false,
-    isPayingWithNewCard: false,
-  };
-
-  const budgetReducer = (
-    state: typeof initBudgetState,
-    action: IBudgetAction
-  ): IBudgetState => {
-    const payload = action.payload;
-    switch (action.type) {
-      case "set-budget":
-        if (!payload) return { ...state };
-        return {
-          ...state,
-          budget: payload.budget,
-          clicks: payload.budget / 1000,
-        };
-      case "set-pm":
-        if (!payload) return { ...state };
-        return {
-          ...state,
-          paymentMethod: payload.paymentMethod,
-        };
-      case "set-payWithPM":
-        return {
-          ...state,
-          isPayingWithPM: true,
-        };
-      case "set-payWithNewCard":
-        return {
-          ...state,
-          isPayingWithNewCard: true,
-        };
-      case "remove-payWithNewCard":
-        return {
-          ...state,
-          isPayingWithNewCard: false,
-        };
-      case "set-isCardPage":
-        return {
-          ...state,
-          isCardPage: true,
-        };
-      case "set-isPaying":
-        return {
-          ...state,
-          isPaying: true,
-        };
-      case "remove-isPaying":
-        return {
-          ...state,
-          isPaying: false,
-        };
-      default:
-        return { ...state };
-    }
-  };
-
-  const [state, dispatch] = useReducer(budgetReducer, initBudgetState);
+export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
+  const { setBudget, paymentMethods, onContinue, onSelectedPaymentMethod, ad } =
+    props;
+  const { state, dispatch } = useSetBudgetAndPM();
 
   const handlePaymentAmount = async (useNewCard = false) => {
-    dispatch({type:"set-isPaying"})
-
-    console.log(" handlePaymentAmount() ");
+    dispatch.setIsPaying();
 
     if (state.isPaying) return;
     if (!ad) return;
@@ -130,16 +37,16 @@ export const BudgetAndPaymentMethod = ({
           budgetItem: state.budget,
           adId: ad.id,
         });
-        dispatch({type:"remove-isPaying"})
+        dispatch.removeIsPaying();
         onContinue(clientSecret);
         return;
       } else {
         await stripePayment.payWithSelectedCard({
           budgetItem: state.budget,
           adId: ad.id,
-          paymentMethod: state.paymentMethod
+          paymentMethod: state.paymentMethod,
         });
-        dispatch({type:"remove-isPaying"})
+        dispatch.removeIsPaying();
         return;
       }
     } catch (err) {
@@ -157,19 +64,17 @@ export const BudgetAndPaymentMethod = ({
               paymentMethods={paymentMethods}
               onSelectedMethod={(method) => {
                 if (!method) return;
-                dispatch({
-                  type: "set-pm",
-                  payload: { ...state, paymentMethod: method },
-                });
+                dispatch.setPaymentMethod(method);
                 onSelectedPaymentMethod(method);
               }}
             />
           </div>
         ) : (
           <Budgets
-            onSelectBudget={(budget) =>
-              dispatch({ type: "set-budget", payload: { ...state, budget } })
-            }
+            onSelectBudget={(budget) => {
+              dispatch.setBudget(budget.amount);
+              setBudget({budget: state.budget, clicks:state.budget})
+            }}
           />
         )}
       </div>
@@ -190,15 +95,15 @@ export const BudgetAndPaymentMethod = ({
               !state.isCardPage &&
               (!paymentMethods || paymentMethods.length == 0)
             ) {
-              dispatch({ type: "set-payWithPM" });
+              dispatch.setPayWithPM();
               await handlePaymentAmount(true);
-              dispatch({ type: "set-payWithPM" });
+              dispatch.setPayWithPM();
             } else if (!state.isCardPage && paymentMethods) {
-              dispatch({ type: "set-isCardPage" });
+              dispatch.setIsCardPage();
             } else if (state.isCardPage && state.paymentMethod) {
-              dispatch({ type: "set-payWithPM" });
+              dispatch.setPayWithPM();
               await handlePaymentAmount();
-              dispatch({ type: "set-payWithPM" });
+              dispatch.setPayWithPM();
             }
           }}
         >
@@ -229,9 +134,9 @@ export const BudgetAndPaymentMethod = ({
               e.preventDefault();
               onSelectedPaymentMethod(undefined);
               if (state.isCardPage) {
-                dispatch({ type: "set-payWithNewCard" });
+                dispatch.setPayWithNewCard();
                 await handlePaymentAmount(true);
-                dispatch({ type: "remove-payWithNewCard" });
+                dispatch.removePayWithNewCard();
               }
             }}
           >

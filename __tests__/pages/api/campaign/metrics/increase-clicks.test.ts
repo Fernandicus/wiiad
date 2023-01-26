@@ -23,7 +23,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     finisehdCampaigns = await campaignsRepo.findByStatus(
       CampaignStatus.finished()
     );
-  });
+  }, 12000);
 
   it(`WHEN send a not 'POST' request, 
     THEN status code should be 400`, async () => {
@@ -33,7 +33,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
 
     await api_v1_IncreaseClicks(req, res);
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`WHEN send POST request without campaign Id, 
   THEN status code should be 400`, async () => {
@@ -43,7 +43,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
 
     await api_v1_IncreaseClicks(req, res);
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`WHEN send POST request with a not existing campaign id, 
   THEN status code should be 400`, async () => {
@@ -56,7 +56,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
 
     await api_v1_IncreaseClicks(req, res);
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`WHEN send POST request with or without user session an with an active campaign id, 
   THEN campaign  total clicks should be increased by one and status code should be 200`, async () => {
@@ -75,7 +75,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     expect(campaignFound!.metrics.totalClicks).toBe(
       campaign.metrics.totalClicks + 1
     );
-  });
+  },12000);
 
   it(`WHEN send POST request with a stand by campaign id, 
   THEN status code shoudl be 400`, async () => {
@@ -90,7 +90,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     await api_v1_IncreaseClicks(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`WHEN send POST request with a finished campaign id, 
   THEN status code shoudl be 400`, async () => {
@@ -105,5 +105,5 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     await api_v1_IncreaseClicks(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 });

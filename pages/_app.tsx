@@ -1,6 +1,6 @@
 import { NavBar } from "@/components/ui/layouts/App";
 import "@/styles/global.css";
-import { store } from "context/common/infrastructure/store";
+import { store } from "@/context/common/infrastructure/store";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 

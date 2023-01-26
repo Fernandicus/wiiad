@@ -1,10 +1,10 @@
 import { AnyAction, configureStore } from "@reduxjs/toolkit";
 import { Reducer } from "react";
-import { IAdvertiserStore } from "context/advertisers/common/domain/interfaces/IAdvertiserStore";
-import { adsSlice } from "context/advertisers/modules/ads/infrastructure/ads-slices";
+import { IAdvertiserStore } from "@/context/advertisers/common/domain/interfaces/IAdvertiserStore";
+import { adsSlice } from "@/context/advertisers/modules/ads/infrastructure/ads-slices";
 import { campaignsSlice } from "../../advertisers/modules/campaigns/infrastructure/campaigns-slices";
-import { advertiserSessionSlices } from "context/advertisers/modules/status/infrastructure/session-slices";
-import { stripeSlice } from "context/advertisers/modules/payments/stripe/infrastructure/stripe-slice";
+import { advertiserSessionSlices } from "@/context/advertisers/modules/status/infrastructure/session-slices";
+import { stripeSlice } from "@/context/advertisers/modules/payments/stripe/infrastructure/stripe-slice";
 
 type TReducer = Reducer<any, AnyAction>;
 

@@ -2,10 +2,10 @@ import apiPayWithoutPMethod, {
   IApiStripePaymentWithoutPMethod,
 } from "@/pages/api/v1/payments/stripe/campaign/without-pmethod";
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+//import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
 import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";
-import { getEnumValues } from "@/src/utils/helpers";
+import { getValuesForNumericEnum } from "@/src/utils/helpers";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { User } from "@/src/modules/users/user/domain/User";
 import { FakeAdvertiser } from "../../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
@@ -13,6 +13,7 @@ import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
+import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
 
 describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,", () => {
   let testDB: TestDBs;
@@ -39,9 +40,11 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   });
 
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
+    
+    const amount = amountsAndPPClick[0][0];
     const body: IApiStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
-      budgetItem: AvailableAmounts.Fifty,
+      budgetItem: amount,
     };
     const { req, res } = mockedContext({ method: "GET", body });
 
@@ -51,9 +54,10 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   });
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
+    
     const body: IApiStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
-      budgetItem: getEnumValues(AvailableAmounts).length - 1,
+      budgetItem: amountsAndPPClick.length - 1,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 

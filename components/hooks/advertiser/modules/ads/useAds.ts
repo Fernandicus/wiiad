@@ -3,11 +3,11 @@ import {
   removeAdHandler,
 } from "@/components/src/modules/advertiser/ads/infrastructure/ads-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { IAdsCtxState } from "context/advertisers/modules/ads/domain/interfaces/IAdsContext";
+import { IAdsCtxState } from "@/context/advertisers/modules/ads/domain/interfaces/IAdsContext";
 import {
   removeAdReducer,
   storeAdsReducer,
-} from "context/advertisers/modules/ads/infrastructure/ads-slices";
+} from "@/context/advertisers/modules/ads/infrastructure/ads-slices";
 import { useDispatch, useSelector } from "react-redux";
 import { useCampaigns } from "../campaigns/useCampaigns";
 

@@ -21,47 +21,7 @@ export const LaunchCampaignSection = ({
 }: ILaunchCampaign) => {
   const [clientSecret, setClientSecret] = useState<string>();
   const [method, setPaymentMethod] = useState<string>();
-  ///const [clientSecret, setClientSecret] = useState<string>();
-  const [budget, setBudget] = useState<number>(0);
-  const [isSelectCardPage, setSelectCardPage] = useState<boolean>(false);
-  const [isPaying, setIsPaying] = useState<boolean>(false);
-  const [isPayingWithPM, setPayingWithPM] = useState<boolean>(false);
-  const [isPayingWithNewCard, setPayingWithNewCard] = useState<boolean>(false);
-  const router = useRouter();
-
-  const handlePaymentAmount = async (useNewCard = false) => {
-    setIsPaying(true);
-
-    if (isPaying) return;
-    if (!adToLaunch) return;
-    if (budget < 0) return;
-
-    try {
-      const stripePayment = new StripePaymentProcess();
-      if (useNewCard) {
-        const clientSecret = await stripePayment.payUsingNewCard({
-          budgetItem: budget,
-          adId: adToLaunch.id,
-        });
-        setIsPaying(false);
-        setClientSecret(clientSecret);
-        return;
-      } else {
-        await stripePayment.payWithSelectedCard({
-          budgetItem: budget,
-          adId: adToLaunch.id,
-          paymentMethod: method!,
-        });
-        setIsPaying(false);
-        const splitedPath = window.location.pathname.split("/");
-        const path = `/${splitedPath[1]}/campaigns`;
-        //  router.push(path);
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const [budget, setBudget] = useState({ budget: 50, clicks: 1000 });
 
   return (
     <div className="w-full flex justify-center items-center">
@@ -77,6 +37,7 @@ export const LaunchCampaignSection = ({
               <StripePaymentElement clientSecret={clientSecret} />
             ) : (
               <BudgetAndPaymentMethod
+                setBudget={(params) => setBudget(params)}
                 ad={adToLaunch}
                 onContinue={setClientSecret}
                 paymentMethods={paymentMethods}
@@ -84,7 +45,7 @@ export const LaunchCampaignSection = ({
               />
             )}
           </div>
-          <CampaignBudgetSummary adToLaunch={adToLaunch!} />
+          <CampaignBudgetSummary budget={budget} adToLaunch={adToLaunch!} />
         </div>
       </div>
     </div>

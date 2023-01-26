@@ -30,22 +30,6 @@ export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IR
     }
   };
 
- /*  //TODO: Remove Ads and Campaigns
-  const deleteAdAndCampaign = async (id: string) => {
-    try {
-      await removeAd(id);
-      handleResponse({
-        message: "Anuncio eliminado",
-        status: "success",
-      });
-    } catch (err) {
-      handleResponse({
-        message: "No se pudo eliminar el anuncio",
-        status: "error",
-      });
-    }
-  }; */
-
   return (
     <RemoveButton onRemove={() => deleteAd(adId)}>
       Eliminar anuncio

@@ -1,4 +1,5 @@
-export const BudgetSummary = () => {
+export const BudgetSummary = (params:{budget:{budget:number, clicks:number}}) => {
+  const {budget}=params;
   return (
     <div className="space-y-2">
       <p className=" font-bold text-gray-500">Campaña</p>
@@ -9,8 +10,8 @@ export const BudgetSummary = () => {
         </div>
 
         <div className="text-end text-gray-500 text-sm">
-          <p>...</p>
-          <p>...</p>
+          <p>{budget.budget}</p>
+          <p>{budget.clicks}</p>
         </div>
       </div>
       <hr />
@@ -20,7 +21,7 @@ export const BudgetSummary = () => {
         </div>
 
         <div className="text-end text-gray-500 text-sm">
-          <p>...</p>
+        <p>{budget.budget / budget.clicks}</p>
         </div>
       </div>
     </div>

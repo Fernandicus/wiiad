@@ -20,17 +20,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const reqBody: AdPropsPrimitives = reqBodyParse(req);
 
     await MongoDB.connectAndDisconnect(
-      async () =>
-      await adCreatorHandler.create({
-        adProps: reqBody,
-        advertiserId: session.id,
-        adId: UniqId.generate(),
-      })
+      async () => await adCreatorHandler.create(reqBody)
     );
 
     res.status(200).json({});
     return;
-    
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: "Error creating new ad banner" });

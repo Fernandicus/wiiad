@@ -1,10 +1,10 @@
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { ICampaignsCtxState } from "context/advertisers/modules/campaigns/domain/interfaces/ICampaignsContext";
+import { ICampaignsCtxState } from "@/context/advertisers/modules/campaigns/domain/interfaces/ICampaignsContext";
 import {
   removeCampaignsReducer_byAdId,
   storeCampaignsReducer,
-} from "context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
+} from "@/context/advertisers/modules/campaigns/infrastructure/campaigns-slices";
 import { useDispatch, useSelector } from "react-redux";
 
 export interface IUseCampaigns {

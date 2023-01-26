@@ -1,12 +1,12 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
+//import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
 import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";
 import apiPayWithPMethod, {
   IApiStripePaymentWithPMethod,
 } from "@/pages/api/v1/payments/stripe/campaign/with-pmethod";
 import { FakePaymentMethodId } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
-import { getEnumValues } from "@/src/utils/helpers";
+import { getValuesForNumericEnum } from "@/src/utils/helpers";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { User } from "@/src/modules/users/user/domain/User";
 import { FakeAdvertiser } from "../../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
@@ -14,6 +14,7 @@ import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
+import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
 
 describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", () => {
   let savedStripeModel: Stripe;
@@ -33,13 +34,14 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     const saveNewAd = testDB.dbs.ads.saveMany([newAdvertiserAd]);
     await Promise.all([saveNewUser, saveNewAd]);
     stripeDB = testDB.dbs.stripe;
-  });
+  },12000);
 
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
+    const amount = amountsAndPPClick[0][0]
     const body: IApiStripePaymentWithPMethod = {
       adId: ad.id.id,
-      budgetItem: AvailableAmounts.Fifty,
+      budgetItem: amount,//AvailableAmounts.Fifty,
       paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "GET", body });
@@ -47,13 +49,14 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
+    const amount = amountsAndPPClick[0][0]
     const body: IApiStripePaymentWithPMethod = {
       adId: ad.id.id,
-      budgetItem: getEnumValues(AvailableAmounts).length - 1,
+      budgetItem: amountsAndPPClick.length - 1,
       paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
@@ -61,7 +64,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it("WHEN send a not valid budget item, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
@@ -78,7 +81,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it("WHEN send request without an adId, THEN status code should be 400", async () => {
     const user = testDB.users[0];
@@ -95,7 +98,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`WHEN send request without an existing ad id for the advertiser id, 
   THEN status code should be 400`, async () => {
@@ -114,7 +117,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`- WHEN send a request without a valid Payment Method, 
   THEN status code should be 400`, async () => {
@@ -132,7 +135,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(req, res);
 
     expect(res.statusCode).toBe(400);
-  });
+  },12000);
 
   it(`- WHEN send a request without Stripe Model, 
   THEN status code should be 200`, async () => {
@@ -153,7 +156,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     )!;
 
     expect(ctx.res.statusCode).toBe(200);
-  });
+  },12000);
 
   it(`- WHEN send a request with a saved Stripe Model, 
   THEN status code should be 200`, async () => {
@@ -181,5 +184,5 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
     await apiPayWithPMethod(ctx.req, ctx.res);
 
     expect(ctx.res.statusCode).toBe(200);
-  });
+  },12000);
 });

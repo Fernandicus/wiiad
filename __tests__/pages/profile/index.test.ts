@@ -1,5 +1,5 @@
-import { IProfilePageParams } from "@/components/ui/pages/profile/UserProfilePage";
-import { getServerSideProps as profilePage } from "@/pages/profile";
+//import { IProfilePageParams } from "@/components/ui/pages/profile/UserProfilePage";
+import { getServerSideProps as profilePage, IProfilePageParams } from "@/pages/profile";
 import { LogStates } from "@/src/common/domain/LogStates";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { createAuthTokenHandler } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
