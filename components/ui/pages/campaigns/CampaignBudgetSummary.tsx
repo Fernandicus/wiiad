@@ -4,13 +4,13 @@ import { BudgetSummary } from "./BudgetSummary";
 
 export const CampaignBudgetSummary = (props: {
   adToLaunch: AdPropsPrimitives;
-  budget:{budget:number, clicks:number}
+  pricePC: number;
 }) => {
-  const { adToLaunch } = props;
+  const { adToLaunch, pricePC } = props;
   return (
     <div className="col-span-2 p-5 flex flex-col justify-between">
       <AdSummary ad={adToLaunch} />
-      <BudgetSummary budget={props.budget}/>
+      <BudgetSummary pricePC={pricePC} />
     </div>
   );
 };

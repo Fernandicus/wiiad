@@ -6,6 +6,7 @@ import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
+import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
 export interface IApiStripePaymentWithPMethod {
   paymentMethod: string;
@@ -15,13 +16,15 @@ export interface IApiStripePaymentWithPMethod {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<IApiResp>
 ) {
   const session = userSession.getFromServer({ req, res });
   const body: IApiStripePaymentWithPMethod = reqBodyParse(req);
-  
+
   if (req.method !== "PUT" || !session || !body.adId || !body.paymentMethod)
-    return res.status(400).end();
+    return res
+      .status(400)
+      .json({ message: "Bad request or bad params provided" });
 
   try {
     await MongoDB.connectAndDisconnect(async () => {
@@ -34,9 +37,10 @@ export default async function handler(
         paymentMethod: body.paymentMethod,
       });
     });
-    return res.status(200).end();
+    return res.status(200).json({ message: "Payment Succeed!" });
   } catch (err) {
     console.error(err);
-    return res.status(400).end();
+    if (err instanceof Error)
+      return res.status(400).json({ message: err.message });
   }
 }

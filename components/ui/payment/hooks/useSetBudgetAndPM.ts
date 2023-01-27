@@ -1,3 +1,4 @@
+import { assertUnreachable } from "@/src/utils/helpers";
 import { useReducer } from "react";
 
 type TBudgetAction =
@@ -100,7 +101,7 @@ export const useSetBudgetAndPM = (): IUseSetBudgetAndPM => {
           isPaying: false,
         };
       default:
-        return { ...state };
+        assertUnreachable(action.type);
     }
   };
 

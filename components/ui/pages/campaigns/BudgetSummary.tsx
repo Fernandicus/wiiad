@@ -1,5 +1,11 @@
-export const BudgetSummary = (params:{budget:{budget:number, clicks:number}}) => {
-  const {budget}=params;
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
+
+export const BudgetSummary = (params: { pricePC: number }) => {
+  const { pricePC } = params;
+  const ppc = new PricesPerClick();
+  const amount = ppc.getAmounts()[pricePC];
+  const clicks = ppc.getClicksPerPrice()[pricePC];
+  const pricePerClick = ppc.getPricePerClick()[pricePC];
   return (
     <div className="space-y-2">
       <p className=" font-bold text-gray-500">Campaña</p>
@@ -10,8 +16,8 @@ export const BudgetSummary = (params:{budget:{budget:number, clicks:number}}) =>
         </div>
 
         <div className="text-end text-gray-500 text-sm">
-          <p>{budget.budget}</p>
-          <p>{budget.clicks}</p>
+          <p>{amount / 100}€</p>
+          <p>{clicks}</p>
         </div>
       </div>
       <hr />
@@ -21,7 +27,7 @@ export const BudgetSummary = (params:{budget:{budget:number, clicks:number}}) =>
         </div>
 
         <div className="text-end text-gray-500 text-sm">
-        <p>{budget.budget / budget.clicks}</p>
+          <p>{pricePerClick/ 100}0€</p>
         </div>
       </div>
     </div>

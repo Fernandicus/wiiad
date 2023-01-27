@@ -1,11 +1,11 @@
-interface IViewsButtonParams {
-  views: number;
+interface IBudgetButtonParams {
+  price: number;
   isSelected: boolean;
   onSelect(views: number): void;
 }
 
-export const ViewsButton = (params: IViewsButtonParams) => {
-  const { views, isSelected, onSelect } = params;
+export const BudgetButton = (params: IBudgetButtonParams) => {
+  const { price, isSelected, onSelect } = params;
   return (
     <button
       className={`${
@@ -14,10 +14,10 @@ export const ViewsButton = (params: IViewsButtonParams) => {
           : "bg-white text-slate-700 border-slate-100"
       } border rounded-lg w-full text-sm py-1`}
       onClick={() => {
-        onSelect(views);
+        onSelect(price);
       }}
     >
-      <p>{views} mil</p>
+    {`${price}€`}
     </button>
   );
 };

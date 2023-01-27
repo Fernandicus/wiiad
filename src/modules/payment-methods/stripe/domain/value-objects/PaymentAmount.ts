@@ -1,5 +1,4 @@
-import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
-import { getValuesForNumericEnum } from "@/src/utils/helpers";
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
 export class PaymentAmount {
   readonly amount;
@@ -11,8 +10,8 @@ export class PaymentAmount {
     this.amount = amount;
   }
 
-  static fromItem(item: number): PaymentAmount {
-    const amountAndPPClick = amountsAndPPClick[item];
+  static fromItem(item: number, ppc = new PricesPerClick()): PaymentAmount {
+    const amountAndPPClick = ppc.amounts[item];
     const amount = amountAndPPClick[0];
     return new PaymentAmount(amount);
   }
