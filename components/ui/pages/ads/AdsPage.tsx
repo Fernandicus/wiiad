@@ -8,12 +8,10 @@ import {
   RefNotifications,
 } from "../../notifications/Notifications";
 import { LaunchCampaignSection } from "../campaigns/LaunchCampaignSection";
-import CreateAdForm from "./CreateAdForm";
 import { AdsSection } from "./AdsSection";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { CreateAdSelector } from "./CreateAdSelector";
 import CreateAdSection from "./CreateAdSection";
-import { useUserStripe } from "@/components/hooks/advertiser/modules/payments/stripe/useUserStripe";
+import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 
 export const AdsPage = () => {
   const { session } = useAdvertiser();
@@ -40,11 +38,7 @@ export const AdsPage = () => {
   return (
     <main className="bg-slate-100 min-h-screen w-full">
       {showPaymentProcess ? (
-        <LaunchCampaignSection
-          userName={session.name}
-          adToLaunch={launchAd}
-          paymentMethods={userStripe.paymentMethods}
-        />
+        <LaunchCampaignSection adToLaunch={launchAd} />
       ) : (
         <div className="">
           <Notifications ref={notificationsRef} />

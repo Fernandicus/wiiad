@@ -1,7 +1,5 @@
-import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
-import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
-import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
-import { AdType } from "@/pages/ads";
+import { useAds } from "@/components/hooks/advertiser/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { NotificationData } from "../../notifications/Notifications";
 import { AdsList } from "./AdsList";

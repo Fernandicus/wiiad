@@ -1,9 +1,7 @@
-import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
-import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
-import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
+import { useAds } from "@/components/hooks/advertiser/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 import { RemoveButton } from "@/components/ui/buttons/RemoveButton";
 import { NotificationData } from "@/components/ui/notifications/Notifications";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
 
 interface IRemoveAdButton {
   adId: string;
@@ -13,7 +11,6 @@ interface IRemoveAdButton {
 
 export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IRemoveAdButton) => {
   const { removeAd } = useAds();
-  const { storeCampaigns } = useCampaigns();
 
   const deleteAd = async (id: string) => {
     try {

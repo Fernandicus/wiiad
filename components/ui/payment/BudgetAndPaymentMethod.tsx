@@ -1,13 +1,10 @@
-import { StripePaymentProcess } from "../../src/payments/StripePaymentProcess";
 import { CreditCards } from "./CreditCards";
 import { Budgets } from "./Budgets";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 import { useSetBudgetAndPM } from "./hooks/useSetBudgetAndPM";
-import { useUserStripe } from "@/components/hooks/advertiser/modules/payments/stripe/useUserStripe";
 import { PaymentButtons } from "./PaymentButtons";
 import { PrimaryButton } from "../buttons/PrimaryButton";
-import { SecondaryButton } from "../buttons/SecondaryButton";
+import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 
 interface IBudgetAndPMethods {
   pricePC: number;
@@ -27,7 +24,7 @@ export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
       <div className="space-y-5">
         {state.isCardPage ? (
           <div className="space-y-2 ">
-            <h3 className="text-lg font-semibold">Elije el método de pago</h3>
+            <h3 className="text-lg font-semibold">Elije un método de pago</h3>
             <CreditCards
               paymentMethods={pmethods}
               onSelectedMethod={(method) => {

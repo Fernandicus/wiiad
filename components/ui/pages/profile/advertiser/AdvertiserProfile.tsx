@@ -2,8 +2,8 @@ import { ProfileCard } from "../ProfileCard";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { LoadDataCardButton } from "./items/LoadDataCardButton";
-import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
-import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
+import { useAds } from "@/components/hooks/advertiser/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;

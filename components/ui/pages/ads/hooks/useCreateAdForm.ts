@@ -1,4 +1,4 @@
-import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
+import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { CloudinaryUploader } from "@/components/src/cloudinary/CloudinaryUploader";
 import { NotificationData } from "@/components/ui/notifications/Notifications";

@@ -1,10 +1,8 @@
-import { useAds } from "@/components/hooks/advertiser/modules/ads/useAds";
-import { useCampaigns } from "@/components/hooks/advertiser/modules/campaigns/useCampaigns";
-import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
+import { useAds } from "@/components/hooks/advertiser/ads/useAds";
+import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { assertUnreachable } from "@/src/utils/helpers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CampaignsList } from "./CampaignsList";
 import { EmptyCampaigns } from "./items/EmptyCampaigns";
 
