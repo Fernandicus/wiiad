@@ -1,8 +1,8 @@
-import { IApiCalls } from "@/components/src/modules/sing-in/domain/interfaces/ISignInApiCalls";
+import { ISignInApiCalls } from "@/components/src/modules/sing-in/domain/interfaces/ISignInApiCalls";
 import { Email } from "@/src/common/domain/Email";
 
 export class LogIn {
-  constructor(private apiCall: IApiCalls) {}
+  constructor(private apiCall: ISignInApiCalls) {}
 
   async user(email: Email): Promise<void> {
     await this.apiCall.logInUser(email);

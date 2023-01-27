@@ -32,7 +32,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const loginQueries = new LoginQueries(query);
 
   try {
-    return await serverSideResponse({ context, loginQueries });
+    if (!loginQueries.authToken) return visitProfile(context);
+
+    const data = await loginOrSignUp({ context, loginQueries });
+    
+    if (!data) throw new Error("No data provided");
+    return getSSRData(data);
+
   } catch (err) {
     await MongoDB.disconnect();
     return {
@@ -42,28 +48,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-async function serverSideResponse(params: {
+async function loginOrSignUp(params: {
   loginQueries: LoginQueries;
   context: IReqAndRes;
 }) {
   const { context, loginQueries } = params;
   const userData = await MongoDB.connectAndDisconnect(async () => {
-    if (!loginQueries.authToken) {
-      return await visitProfile(context);
-    }
     const singInController = SignInController.verifyJWT({
       authToken: loginQueries.authToken,
       context,
     });
-    const userData = await singInController.signIn(loginQueries);
-    return getSSRData(userData);
+
+    if (loginQueries.isLogin()) return await singInController.logIn();
+
+    if (loginQueries.isSignUp())
+      return await singInController.signIn(loginQueries);
   });
+
   return userData;
 }
 
-async function visitProfile(
-  context: IReqAndRes
-): Promise<{ props: IProfilePageParams }> {
+function visitProfile(context: IReqAndRes): { props: IProfilePageParams } {
   const session = userSession.getFromServer(context);
   if (!session) throw new Error("No session provided");
   return {

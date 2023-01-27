@@ -50,7 +50,7 @@ export class SendVerificationEmailController {
     try {
       const { name } = await findAdvertiserHandler.byEmail(data.email);
       const payload = { ...data, userName: name };
-      await sendVerificationEmailHandler.sendSignUp({
+      await sendVerificationEmailHandler.sendLogin({
         sendTo: data.email,
         payload,
       });

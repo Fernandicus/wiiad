@@ -12,10 +12,9 @@ import {
 } from "@/src/modules/users/user/container";
 import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
-import { ProfileDataController } from "./ProfileDataController";
 import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenRepo";
 import { LoginQueries } from "../../domain/LoginQueries";
-import { IProfilePageParams } from "@/components/ui/pages/profile/UserProfilePage";
+import { IProfilePageParams } from "@/pages/profile";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;

@@ -23,9 +23,7 @@ export default async function handler(
   if (req.method !== "POST") return res.status(400);
 
   const { data, isNewUser }: APISendEmailVerification = reqBodyParse(req);
-
-
-
+  
   try {
     await MongoDB.connectAndDisconnect(async () => {
       if (data.role === RoleType.USER) {
