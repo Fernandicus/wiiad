@@ -1,34 +1,32 @@
-import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
-import { useState } from "react";
+import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
+import { useEffect } from "react";
 import { BudgetButton } from "./items/BudgetButton";
 import { BudgetView } from "./items/BudgetView";
 
-interface IBudgetParams {
-  pricePC:number;
-  onSelectBudget(index: number): void;
-}
+export const Budgets = () => {
+  const { storeBudgetFromAvailables, availableBudgets, state } =
+    usePaymentProcess();
+  const isSelected = (amount: number) => state.budget.amount === amount && true;
 
-export const Budgets = ({ onSelectBudget, pricePC }: IBudgetParams) => {
-  const [selectedBudget, setBudget] = useState<number>(pricePC);
-  const isSelected = (budget: number) => selectedBudget === budget && true;
-  const ppc = new PricesPerClick();
-  const amounts = ppc.getAmounts();
-  const clicks = ppc.getClicksPerPrice();
+  useEffect(() => {
+    storeBudgetFromAvailables(0);
+  }, []);
+
+  const amounts = availableBudgets.getAmounts();
 
   return (
     <div>
       <h1 className="font-bold text-md text-gray-500">Visualizaciones:</h1>
-      <BudgetView clicks={clicks[selectedBudget]}/>
+      <BudgetView clicks={state.budget.clicks} />
       <div className="space-y-2">
         <h2 className="font-bold text-md text-gray-500">Precio:</h2>
         <div className="space-x-1 flex ">
-          {amounts.map((prices, index) => {
+          {amounts.map((amount, index) => {
             return (
               <BudgetButton
-                isSelected={isSelected(index)}
+                isSelected={isSelected(amount)}
                 onSelect={() => {
-                  setBudget(index);
-                  onSelectBudget(index);
+                  storeBudgetFromAvailables(index);
                 }}
                 price={amounts[index] / 100}
               />

@@ -20,4 +20,8 @@ export class PricesPerClick {
   getClicksPerPrice(): number[] {
     return this.amounts.map((amount) => amount[0] / amount[1]);
   }
+
+  getIndexFromPrice(price:number):number{
+    return this.amounts.findIndex(budget => budget[0] === price)
+  }
 }

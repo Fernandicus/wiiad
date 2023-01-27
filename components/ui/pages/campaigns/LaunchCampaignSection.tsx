@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
-import { useRouter } from "next/router";
-import { StripePaymentProcess } from "@/components/src/payments/StripePaymentProcess";
 import StripePaymentElement from "../../payment/StripePaymentElement";
 import { BudgetAndPaymentMethod } from "../../payment/BudgetAndPaymentMethod";
-import Image from "next/image";
 import { CampaignBudgetSummary } from "./CampaignBudgetSummary";
-import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
 interface ILaunchCampaign {
   adToLaunch?: AdPropsPrimitives;
@@ -15,7 +10,6 @@ interface ILaunchCampaign {
 
 export const LaunchCampaignSection = ({ adToLaunch }: ILaunchCampaign) => {
   const [clientSecret, setClientSecret] = useState<string>();
-  const [pricePCIndex, setPricePCIndex] = useState(0);
 
   return (
     <div className="w-full flex justify-center items-center">
@@ -29,15 +23,12 @@ export const LaunchCampaignSection = ({ adToLaunch }: ILaunchCampaign) => {
               <StripePaymentElement clientSecret={clientSecret} />
             ) : (
               <BudgetAndPaymentMethod
-                pricePC={pricePCIndex}
-                setPricePC={(params) => setPricePCIndex(params)}
                 ad={adToLaunch}
                 onContinue={setClientSecret}
               />
             )}
           </div>
           <CampaignBudgetSummary
-            pricePC={pricePCIndex}
             adToLaunch={adToLaunch!}
           />
         </div>

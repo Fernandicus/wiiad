@@ -5,15 +5,12 @@ import { CreditCardButton } from "./items/CreditCardButton";
 
 interface ICreditCardsParams {
   paymentMethods?: ICardDetailsPrimitives[];
-  onSelectedMethod(method?: string): void;
 }
 
-export const CreditCards = ({
-  paymentMethods,
-  onSelectedMethod,
-}: ICreditCardsParams) => {
-  const [isMethodSelected, setMethodSelected] = useState<string>();
-  const { storePaymentMethod } = usePaymentProcess()
+export const CreditCards = ({ paymentMethods }: ICreditCardsParams) => {
+  const {state} = usePaymentProcess()
+  const [isMethodSelected, setMethodSelected] = useState<string>(state.paymentMethod);
+  const { storePaymentMethod } = usePaymentProcess();
 
   return (
     <div className="h-48 flex ">
@@ -25,7 +22,7 @@ export const CreditCards = ({
                 isSelected={isMethodSelected === pMethod.paymentMethodId}
                 onClick={() => {
                   setMethodSelected(pMethod.paymentMethodId);
-                  onSelectedMethod(pMethod.paymentMethodId);
+                  storePaymentMethod(pMethod.paymentMethodId);
                 }}
                 pMethod={pMethod}
               />

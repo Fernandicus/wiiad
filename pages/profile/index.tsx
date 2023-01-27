@@ -24,6 +24,9 @@ export default function Profile({ user }: IProfilePageParams) {
   return <UserProfilePage user={user} />;
 }
 
+//! BUG
+//TODO: [BUG] When log in with existing advertiser it creates a new user again
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const loginQueries = new LoginQueries(query);

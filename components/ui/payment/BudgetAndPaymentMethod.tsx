@@ -5,19 +5,19 @@ import { useSetBudgetAndPM } from "./hooks/useSetBudgetAndPM";
 import { PaymentButtons } from "./PaymentButtons";
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
+import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 
 interface IBudgetAndPMethods {
-  pricePC: number;
-  setPricePC(index: number): void;
   onContinue(clientSecret: string): void;
   ad?: AdPropsPrimitives;
 }
 
 export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
-  const { setPricePC, onContinue, pricePC, ad } = props;
+  const { onContinue, ad } = props;
   const { userStripe } = useUserStripe();
   const pmethods = userStripe.paymentMethods;
   const { state, dispatch } = useSetBudgetAndPM();
+  const paymentProcess = usePaymentProcess();
 
   return (
     <div className="space-y-10">
@@ -25,35 +25,25 @@ export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
         {state.isCardPage ? (
           <div className="space-y-2 ">
             <h3 className="text-lg font-semibold">Elije un método de pago</h3>
-            <CreditCards
-              paymentMethods={pmethods}
-              onSelectedMethod={(method) => {
-                if (!method) return;
-                dispatch.setPaymentMethod(method);
-              }}
-            />
+            <CreditCards paymentMethods={pmethods} />
           </div>
         ) : (
-          <Budgets
-            pricePC={pricePC}
-            onSelectBudget={(index) => {
-              setPricePC(index);
-            }}
-          />
+          <Budgets />
         )}
       </div>
       <div className="space-y-2">
         {state.isCardPage ? (
           <div className="space-y-2">
-            <PaymentButtons
-              adId={ad!.id}
-              amountToPay={pricePC}
-              pmethod={state.paymentMethod}
-              onClientSecret={onContinue}
-            />
+            <PaymentButtons adId={ad!.id} onClientSecret={onContinue} />
           </div>
         ) : (
-          <PrimaryButton type="button" onClick={() => dispatch.setIsCardPage()}>
+          <PrimaryButton
+            type="button"
+            onClick={() => {
+              console.log(paymentProcess.state.budget);
+              dispatch.setIsCardPage();
+            }}
+          >
             Continuar
           </PrimaryButton>
         )}

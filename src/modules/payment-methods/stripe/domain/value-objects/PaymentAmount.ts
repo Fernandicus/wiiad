@@ -3,9 +3,9 @@ import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 export class PaymentAmount {
   readonly amount;
   constructor(amount: number) {
-    if (amount < 5000)
+    if (amount < 2000)
       throw new Error(
-        `Payment amount must be at least 5000 (50,00€), and received: ${amount}`
+        `Payment amount must be at least 2000 (20,00€), and received: ${amount}`
       );
     this.amount = amount;
   }

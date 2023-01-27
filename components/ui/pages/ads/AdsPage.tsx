@@ -23,7 +23,7 @@ export const AdsPage = () => {
   const notificationsRef = useRef<RefNotifications>({
     showNotification: () => {},
   });
-  const handleResponse = notificationsRef.current.showNotification;
+ // const handleResponse = notificationsRef.current.showNotification;
 
   const onCreateAd = (adType: AdType) => {
     setAdType(adType);
@@ -49,7 +49,7 @@ export const AdsPage = () => {
                 onCreateImageAd={() => onCreateAd("banner")}
               />
               <AdsSection
-                handleResponse={handleResponse}
+                handleResponse={ notificationsRef.current.showNotification}
                 onLaunchCampaign={onLaunchCampaign}
               />
             </div>
