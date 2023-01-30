@@ -5,11 +5,15 @@ import { NotificationData } from "@/components/ui/notifications/Notifications";
 
 interface IRemoveAdButton {
   adId: string;
-  andCampaign?:boolean;
+  andCampaign?: boolean;
   handleResponse(data: NotificationData): void;
 }
 
-export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IRemoveAdButton) => {
+export const RemoveAdButton = ({
+  adId,
+  handleResponse,
+  andCampaign = false,
+}: IRemoveAdButton) => {
   const { removeAd } = useAds();
 
   const deleteAd = async (id: string) => {
@@ -27,9 +31,5 @@ export const RemoveAdButton = ({ adId, handleResponse, andCampaign = false }: IR
     }
   };
 
-  return (
-    <RemoveButton onRemove={() => deleteAd(adId)}>
-      Eliminar anuncio
-    </RemoveButton>
-  );
+  return <RemoveButton onRemove={() => deleteAd(adId)}>Eliminar</RemoveButton>;
 };

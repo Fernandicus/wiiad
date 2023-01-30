@@ -1,13 +1,8 @@
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
-export const BudgetSummary = (/* params: { pricePC: number } */) => {
-  const {state} = usePaymentProcess()
- // const { pricePC } = params;
-  /* const ppc = new PricesPerClick();
-  const amount = ppc.getAmounts()[pricePC];
-  const clicks = ppc.getClicksPerPrice()[pricePC];
-  const pricePerClick = ppc.getPricePerClick()[pricePC]; */
+export const BudgetSummary = () => {
+  const { state } = usePaymentProcess();
   return (
     <div className="space-y-2">
       <p className=" font-bold text-gray-500">Campaña</p>
@@ -29,7 +24,7 @@ export const BudgetSummary = (/* params: { pricePC: number } */) => {
         </div>
 
         <div className="text-end text-gray-500 text-sm">
-          <p>{state.budget.pricePerClick/ 100}0€</p>
+          <p>{state.budget.pricePerClick / 100}0€</p>
         </div>
       </div>
     </div>
