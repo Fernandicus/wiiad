@@ -46,7 +46,7 @@ export const useCampaigns = (): IUseCampaigns => {
     },
     removeCampaigns_byAdId: (adId: string): void => {
       dispatch(
-        removeCampaignsReducer_byAdId({ campaigns: campaigns.all, adId })
+        removeCampaignsReducer_byAdId({  adId })
       );
     },
   };

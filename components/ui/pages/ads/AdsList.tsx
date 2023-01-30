@@ -28,16 +28,17 @@ export function AdsList({
       <div className="w-full inline-flex justify-center">
         <div className={` grid ${gridCols}`}>
           {ads.map((ad) => {
-            const campaign = campaigns.find(
-              (campaign) => campaign.adId == ad.id
-            );
+            const index = campaigns.findIndex((campaign) => {
+              return campaign.adId == ad.id;
+            });
+            const isActive = index === -1 ? false : true;
             return (
               <div key={ad.id} className="p-5 w-96">
                 <AdCard
                   ad={ad}
-                  campaign={!campaign ? null : campaign}
+                  isActive={isActive}
                   onLaunchCampaign={onLaunchCampaign}
-                 handleResponse={handleResponse}
+                  handleResponse={handleResponse}
                 />
               </div>
             );

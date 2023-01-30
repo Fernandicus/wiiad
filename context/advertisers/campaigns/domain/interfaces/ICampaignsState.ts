@@ -10,5 +10,4 @@ export interface IStoreCampaignsState {
 
 export interface IRemoveCampaignsState {
   adId: string;
-  campaigns: ICampaignPrimitives[];
 }

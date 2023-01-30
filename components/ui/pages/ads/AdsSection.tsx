@@ -20,7 +20,7 @@ export const AdsSection = (params: {
         <AdsList
         handleResponse={params.handleResponse}
           onLaunchCampaign={params.onLaunchCampaign}
-          campaigns={campaigns.all}
+          campaigns={campaigns.actives}
           ads={ads}
         />
       )}

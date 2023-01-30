@@ -7,25 +7,25 @@ import { AdCardItem } from "./AdCardItem";
 
 interface Props {
   ad: AdPropsPrimitives;
-  campaign: ICampaignPrimitives | null;
+  isActive: boolean;
   onLaunchCampaign(ad: AdPropsPrimitives): void;
   handleResponse(data: NotificationData): void;
 }
 
 export const AdCard = (props: Props) => {
-  const { ad, campaign, onLaunchCampaign, handleResponse } = props;
+  const { ad, isActive, onLaunchCampaign, handleResponse } = props;
   return (
     <AdCardItem image={ad.file}>
       <div className="space-y-2">
-        <h3 className="font-medium text-gray-600">{ad.title}</h3>
+        <h3 className="font-medium text-gray-600 truncate">{ad.title}</h3>
         <p className="text-gray-500">{`${ad.description.slice(0, 70)}...`}</p>
-        <a className="text-sky-500 italic" href={`${ad.redirectionUrl}`}>
-          {ad.redirectionUrl}
+        <a className="text-sky-500 italic truncate" href={`${ad.redirectionUrl}`}>
+          {ad.redirectionUrl.slice(0, 40) + "..."}
         </a>
       </div>
       <div className="space-x-5 flex justify-center pt-3">
         <RemoveAdButton handleResponse={handleResponse} adId={ad.id} />
-        {!campaign && (
+        {!isActive && (
           <PrimaryButton
             type="button"
             onClick={() => {
