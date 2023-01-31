@@ -19,7 +19,7 @@ export const AdsListSection = (params: {
       ) : (
         <div className="w-full  mx-auto">
           {ads.length > 2 ? (
-            <div className={`w-full inline-flex flex-wrap justify-between gap-16`}>
+            <div className={` grid-cols-3 w-full grid gap-16`}>
               <AdsList
                 handleResponse={params.handleResponse}
                 onLaunchCampaign={params.onLaunchCampaign}

@@ -3,6 +3,7 @@ import { AdType } from "@/pages/ads";
 import { BackIcon } from "../../icons/BackIcon";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import CreateAdForm from "./CreateAdForm";
+import { SectionHeader } from "../items/SectionHeader";
 
 interface ICreateAdSectionProps {
   user: IUserPrimitives;
@@ -14,19 +15,18 @@ interface ICreateAdSectionProps {
 export default function CreateAdSection(props: ICreateAdSectionProps) {
   const { adType, handleResponse, onBack, user } = props;
   return (
-    <div className=" w-full flex justify-center">
-      <div className="max-w-xl py-10">
-        <div className="pb-5">
-          <button onClick={onBack} className="w-6 h-auto hover:text-sky-500">
-            <BackIcon />
-          </button>
-          <div className="font-bold text-xl">Crea tu anuncio</div>
-          <CreateAdForm
-            adType={adType}
-            handleResponse={handleResponse}
-            onSuccess={onBack}
-          />
-        </div>
+    <div className="max-w-xl mx-auto">
+      <SectionHeader
+        onBack={onBack}
+        titleLable="Crea un anuncio"
+        descriptionLabel="Completa los campos para crear un anuncio"
+      />
+      <div className="w-full flex justify-center">
+        <CreateAdForm
+          adType={adType}
+          handleResponse={handleResponse}
+          onSuccess={onBack}
+        />
       </div>
     </div>
   );

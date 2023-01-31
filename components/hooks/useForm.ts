@@ -23,6 +23,7 @@ export const useForm = <T extends object, S>(
     initialValues,
     validationSchema: params.schema,
     onSubmit: (values) => {
+      console.log(values);
       params.onSubmit(values);
     },
   });
@@ -31,9 +32,9 @@ export const useForm = <T extends object, S>(
     formValues: formik.values as S,
     handleFormChange: formik.handleChange,
     handleFormSubmit: formik.handleSubmit,
-    hasError: (formName: keyof T) => {
-      return formik.errors[formName] && formik.touched[formName] ? true : false;
-    },
+    hasError: (formName: keyof T) =>
+      formik.errors[formName] && formik.touched[formName] ? true : false,
+
     formError: (formName: keyof T) => formik.errors[formName] as string,
   };
 };

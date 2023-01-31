@@ -8,16 +8,11 @@ import {
   RefNotifications,
 } from "../../notifications/Notifications";
 import { LaunchCampaignSection } from "../campaigns/LaunchCampaignSection";
-import { AdsListSection } from "./AdsListSection";
-import { CreateAdSelector } from "./CreateAdSelector";
 import CreateAdSection from "./CreateAdSection";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
-import { AdSectionHeader } from "./AdSectionHeader";
 import { AdsSections } from "./AdsSections";
 
 export const AdsPage = () => {
   const { session } = useAdvertiser();
-  const { userStripe } = useUserStripe();
   const [createAd, setCreateAd] = useState<boolean>(false);
   const [adType, setAdType] = useState<AdType>("banner");
   const [showPaymentProcess, setPaymentProcess] = useState<boolean>(false);
@@ -25,7 +20,6 @@ export const AdsPage = () => {
   const notificationsRef = useRef<RefNotifications>({
     showNotification: () => {},
   });
-  // const handleResponse = notificationsRef.current.showNotification;
 
   const onCreateAd = (adType: AdType) => {
     setAdType(adType);
@@ -38,12 +32,12 @@ export const AdsPage = () => {
   };
 
   return (
-    <main className="">
+    <main >
       <Notifications ref={notificationsRef} />
       {showPaymentProcess ? (
         <LaunchCampaignSection adToLaunch={launchAd} />
       ) : (
-        <div className="">
+        <div>
           {!createAd ? (
             <AdsSections
               onCreateVideo={() => onCreateAd("video")}

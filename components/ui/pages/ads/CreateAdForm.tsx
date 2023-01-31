@@ -26,7 +26,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
 
   return (
     <form
-      className="w-full space-y-5 pt-5"
+      className="w-full space-y-5"
       onSubmit={(e) => {
         const submitParams = { adType, filePreview };
         handle.submit(e, submitParams);
@@ -73,6 +73,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
         errorText={error.message("description")}
       />
       <PrimaryButton
+        type="submit"
         isLoading={isSubmitting}
         disabled={isFileOk ? false : true}
       >
