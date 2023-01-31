@@ -63,9 +63,9 @@ export const CampaignsPage = () => {
         </div>
       </SectionHeader>
 
-      
+      <div className="w-full inline-flex justify-center">
         {campaignList[selectedCampaign]}
-     
+      </div>
     </div>
   );
 };

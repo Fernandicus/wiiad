@@ -8,11 +8,12 @@ import {
   RefNotifications,
 } from "../../notifications/Notifications";
 import { LaunchCampaignSection } from "../campaigns/LaunchCampaignSection";
-import { AdsSection } from "./AdsSection";
+import { AdsListSection } from "./AdsListSection";
 import { CreateAdSelector } from "./CreateAdSelector";
 import CreateAdSection from "./CreateAdSection";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { AdSectionHeader } from "./AdSectionHeader";
+import { AdsSections } from "./AdsSections";
 
 export const AdsPage = () => {
   const { session } = useAdvertiser();
@@ -38,24 +39,18 @@ export const AdsPage = () => {
 
   return (
     <main className="">
+      <Notifications ref={notificationsRef} />
       {showPaymentProcess ? (
         <LaunchCampaignSection adToLaunch={launchAd} />
       ) : (
         <div className="">
-          <Notifications ref={notificationsRef} />
           {!createAd ? (
-            <div>
-              <AdSectionHeader
-                titleLabel="Tus anuncios"
-                descriptionLabel="Crea y lanza anuncios de tipo video o banner"
-                onCreateVideo={() => onCreateAd("video")}
-                onCreateBanner={() => onCreateAd("banner")}
-              />
-              <AdsSection
-                handleResponse={notificationsRef.current.showNotification}
-                onLaunchCampaign={onLaunchCampaign}
-              />
-            </div>
+            <AdsSections
+              onCreateVideo={() => onCreateAd("video")}
+              onCreateBanner={() => onCreateAd("banner")}
+              handleResponse={notificationsRef.current.showNotification}
+              onLaunchCampaign={onLaunchCampaign}
+            />
           ) : (
             <CreateAdSection
               adType={adType}

@@ -17,25 +17,23 @@ export function AdsList({
   handleResponse,
 }: Props) {
   return (
-    <div className="w-full  mx-auto">
-      <div className={`w-full inline-flex flex-wrap justify-between`}>
-        {ads.map((ad) => {
-          const index = campaigns.findIndex((campaign) => {
-            return campaign.adId == ad.id;
-          });
-          const isActive = index === -1 ? false : true;
-          return (
-            <div key={ad.id}>
-              <AdCard
-                ad={ad}
-                isActive={isActive}
-                onLaunchCampaign={onLaunchCampaign}
-                handleResponse={handleResponse}
-              />
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <>
+      {ads.map((ad) => {
+        const index = campaigns.findIndex((campaign) => {
+          return campaign.adId == ad.id;
+        });
+        const isActive = index === -1 ? false : true;
+        return (
+          <div key={ad.id}>
+            <AdCard
+              ad={ad}
+              isActive={isActive}
+              onLaunchCampaign={onLaunchCampaign}
+              handleResponse={handleResponse}
+            />
+          </div>
+        );
+      })}
+    </>
   );
 }
