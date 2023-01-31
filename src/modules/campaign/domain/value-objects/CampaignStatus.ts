@@ -1,8 +1,8 @@
 import { ErrorCreatingCampaign } from "./ErrorCreatingCampaign";
 
 export enum CampaignStatusType {
-  STAND_BY = "standBy",
   ACTIVE = "active",
+  STAND_BY = "standBy",
   FINISHED = "finished",
 }
 

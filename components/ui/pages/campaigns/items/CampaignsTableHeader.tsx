@@ -2,7 +2,7 @@ export const CampaignsTableHeader = () => {
   return (
     <thead className="bg-sky-300">
       <tr className=" text-black">
-        <th className="p-5 text-start">Anúncio</th>
+        <th className="p-5 text-start">Anuncio</th>
         <th className="p-5">Saldo disponible</th>
         <th className="p-5">Clicks restantes</th>
         <th className="p-5">Visualizaciones</th>
