@@ -13,7 +13,7 @@ export const AdsSection = (params: {
   const { ads } = useAds();
 
   return (
-    <div className="py-10">
+    <div className="">
       {!ads || ads.length == 0 ? (
         <EmptyAds />
       ) : (

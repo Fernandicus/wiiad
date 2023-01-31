@@ -20,7 +20,7 @@ export const AdvertiserNavBar = () => {
   }, [router.pathname]);
 
   return (
-    <nav className="bg-slate-100 w-full px-7 py-3">
+    <nav className="w-full mb-5 py-3 border-b border-gray-200">
       <div className="grid grid-cols-2 max-w-5xl m-auto">
         <div className="space-x-5 flex">
           <NavBarButton

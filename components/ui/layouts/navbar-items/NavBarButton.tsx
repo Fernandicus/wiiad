@@ -21,11 +21,11 @@ export const NavBarButton = ({
     <Link
       onClick={onClick}
       href={`/${page}`}
-      className={
+      className={`${
         isActive
-          ? "text-sky-500 font-medium  underline underline-offset-4 decoration-2 decoration-sky-500"
-          : "text-slate-500"
-      }
+          ? "text-sky-500 underline underline-offset-4 decoration-2 decoration-sky-500"
+          : "text-gray-600 "
+      } font-medium`}
     >
       {label}
     </Link>

@@ -17,7 +17,7 @@ export function AdsList({
   handleResponse,
 }: Props) {
   return (
-    <div className="w-full max-w-5xl mx-auto ">
+    <div className="w-full  mx-auto">
       <div className={`w-full inline-flex flex-wrap justify-between`}>
         {ads.map((ad) => {
           const index = campaigns.findIndex((campaign) => {

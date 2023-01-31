@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { LegacyRef, MouseEventHandler, RefObject } from "react";
 
 type TButton = "button" | "submit" | "reset" | undefined;
 
@@ -9,4 +9,5 @@ export interface IButtonProps {
   disabled?:boolean;
   onClick?: MouseEventHandler | undefined;
   onSumbit?(): void;
+  ref?:RefObject<HTMLButtonElement>;
 }

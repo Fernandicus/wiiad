@@ -15,7 +15,7 @@ export const CampaignTableRow = ({ campaign, ad }: ICampaignTableRow) => {
   };
 
   return (
-    <tr className="text-center even:bg-sky-50">
+    <tr className="text-center transition-all ease-out duration-150 hover:text-black even:bg-sky-50">
       <td scope="row" className="p-5 text-left">
         {ad.title}
       </td>

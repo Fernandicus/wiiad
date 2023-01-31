@@ -35,7 +35,7 @@ export const CampaignsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen">
       <h1 className="font-bold text-center py-5">Estas son tus campañas</h1>
       <div className="flex justify-center space-x-5">
         <button

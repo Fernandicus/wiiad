@@ -17,7 +17,7 @@ export const CampaignsTable = ({ campaigns, ads }: ICampaignsListProps) => {
     <div className="p-1 max-h40 overflow-y-scroll bg-white rounded-xl max-w-xl md:max-w-3xl lg:max-w-none  overflow-hidden overflow-x-scroll">
       <table className="table-auto bg-white overflow-hidden rounded-lg">
         <CampaignsTableHeader />
-        <tbody>
+        <tbody className="text-black hover:text-gray-400 transition-all ease-out duration-150">
           {campaigns.map((campaign) => {
             const ad = ads.find((ad) => ad.id == campaign.adId);
             if (!ad) return;
