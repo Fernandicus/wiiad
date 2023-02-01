@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdsPage } from "@/components/ui/pages/ads/AdsPage";
+import { PageLayout } from "@/components/ui/layouts/PageLayout";
 
 export type AdType = "banner" | "video";
 
@@ -15,7 +16,11 @@ export default function Ads(props: { advertiser: IUserPrimitives }) {
     advertiser.initStore(props.advertiser);
   }, []);
 
-  return <AdsPage />;
+  return (
+    <PageLayout>
+      <AdsPage />
+    </PageLayout>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

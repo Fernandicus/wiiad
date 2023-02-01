@@ -9,6 +9,7 @@ import { RoleType } from "@/src/common/domain/Role";
 import { useEffect } from "react";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { PageLayout } from "@/components/ui/layouts/PageLayout";
 
 export interface IProfilePageParams {
   user: IUserPrimitives;
@@ -21,7 +22,11 @@ export default function Profile({ user }: IProfilePageParams) {
     advertiser.initStore(user);
   }, []);
 
-  return <UserProfilePage user={user} />;
+  return (
+    <PageLayout>
+      <UserProfilePage user={user} />
+    </PageLayout>
+  );
 }
 
 //! BUG
@@ -35,10 +40,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!loginQueries.authToken) return visitProfile(context);
 
     const data = await loginOrSignUp({ context, loginQueries });
-    
+
     if (!data) throw new Error("No data provided");
     return getSSRData(data);
-
   } catch (err) {
     await MongoDB.disconnect();
     return {

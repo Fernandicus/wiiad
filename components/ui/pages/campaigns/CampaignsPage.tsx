@@ -39,7 +39,7 @@ export const CampaignsPage = () => {
     <div className="min-h-screen">
       <SectionHeader
         titleLable="Tus campañas"
-        descriptionLabel="Aquí podrás analizar las metricas de todas tus campañas"
+        descriptionLabel="Analiza las metricas de todas tus campañas"
       >
         <div className="flex justify-center space-x-5 ">
           <button

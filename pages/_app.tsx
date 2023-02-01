@@ -8,10 +8,7 @@ import { PageLayout } from "@/components/ui/layouts/PageLayout";
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <PageLayout>
-        <NavBar />
-        <Component {...pageProps} />
-      </PageLayout>
+      <Component {...pageProps} />
     </Provider>
   );
 }

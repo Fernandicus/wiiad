@@ -5,6 +5,7 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useEffect } from "react";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { CampaignsPage } from "@/components/ui/pages/campaigns/CampaignsPage";
+import { PageLayout } from "@/components/ui/layouts/PageLayout";
 
 export default function Campaigns(props: { advertiser: IUserPrimitives }) {
   const { initStore } = useAdvertiser();
@@ -13,7 +14,11 @@ export default function Campaigns(props: { advertiser: IUserPrimitives }) {
     initStore(props.advertiser);
   }, []);
 
-  return <CampaignsPage />;
+  return (
+    <PageLayout>
+      <CampaignsPage />
+    </PageLayout>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
