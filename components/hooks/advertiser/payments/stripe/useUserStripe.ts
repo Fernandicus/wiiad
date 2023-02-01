@@ -62,7 +62,6 @@ export const useUserStripe = (): IUseStripe => {
         budgetItem: index,
         adId: state.ad.id,
       });
-      setNotification({ message: "Campaña lanzada!", status: "success" });
       removeDetails();
       return secret.clientSecret;
     } catch (err) {

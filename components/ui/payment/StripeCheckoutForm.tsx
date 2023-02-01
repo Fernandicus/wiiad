@@ -11,7 +11,6 @@ import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/use
 export default function StripeCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { setNotification } = useNotification();
   const { confirmPayment } = useUserStripe();
 
   const [isLoading, setIsLoading] = useState(false);

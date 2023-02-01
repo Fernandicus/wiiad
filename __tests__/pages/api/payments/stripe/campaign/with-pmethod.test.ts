@@ -14,7 +14,7 @@ import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
-import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
 describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", () => {
   let savedStripeModel: Stripe;
@@ -38,10 +38,11 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
 
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
-    const amount = amountsAndPPClick[0][0]
+    const ppc = new PricesPerClick();
+    const amount = ppc.getAmounts()[0];
     const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
-      budgetItem: amount,//AvailableAmounts.Fifty,
+      budgetItem: amount,
       paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "GET", body });
@@ -53,10 +54,11 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
-    const amount = amountsAndPPClick[0][0]
+    const ppc = new PricesPerClick();
+    const amounts = ppc.getAmounts()
     const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
-      budgetItem: amountsAndPPClick.length - 1,
+      budgetItem: amounts.length - 1,
       paymentMethod: FakePaymentMethodId.create().id,
     };
     const { req, res } = mockedContext({ method: "PUT", body });

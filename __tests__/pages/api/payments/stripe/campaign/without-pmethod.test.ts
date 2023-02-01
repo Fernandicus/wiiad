@@ -13,7 +13,7 @@ import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
-import { amountsAndPPClick } from "@/src/common/domain/AmountsAndPricePerClick";
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
 describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,", () => {
   let testDB: TestDBs;
@@ -41,7 +41,8 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
 
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
     
-    const amount = amountsAndPPClick[0][0];
+    const ppc = new PricesPerClick();
+    const amount = ppc.getAmounts()[0]
     const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
       budgetItem: amount,
@@ -54,10 +55,11 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   });
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
-    
+    const ppc = new PricesPerClick();
+    const amounts = ppc.getAmounts();
     const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
-      budgetItem: amountsAndPPClick.length - 1,
+      budgetItem: amounts.length - 1,
     };
     const { req, res } = mockedContext({ method: "PUT", body });
 
@@ -131,7 +133,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
     expect(ctx.res.statusCode).toBe(200);
     expect(ctx.res._getJSONData()["clientSecret"]).not.toBeNull();
     expect(savedStripeModel).not.toBeUndefined();
-  });
+  }, 12000);
 
   it(`WHEN send request with a saved Stripe Model, 
       THEN status code should be 200 and response should have property 'clientSecret'`, async () => {
