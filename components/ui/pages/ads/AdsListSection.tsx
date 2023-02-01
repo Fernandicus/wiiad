@@ -1,6 +1,9 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { LoadingSpinnerAnimation } from "../../icons/LoadingSpinnerAnimation";
+import { LoadingSection } from "../items/LoadingSection";
 import { AdsList } from "./AdsList";
 import { EmptyAds } from "./EmptyAds";
 
@@ -9,6 +12,9 @@ export const AdsListSection = (params: {
 }) => {
   const { campaigns } = useCampaigns();
   const { ads } = useAds();
+  const { status } = useAdvertiser();
+
+  if (status === "non-init") return <LoadingSection />;
 
   return (
     <div>

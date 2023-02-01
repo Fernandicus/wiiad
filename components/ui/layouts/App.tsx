@@ -4,5 +4,5 @@ import { AdvertiserNavBar } from "./AdvertiserNavBar";
 export const NavBar = () => {
   const advertiser = useAdvertiser();
 
-  return <> {advertiser.status !== "non-init" ? <AdvertiserNavBar /> : null}</>;
+  return <> {advertiser.session.id !== "" ? <AdvertiserNavBar /> : null}</>;
 };

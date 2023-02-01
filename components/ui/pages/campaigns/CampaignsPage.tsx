@@ -1,8 +1,10 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { useState } from "react";
+import { LoadingSection } from "../items/LoadingSection";
 import { SectionHeader } from "../items/SectionHeader";
 import { CampaignsTable } from "./CampaignsTable";
 import { EmptyCampaigns } from "./items/EmptyCampaigns";
@@ -10,6 +12,7 @@ import { EmptyCampaigns } from "./items/EmptyCampaigns";
 export const CampaignsPage = () => {
   const { campaigns } = useCampaigns();
   const { ads } = useAds();
+  const { status } = useAdvertiser();
   const [selectedCampaign, setCampaign] = useState<CampaignStatusType>(
     CampaignStatusType.ACTIVE
   );
@@ -20,6 +23,9 @@ export const CampaignsPage = () => {
       : "text-gray-600 ";
 
   const getComponent = (campaignList: ICampaignPrimitives[]): JSX.Element => {
+    
+    if (status === "non-init") return <LoadingSection />;
+
     return campaigns.all.length == 0 ? (
       <EmptyCampaigns noCampaignsCreated />
     ) : campaignList.length == 0 ? (
