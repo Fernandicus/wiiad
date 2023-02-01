@@ -1,3 +1,4 @@
+import { ErrorFindingStripe } from "@/src/modules/payment-methods/stripe/domain/errors/ErrorFindingStripe";
 import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeRepo";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { UniqId } from "@/src/utils/UniqId";
@@ -12,7 +13,8 @@ export const mockedStripeRepo = (): IStripeRepo => {
     findByUserId: jest
       .fn()
       .mockImplementation((uniqId: FakeUniqId): Stripe | null => {
-        if (uniqId.checkIfNotExsits()) return null;
+        if (uniqId.checkIfNotExsits())
+          throw ErrorFindingStripe.byUserId(uniqId.id);
         return FakeStripe.create(uniqId);
       }),
   };
