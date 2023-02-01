@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import StripePaymentElement from "../../payment/StripePaymentElement";
 import { BudgetAndPaymentMethod } from "../../payment/BudgetAndPaymentMethod";
 import { CampaignBudgetSummary } from "./CampaignBudgetSummary";
-import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 
 export const LaunchCampaignSection = () => {
   const [clientSecret, setClientSecret] = useState<string>();

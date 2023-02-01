@@ -3,15 +3,32 @@ import { useNotification } from "@/components/ui/notifications/hooks/useNotifica
 import { IStripeCtxState } from "@/context/advertisers/payments/stripe/domain/interfaces/IStripeContext";
 import { storeStripeReducer } from "@/context/advertisers/payments/stripe/infrastructure/stripe-slice";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
+import { PublicKeys } from "@/src/utils/PublicKeys";
+import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { usePaymentProcess } from "../payment-process/usePaymentProcess";
+
+interface IConfirmPaymentParams {
+  useStripe: Stripe;
+  useElements: StripeElements;
+}
 
 interface IUseStripe {
   userStripe: IStripePrimitives;
   storeStripe(stripe: IStripePrimitives): void;
   payWithExistingCard(): Promise<void>;
   payWithNewCard(): Promise<string>;
+  confirmPayment(params: IConfirmPaymentParams): Promise<void>;
 }
+
+//? https://stripe.com/docs/payments/quickstart
+//? https://stripe.com/docs/payments/save-during-payment?platform=web&client=react#web-submit-payment
+
+//* Make sure to call loadStripe outside of a component’s render to avoid
+//* recreating the Stripe object on every render.
+//* This is your test publishable API key.
+
+export const stripePromise = loadStripe(PublicKeys.stripe);
 
 export const useUserStripe = (): IUseStripe => {
   const { setNotification } = useNotification();
@@ -19,7 +36,7 @@ export const useUserStripe = (): IUseStripe => {
     (state: IStripeCtxState) => state.stripe.stripe
   );
   const dispatch = useDispatch();
-  const { storePaymentMethod, state, index, availableBudgets, removeDetails } =
+  const { storePaymentMethod, state, index, removeDetails } =
     usePaymentProcess();
 
   const payWithExistingCard = async (): Promise<void> => {
@@ -55,6 +72,25 @@ export const useUserStripe = (): IUseStripe => {
     }
   };
 
+  const confirmPayment = async (
+    params: IConfirmPaymentParams
+  ): Promise<void> => {
+    const { useElements, useStripe } = params;
+    try {
+      await useStripe.confirmPayment({
+        elements: useElements,
+        redirect: "if_required",
+        /*  confirmParams: {
+          return_url: path,
+        }, */
+      });
+      setNotification({ message: "Pago completado!", status: "success" });
+    } catch (err) {
+      console.error(err);
+      setNotification({ message: "Algo no fue bien", status: "error" });
+    }
+  };
+
   return {
     userStripe,
     storeStripe: (stripe: IStripePrimitives) => {
@@ -68,5 +104,6 @@ export const useUserStripe = (): IUseStripe => {
     },
     payWithExistingCard,
     payWithNewCard,
+    confirmPayment,
   };
 };
