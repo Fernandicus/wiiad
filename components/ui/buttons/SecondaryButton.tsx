@@ -2,6 +2,7 @@ import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 import { IButtonProps } from "./interfaces/IButtonProps";
 
 export const SecondaryButton = ({
+  fullWitdth = true,
   children,
   isLoading,
   onClick,
@@ -10,7 +11,7 @@ export const SecondaryButton = ({
 }: IButtonProps) => {
   return (
     <button
-      className="text-sky-500  bg-sky-50 hover:bg-sky-100 transition ease-in duration-150 btn"
+      className={`${fullWitdth && "w-full"} text-sky-500 bg-sky-50 hover:bg-sky-100 transition ease-in duration-150 btn`}
       type={type}
       onClick={onClick}
       onSubmit={onSumbit}

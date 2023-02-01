@@ -8,11 +8,11 @@ export const EmptyCampaigns = ({
   return (
     <>
       {noCampaignsCreated ? (
-        <div className="space-y-3">
-          <h3 className="text-center">No hay ninguna campaña creada.</h3>{" "}
+        <div className="space-y-3 py-20">
+          <h3 className="text-center font-bold text-gray-600">No hay ninguna campaña creada.</h3>{" "}
           <p className="text-center">
             <Link
-              className="text-white py-1 px-2 bg-sky-500 rounded-md hover:bg-sky-400"
+              className="text-sky-500 py-1 font-medium"
               href={"/ads"}
             >
               Crea un anuncio y lánzalo

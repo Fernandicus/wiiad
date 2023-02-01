@@ -1,16 +1,38 @@
-interface IRemoveProps {
-  onRemove(): void;
-  children: JSX.Element | JSX.Element[] | string;
-}
+import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
+import { IButtonProps } from "./interfaces/IButtonProps";
 
-export const RemoveButton = ({ onRemove, children }: IRemoveProps) => {
+export const RemoveButton = (props: IButtonProps) => {
+  const {
+    isLoading = false,
+    disabled = false,
+    fullWitdth = true,
+    children,
+    onClick,
+    onSumbit,
+    type,
+  } = props;
+
   return (
     <button
-      className=" bg-red-100 hover:bg-red-500 text-red-500 hover:text-white transition ease-in duration-100 btn"
-      type="button"
-      onClick={onRemove}
+      className={`${
+        disabled
+          ? "bg-gray-300 text-gray-500"
+          : "bg-red-100 hover:bg-red-500 text-red-500 hover:text-white transition ease-in duration-100"
+      } ${fullWitdth && "w-full"} btn`}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      onSubmit={onSumbit}
     >
-      {children}
+      {isLoading ? (
+        <div className="w-full flex justify-center">
+          <div className="w-6">
+            <LoadingSpinnerAnimation />
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </button>
   );
 };

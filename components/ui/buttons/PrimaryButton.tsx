@@ -5,6 +5,7 @@ export const PrimaryButton = (props: IButtonProps) => {
   const {
     isLoading = false,
     disabled = false,
+    fullWitdth = true,
     children,
     onClick,
     onSumbit,
@@ -17,7 +18,7 @@ export const PrimaryButton = (props: IButtonProps) => {
         disabled
           ? "bg-gray-300 text-gray-500"
           : "bg-sky-500 text-white hover:bg-sky-400 transition ease-in duration-150"
-      } btn`}
+      } ${fullWitdth && "w-full"} btn`}
       type={type}
       disabled={disabled}
       onClick={onClick}

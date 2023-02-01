@@ -13,7 +13,7 @@ export const RemoveAdButton = ({
   andCampaign = false,
 }: IRemoveAdButton) => {
   const { removeAd } = useAds();
-  const {setNotification} = useNotification();
+  const { setNotification } = useNotification();
 
   const deleteAd = async (id: string) => {
     try {
@@ -30,5 +30,9 @@ export const RemoveAdButton = ({
     }
   };
 
-  return <RemoveButton onRemove={() => deleteAd(adId)}>Eliminar</RemoveButton>;
+  return (
+    <RemoveButton type="button" onClick={() => deleteAd(adId)}>
+      Eliminar
+    </RemoveButton>
+  );
 };

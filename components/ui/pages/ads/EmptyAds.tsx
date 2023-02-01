@@ -1,9 +1,11 @@
+import { PrimaryButton } from "../../buttons/PrimaryButton";
+
 export function EmptyAds() {
   return (
-    <div className="flex items-center justify-center text-center">
-      <div className="space-y-5">
-        <p className="font-medium text-gray-800">No tienes anuncios creados</p>
-      </div>
+    <div className="py-20 space-y-2 text-center">
+      <p className="text-center font-bold text-gray-600">
+        No tienes anuncios creados
+      </p>
     </div>
   );
 }

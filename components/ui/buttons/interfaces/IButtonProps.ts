@@ -10,4 +10,5 @@ export interface IButtonProps {
   onClick?: MouseEventHandler | undefined;
   onSumbit?(): void;
   ref?:RefObject<HTMLButtonElement>;
+  fullWitdth?:boolean;
 }

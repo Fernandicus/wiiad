@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .btn {
-  @apply p-1 w-full h-10 rounded-md;
+  @apply px-4 h-10 rounded-md;
 }
