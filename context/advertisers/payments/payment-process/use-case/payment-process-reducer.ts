@@ -1,5 +1,22 @@
-import { IRemoveBudgetDetailsAction, IStoreBudgetDetailsAction, IStorePaymentMethodAction } from "../domain/interfaces/IPaymentProcessAction";
-import { IStoreBudgetDetailsState, IStorePaymentMethodState } from "../domain/interfaces/IPaymentProcessState";
+import {
+  IRemoveBudgetDetailsAction,
+  IStoreAdToLaunchAction,
+  IStoreBudgetDetailsAction,
+  IStorePaymentMethodAction,
+} from "../domain/interfaces/IPaymentProcessAction";
+import {
+  IPaymentProcessState,
+  IStoreAdToLaunchState,
+  IStoreBudgetDetailsState,
+  IStorePaymentMethodState,
+} from "../domain/interfaces/IPaymentProcessState";
+
+const storeAdToLaunch = (
+  state: IStoreAdToLaunchState,
+  action: IStoreAdToLaunchAction
+) => {
+  state.ad = action.payload.ad;
+};
 
 const storeBudgetDetails = (
   state: IStoreBudgetDetailsState,
@@ -15,15 +32,28 @@ const storePaymentMethod = (
   state.paymentMethod = action.payload.paymentMethod;
 };
 
-const removeBudgetDetails = (
-  state: IStoreBudgetDetailsState,
+const removeDetails = (
+  state: IPaymentProcessState,
   action: IRemoveBudgetDetailsAction
 ) => {
-  state = { ...state, budget: { amount: 0, clicks: 0, pricePerClick: 0 } };
+  state = {
+    ...state,
+    budget: { amount: 0, clicks: 0, pricePerClick: 0 },
+    ad: {
+      advertiserId: "",
+      description: "",
+      file: "",
+      id: "",
+      redirectionUrl: "",
+      segments: [],
+      title: "",
+    },
+  };
 };
 
 export const paymentProcessReducers = {
   storeBudgetDetails,
   storePaymentMethod,
-  removeBudgetDetails,
+  removeDetails,
+  storeAdToLaunch,
 };

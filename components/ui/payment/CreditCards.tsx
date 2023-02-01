@@ -8,9 +8,8 @@ interface ICreditCardsParams {
 }
 
 export const CreditCards = ({ paymentMethods }: ICreditCardsParams) => {
-  const {state} = usePaymentProcess()
+  const {state, storePaymentMethod} = usePaymentProcess()
   const [isMethodSelected, setMethodSelected] = useState<string>(state.paymentMethod);
-  const { storePaymentMethod } = usePaymentProcess();
 
   return (
     <div className="h-48 flex ">

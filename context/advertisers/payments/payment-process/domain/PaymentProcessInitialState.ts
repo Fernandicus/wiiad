@@ -7,4 +7,13 @@ export const paymentProcessInitialState: IPaymentProcessState = {
     pricePerClick: 0,
   },
   paymentMethod: "",
+  ad: {
+    advertiserId: "",
+    description: "",
+    file: "",
+    id: "",
+    redirectionUrl: "",
+    segments: [],
+    title: "",
+  },
 };

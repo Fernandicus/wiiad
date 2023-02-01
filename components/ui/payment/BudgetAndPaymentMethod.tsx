@@ -9,15 +9,13 @@ import { usePaymentProcess } from "@/components/hooks/advertiser/payments/paymen
 
 interface IBudgetAndPMethods {
   onContinue(clientSecret: string): void;
-  ad?: AdPropsPrimitives;
 }
 
 export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
-  const { onContinue, ad } = props;
+  const { onContinue } = props;
   const { userStripe } = useUserStripe();
   const pmethods = userStripe.paymentMethods;
   const { state, dispatch } = useSetBudgetAndPM();
-  const paymentProcess = usePaymentProcess();
 
   return (
     <div className="space-y-10">
@@ -34,13 +32,12 @@ export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
       <div className="space-y-2">
         {state.isCardPage ? (
           <div className="space-y-2">
-            <PaymentButtons adId={ad!.id} onClientSecret={onContinue} />
+            <PaymentButtons onClientSecret={onContinue} />
           </div>
         ) : (
           <PrimaryButton
             type="button"
             onClick={() => {
-              console.log(paymentProcess.state.budget);
               dispatch.setIsCardPage();
             }}
           >

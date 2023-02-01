@@ -8,5 +8,9 @@ export const paymentProcessSlice = createSlice({
   reducers: paymentProcessReducers,
 });
 
-export const { storeBudgetDetails, storePaymentMethod, removeBudgetDetails } =
-  paymentProcessSlice.actions;
+export const {
+  storeBudgetDetails,
+  storePaymentMethod,
+  removeDetails,
+  storeAdToLaunch,
+} = paymentProcessSlice.actions;

@@ -1,22 +1,21 @@
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
+import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { StripePaymentProcess } from "@/components/src/payments/StripePaymentProcess";
 import { useState } from "react";
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { SecondaryButton } from "../buttons/SecondaryButton";
+import { useNotification } from "../notifications/hooks/useNotification";
 
 interface IPaymentButtonsProps {
-  adId: string;
   onClientSecret(secret: string): void;
 }
 
-export const PaymentButtons = ({
-  adId,
-  onClientSecret,
-}: IPaymentButtonsProps) => {
-  const { state, payWithExistingCard, payWithNewCard } = usePaymentProcess();
+export const PaymentButtons = ({ onClientSecret }: IPaymentButtonsProps) => {
+  const { payWithExistingCard, payWithNewCard } = useUserStripe();
+  const { state } = usePaymentProcess();
+  const pmethod = state.paymentMethod;
   const [isPaying, setIsPaying] = useState(false);
   const [isLoadingNewCard, setIsLoadingNewCard] = useState(false);
-  const pmethod = state.paymentMethod;
 
   return (
     <div className="space-y-2">
@@ -28,8 +27,8 @@ export const PaymentButtons = ({
           e.preventDefault();
           if (isPaying) return;
           setIsPaying(true);
-          if (!pmethod) await payWithNewCard(adId);
-          else await payWithExistingCard(adId);
+          if (!pmethod) await payWithNewCard();
+          else await payWithExistingCard();
           setIsPaying(false);
         }}
       >
@@ -42,8 +41,8 @@ export const PaymentButtons = ({
           e.preventDefault();
           if (isLoadingNewCard) return;
           setIsLoadingNewCard(true);
-          const clientSecret =  await payWithNewCard(adId);
-          onClientSecret(clientSecret)
+          const clientSecret = await payWithNewCard();
+          onClientSecret(clientSecret);
           setIsLoadingNewCard(false);
         }}
       >

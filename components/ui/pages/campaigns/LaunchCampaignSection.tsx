@@ -3,12 +3,9 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import StripePaymentElement from "../../payment/StripePaymentElement";
 import { BudgetAndPaymentMethod } from "../../payment/BudgetAndPaymentMethod";
 import { CampaignBudgetSummary } from "./CampaignBudgetSummary";
+import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 
-interface ILaunchCampaign {
-  adToLaunch?: AdPropsPrimitives;
-}
-
-export const LaunchCampaignSection = ({ adToLaunch }: ILaunchCampaign) => {
+export const LaunchCampaignSection = () => {
   const [clientSecret, setClientSecret] = useState<string>();
 
   return (
@@ -22,15 +19,10 @@ export const LaunchCampaignSection = ({ adToLaunch }: ILaunchCampaign) => {
             {clientSecret ? (
               <StripePaymentElement clientSecret={clientSecret} />
             ) : (
-              <BudgetAndPaymentMethod
-                ad={adToLaunch}
-                onContinue={setClientSecret}
-              />
+              <BudgetAndPaymentMethod onContinue={setClientSecret} />
             )}
           </div>
-          <CampaignBudgetSummary
-            adToLaunch={adToLaunch!}
-          />
+          <CampaignBudgetSummary />
         </div>
       </div>
     </div>

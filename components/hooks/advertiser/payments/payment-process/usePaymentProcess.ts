@@ -2,11 +2,13 @@ import { StripePaymentProcess } from "@/components/src/payments/StripePaymentPro
 import { IPaymentProcessCtxState } from "@/context/advertisers/payments/payment-process/domain/interfaces/IPaymentProcessContext";
 import { IPaymentProcessState } from "@/context/advertisers/payments/payment-process/domain/interfaces/IPaymentProcessState";
 import {
-  removeBudgetDetails,
+  removeDetails,
+  storeAdToLaunch,
   storeBudgetDetails,
   storePaymentMethod,
 } from "@/context/advertisers/payments/payment-process/infrastructure/payment-process-slices";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
+import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,13 +20,14 @@ interface IBudgetDetails {
 
 interface IUsePaymentProcess {
   state: IPaymentProcessState;
-  payWithExistingCard(adId: string): Promise<void>;
-  payWithNewCard(adId: string): Promise<string>;
+  storeAdToLaunch(ad: AdPropsPrimitives): void;
+  /* payWithExistingCard(): Promise<void>;
+  payWithNewCard(): Promise<string>; */
   index: number;
   storePaymentMethod(pm: string): void;
   storeBudget(budget: IBudgetDetails): void;
   storeBudgetFromAvailables(index: number): void;
-  removeBudget(): void;
+  removeDetails(): void;
   availableBudgets: PricesPerClick;
 }
 
@@ -37,7 +40,7 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
   const prices = new PricesPerClick();
   const index = prices.getIndexFromPrice(state.budget.amount);
 
-  const payWithExistingCard = async (adId: string): Promise<void> => {
+  const payWithExistingCard = async (): Promise<void> => {
     if (index < 0 || index > prices.amounts.length - 1)
       throw new Error(
         `Selected amount is not available ${state.budget.amount}`
@@ -46,18 +49,18 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
     try {
       await stripePayment.payWithSelectedCard({
         budgetItem: index,
-        adId: adId,
+        adId: state.ad.id,
         paymentMethod: state.paymentMethod,
       });
 
-      dispatch(removeBudgetDetails());
+      dispatch(removeDetails());
       return;
     } catch (err) {
       console.error(err);
     }
   };
 
-  const payWithNewCard = async (adId: string): Promise<string> => {
+  const payWithNewCard = async (): Promise<string> => {
     if (index < 0 || index > prices.amounts.length - 1)
       throw new Error(
         `Selected amount is not available ${state.budget.amount}`
@@ -66,9 +69,9 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
     try {
       const clientSecret = await stripePayment.payUsingNewCard({
         budgetItem: index,
-        adId,
+        adId: state.ad.id,
       });
-      dispatch(removeBudgetDetails());
+      dispatch(removeDetails());
       return clientSecret;
     } catch (err) {
       if (err instanceof Error) throw new Error(err.message);
@@ -80,6 +83,7 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
     state,
     index,
     availableBudgets: prices,
+    storeAdToLaunch: (ad: AdPropsPrimitives) => dispatch(storeAdToLaunch({ ad })),
     storePaymentMethod: (pm: string) => {
       dispatch(storePaymentMethod({ paymentMethod: pm }));
     },
@@ -94,10 +98,10 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
     storeBudget: (budget: IBudgetDetails) => {
       dispatch(storeBudgetDetails({ budget }));
     },
-    removeBudget: () => {
-      dispatch(removeBudgetDetails());
+    removeDetails: () => {
+      dispatch(removeDetails());
     },
-    payWithExistingCard,
-    payWithNewCard,
+    /* payWithExistingCard,
+    payWithNewCard, */
   };
 };
