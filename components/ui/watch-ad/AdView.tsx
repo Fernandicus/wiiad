@@ -1,17 +1,11 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  NotificationData,
-  Notifications,
-  RefNotifications,
-} from "../../../components/ui/notifications/Notifications";
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { useNotification } from "../notifications/hooks/useNotification";
 
 interface AdViewParams {
   user: IUserPrimitives | null;
@@ -23,13 +17,11 @@ interface AdViewParams {
 export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canEarnMoney, setCanEarnMoney] = useState<boolean>(false);
-  const notificationRef = useRef<RefNotifications>({
-    showNotification(data: NotificationData): void {},
-  });
+  const { setNotification } = useNotification();
 
   const pay = () => {
     if (user && user.role !== RoleType.USER) {
-      notificationRef.current.showNotification({
+      setNotification({
         message: `Los perfiles de anunciante no pueden ganar dinero viendo anuncios`,
         status: "error",
       });
@@ -46,17 +38,17 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
       .then(async (resp) => {
         const respJSON = await resp.json();
         if (resp.status === 200) {
-          notificationRef.current.showNotification({
+          setNotification({
             message: `Has recibido ${respJSON["increasedBalance"]} centimos !`,
             status: "success",
           });
         } else if (resp.status === 401) {
-          notificationRef.current.showNotification({
+          setNotification({
             message: "Inicia sesion para recibir el pago",
             status: "info",
           });
         } else {
-          notificationRef.current.showNotification({
+          setNotification({
             message: respJSON["message"],
             status: "error",
           });
@@ -64,7 +56,7 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
       })
       .catch(async (err) => {
         const respJSON = await err.json();
-        notificationRef.current.showNotification({
+        setNotification({
           message: respJSON["message"],
           status: "error",
         });
@@ -72,7 +64,7 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
   };
 
   const waitToSeeTheAd = () => {
-    notificationRef.current.showNotification({
+    setNotification({
       message: "Tienes que terminar de ver el anuncio",
       status: "info",
     });
@@ -95,13 +87,11 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
 
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center">
-      <Notifications ref={notificationRef}>
-        {!user ? (
-          <Link href="/" className=" text-blue-500 ">
-            <span className="underline">Iniciar sesion</span> 👈
-          </Link>
-        ) : null}
-      </Notifications>
+      {!user ? (
+        <Link href="/" className=" text-blue-500 ">
+          <span className="underline">Iniciar sesion</span> 👈
+        </Link>
+      ) : null}
       <div className="max-w-xl space-y-20 pt-10">
         <div className="flex justify-center">
           <div className="flex items-center w-full p-2 bg-white rounded-full shadow-lg shadow-slate-200">

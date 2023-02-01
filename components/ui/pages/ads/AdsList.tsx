@@ -1,20 +1,17 @@
 import { AdCard } from "./AdCard";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { NotificationData } from "../../notifications/Notifications";
 
 interface Props {
   ads: AdPropsPrimitives[];
   campaigns: ICampaignPrimitives[];
   onLaunchCampaign(ad: AdPropsPrimitives): void;
-  handleResponse(data: NotificationData): void;
 }
 
 export function AdsList({
   ads,
   campaigns,
   onLaunchCampaign,
-  handleResponse,
 }: Props) {
   return (
     <>
@@ -29,7 +26,6 @@ export function AdsList({
               ad={ad}
               isActive={isActive}
               onLaunchCampaign={onLaunchCampaign}
-              handleResponse={handleResponse}
             />
           </div>
         );

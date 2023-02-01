@@ -1,7 +1,7 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { CloudinaryUploader } from "@/components/src/cloudinary/CloudinaryUploader";
-import { NotificationData } from "@/components/ui/notifications/Notifications";
+import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
 import { AdType } from "@/pages/ads";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
@@ -9,7 +9,7 @@ import { UniqId } from "@/src/utils/UniqId";
 import { useFormik } from "formik";
 import { ChangeEvent, FormEvent, useState } from "react";
 import * as Yup from "yup";
-import { useForm } from "../../../../hooks/useForm";
+import { useForm } from "../../../forms/hooks/useForm";
 
 interface IFormNames {
   file: string;
@@ -45,13 +45,13 @@ interface IUseCreateAdForm {
 }
 
 interface IUseCreateAdFormProps {
-  handleResponse(data: NotificationData): void;
   onSuccess(): void;
 }
 
 export const useCreateAdForm = (
   params: IUseCreateAdFormProps
 ): IUseCreateAdForm => {
+  const { setNotification } = useNotification();
   const { session } = useAdvertiser();
   const { createAd } = useAds();
   const [adType, setAdType] = useState<AdType | null>(null);
@@ -105,10 +105,7 @@ export const useCreateAdForm = (
 
   const submitAd = async (values: IFormNames) => {
     if (!filePreview) return;
-    params.handleResponse({
-      message: "Creando anuncio . . .",
-      status: "info",
-    });
+    setNotification({ message: "Creando anuncio . . .", status: "info" });
     let fileUrl = await uploadFile();
     const formData: IFormNames = {
       ...values,
@@ -123,10 +120,7 @@ export const useCreateAdForm = (
       redirectionUrl: formData.url,
       segments: formData.segments,
     });
-    params.handleResponse({
-      message: "Anuncio creado!",
-      status: "success",
-    });
+    setNotification({ message: "Anuncio creado!", status: "success" });
     params.onSuccess();
   };
 

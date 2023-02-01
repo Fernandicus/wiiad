@@ -2,24 +2,17 @@ import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdType } from "@/pages/ads";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { useRef, useState } from "react";
-import {
-  NotificationData,
-  Notifications,
-  RefNotifications,
-} from "../../notifications/Notifications";
 import { LaunchCampaignSection } from "../campaigns/LaunchCampaignSection";
 import CreateAdSection from "./CreateAdSection";
 import { AdsSections } from "./AdsSections";
+import { Notification } from "../../notifications/Notification";
+import { useNotification } from "../../notifications/hooks/useNotification";
 
 export const AdsPage = () => {
-  const { session } = useAdvertiser();
   const [createAd, setCreateAd] = useState<boolean>(false);
   const [adType, setAdType] = useState<AdType>("banner");
   const [showPaymentProcess, setPaymentProcess] = useState<boolean>(false);
   const [launchAd, setLaunchAd] = useState<AdPropsPrimitives>();
-  const notificationsRef = useRef<RefNotifications>({
-    showNotification: () => {},
-  });
 
   const onCreateAd = (adType: AdType) => {
     setAdType(adType);
@@ -31,9 +24,12 @@ export const AdsPage = () => {
     setLaunchAd(ad);
   };
 
+  const {setNotification} =useNotification()
   return (
-    <main >
-      <Notifications ref={notificationsRef} />
+    <main>
+      <button onClick={()=>{
+setNotification({message:"Prueba", status:"success"})
+      }}>Boton</button>
       {showPaymentProcess ? (
         <LaunchCampaignSection adToLaunch={launchAd} />
       ) : (
@@ -42,16 +38,11 @@ export const AdsPage = () => {
             <AdsSections
               onCreateVideo={() => onCreateAd("video")}
               onCreateBanner={() => onCreateAd("banner")}
-              handleResponse={notificationsRef.current.showNotification}
               onLaunchCampaign={onLaunchCampaign}
             />
           ) : (
             <CreateAdSection
               adType={adType}
-              user={session}
-              handleResponse={(data: NotificationData) => {
-                notificationsRef.current!.showNotification(data);
-              }}
               onBack={() => {
                 setCreateAd(false);
               }}

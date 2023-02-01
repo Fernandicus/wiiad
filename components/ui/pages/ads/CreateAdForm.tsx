@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { NotificationData } from "../../notifications/Notifications";
 import { AdType } from "@/pages/ads";
 import { SelectFileField } from "./ad-form-items/SelectFileField";
 import { AdSegmentsField } from "./ad-form-items/AdSegmentsField";
@@ -11,14 +10,12 @@ import { PrimaryButton } from "../../buttons/PrimaryButton";
 
 interface ICreateAdFormProps {
   adType: AdType;
-  handleResponse(data: NotificationData): void;
   onSuccess(): void;
 }
 
 export default function CreateAdForm(props: ICreateAdFormProps) {
-  const { adType, handleResponse, onSuccess } = props;
+  const { adType, onSuccess } = props;
   const { formNames, handle, values, error, isSubmitting } = useCreateAdForm({
-    handleResponse,
     onSuccess,
   });
   const [isFileOk, setIsFileOk] = useState<boolean>(false);
