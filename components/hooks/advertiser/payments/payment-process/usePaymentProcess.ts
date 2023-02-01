@@ -1,4 +1,3 @@
-import { StripePaymentProcess } from "@/components/src/payments/StripePaymentProcess";
 import { IPaymentProcessCtxState } from "@/context/advertisers/payments/payment-process/domain/interfaces/IPaymentProcessContext";
 import { IPaymentProcessState } from "@/context/advertisers/payments/payment-process/domain/interfaces/IPaymentProcessState";
 import {
@@ -36,48 +35,8 @@ export const usePaymentProcess = (): IUsePaymentProcess => {
     (state: IPaymentProcessCtxState) => state.paymentProcess
   );
   const dispatch = useDispatch();
-  const stripePayment = new StripePaymentProcess();
   const prices = new PricesPerClick();
   const index = prices.getIndexFromPrice(state.budget.amount);
-
-  const payWithExistingCard = async (): Promise<void> => {
-    if (index < 0 || index > prices.amounts.length - 1)
-      throw new Error(
-        `Selected amount is not available ${state.budget.amount}`
-      );
-
-    try {
-      await stripePayment.payWithSelectedCard({
-        budgetItem: index,
-        adId: state.ad.id,
-        paymentMethod: state.paymentMethod,
-      });
-
-      dispatch(removeDetails());
-      return;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const payWithNewCard = async (): Promise<string> => {
-    if (index < 0 || index > prices.amounts.length - 1)
-      throw new Error(
-        `Selected amount is not available ${state.budget.amount}`
-      );
-
-    try {
-      const clientSecret = await stripePayment.payUsingNewCard({
-        budgetItem: index,
-        adId: state.ad.id,
-      });
-      dispatch(removeDetails());
-      return clientSecret;
-    } catch (err) {
-      if (err instanceof Error) throw new Error(err.message);
-      else throw new Error("Something went wrong while paying with new card");
-    }
-  };
 
   return {
     state,

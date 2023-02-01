@@ -1,10 +1,8 @@
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
-import { StripePaymentProcess } from "@/components/src/payments/StripePaymentProcess";
 import { useState } from "react";
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { SecondaryButton } from "../buttons/SecondaryButton";
-import { useNotification } from "../notifications/hooks/useNotification";
 
 interface IPaymentButtonsProps {
   onClientSecret(secret: string): void;
