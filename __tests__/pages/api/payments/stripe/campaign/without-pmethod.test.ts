@@ -1,5 +1,5 @@
 import apiPayWithoutPMethod, {
-  IApiStripePaymentWithoutPMethod,
+  IApiReqStripePaymentWithoutPMethod,
 } from "@/pages/api/v1/payments/stripe/campaign/without-pmethod";
 import { Ad } from "@/src/modules/ad/domain/Ad";
 //import { AvailableAmounts } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
@@ -42,7 +42,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
     
     const amount = amountsAndPPClick[0][0];
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
       budgetItem: amount,
     };
@@ -55,7 +55,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
 
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
     
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
       budgetItem: amountsAndPPClick.length - 1,
     };
@@ -67,7 +67,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   });
 
   it("WHEN send a not valid budget item, THEN status code should be 400", async () => {
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
       budgetItem: 10,
     };
@@ -81,7 +81,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
   });
 
   it("WHEN send request without an adId, THEN status code should be 400", async () => {
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: "",
       budgetItem: 10,
     };
@@ -97,7 +97,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
 
   it(`WHEN send request without an existing ad id for the advertiser id, 
     THEN status code should be 400`, async () => {
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: ads[0].id.id,
       budgetItem: 0,
     };
@@ -113,7 +113,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
 
   it(`WHEN send a request without Stripe Model, 
       THEN status code should be 200, response should have property 'clientSecret' and stripe model should be saved`, async () => {
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: newAdvertiserAd.id.id,
       budgetItem: 0,
     };
@@ -146,7 +146,7 @@ describe("On /api/payments/stripe/campaign/without-pmethod, GIVEN a mocked DB,",
       (ad) => ad.advertiserId.id === advertiser?.id.id
     );
 
-    const body: IApiStripePaymentWithoutPMethod = {
+    const body: IApiReqStripePaymentWithoutPMethod = {
       adId: advertiserAd!.id.id,
       budgetItem: 0,
     };

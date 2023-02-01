@@ -8,7 +8,7 @@ import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
-export interface IApiStripePaymentWithPMethod {
+export interface IApiReqStripePaymentWithPMethod {
   paymentMethod: string;
   budgetItem: number;
   adId: string;
@@ -19,7 +19,7 @@ export default async function handler(
   res: NextApiResponse<IApiResp>
 ) {
   const session = userSession.getFromServer({ req, res });
-  const body: IApiStripePaymentWithPMethod = reqBodyParse(req);
+  const body: IApiReqStripePaymentWithPMethod = reqBodyParse(req);
 
   if (req.method !== "PUT" || !session || !body.adId || !body.paymentMethod)
     return res

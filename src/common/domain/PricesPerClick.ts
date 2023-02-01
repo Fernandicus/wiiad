@@ -7,21 +7,31 @@ export class PricesPerClick {
     [15000, 20],
   ];
 
-  constructor() {}
+  readonly selectedBudget;
 
-  getAmounts():number[]{
-    return this.amounts.map(amount => amount[0])
+  constructor(budget = 0) {
+    if (budget > this.amounts.length - 1 || budget < 0)
+      throw new Error(
+        `Prices per click selectedBudget can't be bigger than ${
+          this.amounts.length - 1
+        } or smaller than 0`
+      );
+    this.selectedBudget = budget;
   }
 
-  getPricePerClick():number[]{
-    return this.amounts.map(amount => amount[1])
+  getAmounts(): number[] {
+    return this.amounts.map((amount) => amount[0]);
   }
-  
+
+  getPricePerClick(): number[] {
+    return this.amounts.map((amount) => amount[1]);
+  }
+
   getClicksPerPrice(): number[] {
     return this.amounts.map((amount) => amount[0] / amount[1]);
   }
 
-  getIndexFromPrice(price:number):number{
-    return this.amounts.findIndex(budget => budget[0] === price)
+  getIndexFromPrice(price: number): number {
+    return this.amounts.findIndex((budget) => budget[0] === price);
   }
 }

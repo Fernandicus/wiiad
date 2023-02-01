@@ -6,18 +6,22 @@ import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
+import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
-export interface IApiStripePaymentWithoutPMethod {
+export interface IApiReqStripePaymentWithoutPMethod {
   budgetItem: number;
   adId: string;
 }
 
+export interface IApiRespStripePayWithoutPM
+  extends IApiResp<{ clientSecret: string }> {}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<IApiRespStripePayWithoutPM>
 ) {
   const session = userSession.getFromServer({ req, res });
-  const body: IApiStripePaymentWithoutPMethod = reqBodyParse(req);
+  const body: IApiReqStripePaymentWithoutPMethod = reqBodyParse(req);
 
   if (req.method !== "PUT" || !session || !body.adId)
     return res.status(400).end();
@@ -31,10 +35,16 @@ export default async function handler(
 
       const details = await controller.payWithoutPaymentMethod(body.budgetItem);
 
-      return res.status(200).json({ clientSecret: details.clientSecret });
+      return res.status(200).json({
+        message: "Payment intent created!",
+        data: { clientSecret: details.clientSecret },
+      });
     });
   } catch (err) {
     console.error(err);
-    return res.status(400).end();
+    if (err instanceof Error)
+      return res.status(400).json({
+        message: err.message,
+      });
   }
 }

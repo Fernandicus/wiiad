@@ -3,16 +3,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Logout } from "../login/Logout";
 import { NavBarButton } from "./navbar-items/NavBarButton";
+import { NavBarItem } from "./navbar-items/NavBarItem";
 
 export type TAdvertiserNavPages = "profile" | "ads" | "campaigns" | undefined;
 
 export const AdvertiserNavBar = () => {
   const [activePage, setActivePage] = useState<TAdvertiserNavPages>();
-  const router = useRouter()
+  const router = useRouter();
 
   const isActive = (page: TAdvertiserNavPages): boolean =>
     page === activePage ? true : false;
- 
+
   useEffect(() => {
     const paths = router.pathname.split("/").splice(1);
     const page = paths[0] as TAdvertiserNavPages;
@@ -20,7 +21,7 @@ export const AdvertiserNavBar = () => {
   }, [router.pathname]);
 
   return (
-    <nav className="w-full mb-5 py-3 border-b border-gray-200">
+    <NavBarItem>
       <div className="grid grid-cols-2 max-w-5xl m-auto">
         <div className="space-x-5 flex">
           <NavBarButton
@@ -35,7 +36,7 @@ export const AdvertiserNavBar = () => {
             page="ads"
             label="Anuncios"
           />
-         <NavBarButton
+          <NavBarButton
             onClick={() => setActivePage("campaigns")}
             isActive={isActive("campaigns")}
             page="campaigns"
@@ -46,6 +47,6 @@ export const AdvertiserNavBar = () => {
           <Logout />
         </div>
       </div>
-    </nav>
+    </NavBarItem>
   );
 };

@@ -3,7 +3,7 @@ import { Ad } from "@/src/modules/ad/domain/Ad";
 import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
 import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";
 import apiPayWithPMethod, {
-  IApiStripePaymentWithPMethod,
+  IApiReqStripePaymentWithPMethod,
 } from "@/pages/api/v1/payments/stripe/campaign/with-pmethod";
 import { FakePaymentMethodId } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
 import { getValuesForNumericEnum } from "@/src/utils/helpers";
@@ -39,7 +39,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
   it("WHEN send a non 'PUT' request, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
     const amount = amountsAndPPClick[0][0]
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
       budgetItem: amount,//AvailableAmounts.Fifty,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -54,7 +54,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
   it("WHEN send a valid request without session, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
     const amount = amountsAndPPClick[0][0]
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
       budgetItem: amountsAndPPClick.length - 1,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -69,7 +69,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
   it("WHEN send a not valid budget item, THEN status code should be 400", async () => {
     const ad = testDB.ads[0];
     const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
       budgetItem: 10,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -85,7 +85,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
 
   it("WHEN send request without an adId, THEN status code should be 400", async () => {
     const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: "",
       budgetItem: 10,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -104,7 +104,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
   THEN status code should be 400`, async () => {
     const ad = testDB.ads[0];
     const user = testDB.users[0];
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: ad.id.id,
       budgetItem: 0,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -121,7 +121,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
 
   it(`- WHEN send a request without a valid Payment Method, 
   THEN status code should be 400`, async () => {
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: newAdvertiserAd.id.id,
       budgetItem: 0,
       paymentMethod: FakePaymentMethodId.noExist().id,
@@ -139,7 +139,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
 
   it(`- WHEN send a request without Stripe Model, 
   THEN status code should be 200`, async () => {
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: newAdvertiserAd.id.id,
       budgetItem: 0,
       paymentMethod: FakePaymentMethodId.create().id,
@@ -171,7 +171,7 @@ describe("On /api/payments/stripe/campaign/with-pmethod, GIVEN a mocked DB:", ()
       (ad) => ad.advertiserId.id === advertiser?.id.id
     );
 
-    const body: IApiStripePaymentWithPMethod = {
+    const body: IApiReqStripePaymentWithPMethod = {
       adId: advertiserAd!.id.id,
       budgetItem: 0,
       paymentMethod: FakePaymentMethodId.create().id,
