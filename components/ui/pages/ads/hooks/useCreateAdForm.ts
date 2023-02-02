@@ -6,9 +6,9 @@ import { AdType } from "@/pages/ads";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { UniqId } from "@/src/utils/UniqId";
+import { useFormik } from "formik";
 import { ChangeEvent, FormEvent, useState } from "react";
 import * as Yup from "yup";
-import { useForm } from "../../../forms/hooks/useForm";
 
 interface IFormNames {
   file: string;
@@ -18,16 +18,16 @@ interface IFormNames {
   description: string;
 }
 
-interface AdFormNames {
-  file: string;
-  title: string;
-  url: string;
-  segments: string;
-  description: string;
+enum AdFormNames {
+  file = "file",
+  title = "title",
+  url = "url",
+  segments = "segments",
+  description = "description",
 }
 
 interface IUseCreateAdForm {
-  formNames: AdFormNames;
+  formNames: typeof AdFormNames;
   values: IFormNames;
   handle: {
     submit(
@@ -37,8 +37,8 @@ interface IUseCreateAdForm {
     change(e: ChangeEvent<any>): void;
   };
   error: {
-    message(formName: keyof AdFormNames): string;
-    hasError(formName: keyof AdFormNames): boolean;
+    message(formName: keyof typeof AdFormNames): string;
+    hasError(formName: keyof typeof AdFormNames): boolean;
   };
   isSubmitting: boolean;
 }
@@ -73,14 +73,9 @@ export const useCreateAdForm = (
       .min(10, "Demasiado corta")
       .max(AdDescription.maxLength, "Demasiado larga"),
   });
-  const formNames: AdFormNames = {
-    file: "file",
-    title: "title",
-    url: "url",
-    segments: "segments",
-    description: "description",
-  };
-  const initialValues: Record<keyof AdFormNames, string | string[]> = {
+  const formNames = AdFormNames;
+
+  const initialValues: IFormNames = {
     file: "",
     description: "",
     segments: [],
@@ -88,7 +83,13 @@ export const useCreateAdForm = (
     url: "",
   };
 
-  const form = useForm({ initialValues, schema, onSubmit: onHandleSubmit });
+  const form = useFormik({
+    initialValues,
+    validationSchema: schema,
+    onSubmit: (values) => {
+      onHandleSubmit(values);
+    },
+  });
 
   const uploadFile = async (): Promise<string> => {
     if (!filePreview) throw new Error("Debes seleccionar un archivo");
@@ -136,18 +137,19 @@ export const useCreateAdForm = (
 
   return {
     formNames,
-    values: form.formValues as IFormNames,
+    values: form.values,
     handle: {
-      change: form.handleFormChange,
+      change: form.handleChange,
       submit: (e, params) => {
         setAdType(params.adType);
         setFilePreview(params.filePreview);
-        form.handleFormSubmit(e);
+        form.handleSubmit(e);
       },
     },
     error: {
-      hasError: form.hasError,
-      message: form.formError,
+      hasError: (formName) =>
+        form.errors[formName] && form.touched[formName] ? true : false,
+      message: (formName) => form.errors[formName] as string,
     },
     isSubmitting: isLoading,
   };
