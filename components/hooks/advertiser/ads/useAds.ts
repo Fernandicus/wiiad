@@ -1,7 +1,7 @@
 import {
   createAdHandler,
   removeAdHandler,
-} from "@/components/src/modules/advertiser/ads/infrastructure/ads-container";
+} from "@/components/src/advertiser/ads/infrastructure/ads-container";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { IAdsCtxState } from "@/context/advertisers/ads/domain/interfaces/IAdsContext";
 import {

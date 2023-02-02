@@ -1,4 +1,4 @@
-import { ISignInApiCalls } from "@/components/src/modules/sing-in/domain/interfaces/ISignInApiCalls";
+import { ISignInApiCalls } from "@/components/src/sing-in/domain/interfaces/ISignInApiCalls";
 import { Email } from "@/src/common/domain/Email";
 
 export class LogIn {

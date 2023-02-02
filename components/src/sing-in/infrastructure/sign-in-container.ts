@@ -1,4 +1,4 @@
-import { FetchSignInApiCalls } from "@/components/src/modules/sing-in/infrastructure/FetchSignInApiCalls";
+import { FetchSignInApiCalls } from "@/components/src/sing-in/infrastructure/FetchSignInApiCalls";
 import { LogInHandler } from "../use-case/handler/LogInHandler";
 import { SingUpHandler } from "../use-case/handler/SingUpHandler";
 import { LogIn } from "../use-case/LogIn";

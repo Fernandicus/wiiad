@@ -1,4 +1,4 @@
-import { IApiCalls } from "@/components/src/modules/sing-in/domain/interfaces/ISignInApiCalls";
+import { IApiCalls } from "@/components/src/sing-in/domain/interfaces/ISignInApiCalls";
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 

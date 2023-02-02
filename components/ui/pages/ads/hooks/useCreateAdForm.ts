@@ -1,12 +1,11 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
-import { CloudinaryUploader } from "@/components/src/cloudinary/CloudinaryUploader";
+import { uploadFileToCloudHandler } from "@/components/src/cloud-file-store/infrastructure/cloud-file-store-container";
 import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
 import { AdType } from "@/pages/ads";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
 import { UniqId } from "@/src/utils/UniqId";
-import { useFormik } from "formik";
 import { ChangeEvent, FormEvent, useState } from "react";
 import * as Yup from "yup";
 import { useForm } from "../../../forms/hooks/useForm";
@@ -92,14 +91,12 @@ export const useCreateAdForm = (
   const form = useForm({ initialValues, schema, onSubmit: onHandleSubmit });
 
   const uploadFile = async (): Promise<string> => {
-    const cloudinaryVideoUploader = new CloudinaryUploader();
-
     if (!filePreview) throw new Error("Debes seleccionar un archivo");
 
     if (adType === "video")
-      return await cloudinaryVideoUploader.uploadVideo(filePreview);
+      return await uploadFileToCloudHandler.video(filePreview);
     else if (adType === "banner")
-      return await cloudinaryVideoUploader.uploadBanner(filePreview);
+      return await uploadFileToCloudHandler.banner(filePreview);
     else throw new Error("El tipo de anuncio seleccionado no existe");
   };
 

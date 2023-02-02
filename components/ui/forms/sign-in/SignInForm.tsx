@@ -1,4 +1,4 @@
-import { SubmitSignInController } from "@/components/src/modules/sing-in/infrastructure/controllers/SubmitSignInController";
+import { SubmitSignInController } from "@/components/src/sing-in/infrastructure/controllers/SubmitSignInController";
 import { RoleType } from "@/src/common/domain/Role";
 import { FormEvent, useRef, useState } from "react";
 import { PrimaryButton } from "../../buttons/PrimaryButton";

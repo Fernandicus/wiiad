@@ -1,15 +1,22 @@
 import { Folder } from "@/src/modules/storage/domain/Folder";
 import { Name } from "@/src/common/domain/Name";
 import { RoleType } from "@/src/common/domain/Role";
-import { CloudinaryCloudStorageRepo } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
+import {
+  CloudinaryCloudStorageRepo,
+  ICloudinarySignedParams,
+} from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSignedParamsHandler } from "@/src/modules/storage/infrastructure/storage-container";
+import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
+
+export interface IApiRespCloudinaryVideoSign
+  extends IApiResp<ICloudinarySignedParams> {}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<IApiRespCloudinaryVideoSign>
 ) {
   if (req.method !== "GET") return res.status(400).end();
 
@@ -23,9 +30,12 @@ export default async function handler(
 
     const signedParams = getSignedParamsHandler.forVideo(session.name);
 
-    return res.status(200).json(signedParams);
+    return res
+      .status(200)
+      .json({ message: "Cloudinary signed params", data: signedParams });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ message: "Something went wrong" });
+    if(err instanceof Error)
+    return res.status(400).json({ message: err.message });
   }
 }
