@@ -39,7 +39,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
       />
       <AdSegmentsField
         title="A qué nichos va dirigido este anuncio?"
-        inputName={formNames.description}
+        inputName={formNames.segments}
         onChange={handle.change}
         value={values.segments}
         errorText={error.message("segments")}

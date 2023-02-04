@@ -17,14 +17,15 @@ export const AdsListSection = (params: {
   if (status === "non-init") return <LoadingSection />;
 
   return (
-    <div>
+    <div className="w-full">
       {!ads || ads.length == 0 ? (
         <EmptyAds />
       ) : (
-        <div className="w-full  mx-auto">
+        <div className="w-full mx-auto">
           {ads.length > 2 ? (
-            <div className={` grid-cols-3 w-full grid gap-16`}>
+            <div className={`grid grid-cols-3 w-full`}>
               <AdsList
+                cols={3}
                 onLaunchCampaign={params.onLaunchCampaign}
                 campaigns={campaigns.actives}
                 ads={ads}

@@ -28,7 +28,7 @@ export const UserProfilePage = (props: IProfilePageParams) => {
   };
 
   return (
-    <section className="bg-slate-100 w-full h-screen">
+    <section className="w-full h-screen">
       {profile[roleType(role)]}
     </section>
   );

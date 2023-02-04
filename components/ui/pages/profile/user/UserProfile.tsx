@@ -2,7 +2,7 @@ import { Logout } from "../../../login/Logout";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { useEffect, useState } from "react";
 import { DataCard } from "./DataCard";
-import { ProfileCard } from "../ProfileCard";
+import { ProfileCard } from "../UserProfileCard";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 interface Props {

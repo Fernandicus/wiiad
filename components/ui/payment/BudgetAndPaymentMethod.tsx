@@ -1,4 +1,3 @@
-import { CreditCards } from "./CreditCards";
 import { Budgets } from "./Budgets";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { useSetBudgetAndPM } from "./hooks/useSetBudgetAndPM";
@@ -6,6 +5,7 @@ import { PaymentButtons } from "./PaymentButtons";
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
+import { PaymentMethod } from "./PaymentMethod";
 
 interface IBudgetAndPMethods {
   onContinue(clientSecret: string): void;
@@ -23,7 +23,7 @@ export const BudgetAndPaymentMethod = (props: IBudgetAndPMethods) => {
         {state.isCardPage ? (
           <div className="space-y-2 ">
             <h3 className="text-lg font-semibold">Elije un método de pago</h3>
-            <CreditCards paymentMethods={pmethods} />
+            <PaymentMethod paymentMethods={pmethods} />
           </div>
         ) : (
           <Budgets />

@@ -6,9 +6,8 @@ export interface IButtonProps {
   children: JSX.Element | JSX.Element[] | string;
   isLoading?: boolean;
   type: TButton;
-  disabled?:boolean;
+  disabled?: boolean;
   onClick?: MouseEventHandler | undefined;
   onSumbit?(): void;
-  ref?:RefObject<HTMLButtonElement>;
-  fullWitdth?:boolean;
+  fullWitdth?: boolean;
 }

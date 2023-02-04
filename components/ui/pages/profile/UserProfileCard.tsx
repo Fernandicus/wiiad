@@ -5,7 +5,7 @@ interface Props {
   children?: JSX.Element;
 }
 
-export function ProfileCard({ user, children }: Props) {
+export function UserProfileCard({ user, children }: Props) {
   return (
     <div className=" inline-flex items-center p-5 h-full space-x-5 bg-white rounded-lg shadow-lg shadow-slate-200">
       <img

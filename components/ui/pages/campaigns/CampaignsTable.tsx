@@ -10,8 +10,8 @@ interface ICampaignsListProps {
 
 export const CampaignsTable = ({ campaigns, ads }: ICampaignsListProps) => {
   return (
-    <div className="p-1 w-full overflow-y-scroll bg-white rounded-xl max-w-xl md:max-w-3xl lg:max-w-none  overflow-hidden overflow-x-scroll">
-      <table className="w-full table-auto bg-white overflow-hidden rounded-lg">
+    <div className="shadow-lg shadow-slate-200 p-1 w-full overflow-y-scroll bg-white rounded-lg max-w-xl md:max-w-3xl lg:max-w-none  overflow-hidden overflow-x-scroll">
+      <table className="w-full table-auto bg-white overflow-hidden rounded-md">
         <CampaignsTableHeader />
         <tbody className="text-black hover:text-gray-400 transition-all ease-out duration-150">
           {campaigns.map((campaign) => {

@@ -3,11 +3,11 @@ import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/dom
 import { useState } from "react";
 import { CreditCardButton } from "./items/CreditCardButton";
 
-interface ICreditCardsParams {
+interface IPaymentMethodParams {
   paymentMethods?: ICardDetailsPrimitives[];
 }
 
-export const CreditCards = ({ paymentMethods }: ICreditCardsParams) => {
+export const PaymentMethod = ({ paymentMethods }: IPaymentMethodParams) => {
   const {state, storePaymentMethod} = usePaymentProcess()
   const [isMethodSelected, setMethodSelected] = useState<string>(state.paymentMethod);
 

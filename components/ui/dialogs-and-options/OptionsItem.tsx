@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { SecondaryButton } from "../buttons/SecondaryButton";
 import { TertiaryButton } from "../buttons/TertiaryButton";
 
 interface IOptionsItem {
@@ -24,13 +25,13 @@ export const OptionsItem = ({ children }: IOptionsItem) => {
 
   return (
     <div className="relative">
-      <TertiaryButton
+      <SecondaryButton
         ref={buttonRef}
         onClick={() => setShowOptions((prev) => !prev)}
         type="button"
       >
         {children[0]}
-      </TertiaryButton>
+      </SecondaryButton>
       {showOptions && (
         <div className="absolute overflow-hidden bg-white shadow-lg  rounded-md right-0">
           {children[1]}
