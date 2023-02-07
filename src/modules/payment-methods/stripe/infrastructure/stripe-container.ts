@@ -16,6 +16,10 @@ import Stripe from "stripe";
 import { PaymentSucceeded } from "../use-case/PaymentSucceeded";
 import { SetupIntent } from "../use-case/SetupIntent";
 import { SetupIntentHandler } from "../use-case/handlers/SetupIntentHandler";
+import { RemovePM } from "../use-case/RemovePM";
+import { RemovePMHandler } from "../use-case/handlers/RemovePMHandler";
+import { DetachStripePM } from "../use-case/DetachStripePM";
+import { DetachStripePMHandler } from "../use-case/handlers/DetachStripePMHandler";
 
 export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-08-01",
@@ -43,3 +47,9 @@ export const createStripeCustomerHandler = new CreateStripeCustomerHandler(
 );
 const setupIntent = new SetupIntent(stripePayments);
 export const setupIntentHandler = new SetupIntentHandler(setupIntent);
+
+const removePaymentMethod = new RemovePM(stripeMongoRepo)
+export const removePMHandler = new RemovePMHandler(removePaymentMethod)
+
+const detachStripePm = new DetachStripePM(stripePayments)
+export const detachStripePmHandler = new DetachStripePMHandler(detachStripePm)

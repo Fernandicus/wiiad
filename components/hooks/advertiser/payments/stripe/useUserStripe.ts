@@ -5,7 +5,10 @@ import {
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
 import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
 import { IStripeCtxState } from "@/context/advertisers/payments/stripe/domain/interfaces/IStripeContext";
-import { storeStripeReducer } from "@/context/advertisers/payments/stripe/infrastructure/stripe-slice";
+import {
+  removePMStripeReducer,
+  storeStripeReducer,
+} from "@/context/advertisers/payments/stripe/infrastructure/stripe-slice";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
@@ -25,6 +28,7 @@ interface IUseStripe {
   confirmPayment(params: IConfirmPaymentParams): Promise<void>;
   confirmSetupIntent(params: IConfirmPaymentParams): Promise<void>;
   setupIntentClientSecret(): Promise<string>;
+  removePM(pmId: string): void;
 }
 
 //? https://stripe.com/docs/payments/quickstart
@@ -112,6 +116,10 @@ export const useUserStripe = (): IUseStripe => {
     }
   };
 
+  const removePM = (pmId: string) => {
+    dispatch(removePMStripeReducer({ pmId }));
+  };
+
   return {
     userStripe,
     storeStripe: (stripe: IStripePrimitives) => {
@@ -120,6 +128,7 @@ export const useUserStripe = (): IUseStripe => {
           stripe,
         })
       );
+      if (!stripe.paymentMethods[0]) return;
       const pmId = stripe.paymentMethods[0].paymentMethodId;
       storePaymentMethod(pmId);
     },
@@ -128,5 +137,6 @@ export const useUserStripe = (): IUseStripe => {
     confirmPayment,
     confirmSetupIntent,
     setupIntentClientSecret,
+    removePM,
   };
 };

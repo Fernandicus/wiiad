@@ -129,6 +129,10 @@ export class StripePayments {
     };
   }
 
+  async detachPaymentMethod(id: PaymentMethodId): Promise<void> {
+    await this.stripe.paymentMethods.detach(id.id);
+  }
+
   //? https://stripe.com/docs/payments/payment-intents#future-usage
 
   async paymentIntentWithoutPaymentMethod({
@@ -199,6 +203,13 @@ export class StripePayments {
   async createCustomer(): Promise<CustomerId> {
     const customer = await this.stripe.customers.create();
     return new CustomerId(customer.id);
+  }
+
+  async updateCustomer(
+    customerId: CustomerId,
+    params: Stripe.CustomerUpdateParams
+  ): Promise<void> {
+    await this.stripe.customers.update(customerId.id, params);
   }
 
   async validateWebhookEvent(params: {

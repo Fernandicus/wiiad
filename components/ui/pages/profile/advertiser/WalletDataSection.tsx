@@ -39,6 +39,7 @@ export const WalletDataSection = ({
                       expMonth={pm.expMonth}
                       expYear={pm.expYear}
                       last4={pm.last4}
+                      pmId={pm.paymentMethodId}
                     />
                   </div>
                 );

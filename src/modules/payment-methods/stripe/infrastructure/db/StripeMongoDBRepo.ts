@@ -12,6 +12,21 @@ import { Last4 } from "../../domain/value-objects/Last4";
 import { ErrorFindingStripe } from "../../domain/errors/ErrorFindingStripe";
 
 export class StripeMongoDBRepo implements IStripeRepo {
+  async removePM(params: {
+    userId: UniqId;
+    pm: PaymentMethodId;
+  }): Promise<void> {
+    const { pm, userId } = params;
+    await StripeModel.updateOne(
+      { userId: userId.id },
+      {
+        $pull: {
+          paymentMethods: { paymentMethodId: pm.id } as ICardDetailsPrimitives,
+        },
+      }
+    );
+  }
+
   async save(stripe: Stripe): Promise<void> {
     await StripeModel.create({
       ...stripe.toPrimitives(),
@@ -23,7 +38,7 @@ export class StripeMongoDBRepo implements IStripeRepo {
     const stripeModel = await StripeModel.findOne<IStripeModel>({
       userId: userId.id,
     } as IStripeModel);
-    
+
     if (!stripeModel) throw ErrorFindingStripe.byUserId(userId.id);
 
     return new Stripe({

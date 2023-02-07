@@ -1,4 +1,5 @@
 import { IActionReducer } from "@/context/common/domain/interface/IActionReducer";
-import { IStripeState } from "./IStripeState";
+import { IRemovePMStripeState, IStripeState } from "./IStripeState";
 
-export interface IStripeAction extends IActionReducer<IStripeState> {}
+export interface IStoreStripeAction extends IActionReducer<IStripeState> {}
+export interface IRemovePMStripeAction extends IActionReducer<IRemovePMStripeState> {}

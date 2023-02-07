@@ -1,7 +1,7 @@
 //? https://stripe.com/docs/payments/quickstart
 //? https://stripe.com/docs/payments/save-during-payment
 
-import { StripeCampaignPaymentController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripePaymentController";
+import { StripeCampaignPaymentController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripeCampaignPaymentController";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";
