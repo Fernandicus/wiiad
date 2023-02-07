@@ -1,25 +1,20 @@
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { SectionHeader } from "../../items/SectionHeader";
-import { CreditCard } from "../../../payment/CreditCard";
 import { CreditCardAdd } from "../../../payment/CreditCardAdd";
 import { CreditCardOptionsButton } from "@/components/ui/payment/CreditCardOptionsButton";
-import { getApiResponse } from "@/src/utils/helpers";
-import { IApiRespSetupIntent } from "@/pages/api/v1/payments/stripe/setup-intent";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { useState } from "react";
-import StripePaymentElement from "@/components/ui/payment/StripePaymentElement";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
+import { MouseEvent } from "react";
 
 interface IWalletDataSectionProps {
   paymentMethods: ICardDetailsPrimitives[];
-  onAddPaymentMethod(clientSecret: string): void;
+  onAddPaymentMethod(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ): Promise<void>;
 }
 
 export const WalletDataSection = ({
-  onAddPaymentMethod,
   paymentMethods,
+  onAddPaymentMethod,
 }: IWalletDataSectionProps) => {
-  const { setupIntentClientSecret } = useUserStripe();
   return (
     <div className=" overflow-scroll pb-5">
       <SectionHeader
@@ -31,18 +26,7 @@ export const WalletDataSection = ({
           <div className="  w-full">
             <div className="flex space-x-5 ">
               <div>
-                <button
-                  type="button"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    try {
-                      const secret = await setupIntentClientSecret();
-                      onAddPaymentMethod(secret);
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }}
-                >
+                <button type="button" onClick={onAddPaymentMethod}>
                   <CreditCardAdd />
                 </button>
               </div>

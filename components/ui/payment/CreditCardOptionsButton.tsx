@@ -1,6 +1,7 @@
 import Remove from "@/pages/api/v1/ads/remove";
 import { useEffect, useRef, useState } from "react";
 import { RemoveButton } from "../buttons/RemoveButton";
+import { useOpenCloseDialog } from "../hooks/useOpenCloseDialog";
 import { CreditCard } from "./CreditCard";
 
 type TParams = Parameters<typeof CreditCard>;
@@ -8,28 +9,16 @@ type TParams = Parameters<typeof CreditCard>;
 export const CreditCardOptionsButton = (params: TParams[0]) => {
   const { brand, expMonth, expYear, last4, owner } = params;
   const cardRef = useRef<HTMLButtonElement>(null);
-  const [isSelected, setSelected] = useState<boolean>(false);
-
-  useEffect(() => {
-    const closeDialog = (e: MouseEvent) => {
-      const mousePath = e.composedPath();
-      const containsButtonRef = mousePath.includes(cardRef.current!);
-      if (!containsButtonRef) setSelected(false);
-    };
-
-    document.addEventListener("click", closeDialog);
-
-    return () => document.addEventListener("click", closeDialog);
-  }, []);
+  const {isOpen,setIsOpen} = useOpenCloseDialog({ref: cardRef})
 
   return (
     <div className="relative ">
       <button
         ref={cardRef}
         onClick={() => {
-          setSelected((prev) => !prev);
+          setIsOpen((prev) => !prev);
         }}
-        className={`${isSelected && "opacity-20 transitio-all duration-300 "}`}
+        className={`${isOpen && "opacity-20 transitio-all duration-300 "}`}
       >
         <CreditCard
           owner={owner}
@@ -39,7 +28,7 @@ export const CreditCardOptionsButton = (params: TParams[0]) => {
           last4={last4}
         />
       </button>
-      {isSelected && (
+      {isOpen && (
         <div className="absolute transitio-all duration-150  text-center inset-0 flex items-center justify-center ">
           <div>
             <button className="bg-red-500 shadow-md shadow-slate-400 text-white rounded-lg btn" type="button" onClick={() => {}}>
