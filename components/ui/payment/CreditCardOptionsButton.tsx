@@ -29,7 +29,7 @@ export const CreditCardOptionsButton = (params: TParams[0]) => {
         onClick={() => {
           setSelected((prev) => !prev);
         }}
-        className={`${isSelected && "opacity-20 transitio-all duration-150 "}`}
+        className={`${isSelected && "opacity-20 transitio-all duration-300 "}`}
       >
         <CreditCard
           owner={owner}

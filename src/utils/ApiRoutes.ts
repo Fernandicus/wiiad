@@ -29,4 +29,6 @@ export class ApiRoutes {
     else return `https://${host}/campaigns`;
   };
   static readonly advertiserDataProfile = "/api/v1/profile"
+  static readonly stripeSetupIntent = "/api/v1/payments/stripe/setup-intent"
+  static readonly stripeSaveNewPaymentMethod = "/api/v1/payments/stripe/save-new-pm"
 }

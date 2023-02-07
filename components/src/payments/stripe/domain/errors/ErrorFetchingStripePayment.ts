@@ -16,4 +16,18 @@ export class ErrorFetchingStripePayment extends Error {
       { cause }
     );
   }
+
+  static setupIntent(cause?: string): ErrorFetchingStripePayment {
+    return new ErrorFetchingStripePayment(
+      "Error setting up payment method",
+      { cause }
+    );
+  }
+
+  static noDataProvided(cause?: string): ErrorFetchingStripePayment {
+    return new ErrorFetchingStripePayment(
+      "Error getting data. Data is null or undefined",
+      { cause }
+    );
+  }
 }

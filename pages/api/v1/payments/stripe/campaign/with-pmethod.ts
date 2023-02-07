@@ -20,7 +20,6 @@ export default async function handler(
 ) {
   const session = userSession.getFromServer({ req, res });
   const body: IApiReqStripePaymentWithPMethod = reqBodyParse(req);
-
   if (req.method !== "PUT" || !session || !body.adId || !body.paymentMethod)
     return res
       .status(400)

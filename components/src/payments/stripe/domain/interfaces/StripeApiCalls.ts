@@ -1,5 +1,6 @@
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
+import { StripeClientSecret } from "@/src/modules/payment-methods/stripe/domain/value-objects/StripeClientSecret";
 import { UniqId } from "@/src/utils/UniqId";
 
 export interface IPaymentWithoutPMParams {
@@ -18,4 +19,6 @@ export interface IClientSecret {
 export interface IStripeApiCalls {
   payWithoutPMethod(params: IPaymentWithoutPMParams): Promise<IClientSecret>;
   payWithPMethod(params: IPaymentWithPMParams): Promise<void>;
+  setupIntent():Promise<StripeClientSecret>;
+  saveNewPaymentMethod(pm:PaymentMethodId):Promise<void>;
 }

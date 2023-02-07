@@ -18,7 +18,9 @@ import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { findCustomerHandler, updateStripeHandler } from "./stripe-container";
 import { ErrorPaymentValidation } from "../domain/errors/ErrorPaymentValidation";
-
+import { Email } from "@/src/common/domain/Email";
+import { SetupIntentId } from "../domain/value-objects/SetupIntentId";
+import { StripeClientSecret } from "../domain/value-objects/StripeClientSecret";
 
 export interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
@@ -67,14 +69,18 @@ export interface IStripePayload {
   };
 }
 
+export interface ISetupIntent {
+  id: SetupIntentId;
+  client_secret: StripeClientSecret;
+}
+
 export type StripeEventType =
   | "payment_intent.succeeded"
   | "payment_intent.cancelled"
   | "payment_intent.created";
 
-
-
 //?https://stripe.com/docs/cli/trigger
+
 export class StripePayments {
   constructor(private stripe: Stripe) {}
 
@@ -108,9 +114,22 @@ export class StripePayments {
       paymentMethodId: new PaymentMethodId(
         paymentDetails.payment_method!.toString()
       ),
-      clientSecret: paymentDetails.client_secret!,
+      clientSecret: new StripeClientSecret(paymentDetails.client_secret!),
     });
   }
+
+  async setupIntent(customerId: CustomerId): Promise<ISetupIntent> {
+    const setupIntent = await this.stripe.setupIntents.create({
+      customer: customerId.id,
+      payment_method_types: ["card"],
+    });
+    return {
+      id: new SetupIntentId(setupIntent.id),
+      client_secret: new StripeClientSecret(setupIntent.client_secret!),
+    };
+  }
+
+  //? https://stripe.com/docs/payments/payment-intents#future-usage
 
   async paymentIntentWithoutPaymentMethod({
     customerId,
@@ -136,7 +155,7 @@ export class StripePayments {
       paymentMethodId: paymentIntent.payment_method
         ? new PaymentMethodId(paymentIntent.payment_method?.toString())
         : undefined,
-      clientSecret: paymentIntent.client_secret!,
+      clientSecret: new StripeClientSecret(paymentIntent.client_secret!),
     });
   }
 
@@ -162,7 +181,7 @@ export class StripePayments {
       paymentMethodId: new PaymentMethodId(
         paymentIntent.payment_method!.toString()
       ),
-      clientSecret: paymentIntent.client_secret!,
+      clientSecret: new StripeClientSecret(paymentIntent.client_secret!),
     });
   }
 

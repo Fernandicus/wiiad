@@ -7,49 +7,31 @@ import {
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { useNotification } from "../notifications/hooks/useNotification";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
+import { Stripe, StripeElements } from "@stripe/stripe-js";
+import { StripeElement } from "@stripe/stripe-js";
 
-export default function StripeCheckoutForm() {
+interface IStripeCheckoutForm {
+  buttonLabel: string;
+  onSubmit(props: { stripe: Stripe; elements: StripeElements }): Promise<void>;
+}
+
+export default function StripeCheckoutForm({
+  buttonLabel,
+  onSubmit,
+}: IStripeCheckoutForm) {
   const stripe = useStripe();
   const elements = useElements();
-  const { confirmPayment } = useUserStripe();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  /* useEffect(() => {
-    if (!stripe) return;
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    if (!clientSecret) return;
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent!.status) {
-        case "succeeded":
-          setNotification({ message: "Payment succeeded!", status: "success" });
-          break;
-        case "requires_payment_method":
-          setNotification({
-            message: "Debes añadir una tarjeta",
-            status: "error",
-          });
-          break;
-        default:
-          setNotification({ message: "Algo fue mal", status: "error" });
-          break;
-      }
-    });
-  }, [stripe]); */
 
   return (
     <form
       id="payment-form"
       onSubmit={async (e) => {
         e.preventDefault();
-        if (!stripe || !elements) return;
         setIsLoading(true);
-        await confirmPayment({ useStripe: stripe, useElements: elements });
+        if (!stripe || !elements) return;
+        await onSubmit({ stripe, elements });
         setIsLoading(false);
       }}
       className="space-y-5"
@@ -60,7 +42,7 @@ export default function StripeCheckoutForm() {
         disabled={isLoading || !stripe || !elements}
         type="submit"
       >
-        Pagar y lanzar
+        {buttonLabel}
       </PrimaryButton>
     </form>
   );

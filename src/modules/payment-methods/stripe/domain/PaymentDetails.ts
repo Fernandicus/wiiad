@@ -1,6 +1,7 @@
 import { PaymentAmount } from "./value-objects/PaymentAmount";
 import { PaymentIntentId } from "./value-objects/PaymentIntentId";
 import { PaymentMethodId } from "./value-objects/PaymentMethodId";
+import { StripeClientSecret } from "./value-objects/StripeClientSecret";
 
 export interface IPaymentDetailsPrimitives {
   id: string;
@@ -13,7 +14,7 @@ export interface IPaymentDetailsParams {
   id: PaymentIntentId;
   amount: PaymentAmount;
   paymentMethodId?: PaymentMethodId;
-  clientSecret: string;
+  clientSecret: StripeClientSecret;
 }
 
 export class PaymentDetails {
@@ -39,7 +40,7 @@ export class PaymentDetails {
       id: this.id.id,
       amount: this.amount.amount,
       paymentMethodId: this.paymentMethodId?.id,
-      clientSecret: this.clientSecret,
+      clientSecret: this.clientSecret.secret,
     };
   }
 }

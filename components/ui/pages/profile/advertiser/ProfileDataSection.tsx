@@ -39,6 +39,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   type="text"
                   placeholder="Mi Empresa S.L."
                   /*  value={"Mi Empresa S.L."} */
+                  onChange={()=>{}}
                   className={`rounded-md px-2 block w-full h-10 border-2 border-red-300 `}
                 />
               </div>
@@ -48,6 +49,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   required
                   type="text"
                   value={user.name}
+                  onChange={()=>{}}
                   className={`rounded-md px-2 block w-full h-10 border border-gray-300 `}
                 />
               </div>
@@ -57,6 +59,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   required
                   type="text"
                   value={user.email}
+                  onChange={()=>{}}
                   className={`rounded-md px-2 block w-full h-10 border border-gray-300 `}
                 />
               </div>

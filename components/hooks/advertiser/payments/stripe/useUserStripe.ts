@@ -1,4 +1,8 @@
-import { payWithStripeHandler } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
+import {
+  payWithStripeHandler,
+  saveNewPMHandler,
+  setupIntentClientHandler,
+} from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
 import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
 import { IStripeCtxState } from "@/context/advertisers/payments/stripe/domain/interfaces/IStripeContext";
 import { storeStripeReducer } from "@/context/advertisers/payments/stripe/infrastructure/stripe-slice";
@@ -19,6 +23,8 @@ interface IUseStripe {
   payWithExistingCard(): Promise<void>;
   payWithNewCard(): Promise<string>;
   confirmPayment(params: IConfirmPaymentParams): Promise<void>;
+  confirmSetupIntent(params: IConfirmPaymentParams): Promise<void>;
+  setupIntentClientSecret(): Promise<string>;
 }
 
 //? https://stripe.com/docs/payments/quickstart
@@ -71,6 +77,22 @@ export const useUserStripe = (): IUseStripe => {
     }
   };
 
+  const setupIntentClientSecret = async (): Promise<string> => {
+    return await setupIntentClientHandler.get();
+  };
+
+  const confirmSetupIntent = async (
+    params: IConfirmPaymentParams
+  ): Promise<void> => {
+    const { useElements, useStripe } = params;
+    const data = await useStripe.confirmSetup({
+      elements: useElements,
+      redirect: "if_required",
+    });
+    const pm = data.setupIntent!.payment_method;
+    await saveNewPMHandler.save(pm!.toString());
+  };
+
   const confirmPayment = async (
     params: IConfirmPaymentParams
   ): Promise<void> => {
@@ -104,5 +126,7 @@ export const useUserStripe = (): IUseStripe => {
     payWithExistingCard,
     payWithNewCard,
     confirmPayment,
+    confirmSetupIntent,
+    setupIntentClientSecret,
   };
 };

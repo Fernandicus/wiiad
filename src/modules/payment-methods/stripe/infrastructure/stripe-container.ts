@@ -14,6 +14,8 @@ import { CreateStripeCustomer } from "../use-case/CreateStripeCustomer";
 import { CreateStripeCustomerHandler } from "../use-case/handlers/CreateStripeCustomerHandler";
 import Stripe from "stripe";
 import { PaymentSucceeded } from "../use-case/PaymentSucceeded";
+import { SetupIntent } from "../use-case/SetupIntent";
+import { SetupIntentHandler } from "../use-case/handlers/SetupIntentHandler";
 
 export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-08-01",
@@ -39,3 +41,5 @@ export const getPaymentDetailsHandler = new GetPaymentDetailsHandler(
 export const createStripeCustomerHandler = new CreateStripeCustomerHandler(
   createStripeCustomer
 );
+const setupIntent = new SetupIntent(stripePayments);
+export const setupIntentHandler = new SetupIntentHandler(setupIntent);
