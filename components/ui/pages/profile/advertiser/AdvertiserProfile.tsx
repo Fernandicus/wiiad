@@ -1,9 +1,9 @@
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { ProfileDataSection } from "@/components/ui/pages/profile/advertiser/ProfileDataSection";
 import { WalletDataSection } from "@/components/ui/pages/profile/advertiser/WalletDataSection";
 import { useState } from "react";
 import { AddCreditCardDialog } from "./items/AddCreditCardDialog";
+import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 
 interface IAdvertiserSectionProps {
   user: IUserPrimitives;

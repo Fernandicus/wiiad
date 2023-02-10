@@ -1,3 +1,5 @@
+import { ApiCallGetCardDetails } from "../use-case/ApiCallGetCardDetails";
+import { ApiCallGetCardDetailsHandler } from "../use-case/handler/ApiCallGetCardDetailsHandler";
 import { PayWithStripeHandler } from "../use-case/handler/PayWithStripeHandler";
 import { SaveNewStripePaymentMethodHandler } from "../use-case/handler/SaveNewStripePaymentMethodHandler";
 import { SetupIntentClientSecretHandler } from "../use-case/handler/SetupIntentClientSecretHandler";
@@ -13,3 +15,5 @@ const setupIntent = new SetupIntentClientSecret(fetchStripe);
 export const setupIntentClientHandler = new SetupIntentClientSecretHandler(setupIntent);
 const saveNewPM = new SaveNewStripePaymentMethod(fetchStripe);
 export const saveNewPMHandler = new SaveNewStripePaymentMethodHandler(saveNewPM);
+const getCardDetails = new ApiCallGetCardDetails(fetchStripe);
+export const getCardDetailsHandler = new ApiCallGetCardDetailsHandler(getCardDetails);

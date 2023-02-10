@@ -47,12 +47,8 @@ export const CreditCardOptionsButton = (params: TCreditCardOptionsButton) => {
                   method: "DELETE",
                   body: JSON.stringify(body),
                 });
-
                 const apiResp = await getApiResponse(resp);
-                if (resp.status === 200) {
-                  console.log(apiResp.message);
-                  removePM(pmId);
-                }
+                removePM(pmId);
               }}
             >
               Eliminar tarjeta

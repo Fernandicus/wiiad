@@ -6,7 +6,6 @@ import {
 } from "@stripe/react-stripe-js";
 import { PrimaryButton } from "../buttons/PrimaryButton";
 import { useNotification } from "../notifications/hooks/useNotification";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { Stripe, StripeElements } from "@stripe/stripe-js";
 import { StripeElement } from "@stripe/stripe-js";
 

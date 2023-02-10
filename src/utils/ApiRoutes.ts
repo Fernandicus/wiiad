@@ -21,14 +21,19 @@ export class ApiRoutes {
     "/api/v1/auth/cloudinary/banner-sign-request";
   static readonly cloudinaryVideoEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/video/upload/`;
   static readonly cloudinaryImageEndPoint = `https://api.cloudinary.com/v1_1/${this.cloudinaryCloudName}/image/upload/`;
-  static readonly stripePayWithPMethod = "/api/v1/payments/stripe/campaign/with-pmethod";
-  static readonly stripePayWithoutPMethod = "/api/v1/payments/stripe/campaign/without-pmethod";
+  static readonly stripePayWithPMethod =
+    "/api/v1/payments/stripe/campaign/with-pmethod";
+  static readonly stripePayWithoutPMethod =
+    "/api/v1/payments/stripe/campaign/without-pmethod";
   static readonly paymentCompleted = () => {
     const host = window.location.host;
     if (host === "localhost:3000") return `http://${host}/campaigns`;
     else return `https://${host}/campaigns`;
   };
-  static readonly advertiserDataProfile = "/api/v1/profile"
-  static readonly stripeSetupIntent = "/api/v1/payments/stripe/setup-intent"
-  static readonly stripeSaveNewPaymentMethod = "/api/v1/payments/stripe/save-new-pm"
+  static readonly advertiserDataProfile = "/api/v1/profile";
+  static readonly stripeSetupIntent = "/api/v1/payments/stripe/setup-intent";
+  static readonly stripeSaveNewPaymentMethod =
+    "/api/v1/payments/stripe/save-new-pm";
+  static readonly stripeGetCardDetails = (pmId: string) =>
+    `/api/v1/payments/stripe/cards/get-card-details?pmId=${pmId}`;
 }

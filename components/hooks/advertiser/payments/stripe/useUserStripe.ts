@@ -1,14 +1,13 @@
 import {
   payWithStripeHandler,
-  saveNewPMHandler,
   setupIntentClientHandler,
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
 import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
-import { IStripeCtxState } from "@/context/advertisers/payments/stripe/domain/interfaces/IStripeContext";
+import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe-slice";
 import {
-  removePMStripeReducer,
-  storeStripeReducer,
-} from "@/context/advertisers/payments/stripe/infrastructure/stripe-slice";
+  AppDispatch,
+  TStateStripe,
+} from "@/context/common/infrastructure/store";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
@@ -34,18 +33,17 @@ interface IUseStripe {
 //? https://stripe.com/docs/payments/quickstart
 //? https://stripe.com/docs/payments/save-during-payment?platform=web&client=react#web-submit-payment
 
-//* Make sure to call loadStripe outside of a component’s render to avoid
-//* recreating the Stripe object on every render.
-//* This is your test publishable API key.
+// Make sure to call loadStripe outside of a component’s render to avoid
+// recreating the Stripe object on every render.
+// This is your test publishable API key.
 
 export const stripePromise = loadStripe(PublicKeys.stripe);
 
 export const useUserStripe = (): IUseStripe => {
   const { setNotification } = useNotification();
-  const userStripe = useSelector(
-    (state: IStripeCtxState) => state.stripe.stripe
-  );
-  const dispatch = useDispatch();
+  const { removeStripePM, saveNewStripePM, storeStripe } = stripeSliceActions;
+  const userStripe = useSelector((state: TStateStripe) => state.stripe.stripe);
+  const dispatch = useDispatch<AppDispatch>();
   const { storePaymentMethod, state, index, removeDetails } =
     usePaymentProcess();
 
@@ -94,7 +92,7 @@ export const useUserStripe = (): IUseStripe => {
       redirect: "if_required",
     });
     const pm = data.setupIntent!.payment_method;
-    await saveNewPMHandler.save(pm!.toString());
+    await dispatch(saveNewStripePM(pm!.toString()));
   };
 
   const confirmPayment = async (
@@ -116,18 +114,10 @@ export const useUserStripe = (): IUseStripe => {
     }
   };
 
-  const removePM = (pmId: string) => {
-    dispatch(removePMStripeReducer({ pmId }));
-  };
-
   return {
     userStripe,
     storeStripe: (stripe: IStripePrimitives) => {
-      dispatch(
-        storeStripeReducer({
-          stripe,
-        })
-      );
+      dispatch(storeStripe({ stripe }));
       if (!stripe.paymentMethods[0]) return;
       const pmId = stripe.paymentMethods[0].paymentMethodId;
       storePaymentMethod(pmId);
@@ -137,6 +127,8 @@ export const useUserStripe = (): IUseStripe => {
     confirmPayment,
     confirmSetupIntent,
     setupIntentClientSecret,
-    removePM,
+    removePM: (pmId: string) => {
+      dispatch(removeStripePM({ pmId }));
+    },
   };
 };

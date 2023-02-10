@@ -18,7 +18,7 @@ const storeCampaignsReducer = (
   });
 };
 
-const removeCampaignsReducer_byAdId = (
+const removeCampaignsReducerByAdId = (
   state: IStoreCampaignsState,
   action: IRemoveCampaignsAction
 ): void => {
@@ -30,5 +30,5 @@ const removeCampaignsReducer_byAdId = (
 
 export const campaignsReducers = {
   storeCampaignsReducer,
-  removeCampaignsReducer_byAdId,
+  removeCampaignsReducerByAdId,
 };

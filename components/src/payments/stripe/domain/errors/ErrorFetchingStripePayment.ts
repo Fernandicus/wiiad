@@ -11,17 +11,15 @@ export class ErrorFetchingStripePayment extends Error {
   }
 
   static payWithPMethod(cause?: string): ErrorFetchingStripePayment {
-    return new ErrorFetchingStripePayment(
-      "Error paying with payment method",
-      { cause }
-    );
+    return new ErrorFetchingStripePayment("Error paying with payment method", {
+      cause,
+    });
   }
 
   static setupIntent(cause?: string): ErrorFetchingStripePayment {
-    return new ErrorFetchingStripePayment(
-      "Error setting up payment method",
-      { cause }
-    );
+    return new ErrorFetchingStripePayment("Error setting up payment method", {
+      cause,
+    });
   }
 
   static noDataProvided(cause?: string): ErrorFetchingStripePayment {
@@ -29,5 +27,11 @@ export class ErrorFetchingStripePayment extends Error {
       "Error getting data. Data is null or undefined",
       { cause }
     );
+  }
+
+  static gettingCreditCard(cause?: string): ErrorFetchingStripePayment {
+    return new ErrorFetchingStripePayment("Error getting credit card details", {
+      cause,
+    });
   }
 }

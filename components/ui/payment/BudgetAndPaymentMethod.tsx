@@ -3,9 +3,9 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { useSetBudgetAndPM } from "./hooks/useSetBudgetAndPM";
 import { PaymentButtons } from "./PaymentButtons";
 import { PrimaryButton } from "../buttons/PrimaryButton";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 import { PaymentMethod } from "./PaymentMethod";
+import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 
 interface IBudgetAndPMethods {
   onContinue(clientSecret: string): void;

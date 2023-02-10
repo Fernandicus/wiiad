@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { campaignInitialState } from "../domain/CampaignInitialState";
 import { campaignsReducers } from "../use-case/campaigns-reducer";
 
@@ -8,4 +9,4 @@ export const campaignsSlice = createSlice({
   reducers: campaignsReducers,
 });
 
-export const { storeCampaignsReducer, removeCampaignsReducer_byAdId } = campaignsSlice.actions;
+export const { storeCampaignsReducer, removeCampaignsReducerByAdId } = campaignsSlice.actions;

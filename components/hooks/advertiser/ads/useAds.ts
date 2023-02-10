@@ -5,11 +5,14 @@ import {
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { IAdsCtxState } from "@/context/advertisers/ads/domain/interfaces/IAdsContext";
 import {
+  createAd,
+  removeAd,
   removeAdReducer,
   storeAdsReducer,
 } from "@/context/advertisers/ads/infrastructure/ads-slices";
 import { useDispatch, useSelector } from "react-redux";
 import { useCampaigns } from "../campaigns/useCampaigns";
+import { AppDispatch, store } from "@/context/common/infrastructure/store";
 
 interface IUseAds {
   ads: AdPropsPrimitives[];
@@ -19,25 +22,19 @@ interface IUseAds {
 }
 
 export const useAds = (): IUseAds => {
-  const { removeCampaigns_byAdId } = useCampaigns();
+  const { removeCampaignsByAdId } = useCampaigns();
   const ads = useSelector((state: IAdsCtxState) => state.ads.ads);
-  const dispatch = useDispatch();
-
-  const createAd = async (ad: AdPropsPrimitives) => {
-    await createAdHandler.create(ad);
-    dispatch(storeAdsReducer({ ads: [ad] }));
-  };
-
-  const removeAd = async (adId: string) => {
-    await removeAdHandler.remove(adId);
-    dispatch(removeAdReducer({ ads, adId }));
-    removeCampaigns_byAdId(adId);
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   return {
     ads,
-    createAd,
-    removeAd,
+    createAd: async (ad: AdPropsPrimitives) => {
+      await dispatch(createAd(ad));
+    },
+    removeAd: async (adId: string) => {
+      await dispatch(removeAd(adId));
+      removeCampaignsByAdId(adId);
+    },
     storeAds: (ads: AdPropsPrimitives[]): void => {
       dispatch(storeAdsReducer({ ads }));
     },

@@ -1,3 +1,4 @@
+import { stripePromise } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { Elements } from "@stripe/react-stripe-js";
 import {
   Stripe,
@@ -5,7 +6,6 @@ import {
   StripeElementsOptions,
 } from "@stripe/stripe-js";
 import StripeCheckoutForm from "./StripeCheckoutForm";
-import { stripePromise } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 
 export default function StripePaymentElement(params: {
   clientSecret: string;
