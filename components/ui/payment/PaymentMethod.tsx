@@ -1,7 +1,7 @@
 import { usePaymentProcess } from "@/components/hooks/advertiser/payments/payment-process/usePaymentProcess";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { useState } from "react";
-import { CreditCardButton } from "./items/CreditCardButton";
+import { PaymentMethodButton } from "./items/PaymentMethodButton";
 
 interface IPaymentMethodParams {
   paymentMethods?: ICardDetailsPrimitives[];
@@ -17,7 +17,7 @@ export const PaymentMethod = ({ paymentMethods }: IPaymentMethodParams) => {
         {paymentMethods &&
           paymentMethods.map((pMethod) => (
             <div key={pMethod.paymentMethodId}>
-              <CreditCardButton
+              <PaymentMethodButton
                 isSelected={isMethodSelected === pMethod.paymentMethodId}
                 onClick={() => {
                   setMethodSelected(pMethod.paymentMethodId);

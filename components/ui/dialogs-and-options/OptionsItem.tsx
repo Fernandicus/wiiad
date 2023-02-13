@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SecondaryButton } from "../buttons/SecondaryButton";
 import { TertiaryButton } from "../buttons/TertiaryButton";
-import { useOpenCloseDialog } from "../hooks/useOpenCloseDialog";
+import { useOpenCloseOptionsDialog } from "../hooks/useOpenCloseOptionsDialog";
 
 interface IOptionsItem {
   children: JSX.Element[];
@@ -9,7 +9,7 @@ interface IOptionsItem {
 
 export const OptionsItem = ({ children }: IOptionsItem) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { isOpen, setIsOpen } = useOpenCloseDialog({ ref: buttonRef });
+  const { isOpen, setIsOpen } = useOpenCloseOptionsDialog({ ref: buttonRef });
 
   return (
     <div className="relative">

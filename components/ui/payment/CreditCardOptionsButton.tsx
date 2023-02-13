@@ -4,7 +4,7 @@ import { IApiReqRemovePaymentMethod } from "@/pages/api/v1/payments/stripe/remov
 import { removePMHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { getApiResponse } from "@/src/utils/helpers";
 import { useRef } from "react";
-import { useOpenCloseDialog } from "../hooks/useOpenCloseDialog";
+import { useOpenCloseOptionsDialog } from "../hooks/useOpenCloseOptionsDialog";
 import { CreditCard } from "./CreditCard";
 
 type TCreditCardOptionsButton = Parameters<typeof CreditCard>[0] & {
@@ -14,7 +14,7 @@ type TCreditCardOptionsButton = Parameters<typeof CreditCard>[0] & {
 export const CreditCardOptionsButton = (params: TCreditCardOptionsButton) => {
   const { brand, expMonth, expYear, last4, owner, pmId } = params;
   const cardRef = useRef<HTMLButtonElement>(null);
-  const { isOpen, setIsOpen } = useOpenCloseDialog({ ref: cardRef });
+  const { isOpen, setIsOpen } = useOpenCloseOptionsDialog({ ref: cardRef });
   const { removePM } = useUserStripe();
 
   return (

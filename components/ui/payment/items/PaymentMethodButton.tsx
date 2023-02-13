@@ -1,16 +1,16 @@
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 
-interface ICreditCardButtonProps {
+interface IPaymentMethodButtonProps {
   pMethod: ICardDetailsPrimitives;
   isSelected: boolean;
   onClick(): void;
 }
 
-export const CreditCardButton = ({
+export const PaymentMethodButton = ({
   pMethod,
   isSelected,
   onClick,
-}: ICreditCardButtonProps) => {
+}: IPaymentMethodButtonProps) => {
   return (
     <button
       className={`border p-4 rounded-lg w-full text-center transition-all duration-150 ease-in ${

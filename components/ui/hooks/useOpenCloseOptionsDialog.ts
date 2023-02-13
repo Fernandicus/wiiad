@@ -16,7 +16,7 @@ interface ICloseDialog {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const useOpenCloseDialog = <T extends HTMLElement>({
+export const useOpenCloseOptionsDialog = <T extends HTMLElement>({
   ref,
   onCloseDialog,
 }: ICloseDialogProps<T>): ICloseDialog => {

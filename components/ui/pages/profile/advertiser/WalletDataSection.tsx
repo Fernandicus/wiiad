@@ -1,8 +1,11 @@
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { SectionHeader } from "../../items/SectionHeader";
-import { CreditCardAdd } from "../../../payment/CreditCardAdd";
+import { AddCreditCardButton } from "../../../payment/AddCreditCardButton";
 import { CreditCardOptionsButton } from "@/components/ui/payment/CreditCardOptionsButton";
 import { MouseEvent } from "react";
+import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
+import { CreditCardItemShape } from "@/components/ui/payment/items/CreditCardItemShape";
+import { CreditCardLoader } from "./items/CreditCardLoader";
 
 interface IWalletDataSectionProps {
   paymentMethods: ICardDetailsPrimitives[];
@@ -15,6 +18,9 @@ export const WalletDataSection = ({
   paymentMethods,
   onAddPaymentMethod,
 }: IWalletDataSectionProps) => {
+  const { status } = useAdvertiser();
+  //const status = false;
+
   return (
     <div className=" overflow-scroll pb-5">
       <SectionHeader
@@ -26,24 +32,26 @@ export const WalletDataSection = ({
           <div className="  w-full">
             <div className="flex space-x-5 ">
               <div>
-                <button type="button" onClick={onAddPaymentMethod}>
-                  <CreditCardAdd />
-                </button>
+                <AddCreditCardButton onClick={onAddPaymentMethod} />
               </div>
-              {paymentMethods.map((pm) => {
-                return (
-                  <div key={pm.paymentMethodId}>
-                    <CreditCardOptionsButton
-                      owner="Mi Empresa S.L."
-                      brand={pm.brand}
-                      expMonth={pm.expMonth}
-                      expYear={pm.expYear}
-                      last4={pm.last4}
-                      pmId={pm.paymentMethodId}
-                    />
-                  </div>
-                );
-              })}
+              {status !== "init" ? (
+                <CreditCardLoader />
+              ) : (
+                paymentMethods.map((pm) => {
+                  return (
+                    <div key={pm.paymentMethodId}>
+                      <CreditCardOptionsButton
+                        owner="Mi Empresa S.L."
+                        brand={pm.brand}
+                        expMonth={pm.expMonth}
+                        expYear={pm.expYear}
+                        last4={pm.last4}
+                        pmId={pm.paymentMethodId}
+                      />
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
