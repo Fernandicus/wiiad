@@ -23,4 +23,5 @@ export interface IStripeApiCalls {
   setupIntent():Promise<StripeClientSecret>;
   saveNewPaymentMethod(pm:PaymentMethodId):Promise<void>;
   getCardDetails(pm:PaymentMethodId):Promise<CardDetails>;
+  removePM(pm:PaymentMethodId):Promise<void>;
 }

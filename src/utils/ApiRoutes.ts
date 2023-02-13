@@ -34,6 +34,8 @@ export class ApiRoutes {
   static readonly stripeSetupIntent = "/api/v1/payments/stripe/setup-intent";
   static readonly stripeSaveNewPaymentMethod =
     "/api/v1/payments/stripe/save-new-pm";
+  static readonly stripeRemovePaymentMethod =
+    "/api/v1/payments/stripe/remove-pm";
   static readonly stripeGetCardDetails = (pmId: string) =>
     `/api/v1/payments/stripe/cards/get-card-details?pmId=${pmId}`;
 }

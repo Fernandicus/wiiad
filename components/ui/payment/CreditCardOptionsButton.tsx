@@ -1,5 +1,7 @@
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
+import { apiCallRemovePMHandler } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
 import { IApiReqRemovePaymentMethod } from "@/pages/api/v1/payments/stripe/remove-pm";
+import { removePMHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { getApiResponse } from "@/src/utils/helpers";
 import { useRef } from "react";
 import { useOpenCloseDialog } from "../hooks/useOpenCloseDialog";
@@ -40,14 +42,8 @@ export const CreditCardOptionsButton = (params: TCreditCardOptionsButton) => {
               type="button"
               onClick={async () => {
                 //TODO: REFACT LOGIC
-                const body: IApiReqRemovePaymentMethod = {
-                  pmId,
-                };
-                const resp = await fetch("/api/v1/payments/stripe/remove-pm", {
-                  method: "DELETE",
-                  body: JSON.stringify(body),
-                });
-                const apiResp = await getApiResponse(resp);
+
+                await apiCallRemovePMHandler.remove(pmId);
                 removePM(pmId);
               }}
             >

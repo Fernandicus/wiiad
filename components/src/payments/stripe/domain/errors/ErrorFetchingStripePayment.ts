@@ -34,4 +34,10 @@ export class ErrorFetchingStripePayment extends Error {
       cause,
     });
   }
+
+  static removingPM(cause?: string): ErrorFetchingStripePayment {
+    return new ErrorFetchingStripePayment("Error removing payment method", {
+      cause,
+    });
+  }
 }

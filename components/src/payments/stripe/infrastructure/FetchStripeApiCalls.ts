@@ -4,6 +4,7 @@ import {
   IApiRespStripePayWithoutPM,
 } from "@/pages/api/v1/payments/stripe/campaign/without-pmethod";
 import { IApiRespGetCardDetails } from "@/pages/api/v1/payments/stripe/cards/get-card-details";
+import { IApiReqRemovePaymentMethod } from "@/pages/api/v1/payments/stripe/remove-pm";
 import { IApiReqSaveNewPaymentM } from "@/pages/api/v1/payments/stripe/save-new-pm";
 import { IApiRespSetupIntent } from "@/pages/api/v1/payments/stripe/setup-intent";
 import { CardDetails } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
@@ -24,6 +25,18 @@ import {
 } from "../domain/interfaces/StripeApiCalls";
 
 export class FetchStripeApiCalls implements IStripeApiCalls {
+  async removePM(pm: PaymentMethodId): Promise<void> {
+    const body: IApiReqRemovePaymentMethod = {
+      pmId: pm.id,
+    };
+    const resp = await fetch(ApiRoutes.stripeRemovePaymentMethod, {
+      method: "DELETE",
+      body: JSON.stringify(body),
+    });
+    const apiResp = await getApiResponse(resp);
+    if (!resp.ok) throw ErrorFetchingStripePayment.removingPM(apiResp.message);
+  }
+
   async getCardDetails(pm: PaymentMethodId): Promise<CardDetails> {
     const resp = await fetch(ApiRoutes.stripeGetCardDetails(pm.id));
     const apiResp = await getApiResponse<IApiRespGetCardDetails>(resp);
