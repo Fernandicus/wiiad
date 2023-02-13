@@ -2,7 +2,7 @@ import {
   payWithStripeHandler,
   setupIntentClientHandler,
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
-import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
+import { useNotification } from "@/components/hooks/useNotification";
 import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe-slice";
 import {
   AppDispatch,

@@ -1,7 +1,7 @@
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
 import { CloseIcon } from "@/components/ui/icons/CloseIcon";
 import { LoadingSpinnerAnimation } from "@/components/ui/icons/LoadingSpinnerAnimation";
-import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
+import { useNotification } from "@/components/hooks/useNotification";
 import StripePaymentElement from "@/components/ui/payment/StripePaymentElement";
 import { useState } from "react";
 

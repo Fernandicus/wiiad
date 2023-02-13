@@ -5,7 +5,7 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { RoleType } from "@/src/common/domain/Role";
 import { TertiaryButton } from "@/components/ui/buttons/TertiaryButton";
 import { SignInCard } from "@/components/ui/forms/sign-in/SignInCard";
-import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
+import { useNotification } from "@/components/hooks/useNotification";
 
 export default function Home(props: { session: IUserPrimitives }) {
   const [userRole, setRole] = useState<RoleType>(RoleType.USER);

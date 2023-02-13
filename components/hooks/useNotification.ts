@@ -1,9 +1,6 @@
-import { INotificationCtxState } from "@/context/notifications/domain/interfaces/INotificationContext";
-import { INotificationState } from "@/context/notifications/domain/interfaces/INotificationState";
-import {
-  removeNotification,
-  storeNotification,
-} from "@/context/notifications/infrastructure/notification-slice";
+import { INotificationState } from "@/context/notifications/notification-reducers";
+import { notificationSliceActions } from "@/context/notifications/notification-slice";
+import { TNotificationState } from "@/context/store";
 import { useDispatch, useSelector } from "react-redux";
 
 interface IUseNotification {
@@ -14,9 +11,8 @@ interface IUseNotification {
 let removeNotificationTimer: NodeJS.Timeout;
 
 export const useNotification = (): IUseNotification => {
-  const state = useSelector(
-    (state: INotificationCtxState) => state.notification
-  );
+  const { removeNotification, storeNotification } = notificationSliceActions;
+  const state = useSelector((state: TNotificationState) => state.notification);
   const dispatch = useDispatch();
 
   const setNotification = (notification: INotificationState) => {

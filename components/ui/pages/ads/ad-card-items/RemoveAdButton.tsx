@@ -1,7 +1,7 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 import { RemoveButton } from "@/components/ui/buttons/RemoveButton";
-import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
+import { useNotification } from "@/components/hooks/useNotification";
 
 interface IRemoveAdButton {
   adId: string;

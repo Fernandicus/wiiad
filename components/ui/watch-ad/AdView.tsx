@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useNotification } from "../notifications/hooks/useNotification";
+import { useNotification } from "../../hooks/useNotification";
 
 interface AdViewParams {
   user: IUserPrimitives | null;

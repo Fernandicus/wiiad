@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { stripeSliceReducer } from "@/context/advertisers/payments/stripe/stripe-slice";
 import { paymentProcessSliceReducer } from "@/context/advertisers/payments/payment-process/payment-process-slices";
-import { notificationSlice } from "@/context/notifications/infrastructure/notification-slice";
+import { notificationSliceReducer } from "@/context/notifications/notification-slice";
 import { adsSliceReducer } from "@/context/advertisers/ads/ads-slices";
 import { campaignsSliceReducer } from "@/context/advertisers/campaigns/campaigns-slices";
 import { advertiserSlicesReducer } from "@/context/advertisers/status/session-slices";
@@ -12,7 +12,7 @@ const reducer = {
   session: advertiserSlicesReducer,
   stripe: stripeSliceReducer,
   paymentProcess: paymentProcessSliceReducer,
-  notification: notificationSlice.reducer,
+  notification: notificationSliceReducer,
 };
 
 export const store = configureStore({ reducer });
@@ -24,3 +24,4 @@ export type TAdsState = Pick<RootState, "ads">;
 export type TCampaignsState = Pick<RootState, "campaigns">;
 export type TPaymentProcessState = Pick<RootState, "paymentProcess">;
 export type TAdvertiserState = Pick<RootState, "session">;
+export type TNotificationState = Pick<RootState, "notification">;

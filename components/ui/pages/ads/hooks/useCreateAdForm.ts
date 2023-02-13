@@ -1,7 +1,7 @@
 import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { uploadFileToCloudHandler } from "@/components/src/cloud-file-store/infrastructure/cloud-file-store-container";
-import { useNotification } from "@/components/ui/notifications/hooks/useNotification";
+import { useNotification } from "@/components/hooks/useNotification";
 import { AdType } from "@/pages/ads";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
