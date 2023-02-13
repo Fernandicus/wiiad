@@ -40,12 +40,7 @@ export const CreditCardOptionsButton = (params: TCreditCardOptionsButton) => {
             <button
               className="bg-red-500 shadow-md shadow-slate-400 text-white rounded-lg btn"
               type="button"
-              onClick={async () => {
-                //TODO: REFACT LOGIC
-
-                await apiCallRemovePMHandler.remove(pmId);
-                removePM(pmId);
-              }}
+              onClick={async () => await removePM(pmId)}
             >
               Eliminar tarjeta
             </button>

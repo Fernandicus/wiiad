@@ -27,7 +27,7 @@ interface IUseStripe {
   confirmPayment(params: IConfirmPaymentParams): Promise<void>;
   confirmSetupIntent(params: IConfirmPaymentParams): Promise<void>;
   setupIntentClientSecret(): Promise<string>;
-  removePM(pmId: string): void;
+  removePM(pmId: string): Promise<void>;
 }
 
 //? https://stripe.com/docs/payments/quickstart
@@ -127,8 +127,8 @@ export const useUserStripe = (): IUseStripe => {
     confirmPayment,
     confirmSetupIntent,
     setupIntentClientSecret,
-    removePM: (pmId: string) => {
-      dispatch(removeStripePM({ pmId }));
+    removePM: async (pmId: string) => {
+      await dispatch(removeStripePM(pmId));
     },
   };
 };

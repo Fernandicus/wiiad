@@ -1,4 +1,5 @@
 import {
+  apiCallRemovePMHandler,
   getCardDetailsHandler,
   saveNewPMHandler,
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
@@ -20,17 +21,26 @@ const saveNewStripePM = createAsyncThunk(
   }
 );
 
+const removeStripePM = createAsyncThunk(
+  "stripe/removePM",
+  async (paymentMethodId: string): Promise<{pmId:string}> => {
+    await apiCallRemovePMHandler.remove(paymentMethodId);
+    return { pmId: paymentMethodId };
+  }
+);
+
 const stripeSlice = createSlice({
   name: "stripe",
   initialState: initStripeState,
   reducers: {
     storeStripe: storeStripeReducer,
-    removeStripePM: removeStripePMReducer,
   },
   extraReducers: (builder) => {
-    builder.addCase(saveNewStripePM.fulfilled, saveNewStripePMReducer);
+    builder
+      .addCase(saveNewStripePM.fulfilled, saveNewStripePMReducer)
+      .addCase(removeStripePM.fulfilled, removeStripePMReducer);
   },
 });
 
-export const stripeSliceActions = { ...stripeSlice.actions, saveNewStripePM };
+export const stripeSliceActions = { ...stripeSlice.actions, saveNewStripePM, removeStripePM };
 export const stripeSliceReducer = stripeSlice.reducer;
