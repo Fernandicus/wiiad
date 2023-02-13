@@ -6,7 +6,7 @@ import { useNotification } from "@/components/ui/notifications/hooks/useNotifica
 import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe-slice";
 import {
   AppDispatch,
-  TStateStripe,
+  TStripeState,
 } from "@/context/common/infrastructure/store";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { PublicKeys } from "@/src/utils/PublicKeys";
@@ -42,15 +42,15 @@ export const stripePromise = loadStripe(PublicKeys.stripe);
 export const useUserStripe = (): IUseStripe => {
   const { setNotification } = useNotification();
   const { removeStripePM, saveNewStripePM, storeStripe } = stripeSliceActions;
-  const userStripe = useSelector((state: TStateStripe) => state.stripe.stripe);
+  const userStripe = useSelector((state: TStripeState) => state.stripe.stripe);
   const dispatch = useDispatch<AppDispatch>();
-  const { storePaymentMethod, state, index, removeDetails } =
+  const { storePaymentMethod, state, selectedBudgetIndex, removeDetails } =
     usePaymentProcess();
 
   const payWithExistingCard = async (): Promise<void> => {
     try {
       await payWithStripeHandler.withPMethod({
-        budgetItem: index,
+        budgetItem: selectedBudgetIndex,
         adId: state.ad.id,
         paymentMethod: state.paymentMethod,
       });
@@ -67,7 +67,7 @@ export const useUserStripe = (): IUseStripe => {
   const payWithNewCard = async (): Promise<string> => {
     try {
       const secret = await payWithStripeHandler.withoutPMethod({
-        budgetItem: index,
+        budgetItem: selectedBudgetIndex,
         adId: state.ad.id,
       });
       removeDetails();
