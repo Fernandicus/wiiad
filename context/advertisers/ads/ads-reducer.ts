@@ -1,7 +1,7 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { PayloadAction } from "@reduxjs/toolkit";
 
-export interface IAdsState {
+interface IAdsState {
   ads: AdPropsPrimitives[];
 }
 
@@ -11,7 +11,7 @@ export const adsInitialState: IAdsState = {
 
 export const storeAdsReducer = (
   state: IAdsState,
-  action: PayloadAction<{ ads: AdPropsPrimitives[] }>
+  action: PayloadAction<IAdsState>
 ) => {
   const newAds = action.payload.ads;
   newAds.forEach((ad) => {

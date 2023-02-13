@@ -17,7 +17,7 @@ interface IUseAds {
 
 export const useAds = (): IUseAds => {
   const { storeAds } = adsSliceActions;
-  const { removeCampaignsByAdId } = useCampaigns();
+  const { removeCampaignByAdId } = useCampaigns();
   const ads = useSelector((state: TAdsState) => state.ads.ads);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -28,7 +28,7 @@ export const useAds = (): IUseAds => {
     },
     removeAd: async (adId: string) => {
       await dispatch(removeAd(adId));
-      removeCampaignsByAdId(adId);
+      removeCampaignByAdId(adId);
     },
     storeAds: (ads: AdPropsPrimitives[]): void => {
       dispatch(storeAds({ ads }));

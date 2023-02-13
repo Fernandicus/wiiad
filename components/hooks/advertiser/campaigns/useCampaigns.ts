@@ -1,9 +1,8 @@
-import { ICampaignsCtxState } from "@/context/advertisers/campaigns/domain/interfaces/ICampaignsContext";
+import { campaignsSliceActions } from "@/context/advertisers/campaigns/campaigns-slices";
 import {
-  removeCampaignsReducerByAdId,
-  storeCampaignsReducer,
-} from "@/context/advertisers/campaigns/infrastructure/campaigns-slices";
-import { AppDispatch, store } from "@/context/common/infrastructure/store";
+  AppDispatch,
+  TCampaignsState,
+} from "@/context/common/infrastructure/store";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,22 +17,21 @@ interface ICampaignsStates {
 export interface IUseCampaigns {
   campaigns: ICampaignsStates;
   storeCampaigns(campaigns: ICampaignPrimitives[]): void;
-  removeCampaignsByAdId(adId: string): void;
+  removeCampaignByAdId(adId: string): void;
 }
 
 export const useCampaigns = (): IUseCampaigns => {
+  const { removeCampaign, storeCampaign } = campaignsSliceActions;
   const dispatch = useDispatch<AppDispatch>();
-  const campaigns = useSelector(
-    (state: ICampaignsCtxState): ICampaignsStates => {
-      const campaigns = state.campaigns.campaigns;
-      return {
-        all: campaigns,
-        actives: filterByStatus(campaigns, CampaignStatusType.ACTIVE),
-        standBy: filterByStatus(campaigns, CampaignStatusType.STAND_BY),
-        finished: filterByStatus(campaigns, CampaignStatusType.FINISHED),
-      };
-    }
-  );
+  const campaigns = useSelector((state: TCampaignsState): ICampaignsStates => {
+    const campaigns = state.campaigns.campaigns;
+    return {
+      all: campaigns,
+      actives: filterByStatus(campaigns, CampaignStatusType.ACTIVE),
+      standBy: filterByStatus(campaigns, CampaignStatusType.STAND_BY),
+      finished: filterByStatus(campaigns, CampaignStatusType.FINISHED),
+    };
+  });
 
   function filterByStatus(
     campaigns: ICampaignPrimitives[],
@@ -45,10 +43,10 @@ export const useCampaigns = (): IUseCampaigns => {
   return {
     campaigns,
     storeCampaigns: (campaigns: ICampaignPrimitives[]): void => {
-      dispatch(storeCampaignsReducer({ campaigns }));
+      dispatch(storeCampaign({ campaigns }));
     },
-    removeCampaignsByAdId: (adId: string): void => {
-      dispatch(removeCampaignsReducerByAdId({ adId }));
+    removeCampaignByAdId: (adId: string): void => {
+      dispatch(removeCampaign({ adId }));
     },
   };
 };
