@@ -3,7 +3,7 @@ import {
   getCardDetailsHandler,
   saveNewPMHandler,
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
-import { RootState } from "@/context/common/infrastructure/store";
+import { RootState } from "@/context/store";
 import { ICardDetailsPrimitives } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {

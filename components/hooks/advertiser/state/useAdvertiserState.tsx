@@ -1,6 +1,6 @@
-import { IAdvertiserSessionCtxState, IAdvertiserStatusCtxState } from "@/context/advertisers/status/domain/interfaces/IAdvertiserContext";
-import { TAdvertiserStatusState } from "@/context/advertisers/status/domain/interfaces/IAdvertiserState";
-import { changeSessionReducer, storeAdvertiserSession } from "@/context/advertisers/status/infrastructure/session-slices";
+import { TAdvertiserStatusState } from "@/context/advertisers/status/session-reducer";
+import { advertiserSlicesActions } from "@/context/advertisers/status/session-slices";
+import { TAdvertiserState } from "@/context/store";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,22 +12,21 @@ interface IUseAdvertiserState {
 }
 
 export const useAdvertiserState = (): IUseAdvertiserState => {
+  const { changeSession, storeAdvertiser } = advertiserSlicesActions;
   const dispatch = useDispatch();
-
-  const status = useSelector(
-    (state: IAdvertiserStatusCtxState) => state.session.status
-  );
-  const session = useSelector(
-    (state: IAdvertiserSessionCtxState) => state.session.session
-  );
+  const state = useSelector((state: TAdvertiserState) => state.session);
 
   const changeStatus = (newStatus: TAdvertiserStatusState) => {
-    console.log(newStatus);
-    dispatch(changeSessionReducer({ status: newStatus }));
+    dispatch(changeSession({ status: newStatus }));
   };
   const storeSession = (user: IUserPrimitives) => {
-    dispatch(storeAdvertiserSession({ session: user }));
+    dispatch(storeAdvertiser(user));
   };
 
-  return { status, session, storeSession, changeStatus };
+  return {
+    status: state.status,
+    session: state.session,
+    storeSession,
+    changeStatus,
+  };
 };

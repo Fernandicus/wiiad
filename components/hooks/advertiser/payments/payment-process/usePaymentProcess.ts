@@ -3,7 +3,7 @@ import {
   IStoreBudgetDetailsState,
 } from "@/context/advertisers/payments/payment-process/payment-process-reducer";
 import { paymentProcessSliceActions } from "@/context/advertisers/payments/payment-process/payment-process-slices";
-import { TPaymentProcessState } from "@/context/common/infrastructure/store";
+import { TPaymentProcessState } from "@/context/store";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { useDispatch, useSelector } from "react-redux";

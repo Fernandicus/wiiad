@@ -6,7 +6,7 @@ import {
 } from "@/context/advertisers/ads/ads-slices";
 import { useDispatch, useSelector } from "react-redux";
 import { useCampaigns } from "../campaigns/useCampaigns";
-import { AppDispatch, TAdsState } from "@/context/common/infrastructure/store";
+import { AppDispatch, TAdsState } from "@/context/store";
 
 interface IUseAds {
   ads: AdPropsPrimitives[];

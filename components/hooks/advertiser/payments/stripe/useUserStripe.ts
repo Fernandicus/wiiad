@@ -7,7 +7,7 @@ import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe
 import {
   AppDispatch,
   TStripeState,
-} from "@/context/common/infrastructure/store";
+} from "@/context/store";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";

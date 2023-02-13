@@ -1,5 +1,5 @@
 import { getAdvertiserProfileDataHandler } from "@/components/src/advertiser/data-profile/infrastructure/advertiser-container";
-import { TAdvertiserStatusState } from "@/context/advertisers/status/domain/interfaces/IAdvertiserState";
+import { TAdvertiserStatusState } from "@/context/advertisers/status/session-reducer";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useAds } from "./ads/useAds";

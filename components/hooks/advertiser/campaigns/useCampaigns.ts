@@ -2,7 +2,7 @@ import { campaignsSliceActions } from "@/context/advertisers/campaigns/campaigns
 import {
   AppDispatch,
   TCampaignsState,
-} from "@/context/common/infrastructure/store";
+} from "@/context/store";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { useDispatch, useSelector } from "react-redux";
