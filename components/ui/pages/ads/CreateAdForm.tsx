@@ -15,7 +15,7 @@ interface ICreateAdFormProps {
 
 export default function CreateAdForm(props: ICreateAdFormProps) {
   const { adType, onSuccess } = props;
-  const { formNames, handle, values, error, isSubmitting } = useCreateAdForm({
+  const { names, handle, values, error, isSubmitting } = useCreateAdForm({
     onSuccess,
   });
   const [isFileOk, setIsFileOk] = useState<boolean>(false);
@@ -30,7 +30,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
       }}
     >
       <SelectFileField
-        inputName={formNames.file}
+        inputName={names.file}
         adType={adType}
         onSuccess={(image) => {
           setFilePreview(image);
@@ -39,7 +39,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
       />
       <AdSegmentsField
         title="A qué nichos va dirigido este anuncio?"
-        inputName={formNames.segments}
+        inputName={names.segments}
         onChange={handle.change}
         value={values.segments}
         errorText={error.message("segments")}
@@ -49,13 +49,13 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
         title="Título"
         value={values.title}
         onChange={handle.change}
-        inputName={formNames.title}
+        inputName={names.title}
         hasError={error.hasError("title")}
         errorText={error.message("title")}
       />
       <AdURLField
         hasError={error.hasError("url")}
-        inputName={formNames.url}
+        inputName={names.url}
         onChange={handle.change}
         title="URL de redirección"
         errorText={error.message("url")}
@@ -63,7 +63,7 @@ export default function CreateAdForm(props: ICreateAdFormProps) {
       />
       <AdDescriptionField
         hasError={error.hasError("description")}
-        inputName={formNames.description}
+        inputName={names.description}
         onChange={handle.change}
         title="Description"
         value={values.description}

@@ -11,7 +11,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
   return (
     <div>
       <SectionHeader
-        titleLable="Datos personales"
+        titleLable="Información básica"
         descriptionLabel="Revisa la información de tu perfil y actualiza tus datos personales si fuese necesario"
       >
         <PrimaryButton disabled fullWitdth={false} type="button">
@@ -29,20 +29,9 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                 ></img>
               </button>
             </div>
-            <div className="grid grid-cols-3 gap-5 w-full">
-              <div className="space-y-2">
-                <label className="font-bold">
-                  Empresa <span className="text-red-500">*</span>
-                </label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Mi Empresa S.L."
-                  onChange={() => {}}
-                  className={`rounded-md px-2 block w-full h-10 border-2 border-red-300 `}
-                />
-              </div>
-              <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-5 w-full">
+              
+              <div className="space-y-2 w-full">
                 <label className="font-bold">Nombre de marca</label>
                 <input
                   required
@@ -52,7 +41,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   className={`rounded-md px-2 block w-full h-10 border border-gray-300 `}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 w-full">
                 <label className="font-bold">Email</label>
                 <input
                   required
@@ -62,6 +51,18 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   className={`rounded-md px-2 block w-full h-10 border border-gray-300 `}
                 />
               </div>
+              {/* <div className="space-y-2">
+                <label className="font-bold">
+                  Web
+                </label>
+                <input
+                  required
+                  type="text"
+                  placeholder="https://..."
+                  onChange={() => {}}
+                  className={`rounded-md px-2 block w-full h-10 border border-gray-300 `}
+                />
+              </div> */}
             </div>
           </div>
         </form>

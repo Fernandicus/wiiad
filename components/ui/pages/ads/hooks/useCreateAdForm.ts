@@ -27,7 +27,7 @@ enum AdFormNames {
 }
 
 interface IUseCreateAdForm {
-  formNames: typeof AdFormNames;
+  names: typeof AdFormNames;
   values: IFormNames;
   handle: {
     submit(
@@ -37,8 +37,8 @@ interface IUseCreateAdForm {
     change(e: ChangeEvent<any>): void;
   };
   error: {
-    message(formName: keyof typeof AdFormNames): string;
-    hasError(formName: keyof typeof AdFormNames): boolean;
+    message(name: keyof typeof AdFormNames): string;
+    hasError(name: keyof typeof AdFormNames): boolean;
   };
   isSubmitting: boolean;
 }
@@ -136,7 +136,7 @@ export const useCreateAdForm = (
   }
 
   return {
-    formNames,
+    names: formNames,
     values: form.values,
     handle: {
       change: form.handleChange,
@@ -147,9 +147,9 @@ export const useCreateAdForm = (
       },
     },
     error: {
-      hasError: (formName) =>
-        form.errors[formName] && form.touched[formName] ? true : false,
-      message: (formName) => form.errors[formName] as string,
+      hasError: (name) =>
+        form.errors[name] && form.touched[name] ? true : false,
+      message: (name) => form.errors[name] as string,
     },
     isSubmitting: isLoading,
   };

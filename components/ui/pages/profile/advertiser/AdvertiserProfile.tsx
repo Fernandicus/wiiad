@@ -1,44 +1,48 @@
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ProfileDataSection } from "@/components/ui/pages/profile/advertiser/ProfileDataSection";
 import { WalletDataSection } from "@/components/ui/pages/profile/advertiser/WalletDataSection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddCreditCardDialog } from "./items/AddCreditCardDialog";
 import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
+import { SectionHeader } from "../../items/SectionHeader";
+import { CardItem } from "./CardItem";
+import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
+import { SecondaryNavBarItem } from "@/components/ui/layouts/navbar-items/SecondaryNavBarItem";
+import { NavBarButton } from "@/components/ui/layouts/navbar-items/NavBarButton";
+import Link from "next/link";
+import { SecondaryNavBarButton } from "@/components/ui/layouts/navbar-items/SecondaryNavBarButton";
+import {
+  ProfileSecondaryNavBar,
+  TProfileSeconadaryNavBar,
+} from "./ProfileSecondaryNavBar";
+import { AdvertiserProfileSection } from "./AdvertiserProfileSection";
+import { FacturationProfileSection } from "./FacturationProfileSection";
+import { useRouter } from "next/router";
 
-interface IAdvertiserSectionProps {
-  user: IUserPrimitives;
-  children?: JSX.Element;
-}
+export function AdvertiserProfile() {
+  const router = useRouter();
+  const [secondaryPage, setSecondaryPage] =
+    useState<TProfileSeconadaryNavBar>("profile");
 
-export function AdvertiserProfile({ user }: IAdvertiserSectionProps) {
-  const { userStripe, setupIntentClientSecret } = useUserStripe();
-  const [secret, setSecret] = useState<string>("");
-  const [showDialog, setShowDialog] = useState<boolean>(false);
+  useEffect(() => {
+    const paths = router.asPath.split("#");
+    const subPage = paths[1] as TProfileSeconadaryNavBar;
+    setSecondaryPage(subPage);
+  }, []);
 
   return (
-    <div className="relative">
-      <div className="space-y-10">
-        <ProfileDataSection user={user} />
-        <WalletDataSection
-          onAddPaymentMethod={async (e) => {
-            e.preventDefault();
-            try {
-              setShowDialog((prev) => !prev);
-              const secret = await setupIntentClientSecret();
-              setSecret(secret);
-            } catch (err) {
-              console.error(err);
-            }
-          }}
-          paymentMethods={userStripe.paymentMethods}
-        />
+    <>
+      <ProfileSecondaryNavBar
+        selectedPage={secondaryPage}
+        onClick={(page) => setSecondaryPage(page)}
+      />
+      <div>
+        {secondaryPage == "facturation" ? (
+          <FacturationProfileSection />
+        ) : (
+          <AdvertiserProfileSection />
+        )}
       </div>
-      {showDialog && (
-        <AddCreditCardDialog
-          closeDialog={() => setShowDialog(false)}
-          secret={secret}
-        />
-      )}
-    </div>
+    </>
   );
 }

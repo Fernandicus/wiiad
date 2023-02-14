@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Logout } from "../login/Logout";
@@ -28,7 +27,7 @@ export const AdvertiserNavBar = () => {
             onClick={() => setActivePage("profile")}
             isActive={isActive("profile")}
             page="profile"
-            label="Perfil"
+            label="Mi cuenta"
           />
           <NavBarButton
             onClick={() => setActivePage("ads")}

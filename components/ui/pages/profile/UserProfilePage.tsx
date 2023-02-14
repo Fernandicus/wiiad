@@ -23,13 +23,9 @@ export const UserProfilePage = (props: IProfilePageParams) => {
 
   const profile: Record<RoleType, JSX.Element | null> = {
     user: <UserProfile user={user} />,
-    business: <AdvertiserProfile user={user} />,
+    business: <AdvertiserProfile />,
     agency: null,
   };
 
-  return (
-    <section className="w-full h-screen">
-      {profile[roleType(role)]}
-    </section>
-  );
+  return <section className="w-full">{profile[roleType(role)]}</section>;
 };
