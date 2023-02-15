@@ -19,8 +19,8 @@ export const useAdvertiserState = (): IUseAdvertiserState => {
   const changeStatus = (newStatus: TAdvertiserStatusState) => {
     dispatch(changeSession({ status: newStatus }));
   };
-  const storeSession = (user: IUserPrimitives) => {
-    dispatch(storeAdvertiser(user));
+  const storeSession = (session: IUserPrimitives) => {
+    dispatch(storeAdvertiser(session));
   };
 
   return {

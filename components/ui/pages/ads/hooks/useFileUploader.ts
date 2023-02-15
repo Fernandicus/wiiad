@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 
 interface IUseFileUploaderProps {
   fileMaxSize: number;
-  onSuccess(file: string): void;
+  onSuccess?(file: string): void;
 }
 
 interface IUseFileUploaderResp {
@@ -12,6 +12,9 @@ interface IUseFileUploaderResp {
   filePreview?: string;
 }
 
+/**
+ * @param fileMaxSize must be in bytes. (2mb = 2 * 1024 * 1024 bytes)
+ */
 export const useFileUploader = (
   props: IUseFileUploaderProps
 ): IUseFileUploaderResp => {
@@ -31,7 +34,7 @@ export const useFileUploader = (
     if (selectedFile.size > fileMaxSize) {
       setHasError(true);
       setErrorMessage(
-        `El archivo es demasiado garnde. El tamaño máximo debe ser ${mb}Mb`
+        `El archivo es demasiado grande. El tamaño máximo debe ser ${mb}Mb`
       );
     } else {
       if (hasError) setHasError(false);
@@ -40,7 +43,7 @@ export const useFileUploader = (
       reader.onloadend = () => {
         const fileResult = reader.result as string;
         setFilePreview(fileResult);
-        onSuccess(fileResult);
+        if (onSuccess) onSuccess(fileResult);
       };
     }
   };

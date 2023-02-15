@@ -10,6 +10,7 @@ export const AdvertiserProfileSection = () => {
   const { session } = useAdvertiser();
   const [secret, setSecret] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  
   return (
     <>
       <div className="space-y-10">

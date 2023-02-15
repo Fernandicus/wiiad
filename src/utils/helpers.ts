@@ -1,5 +1,5 @@
 import { NextApiRequest } from "next";
-import { RefObject } from "react";
+import { ChangeEvent, RefObject } from "react";
 import { IApiResp } from "../common/domain/interfaces/IApiResponse";
 
 export const reqBodyParse = (req: NextApiRequest) =>
@@ -22,4 +22,11 @@ export async function getApiResponse<T extends IApiResp<unknown>>(
 
 export function assertUnreachable(assert: never): never {
   throw new Error("Missing switch case");
+}
+
+export function replaceInputTextSpacesWith(
+  e: ChangeEvent<HTMLInputElement>,
+  replacer: string
+) {
+  return e.target.value.replace(/\s/g, replacer);
 }

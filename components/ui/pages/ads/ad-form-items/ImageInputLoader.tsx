@@ -2,6 +2,7 @@ import { UploadIcon } from "@/components/ui/icons/UploadIcon";
 import { ChangeEvent } from "react";
 
 interface IImageInputLoaderProps {
+  required?:boolean;
   children: JSX.Element | JSX.Element[];
   filePreview?: string;
   inputName?: string;
@@ -10,7 +11,7 @@ interface IImageInputLoaderProps {
 }
 
 export const ImageInputLoader = (params: IImageInputLoaderProps) => {
-  const { imageClassName, filePreview, inputName, onSelectFile, children } =
+  const { imageClassName, filePreview, inputName, onSelectFile, children, required = true } =
     params;
   const idRef = "image-input";
 
@@ -31,7 +32,7 @@ export const ImageInputLoader = (params: IImageInputLoaderProps) => {
       </label>
       <input
         className="hidden"
-        required
+        required={required}
         id={idRef}
         accept=".png, .jpg, .jpeg"
         type="file"

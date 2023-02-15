@@ -1,7 +1,8 @@
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { AdFileUrl } from "../../../ad/domain/value-objects/AdFileUrl";
+import { ICloudinarySignedParams } from "../../infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { Folder } from "../Folder";
 
 export interface ICloudStorageRepo {
-  uploadBannerAndGetUrl(file: string, folder: Folder): Promise<AdFileUrl>;
-  uploadVideoAndGetUrl(file: string, foler: Folder): Promise<AdFileUrl>;
+  getSignedData(folder: Folder): ICloudinarySignedParams;
 }

@@ -15,4 +15,9 @@ export class Folder {
     const path = `advertisers/${userName.name}/ads/videos/`;
     return new Folder(path);
   }
+
+  static advertiserProfilePic(userName: Name){
+    const path = `advertisers/${userName.name}/profilePic/`;
+    return new Folder(path);
+  }
 }
