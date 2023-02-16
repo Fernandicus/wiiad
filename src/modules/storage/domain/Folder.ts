@@ -1,3 +1,4 @@
+import { UniqId } from "@/src/utils/UniqId";
 import { Name } from "../../../common/domain/Name";
 
 export class Folder {
@@ -6,18 +7,18 @@ export class Folder {
     this.path = path;
   }
 
-  static bannerAd(userName: Name){
-    const path = `advertisers/${userName.name}/ads/banners/`;
+  static bannerAd(userId: UniqId) {
+    const path = `advertisers/${userId.id}/ads/banners/`;
     return new Folder(path);
   }
 
-  static videoAd(userName: Name){
-    const path = `advertisers/${userName.name}/ads/videos/`;
+  static videoAd(userId: UniqId) {
+    const path = `advertisers/${userId.id}/ads/videos/`;
     return new Folder(path);
   }
 
-  static advertiserProfilePic(userName: Name){
-    const path = `advertisers/${userName.name}/profilePic/`;
+  static advertiserProfilePic(userId: UniqId) {
+    const path = `advertisers/${userId.id}/profilePic/`;
     return new Folder(path);
   }
 }

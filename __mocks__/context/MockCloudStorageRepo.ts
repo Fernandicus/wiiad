@@ -4,9 +4,11 @@ import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 
 export const mockedCloudStorageRepo = (): ICloudStorageRepo => {
   return {
-    uploadBannerAndGetUrl: jest
-      .fn()
-      .mockImplementation((file: string, folder: Folder): AdFileUrl => new AdFileUrl(folder.path + file)),
-    uploadVideoAndGetUrl: jest.fn(),
+    getSignedData: (folder) => ({
+      api_key: "_apiKey_",
+      signature: "_signature_",
+      signedParams: { folder: folder.path },
+      timestamp: Date.now(),
+    }),
   };
 };

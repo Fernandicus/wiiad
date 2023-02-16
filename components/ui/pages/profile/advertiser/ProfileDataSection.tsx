@@ -23,7 +23,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
 
   const { setNotification } = useNotification();
 
-  const { error, handle, input } = useUpdateProfileDataForm({
+  const { error, handle, input, isSubmitting } = useUpdateProfileDataForm({
     email: user.email,
     name: user.name,
     profilePic: user.profilePic,
@@ -42,12 +42,23 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
 
   return (
     <div>
-      <form onSubmit={handle.submit}>
+      <form
+        onSubmit={(e) => {
+          if (!isSubmitting) {
+            handle.submit(e, { file: filePreview });
+          }
+        }}
+      >
         <SectionHeader
           titleLable="Información básica"
           descriptionLabel="Revisa la información de tu perfil y actualiza tus datos personales si fuese necesario"
         >
-          <PrimaryButton disabled={isDisabled} fullWitdth={false} type="submit">
+          <PrimaryButton
+            isLoading={isSubmitting}
+            disabled={isDisabled}
+            fullWitdth={false}
+            type="submit"
+          >
             Guardar cambios
           </PrimaryButton>
         </SectionHeader>
@@ -86,7 +97,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   name={input.names.name}
                   value={input.values.name}
                   onChange={(e) => {
-                    e.target.value = replaceInputTextSpacesWith(e, "_")
+                    e.target.value = replaceInputTextSpacesWith(e, "_");
                     handle.change(e);
                   }}
                   className={`rounded-md px-2 block w-full h-10 border ${
@@ -105,7 +116,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                 </label>
                 <input
                   required
-                  type="text"
+                  type="email"
                   name={input.names.email}
                   value={input.values.email}
                   onChange={handle.change}

@@ -26,6 +26,10 @@ export class VerificationURL {
     return this.verificationUrl(LogStates.SignUp);
   }
 
+  updateEmail(): string {
+    return this.verificationUrl(LogStates.UpdateEmail);
+  }
+
   private verificationUrl(logState: LogStates) {
     const token = this.authToken.token;
     const log = LoginQuery.Log;

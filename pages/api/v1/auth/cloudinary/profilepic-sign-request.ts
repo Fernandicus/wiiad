@@ -12,16 +12,24 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<IApiRespCloudinarySignature>
 ) {
-  if (req.method !== "GET") return res.status(400).json({ message: "Bad request" });
+  if (req.method !== "GET")
+    return res.status(400).json({ message: "Bad request" });
 
   try {
     const session = userSession.getFromServer({ req, res });
 
     if (!session)
-      return res.status(400).json({ message: "No session provided" });
-    if (session.role == RoleType.USER) return res.status(400).json({ message: "Action no authorized" });
+      return res.status(400).end({ message: "No session provided" });
+    if (session.role == RoleType.USER)
+      return res.status(400).end({ message: "Action no authorized" });
 
-    const signedParams = getSignedParamsHandler.forBanner(session.id);
+    let signedParams;
+
+    if (session.role !== RoleType.USER) {
+      signedParams = getSignedParamsHandler.forAdvertiserProfilePic(
+        session.id
+      );
+    }
 
     return res
       .status(200)

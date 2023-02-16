@@ -14,9 +14,11 @@ import { Last4 } from "@/src/modules/payment-methods/stripe/domain/value-objects
 import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentIntentId";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
+import { StripeClientSecret } from "@/src/modules/payment-methods/stripe/domain/value-objects/StripeClientSecret";
 import { PaymentIntent } from "@/src/modules/payment-methods/stripe/use-case/PaymentIntent";
 import { faker } from "@faker-js/faker";
 import { FakePaymentMethodId } from "./FakePaymentMethodId";
+import { FakeStripeClientSecret } from "./FakeStripeClientSecret";
 
 export class FakePaymentDetails extends PaymentDetails {
   constructor(params: IPaymentDetailsParams) {
@@ -28,7 +30,7 @@ export class FakePaymentDetails extends PaymentDetails {
     return new FakePaymentDetails({
       id,
       amount: new PaymentAmount(amount),
-      clientSecret: faker.random.numeric(1000),
+      clientSecret: FakeStripeClientSecret.create(),
       paymentMethodId: FakePaymentMethodId.create(),
     });
   }

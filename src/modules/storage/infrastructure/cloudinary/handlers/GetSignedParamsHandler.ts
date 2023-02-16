@@ -1,4 +1,5 @@
 import { Name } from "@/src/common/domain/Name";
+import { UniqId } from "@/src/utils/UniqId";
 import { Folder } from "../../../domain/Folder";
 import { ICloudinarySignedParams } from "../CloudinaryCloudStorageRepo";
 import { GetCloudinarySignedParams } from "../services/GetCloudinarySignedParams";
@@ -6,13 +7,18 @@ import { GetCloudinarySignedParams } from "../services/GetCloudinarySignedParams
 export class GetSignedParamsHandler {
   constructor(private getSignedParams: GetCloudinarySignedParams) {}
 
-  forVideo(userName: string): ICloudinarySignedParams {
-    const folder = Folder.videoAd(new Name(userName));
+  forVideo(userId: string): ICloudinarySignedParams {
+    const folder = Folder.videoAd(new UniqId(userId));
     return this.getSignedParams.get(folder);
   }
 
-  forBanner(userName: string): ICloudinarySignedParams {
-    const folder = Folder.bannerAd(new Name(userName));
+  forBanner(userId: string): ICloudinarySignedParams {
+    const folder = Folder.bannerAd(new UniqId(userId));
+    return this.getSignedParams.get(folder);
+  }
+
+  forAdvertiserProfilePic(userId: string): ICloudinarySignedParams {
+    const folder = Folder.advertiserProfilePic(new UniqId(userId));
     return this.getSignedParams.get(folder);
   }
 }

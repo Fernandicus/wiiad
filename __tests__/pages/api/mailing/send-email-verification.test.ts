@@ -1,4 +1,6 @@
-import sendEmailVerification from "@/pages/api/v1/auth/login";
+import sendEmailVerification, {
+  IApiReqSendEmailVerification,
+} from "@/pages/api/v1/auth/login";
 import { faker } from "@faker-js/faker";
 import { TestVerificationEmailMongoDBRepo } from "../../../../__mocks__/lib/modules/send-email-verification/infrastructure/TestVerificationEmailMongoDBRepo";
 import { RoleType } from "@/src/common/domain/Role";
@@ -20,7 +22,8 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request with all the required data for new user,
   THEN return status code 200`, async () => {
-    const { req, res } = mockedContext({method:"POST", body:{ data: user, isNewUser: true }});
+    const body: IApiReqSendEmailVerification = { data: user, isNewUser: true };
+    const { req, res } = mockedContext({ method: "POST", body });
 
     await sendEmailVerification(req, res);
 
@@ -29,7 +32,10 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request with all the required data for an existing user,
   THEN return status code 400`, async () => {
-    const { req, res } = mockedContext({method:"POST", body:{ data: user, isNewUser: false }});
+    const { req, res } = mockedContext({
+      method: "POST",
+      body: { data: user, isNewUser: false },
+    });
 
     await sendEmailVerification(req, res);
 
@@ -38,7 +44,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send GET request, 
   THEN return status code 400`, async () => {
-    const { req, res } = mockedContext({method:"GET", body:{ data: user }});
+    const { req, res } = mockedContext({ method: "GET", body: { data: user } });
 
     await sendEmailVerification(req, res);
 
@@ -47,7 +53,7 @@ describe("On api/mailing/send-email-verification, GIVEN an user", () => {
 
   it(`WHEN send POST request without the required data, 
   THEN return status code 400`, async () => {
-    const { req, res } = mockedContext({method:"POST", body:{ data: {} }});
+    const { req, res } = mockedContext({ method: "POST", body: { data: {} } });
 
     await sendEmailVerification(req, res);
 

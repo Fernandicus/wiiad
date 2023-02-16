@@ -1,4 +1,5 @@
 export const enum LogStates{
     LogIn = "login",
-    SignUp = "signup"
+    SignUp = "signup",
+    UpdateEmail = "update-email",
 }

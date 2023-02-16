@@ -3,36 +3,44 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 type TFormNames<T> = { [K in keyof T]: string };
 
-export interface IUseForm<FV> {
+export interface IUseForm<FV, T> {
   input: { names: TFormNames<FV>; values: FV };
   handle: {
-    submit<T>(e: FormEvent<HTMLFormElement> | undefined, params?: T): void;
+    submit(e: FormEvent<HTMLFormElement> | undefined, params: T): void;
     change(e: ChangeEvent<any>): void;
   };
   error: {
     message(name: keyof FV): string;
     hasError(name: keyof FV): boolean;
   };
+  isSubmitting: boolean;
 }
 
-export const useForm = <T extends object>({
-  initialValues,
-  yupSchema,
-  //handleSubmit,
-  onSubmit,
-  inputNames,
-}: {
+interface IUseFormProps<T, P> {
   inputNames: TFormNames<T>;
   initialValues: T;
   yupSchema: {};
-  onSubmit(values: T): void;
-  //onSubmit<P>(params?: P): void;
-}): IUseForm<T> => {
+  handleSubmit(values: T): void | Promise<void>;
+  onSubmit?(params: P): void;
+}
+
+export const useForm = <T extends object, P>({
+  initialValues,
+  yupSchema,
+  handleSubmit,
+  onSubmit,
+  inputNames,
+}: IUseFormProps<T, P>): IUseForm<T, P> => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const form = useFormik({
     enableReinitialize: true,
     initialValues: initialValues,
     validationSchema: yupSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      await handleSubmit(values);
+      setIsSubmitting(false);
+    },
   });
 
   return {
@@ -40,7 +48,8 @@ export const useForm = <T extends object>({
     handle: {
       change: form.handleChange,
       submit: (e, params) => {
-        //  onSubmit(params);
+        setIsSubmitting(true);
+        if (onSubmit) onSubmit(params);
         form.handleSubmit(e);
       },
     },
@@ -49,6 +58,6 @@ export const useForm = <T extends object>({
         form.errors[name] && form.touched[name] ? true : false,
       message: (name) => form.errors[name] as string,
     },
-    //isSubmitting: isLoading,
+    isSubmitting,
   };
 };

@@ -6,6 +6,7 @@ import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { Folder } from "@/src/modules/storage/domain/Folder";
+import { IApiRespCloudinarySignature } from "@/pages/api/v1/auth/cloudinary/video-sign-request";
 
 describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
   it(`WHEN send a not 'GET' request,
@@ -46,14 +47,16 @@ describe("On api/v1/auth/cloudinary/banner-sign-request", () => {
     await api_v1_CloudinarySignBannerRequest(req, res);
 
     const responseJSON = res._getData();
-    const response: ICloudinarySignedParams = JSON.parse(responseJSON);
+    const response: IApiRespCloudinarySignature = JSON.parse(responseJSON);
+
 
     expect(res.statusCode).toBe(200);
-    expect(response.api_key).not.toBeUndefined();
-    expect(response.signature).not.toBeUndefined();
-    expect(response.signedParams).not.toBeUndefined();
-    expect(response.timestamp).not.toBeUndefined();
-    expect(response.signedParams.folder).toEqual(Folder.bannerAd(advertiser.name).path)
+    expect(response.data).not.toBeUndefined();
+    expect(response.data?.api_key).not.toBeUndefined();
+    expect(response.data?.signature).not.toBeUndefined();
+    expect(response.data?.signedParams).not.toBeUndefined();
+    expect(response.data?.timestamp).not.toBeUndefined();
+    expect(response.data?.signedParams.folder).toEqual(Folder.bannerAd(advertiser.id).path)
     
   });
 });

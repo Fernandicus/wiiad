@@ -11,7 +11,7 @@ import { RoleType } from "@/src/common/domain/Role";
 import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { verificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 
-export interface APISendEmailVerification {
+export interface IApiReqSendEmailVerification {
   data: IVerificationEmailData;
   isNewUser: boolean;
 }
@@ -22,7 +22,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(400);
 
-  const { data, isNewUser }: APISendEmailVerification = reqBodyParse(req);
+  const { data, isNewUser }: IApiReqSendEmailVerification = reqBodyParse(req);
   
   try {
     await MongoDB.connectAndDisconnect(async () => {

@@ -15,6 +15,8 @@ export class ApiRoutes {
   static readonly addReferral = "/api/v1/referral/add";
   static readonly getUserReferralData = "/api/v1/referral/get-data";
   static readonly cloudinaryCloudName = "fernanprojects";
+  static readonly cloudinarySignedProfilePic =
+    "/api/v1/auth/cloudinary/profilepic-sign-request";
   static readonly cloudinarySignedVideoData =
     "/api/v1/auth/cloudinary/video-sign-request";
   static readonly cloudinarySignedBannerData =
@@ -31,6 +33,7 @@ export class ApiRoutes {
     else return `https://${host}/campaigns`;
   };
   static readonly advertiserDataProfile = "/api/v1/profile";
+  static readonly updateProfile = "/api/v1/profile/update";
   static readonly stripeSetupIntent = "/api/v1/payments/stripe/setup-intent";
   static readonly stripeSaveNewPaymentMethod =
     "/api/v1/payments/stripe/save-new-pm";

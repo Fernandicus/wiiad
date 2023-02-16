@@ -12,4 +12,9 @@ export class UploadFileToCloudStorageHandler {
     const adFileUrl = await this.uploadFile.banner(file);
     return adFileUrl.file;
   }
+
+  async profilePic(file: string): Promise<string> {
+    const profilePic = await this.uploadFile.profilePic(file);
+    return profilePic.url;
+  }
 }

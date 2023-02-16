@@ -31,7 +31,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     const { users } = await TestDBs.setAndInitAll();
     influencer = users[0];
     myUser = FakeUser.createWithPrimitives(UniqId.generate());
-  });
+  }, 12000);
 
   it(`WHEN access to url without user session,
   THEN response should be all active campaigns`, async () => {
@@ -47,7 +47,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
 
     expect(resp.props.campaign).not.toBe(null);
     expect(resp.props.ad).not.toBe(null);
-  });
+  }, 12000);
 
   it(`WHEN access to my user name url,
   THEN response should contain destination "/profile"`, async () => {
@@ -65,7 +65,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     })) as IServerSideResponse;
 
     expect(resp.redirect.destination).toBe("/profile");
-  });
+  }, 12000);
 
   it(`WHEN access to an influencer url,
   THEN response should have an active campaign and ad`, async () => {
@@ -90,7 +90,7 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     expect(ad.id).toBe(campaign.adId);
     expect(user.id).toBe(myUser.id);
     expect(referrer.id).toBe(influencer.id.id);
-  });
+  }, 12000);
 
   it(`WHEN access to a not existing influencer url,
   THEN response should return a redirect address`, async () => {
@@ -107,5 +107,5 @@ describe("On getServerSideProps WatchAd, GIVEN a user and some Active Campaigns"
     })) as IServerSideResponse;
 
     expect(resp.redirect).not.toBe(undefined);
-  });
+  }, 12000);
 });

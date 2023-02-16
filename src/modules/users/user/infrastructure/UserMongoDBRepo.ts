@@ -3,11 +3,24 @@ import { Name } from "@/src/common/domain/Name";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
-import { IUserRepo } from "../domain/IUserRepo";
+import { IUpdateProfileProps, IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";
 import { UserModel, IUserModel } from "./UserModel";
 
 export class UserMongoDBRepo implements IUserRepo {
+  async update(params: IUpdateProfileProps): Promise<void> {
+    const { userId, data } = params;
+    const { email, name, profilePic } = data;
+
+    const body: Partial<IUserModel> = {
+      email: email?.email,
+      name: name?.name,
+      profilePic: profilePic?.url,
+    };
+    
+    await UserModel.updateOne({ _id: userId.id }, { $set: body });
+  }
+
   async save(user: User): Promise<void> {
     await UserModel.create({
       ...user.toPrimitives(),

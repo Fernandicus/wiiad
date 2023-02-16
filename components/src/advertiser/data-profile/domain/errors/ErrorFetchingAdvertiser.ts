@@ -24,4 +24,11 @@ export class ErrorFetchingAdvertiser extends Error {
       cause,
     });
   }
+
+  static updateProfile(cause?:string):ErrorFetchingAdvertiser{
+    return new ErrorFetchingAdvertiser({
+      message: "Something went wrong updating advertiser profile",
+      cause,
+    });
+  }
 }

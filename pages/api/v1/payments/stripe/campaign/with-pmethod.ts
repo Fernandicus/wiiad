@@ -1,12 +1,12 @@
 //? https://stripe.com/docs/payments/quickstart
 //? https://stripe.com/docs/payments/save-during-payment
 
-import { StripeCampaignPaymentController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripeCampaignPaymentController";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
+import { StripeCampaignPaymentController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripePaymentController";
 
 export interface IApiReqStripePaymentWithPMethod {
   paymentMethod: string;

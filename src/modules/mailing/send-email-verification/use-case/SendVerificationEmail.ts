@@ -11,4 +11,8 @@ export class SendlVerificationEmail {
   async signUp(verificationURL: VerificationURL): Promise<void> {
     await this.emailSender.signUp(verificationURL);
   }
+
+  async updateEmail(verificationURL: VerificationURL): Promise<void> {
+    await this.emailSender.updateEmail(verificationURL);
+  }
 }

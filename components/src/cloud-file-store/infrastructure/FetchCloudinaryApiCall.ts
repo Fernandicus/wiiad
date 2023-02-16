@@ -1,4 +1,5 @@
-import { IApiRespCloudinaryVideoSign } from "@/pages/api/v1/auth/cloudinary/video-sign-request";
+import { IApiRespCloudinarySignature } from "@/pages/api/v1/auth/cloudinary/video-sign-request";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { ICloudinarySignedParams } from "@/src/modules/storage/infrastructure/cloudinary/CloudinaryCloudStorageRepo";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
@@ -30,42 +31,65 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     });
   }
 
-  async uploadBanner(file: string): Promise<AdFileUrl> {
-    const signedData = await this.getSignedData();
-    const formData = this.formDataParse({ file, data: signedData });
-
-    const uploadResp = await fetch(ApiRoutes.cloudinaryImageEndPoint, {
-      method: "POST",
-      body: formData,
+  async uploadProfilePic(file: string): Promise<ProfilePic> {
+    const { public_id } = await this.getPublicId({
+      file,
+      signedDataEndPoint: ApiRoutes.cloudinarySignedProfilePic,
+      cloudinaryEndPoint: ApiRoutes.cloudinaryImageEndPoint,
     });
-    const jsonResp = await uploadResp.json();
-    const { public_id } = jsonResp as { public_id: string };
+    const transformedImage = this.transformImage(public_id, {
+      width: 128,
+      height: 128,
+    });
+    const url = transformedImage.toURL();
+    return new ProfilePic(url);
+  }
 
-    const transformedVideo = this.transformImage(public_id);
-    const url = transformedVideo.toURL();
+  async uploadBanner(file: string): Promise<AdFileUrl> {
+    const { public_id } = await this.getPublicId({
+      file,
+      signedDataEndPoint: ApiRoutes.cloudinarySignedBannerData,
+      cloudinaryEndPoint: ApiRoutes.cloudinaryImageEndPoint,
+    });
+
+    const transformedImage = this.transformImage(public_id);
+    const url = transformedImage.toURL();
     return new AdFileUrl(url);
   }
 
   async uploadVideo(file: string): Promise<AdFileUrl> {
-    const signedData = await this.getSignedData();
-    const formData = this.formDataParse({
+    const { public_id } = await this.getPublicId({
       file,
-      data: signedData,
+      signedDataEndPoint: ApiRoutes.cloudinarySignedVideoData,
+      cloudinaryEndPoint: ApiRoutes.cloudinaryVideoEndPoint,
     });
-
-    const resp = await fetch(ApiRoutes.cloudinaryVideoEndPoint, {
-      method: "POST",
-      body: formData,
-    });
-
-    const jsonResp = await resp.json();
-    const { public_id } = jsonResp as { public_id: string };
 
     const format = "mp4";
     const transformedVideo = this.transformVideo(public_id, format);
     const url = this.toURLVideo(transformedVideo, format);
 
-    return new AdFileUrl(url);;
+    return new AdFileUrl(url);
+  }
+
+  private async getPublicId(params: {
+    file: string;
+    signedDataEndPoint: string;
+    cloudinaryEndPoint: string;
+  }) {
+    const { file, cloudinaryEndPoint, signedDataEndPoint } = params;
+    
+    const signedData = await this.getSignedData(signedDataEndPoint);
+    const formData = this.formDataParse({
+      file,
+      data: signedData,
+    });
+    const resp = await fetch(cloudinaryEndPoint, {
+      method: "POST",
+      body: formData,
+    });
+
+    const jsonResp = await resp.json();
+    return jsonResp as { public_id: string };
   }
 
   private formDataParse(params: {
@@ -82,12 +106,11 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     return formData;
   }
 
-  private async getSignedData(): Promise<ICloudinarySignedParams> {
-    const resp = await fetch(ApiRoutes.cloudinarySignedVideoData, {
+  private async getSignedData(url: string): Promise<ICloudinarySignedParams> {
+    const resp = await fetch(url, {
       method: "GET",
     });
-    const apiResp = await getApiResponse<IApiRespCloudinaryVideoSign>(resp);
-
+    const apiResp = await getApiResponse<IApiRespCloudinarySignature>(resp);
     if (resp.status !== 200 || !apiResp.data)
       throw ErrorFetchingCloudinary.gettingSignedData(apiResp.message);
 
@@ -108,10 +131,15 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     return videoTransformedData;
   }
 
-  private transformImage(public_id: string): CloudinaryImage {
+  private transformImage(
+    public_id: string,
+    size?: { width: number; height: number }
+  ): CloudinaryImage {
+    const { width, height } = !size ? { width: 576, height: 324 } : size;
+    
     const myImage = this.cld.image(public_id);
     const transformedImage = myImage
-      .resize(fill().width(576).height(324).gravity("center"))
+      .resize(fill().width(width).height(height).gravity("center"))
       .format("png");
     return transformedImage;
   }

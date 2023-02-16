@@ -11,14 +11,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSignedParamsHandler } from "@/src/modules/storage/infrastructure/storage-container";
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
-export interface IApiRespCloudinaryVideoSign
+export interface IApiRespCloudinarySignature
   extends IApiResp<ICloudinarySignedParams> {}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<IApiRespCloudinaryVideoSign>
+  res: NextApiResponse<IApiRespCloudinarySignature>
 ) {
-  if (req.method !== "GET") return res.status(400).end();
+  if (req.method !== "GET") return res.status(400).json({ message: "Bad request" });
 
   try {
     const session = userSession.getFromServer({ req, res });
@@ -28,7 +28,7 @@ export default async function handler(
     if (session.role == RoleType.USER)
       return res.status(400).end({ message: "Action no authorized" });
 
-    const signedParams = getSignedParamsHandler.forVideo(session.name);
+    const signedParams = getSignedParamsHandler.forVideo(session.id);
 
     return res
       .status(200)

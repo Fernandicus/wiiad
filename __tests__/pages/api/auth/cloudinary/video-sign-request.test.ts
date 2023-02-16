@@ -1,4 +1,4 @@
-import api_v1_CloudinarySignVideoRequest from "@/pages/api/v1/auth/cloudinary/video-sign-request";
+import api_v1_CloudinarySignVideoRequest, { IApiRespCloudinarySignature } from "@/pages/api/v1/auth/cloudinary/video-sign-request";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeUser } from "../../../../../__mocks__/lib/modules/user/FakeUser";
@@ -46,14 +46,15 @@ describe("On api/v1/auth/cloudinary/video-sign-request", () => {
     await api_v1_CloudinarySignVideoRequest(req, res);
 
     const responseJSON = res._getData();
-    const response: ICloudinarySignedParams = JSON.parse(responseJSON);
+    const response: IApiRespCloudinarySignature = JSON.parse(responseJSON);
 
     expect(res.statusCode).toBe(200);
-    expect(response.api_key).not.toBeUndefined();
-    expect(response.signature).not.toBeUndefined();
-    expect(response.signedParams).not.toBeUndefined();
-    expect(response.timestamp).not.toBeUndefined();
-    expect(response.signedParams.folder).toEqual(Folder.videoAd(advertiser.name).path)
+    expect(response.data).not.toBeUndefined();
+    expect(response.data?.api_key).not.toBeUndefined();
+    expect(response.data?.signature).not.toBeUndefined();
+    expect(response.data?.signedParams).not.toBeUndefined();
+    expect(response.data?.timestamp).not.toBeUndefined();
+    expect(response.data?.signedParams.folder).toEqual(Folder.videoAd(advertiser.id).path)
     
   });
 });

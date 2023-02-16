@@ -36,16 +36,35 @@ import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { getApiResponse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorFetchingAdvertiser } from "../domain/errors/ErrorFetchingAdvertiser";
-import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
+import {
+  IAdvertiserApiCall
+} from "../domain/interfaces/IAdvertiserApiCall";
+import { IUpdateProfileDataProps } from "../use-case/UpdateAdvertiserProfileData";
 
 export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
+  async updateProfileData(props: IUpdateProfileDataProps): Promise<void> {
+    const body = {
+      email: props.email?.email,
+      name: props.name?.name,
+      profilePic: props.profilePic?.url,
+    };
+
+    const resp = await fetch(ApiRoutes.updateProfile, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+
+    const apiResp = getApiResponse(resp);
+    if (!resp.ok)
+      throw ErrorFetchingAdvertiser.updateProfile((await apiResp).message);
+  }
 
   async getAdvertiserProfileData(): Promise<IAdvertiserData> {
     const resp = await fetch(ApiRoutes.advertiserDataProfile, {
       method: "GET",
     });
     const apiResp = await getApiResponse<IApiProfileResp>(resp);
-    
+
     if (resp.status !== 200)
       throw ErrorFetchingAdvertiser.getAdvertiserProfileData(apiResp.message);
     if (!apiResp.data)
