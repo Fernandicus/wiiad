@@ -9,12 +9,15 @@ import {
   createUserHandler,
   findAdvertiserHandler,
   findUserHandler,
+  updateUserHandler,
 } from "@/src/modules/users/user/container";
 import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
 import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenRepo";
 import { LoginQueries } from "../../domain/LoginQueries";
 import { IProfilePageParams } from "@/pages/profile";
+import { ErrorFindingUser } from "@/src/modules/users/user/domain/ErrorFindingUser";
+import { ProfileDataController } from "./ProfileDataController";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;
@@ -29,13 +32,11 @@ interface IVerifyJWTParams {
 
 export class SignInController {
   private readonly context;
-  /* private readonly profileController; */
   private readonly jwtData;
 
   private constructor({ jwtData, context }: ILogingInParams) {
     this.jwtData = jwtData;
     this.context = context;
-    /* this.profileController = new ProfileDataController(); */
   }
 
   static verifyJWT({
@@ -55,8 +56,6 @@ export class SignInController {
       data = await this.logIn();
       return {
         user: data.user,
-        /* ads: data.ads,
-        campaigns: data.campaigns, */
       };
     }
 
@@ -64,8 +63,6 @@ export class SignInController {
       data = await this.signUp();
       return {
         user: data.user,
-       /*  ads: data.ads,
-        campaigns: data.campaigns, */
       };
     }
 
@@ -75,12 +72,8 @@ export class SignInController {
   async logIn(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.advertiserLogIn(this.jwtData);
-      /* const advertiserData = await this.profileController.getAdvertiserData(
-        advertiser.id
-      ); */
       this.userInitSession(this.context, advertiser);
       return {
-        /* ...advertiserData, */
         user: advertiser,
       };
     } else {
@@ -95,12 +88,8 @@ export class SignInController {
   async signUp(): Promise<IProfilePageParams> {
     if (this.jwtData.role !== RoleType.USER) {
       const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
-      /* const advertiserData = await this.profileController.getAdvertiserData(
-        advertiser.id
-      ); */
       this.userInitSession(this.context, advertiser);
       return {
-        /* ...advertiserData, */
         user: advertiser,
       };
     } else {
@@ -111,20 +100,63 @@ export class SignInController {
 
       this.userInitSession(this.context, user);
 
-      return {
-        user,
-        /* ads: null,
-        campaigns: null, */
-      };
+      return { user };
     }
+  }
+
+  //TODO: Handle update email
+  async updateEmail(): Promise<IProfilePageParams> {
+    const data = this.jwtData;
+
+    await updateUserHandler.email({
+      id: data.id!,
+      email: data.email,
+    });
+    
+    const session = userSession.getFromServer(this.context);
+
+    if (!session) {
+      const advertiserFound = await findAdvertiserHandler.byId(data.id!);
+      const advertiser = advertiserFound.match({
+        nothing() {
+          throw ErrorFindingUser.byId(data.id!);
+        },
+        some: (advertiser) => advertiser,
+      });
+      userSession.setFromServer(this.context, advertiser);
+      return { user: advertiser };
+    }
+
+    const sessionUpdated = {
+      ...session!,
+      email: data.email,
+    };
+
+    userSession.setFromServer(this.context, sessionUpdated);
+    return {
+      user: sessionUpdated,
+    };
   }
 
   private async advertiserLogIn(
     data: IVerificationEmailData
   ): Promise<IUserPrimitives> {
     const advertiserFound = await findAdvertiserHandler.byEmail(data.email);
-    const { id, profilePic } = advertiserFound;
-    return this.user({ data, id, profilePic });
+    return advertiserFound.match({
+      nothing() {
+        throw ErrorFindingUser.byEmail(data.email);
+      },
+      some(advertiser) {
+        const { id, profilePic } = advertiser;
+        return {
+          id,
+          email: data.email,
+          name: data.userName!,
+          role: data.role,
+          profilePic,
+        };
+      },
+    });
   }
 
   private async userLogIn(

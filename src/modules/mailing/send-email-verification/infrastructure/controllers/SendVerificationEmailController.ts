@@ -1,9 +1,11 @@
+import { Maybe } from "@/src/common/domain/Maybe";
 import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import {
   findAdvertiserHandler,
   findUserHandler,
 } from "@/src/modules/users/user/container";
 import { ErrorFindingUser } from "@/src/modules/users/user/domain/ErrorFindingUser";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ErrorSendVerificationEmail } from "../../domain/errors/ErrorSendVerificationEmail";
 import { IVerificationEmailData } from "../../domain/interfaces/IVerificationEmailData";
 import {
@@ -12,7 +14,7 @@ import {
 } from "../email-verification-container";
 
 export class SendVerificationEmailController {
-  constructor(private jwt: JsonWebTokenNPM) {}
+  constructor() {}
 
   async sendToNewUser(data: IVerificationEmailData): Promise<void> {
     await this.checkIsNewUser(data);
@@ -47,18 +49,20 @@ export class SendVerificationEmailController {
   }
 
   async sendToAdvertiser(data: IVerificationEmailData): Promise<void> {
-    try {
-      const { name } = await findAdvertiserHandler.byEmail(data.email);
-      const payload = { ...data, userName: name };
-      await sendVerificationEmailHandler.sendLogin({
-        sendTo: data.email,
-        payload,
-      });
-    } catch (err) {
-      if (err instanceof ErrorFindingUser)
+    const advertiserFound = await findAdvertiserHandler.byEmail(data.email);
+    advertiserFound.match({
+      nothing() {
         throw ErrorSendVerificationEmail.emailNotExists(data.email);
-      throw err;
-    }
+      },
+      some: async (advertiser) => {
+        const { name } = advertiser;
+        const payload = { ...data, userName: name };
+        await sendVerificationEmailHandler.sendLogin({
+          sendTo: data.email,
+          payload,
+        });
+      },
+    });
   }
 
   private async checkIsNewUser(data: IVerificationEmailData): Promise<void> {
@@ -80,15 +84,24 @@ export class SendVerificationEmailController {
     const advertiserFound = findAdvertiserHandler.byName(data.userName!);
     const advertiserFoundByEmail = findAdvertiserHandler.byEmail(data.email);
 
-    const resp = await Promise.allSettled([
+    const [advertiser, email] = await Promise.allSettled([
       advertiserFound,
       advertiserFoundByEmail,
     ]);
 
-    if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
-      throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
-        data.userName!,
-        data.email
-      );
+    if (advertiser.status === "fulfilled") this.match(advertiser.value);
+    if (email.status === "fulfilled") this.match(email.value);
+  }
+
+  private match(value: Maybe<IUserPrimitives>) {
+    value.match({
+      nothing: () => {},
+      some: (value) => {
+        throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
+          value.name,
+          value.email
+        );
+      },
+    });
   }
 }

@@ -2,13 +2,10 @@ import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ErrorVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorVerificationEmail";
 import { ErrorSendingEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorSendingEmail";
-import { SendVerificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/controllers/SendVerificationEmailController";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
-import { UniqId } from "@/src/utils/UniqId";
 import { ErrorCreatingUser } from "@/src/modules/users/user/domain/ErrorCreatingUser";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/common/domain/Role";
-import { JsonWebTokenNPM } from "@/src/common/infrastructure/JsonWebTokenNPM";
 import { verificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 
 export interface IApiReqSendEmailVerification {

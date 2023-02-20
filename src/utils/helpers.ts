@@ -1,6 +1,8 @@
 import { NextApiRequest } from "next";
 import { ChangeEvent, RefObject } from "react";
 import { IApiResp } from "../common/domain/interfaces/IApiResponse";
+import { RoleType } from "../common/domain/Role";
+import { IUserPrimitives } from "../modules/users/user/domain/User";
 
 export const reqBodyParse = (req: NextApiRequest) =>
   typeof req.body !== "object" ? JSON.parse(req.body) : req.body;

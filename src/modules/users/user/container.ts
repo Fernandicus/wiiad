@@ -18,5 +18,5 @@ export const createUserHandler = new CreateUserHandler(createUser);
 export const findUserHandler = new FindUserHandler(findUser);
 export const findAdvertiserHandler = new FindAdvertiserHandler(findAdvertiser);
 
-const updateData = new UpdateUser(userRepo)
-export const updateDataHandler = new UpdateUserHandler(updateData)
+const updateUser = new UpdateUser(userRepo)
+export const updateUserHandler = new UpdateUserHandler(updateUser)

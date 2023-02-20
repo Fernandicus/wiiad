@@ -25,7 +25,7 @@ export class SendVerificationEmailHandler {
   }
 
   async sendUpdate(
-    props: ISendVerificationParams<{ email: string }>
+    props: ISendVerificationParams<{ email: string, id:string }>
   ): Promise<void> {
     const verificationEmail = this.getVerificationURL(props);
     await this.sendEmail.updateEmail(verificationEmail);

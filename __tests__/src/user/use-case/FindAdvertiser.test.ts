@@ -14,21 +14,33 @@ describe("On FindAdvertiser, GIVEN an advertiser", () => {
 
   beforeAll(() => {
     advertiser = FakeAdvertiser.create();
-    advertiserRepo = mockedAdvertiserRepo(advertiser)
+    advertiserRepo = mockedAdvertiserRepo(advertiser);
     findAdvertiser = new FindAdvertiser(advertiserRepo);
   });
 
   it(`WHEN call create, THEN advertiser repo save method should be called with advertiser email`, async () => {
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);
-    expect(advertiserRepo.findAdvertiserByEmail).toBeCalledWith(advertiser.email);
-    expect(advertiserFound).toEqual(advertiser);
+    expect(advertiserRepo.findAdvertiserByEmail).toBeCalledWith(
+      advertiser.email
+    );
+    advertiserFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(advertiser);
+      },
+    });
   });
 
   it(`WHEN call byUserName for an existing advertiser name, 
   THEN advertiser repo byUserName method should be called with advertiser name`, async () => {
     const advertiserFound = await findAdvertiser.byName(advertiser.name);
     expect(advertiserRepo.findAdvertiserByName).toBeCalledWith(advertiser.name);
-    expect(advertiserFound).toEqual(advertiser);
+    advertiserFound.match({
+      nothing: () => {},
+      some: (value) => {
+        expect(value).toEqual(advertiser);
+      },
+    });
   });
 
   it(`WHEN call findByUserName for a not existing advertiser name, 
@@ -42,8 +54,15 @@ describe("On FindAdvertiser, GIVEN an advertiser", () => {
   it(`WHEN call findByEmail for an existing advertiser email, 
   THEN advertiser repo findByEmail method should be called with advertiser email`, async () => {
     const advertiserFound = await findAdvertiser.byEmail(advertiser.email);
-    expect(advertiserRepo.findAdvertiserByEmail).toBeCalledWith(advertiser.email);
-    expect(advertiserFound).toEqual(advertiser);
+    expect(advertiserRepo.findAdvertiserByEmail).toBeCalledWith(
+      advertiser.email
+    );
+    advertiserFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(advertiser);
+      },
+    });
   });
 
   it(`WHEN call findByUserName for a not existing advertiser email, 

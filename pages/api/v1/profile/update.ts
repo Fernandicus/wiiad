@@ -6,6 +6,7 @@ import { ProfileDataController } from "@/src/common/infrastructure/controllers/P
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { IUpdateDataPrimitives } from "@/src/modules/users/user/handler/UpdateUserHandler";
+import { RoleType } from "@/src/common/domain/Role";
 
 export interface IApiReqUpdateProfile extends IUpdateDataPrimitives {}
 
@@ -25,7 +26,12 @@ export default async function handler(
     const profileController = new ProfileDataController();
     await MongoDB.connectAndDisconnect(async () => {
       const ctx = { req, res };
-      await profileController.updateProfile({ session, update: reqData, ctx });
+      if (session.role !== RoleType.USER)
+        await profileController.updateAdvertiserProfile({
+          session,
+          update: reqData,
+          ctx,
+        });
     });
 
     return res.status(200).json({ message: `Data updated! ${reqData}` });

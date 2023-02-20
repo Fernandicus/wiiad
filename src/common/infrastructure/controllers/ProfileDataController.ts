@@ -7,15 +7,21 @@ import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/S
 import { findCustomerHandler } from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { updateDataHandler } from "@/src/modules/users/user/container";
+import {
+  findAdvertiserHandler,
+  updateUserHandler,
+} from "@/src/modules/users/user/container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { IUpdateDataPrimitives } from "@/src/modules/users/user/handler/UpdateUserHandler";
-import { UserMongoDBRepo } from "@/src/modules/users/user/infrastructure/UserMongoDBRepo";
-import { UpdateUser } from "@/src/modules/users/user/use-case/UpdateUser";
-import { UniqId } from "@/src/utils/UniqId";
+import { ErrorUpdatingProfile } from "../../domain/errors/ErrorUpdatingProfile";
 import { IAdvertiserDataPrimitives } from "../../domain/interfaces/IAdvertiserData";
 
-type TUpdateProfileCtrProps = IUpdateDataPrimitives & { email?: string };
+type TUpdateProps = IUpdateDataPrimitives & { email?: string };
+type TUpdateProfileProps = {
+  session: IUserPrimitives;
+  update: TUpdateProps;
+  ctx: IReqAndRes;
+};
 
 export class ProfileDataController {
   constructor() {}
@@ -40,32 +46,46 @@ export class ProfileDataController {
     return { campaigns, ads, stripeCustomer };
   }
 
-  async updateProfile(params: {
-    session: IUserPrimitives;
-    update: TUpdateProfileCtrProps;
-    ctx: IReqAndRes;
-  }): Promise<void> {
-    const session = params.session;
-    const context = params.ctx;
-    const email = params.update.email;
-
+  async updateAdvertiserProfile(params: TUpdateProfileProps): Promise<void> {
+    const { session, ctx, update } = params;
+    const newName = update.name;
+    const newEmail = update.email;
+    const emailHasChanged =
+      newEmail && newEmail.toLowerCase() !== session.email;
+    const nameHasChanged = newName && newName !== session.name;
     //// Send verfication email before update de email
     //TODO: Handle update email
-    if (email && email.toLowerCase() !== session.email) {
-      await sendVerificationEmailHandler.sendUpdate({
-        sendTo: email,
-        payload: { email },
+    if (emailHasChanged) {
+      const advertiserFound = await findAdvertiserHandler.byEmail(newEmail);
+      advertiserFound.match({
+        some(_) {
+          throw ErrorUpdatingProfile.emailAlreadyExist(newEmail);
+        },
+        nothing: async () => {
+          await sendVerificationEmailHandler.sendUpdate({
+            sendTo: newEmail,
+            payload: { email: newEmail, id: session.id },
+          });
+        },
       });
     }
 
-    const newData = this.getNewData(session, params.update);
-
-    await updateDataHandler.update({
-      userId: session.id,
-      data: newData,
-    });
-
-    userSession.setFromServer(context, newData);
+    if (nameHasChanged) {
+      const nameFound = await findAdvertiserHandler.byName(newName);
+      nameFound.match({
+        some(_) {
+          throw ErrorUpdatingProfile.nameAlreadyExist(newName);
+        },
+        nothing: async () => {
+          const newData = this.getNewData(session, update);
+          await updateUserHandler.profile({
+            userId: session.id,
+            data: newData,
+          });
+          userSession.setFromServer(ctx, newData);
+        },
+      });
+    }
   }
 
   private getNewData(

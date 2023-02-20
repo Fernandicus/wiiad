@@ -39,4 +39,8 @@ export class LoginQueries {
   isSignUp(): boolean {
     return this.log === LogStates.SignUp;
   }
+
+  isUpdateEmail():boolean{
+    return this.log === LogStates.UpdateEmail
+  }
 }

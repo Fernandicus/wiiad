@@ -18,7 +18,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "GET") return res.status(400);
-
   try {
     const session = userSession.getFromServer({ req, res });
     if (!session) throw new ErrorFindingUser("There is no session");

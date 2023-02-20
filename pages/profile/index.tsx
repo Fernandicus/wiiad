@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     if (!loginQueries.authToken) return visitProfile(context);
 
-    const data = await loginOrSignUp({ context, loginQueries });
+    const data = await singInOrUpdate({ context, loginQueries });
 
     if (!data) throw new Error("No data provided");
     return getSSRData(data);
@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-async function loginOrSignUp(params: {
+async function singInOrUpdate(params: {
   loginQueries: LoginQueries;
   context: IReqAndRes;
 }) {
@@ -62,8 +62,10 @@ async function loginOrSignUp(params: {
 
     if (loginQueries.isLogin()) return await singInController.logIn();
 
-    if (loginQueries.isSignUp())
-      return await singInController.signIn(loginQueries);
+    if (loginQueries.isSignUp()) return await singInController.signUp();
+
+    if (loginQueries.isUpdateEmail())
+      return await singInController.updateEmail();
   });
 
   return userData;
