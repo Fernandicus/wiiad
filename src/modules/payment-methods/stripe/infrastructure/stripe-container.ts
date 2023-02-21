@@ -26,17 +26,17 @@ export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 const stripeMongoRepo = new StripeMongoDBRepo();
-const stripePayments = new StripePayments(stripeRepo);
-const saveStripe = new SaveStripe(stripeMongoRepo);
-const findStripe = new FindStripeCustomer(stripeMongoRepo);
-const paymentIntent = new PaymentIntent(stripePayments);
-const updateStripe = new UpdateStripe(stripeMongoRepo);
-const getDetails = new GetPaymentDetails(stripePayments);
-const createStripeCustomer = new CreateStripeCustomer(stripePayments);
+export const stripePayments = new StripePayments(stripeRepo);
+export const saveStripe = new SaveStripe(stripeMongoRepo);
+export const findCustomer = new FindStripeCustomer(stripeMongoRepo);
+export const paymentIntent = new PaymentIntent(stripePayments);
+export const updateStripe = new UpdateStripe(stripeMongoRepo);
+export const getDetails = new GetPaymentDetails(stripePayments);
+export const createStripeCustomer = new CreateStripeCustomer(stripePayments);
 export const paymentSucceeded = new PaymentSucceeded(stripePayments);
 
 export const saveStripeHandler = new SaveStripeHandler(saveStripe);
-export const findCustomerHandler = new FindStripeCustomerHandler(findStripe);
+export const findCustomerHandler = new FindStripeCustomerHandler(findCustomer);
 export const paymentIntentHandler = new PaymentIntentHandler(paymentIntent);
 export const updateStripeHandler = new UpdateStripeHandler(updateStripe);
 export const getPaymentDetailsHandler = new GetPaymentDetailsHandler(

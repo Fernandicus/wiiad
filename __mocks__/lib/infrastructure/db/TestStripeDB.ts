@@ -12,11 +12,7 @@ export const setTestStripeDB = async (
 };
 
 export class TestStripeDB {
-  readonly stripeRepo;
-
-  private constructor(stripeRepo: TestStripeRepository) {
-    this.stripeRepo = stripeRepo;
-  }
+  private constructor(private stripeRepo: TestStripeRepository) {}
 
   static async setAndInit(
     stripeRepo: TestStripeRepository,

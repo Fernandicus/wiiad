@@ -21,8 +21,8 @@ export class UpdateUser {
     await this.repo.updateProfile(params);
   }
 
-  async email(params: { id: UniqId; email: Email }): Promise<void> {
-    const { email, id } = params;
-    await this.repo.updateEmail({ id, email });
+  async email(params: { id: UniqId; newEmail: Email }): Promise<void> {
+    const { newEmail, id } = params;
+    await this.repo.updateEmail({ id, newEmail });
   }
 }

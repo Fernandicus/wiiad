@@ -34,6 +34,16 @@ export class User {
     this.role = props.role;
     this.profilePic = props.profilePic;
   }
+  
+  static fromPrimitives(data: IUserPrimitives): User {
+    return new User({
+      id: new UniqId(data.id),
+      email: new Email(data.email),
+      name: new Name(data.name),
+      profilePic: new ProfilePic(data.profilePic),
+      role: new Role(data.role),
+    });
+  }
 
   toPrimitives(): IUserPrimitives {
     return {

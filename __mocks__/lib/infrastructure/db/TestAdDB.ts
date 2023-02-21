@@ -11,11 +11,7 @@ export const setTestAdDB = async (advertisers: User[]): Promise<TestAdDB> => {
 };
 
 export class TestAdDB {
-  readonly adRepo;
-
-  private constructor(adRepo: TestAdRepository) {
-    this.adRepo = adRepo;
-  }
+  private constructor(private adRepo: TestAdRepository) {}
 
   static async setAndInit(
     adRepo: TestAdRepository,
@@ -29,7 +25,7 @@ export class TestAdDB {
 
   async getAllAds(): Promise<Ad[]> {
     const allAds = await this.adRepo.getAllAds();
-    if(!allAds) throw new Error("No ads available");
+    if (!allAds) throw new Error("No ads available");
     return allAds;
   }
 
@@ -38,9 +34,9 @@ export class TestAdDB {
   }
 
   private static setAds(advertisers: User[]): Ad[] {
-    const ads = advertisers.flatMap(advertiser =>{
-      return FakeAd.createMany(advertiser.id, 3)
-    })
+    const ads = advertisers.flatMap((advertiser) => {
+      return FakeAd.createMany(advertiser.id, 3);
+    });
     return ads;
   }
 }

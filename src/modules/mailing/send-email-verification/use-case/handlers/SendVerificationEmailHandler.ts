@@ -9,23 +9,23 @@ interface ISendVerificationParams<T> {
   payload: T;
 }
 
-interface ISendSignIn extends ISendVerificationParams<IVerificationEmailData> {}
+interface ISendData extends ISendVerificationParams<IVerificationEmailData> {}
 
 export class SendVerificationEmailHandler {
   constructor(private sendEmail: SendlVerificationEmail) {}
 
-  async sendLogin(props: ISendSignIn): Promise<void> {
+  async sendLogin(props: ISendData): Promise<void> {
     const verificationEmail = this.getVerificationURL(props);
     await this.sendEmail.login(verificationEmail);
   }
 
-  async sendSignUp(props: ISendSignIn): Promise<void> {
+  async sendSignUp(props: ISendData): Promise<void> {
     const verificationEmail = this.getVerificationURL(props);
     await this.sendEmail.signUp(verificationEmail);
   }
 
   async sendUpdate(
-    props: ISendVerificationParams<{ email: string, id:string }>
+    props: ISendData
   ): Promise<void> {
     const verificationEmail = this.getVerificationURL(props);
     await this.sendEmail.updateEmail(verificationEmail);

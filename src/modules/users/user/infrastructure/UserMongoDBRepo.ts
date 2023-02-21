@@ -10,18 +10,23 @@ import { IUpdateProfileProps } from "../use-case/UpdateUser";
 import { UserModel, IUserModel } from "./UserModel";
 
 export class UserMongoDBRepo implements IUserRepo {
-  //TODO: FIND ADVERTISER BY ID
+  async findUserById(id: UniqId): Promise<Maybe<User>> {
+    const userFound = await UserModel.findById(id.id);
+    if (!userFound) return Maybe.nothing();
+    return Maybe.some(this.toUser(userFound));
+  }
+
   async findAdvertiserById(id: UniqId): Promise<Maybe<User>> {
     const userFound = await UserModel.findById(id.id);
     if (!userFound) return Maybe.nothing();
     return Maybe.some(this.toUser(userFound));
   }
 
-  async updateEmail(params: { id: UniqId; email: Email }): Promise<void> {
-    const { email, id } = params;
+  async updateEmail(params: { id: UniqId; newEmail: Email }): Promise<void> {
+    const { newEmail, id } = params;
 
     const body: Partial<IUserModel> = {
-      email: email.email,
+      email: newEmail.email,
     };
 
     await UserModel.updateOne({ _id: id.id }, { $set: body });

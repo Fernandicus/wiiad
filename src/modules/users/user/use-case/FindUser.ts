@@ -1,5 +1,7 @@
 import { Email } from "@/src/common/domain/Email";
+import { Maybe } from "@/src/common/domain/Maybe";
 import { Name } from "@/src/common/domain/Name";
+import { UniqId } from "@/src/utils/UniqId";
 import { ErrorFindingUser } from "../domain/ErrorFindingUser";
 import { IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";
@@ -19,5 +21,9 @@ export class FindUser {
     if (!userFound)
       throw new ErrorFindingUser(`User name ${userName.name} do not exist`);
     return userFound;
+  }
+
+  async byId(id: UniqId): Promise<Maybe<User>> {
+    return await this.userRepo.findUserById(id);
   }
 }

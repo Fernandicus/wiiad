@@ -1,10 +1,10 @@
 import { IReqAndRes } from "../../../modules/session/domain/interfaces/IAuthCookies";
-import { RoleType } from "../../domain/Role";
+import { Role, RoleType } from "../../domain/Role";
 import { userSession } from "../../../modules/session/infrastructure/session-container";
 import { UniqId } from "../../../utils/UniqId";
 import { ProfilePic } from "../../domain/ProfilePic";
 import { ReferralController } from "../../../modules/referrals/infrastructure/controllers/ReferralController";
-import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import {
   createUserHandler,
   findAdvertiserHandler,
@@ -17,7 +17,12 @@ import { IJsonWebTokenRepo } from "@/src/common/domain/interfaces/IJsonWebTokenR
 import { LoginQueries } from "../../domain/LoginQueries";
 import { IProfilePageParams } from "@/pages/profile";
 import { ErrorFindingUser } from "@/src/modules/users/user/domain/ErrorFindingUser";
-import { ProfileDataController } from "./ProfileDataController";
+import { HandleUserRoles } from "@/src/modules/users/user/use-case/HandleUserRoles";
+import { isAdvertiser, isUser } from "@/src/utils/helpers";
+import { HandleRoles } from "@/src/modules/users/user/use-case/HandleRoles";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
+import { ErrorUpdatingProfile } from "../../domain/errors/ErrorUpdatingProfile";
+import { ErrorSingingIn } from "../../domain/errors/ErrorSingingIn";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;
@@ -33,10 +38,12 @@ interface IVerifyJWTParams {
 export class SignInController {
   private readonly context;
   private readonly jwtData;
+  private readonly handleRole;
 
   private constructor({ jwtData, context }: ILogingInParams) {
     this.jwtData = jwtData;
     this.context = context;
+    this.handleRole = new HandleRolesHandler(this.jwtData.role);
   }
 
   static verifyJWT({
@@ -70,72 +77,103 @@ export class SignInController {
   }
 
   async logIn(): Promise<IProfilePageParams> {
-    if (this.jwtData.role !== RoleType.USER) {
-      const advertiser = await this.advertiserLogIn(this.jwtData);
-      this.userInitSession(this.context, advertiser);
-      return {
-        user: advertiser,
-      };
-    } else {
-      const user = await this.userLogIn(this.jwtData);
+    const userData = await this.handleRole.forRole({
+      BUSINESS: async () => {
+        const advertiser = await this.advertiserLogIn(this.jwtData);
+        this.userInitSession(this.context, advertiser);
+        return advertiser;
+      },
+      USER: async () => {
+        const user = await this.userLogIn(this.jwtData);
+        this.userInitSession(this.context, user);
+        return user;
+      },
+      AGENCY: () => {
+        throw new ErrorSingingIn(
+          `User ${this.handleRole.role.role} role not exist`
+        );
+      },
+    });
 
-      this.userInitSession(this.context, user);
-
-      return { user };
-    }
+    return {
+      user: userData,
+    };
   }
 
   async signUp(): Promise<IProfilePageParams> {
-    if (this.jwtData.role !== RoleType.USER) {
-      const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
-      this.userInitSession(this.context, advertiser);
-      return {
-        user: advertiser,
-      };
-    } else {
-      const user = await this.getAndCreateNewUser(this.jwtData);
+    const userData = await this.handleRole.forRole({
+      BUSINESS: async () => {
+        const advertiser = await this.getAndCreateNewAdvertiser(this.jwtData);
+        this.userInitSession(this.context, advertiser);
+        return advertiser;
+      },
+      USER: async () => {
+        const user = await this.getAndCreateNewUser(this.jwtData);
 
-      const controller = new ReferralController();
-      await controller.createNew(user.id);
+        const referralController = new ReferralController();
+        await referralController.createNew(user.id);
 
-      this.userInitSession(this.context, user);
+        this.userInitSession(this.context, user);
+        return user;
+      },
+      AGENCY: () => {
+        throw new ErrorSingingIn(
+          `User ${this.handleRole.role.role} role not exist`
+        );
+      },
+    });
 
-      return { user };
-    }
+    return {
+      user: userData,
+    };
   }
 
-  //TODO: Handle update email
   async updateEmail(): Promise<IProfilePageParams> {
     const data = this.jwtData;
 
     await updateUserHandler.email({
       id: data.id!,
-      email: data.email,
+      newEmail: data.email,
     });
-    
-    const session = userSession.getFromServer(this.context);
 
-    if (!session) {
-      const advertiserFound = await findAdvertiserHandler.byId(data.id!);
-      const advertiser = advertiserFound.match({
-        nothing() {
-          throw ErrorFindingUser.byId(data.id!);
-        },
-        some: (advertiser) => advertiser,
-      });
-      userSession.setFromServer(this.context, advertiser);
-      return { user: advertiser };
-    }
+    const userData = await this.handleRole.forRole({
+      BUSINESS: async () => {
+        const advertiserFound = await this.findAdvertiserById(data.id!);
+        userSession.setFromServer(this.context, advertiserFound);
+        return advertiserFound;
+      },
+      USER: async () => {
+        const userFound = await this.findUserById(data.id!);
+        userSession.setFromServer(this.context, userFound);
+        return userFound;
+      },
+      AGENCY: () => {
+        throw new ErrorUpdatingProfile(
+          `User ${this.handleRole.role.role} role not exist`
+        );
+      },
+    });
+    return { user: userData };
+  }
 
-    const sessionUpdated = {
-      ...session!,
-      email: data.email,
-    };
+  private async findAdvertiserById(id: string) {
+    const advertiserFound = await findAdvertiserHandler.byId(id);
+    return advertiserFound.match({
+      nothing() {
+        throw ErrorFindingUser.byId(id);
+      },
+      some: (advertiser) => advertiser,
+    });
+  }
 
-    userSession.setFromServer(this.context, sessionUpdated);
-    return {
-      user: sessionUpdated,
-    };
+  private async findUserById(id: string) {
+    const userFound = await findUserHandler.byId(id);
+    return userFound.match({
+      nothing() {
+        throw ErrorFindingUser.byId(id);
+      },
+      some: (user) => user,
+    });
   }
 
   private async advertiserLogIn(
@@ -143,9 +181,6 @@ export class SignInController {
   ): Promise<IUserPrimitives> {
     const advertiserFound = await findAdvertiserHandler.byEmail(data.email);
     return advertiserFound.match({
-      nothing() {
-        throw ErrorFindingUser.byEmail(data.email);
-      },
       some(advertiser) {
         const { id, profilePic } = advertiser;
         return {
@@ -155,6 +190,9 @@ export class SignInController {
           role: data.role,
           profilePic,
         };
+      },
+      nothing() {
+        throw ErrorFindingUser.byEmail(data.email);
       },
     });
   }

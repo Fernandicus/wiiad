@@ -29,7 +29,7 @@ export class Maybe<T> {
     }
   }
 
-  match<U, R>(props: { some?: (value: T) => U; nothing?: () => R }): U | R {
+  match<U, R>(props: { some: (value: T) => U; nothing: () => R }): U | R {
     const { nothing, some } = props;
     switch (this.value.type) {
       case "nothing":

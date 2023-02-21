@@ -7,11 +7,11 @@ import { FindAds } from "../use-case/FindAds";
 import { RemoveAd } from "../use-case/RemoveAd";
 
 const adRepository = new AdMongoDBRepository();
-const findAds = new FindAds(adRepository);
-export const adFinderHandler = new AdFinderHandler(findAds);
+export const findAd = new FindAds(adRepository);
+export const adFinderHandler = new AdFinderHandler(findAd);
 
-const removeAd = new RemoveAd(adRepository);
+export const removeAd = new RemoveAd(adRepository);
 export const adRemoverHandler = new AdRemoverHandler(removeAd);
 
-const createAd = new CreateAd(adRepository);
+export const createAd = new CreateAd(adRepository);
 export const adCreatorHandler = new AdCreatorHandler(createAd);

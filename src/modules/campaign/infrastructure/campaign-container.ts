@@ -9,10 +9,10 @@ import { RemoveCampaign } from "../use-case/RemoveCampaign";
 import { RemoveCampaignHandler } from "../use-case/handlers/RemoveCampaignHandler";
 
 const campaignRepo = new CampaignMongoDBRepo();
-const createCampaign = new CreateCampaign(campaignRepo);
-const findCampaign = new FindCampaign(campaignRepo);
-const removeCampaign = new RemoveCampaign(campaignRepo);
-const updateCampaignMetrics = new UpdateCampaignMetrics(campaignRepo);
+export const createCampaign = new CreateCampaign(campaignRepo);
+export const findCampaign = new FindCampaign(campaignRepo);
+export const removeCampaign = new RemoveCampaign(campaignRepo);
+export const updateCampaignMetrics = new UpdateCampaignMetrics(campaignRepo);
 
 export const createCampaignHandler = new CreateCampaignHandler(createCampaign);
 export const findCampaignHandler = new FindCampaignHandler(findCampaign);

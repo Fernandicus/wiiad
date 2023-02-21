@@ -16,19 +16,11 @@ export const AdSectionHeader = ({
   onCreateBanner,
   onCreateVideo,
 }: IAdSectionHeaderProps) => {
-  const ButtonContent = (
-    <div className="flex items-center space-x-1">
-      <div className="stroke-2 w-4">
-        <AddIcon />
-      </div>
-      <span>Crear anuncio</span>
-    </div>
-  );
+  
 
   return (
     <SectionHeader titleLable={titleLabel} descriptionLabel={descriptionLabel}>
       <OptionsItem>
-        {ButtonContent}
         <CreateAdOptions
           onCreateBanner={onCreateBanner}
           onCreateVideo={onCreateVideo}

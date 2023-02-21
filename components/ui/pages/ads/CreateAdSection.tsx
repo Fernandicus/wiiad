@@ -10,12 +10,13 @@ interface ICreateAdSectionProps {
 export default function CreateAdSection(props: ICreateAdSectionProps) {
   const { adType, onBack } = props;
   return (
-    <div className="max-w-xl mx-auto">
+    <>
       <SectionHeader
         onBack={onBack}
         titleLable="Crea un anuncio"
         descriptionLabel="Completa los campos para crear un anuncio"
       />
+    <div className="max-w-xl mx-auto">
       <div className="w-full flex justify-center">
         <CreateAdForm
           adType={adType}
@@ -23,5 +24,6 @@ export default function CreateAdSection(props: ICreateAdSectionProps) {
         />
       </div>
     </div>
+    </>
   );
 }

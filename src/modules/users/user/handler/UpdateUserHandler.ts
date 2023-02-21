@@ -5,20 +5,20 @@ import { UniqId } from "@/src/utils/UniqId";
 import { IUserRepo } from "../domain/IUserRepo";
 import { IUpdateData, UpdateUser } from "../use-case/UpdateUser";
 
-export interface IUpdateDataPrimitives {
+export interface IUpdateHandlerProps {
   name?: string;
   profilePic?: string;
 }
 
-interface IUpdateProfilePropsPrimitives {
+interface IUpdateProfileHandlerPrimitives {
   userId: string;
-  data: IUpdateDataPrimitives;
+  data: IUpdateHandlerProps;
 }
 
 export class UpdateUserHandler {
   constructor(private updateUser: UpdateUser) {}
 
-  async profile(params: IUpdateProfilePropsPrimitives): Promise<void> {
+  async profile(params: IUpdateProfileHandlerPrimitives): Promise<void> {
     const { data, userId } = params;
     const id = new UniqId(userId);
     await this.updateUser.profile({
@@ -27,22 +27,20 @@ export class UpdateUserHandler {
     });
   }
 
-  async email(params: { id: string; email: string }): Promise<void> {
-    const { email, id } = params;
+  async email(params: { id: string; newEmail: string }): Promise<void> {
+    const { newEmail, id } = params;
     const userId = new UniqId(id);
-    const userEmail = new Email(email);
-    await this.updateUser.email({ email: userEmail, id: userId });
+    const userEmail = new Email(newEmail);
+    await this.updateUser.email({ newEmail: userEmail, id: userId });
   }
 
-  private getData(data: IUpdateDataPrimitives): IUpdateData {
+  private getData(data: IUpdateHandlerProps): IUpdateData {
     const name = data.name ? new Name(data.name) : undefined;
-    // const email = data.email ? new Email(data.email) : undefined;
     const profilePic = data.profilePic
       ? new ProfilePic(data.profilePic)
       : undefined;
     return {
       name,
-      //  email,
       profilePic,
     };
   }
