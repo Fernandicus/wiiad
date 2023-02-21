@@ -36,6 +36,7 @@ export default async function handler(
         paymentMethod: body.paymentMethod,
       });
     });
+
     return res.status(200).json({ message: "Payment Succeed!" });
   } catch (err) {
     console.error(err);

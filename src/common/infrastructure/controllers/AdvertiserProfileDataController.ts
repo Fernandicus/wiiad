@@ -24,7 +24,7 @@ export interface IUpdateProfileProps extends IUpdateHandlerProps {
 }
 
 type TUpdateProfileProps = {
-  user: User;
+  user: IUserPrimitives;
   update: IUpdateProfileProps;
   ctx: IReqAndRes;
 };
@@ -53,9 +53,8 @@ export class AdvertiserProfileDataController {
     const { user, ctx, update } = params;
     const newName = update.name;
     const newEmail = update.email;
-    const emailHasChanged =
-      newEmail && newEmail.toLowerCase() !== user.email.email;
-    const nameHasChanged = newName && newName !== user.name.name;
+    const emailHasChanged = newEmail && newEmail.toLowerCase() !== user.email;
+    const nameHasChanged = newName && newName !== user.name;
 
     if (emailHasChanged) await this.verifyAndValidateEmail({ user, newEmail });
 
@@ -64,7 +63,7 @@ export class AdvertiserProfileDataController {
   }
 
   private async verifyAndValidateEmail(params: {
-    user: User;
+    user: IUserPrimitives;
     newEmail: string;
   }) {
     const { newEmail, user } = params;
@@ -76,7 +75,7 @@ export class AdvertiserProfileDataController {
       nothing: async () => {
         await sendVerificationEmailHandler.sendUpdate({
           sendTo: newEmail,
-          payload: { email: newEmail, id: user.id.id, role: user.role.role },
+          payload: { email: newEmail, id: user.id, role: user.role },
         });
       },
     });
@@ -85,35 +84,36 @@ export class AdvertiserProfileDataController {
   private async verifyAndUpdateProfile(params: {
     ctx: IReqAndRes;
     newName: string;
-    user: User;
+    user: IUserPrimitives;
     update: IUpdateProfileProps;
   }) {
     const { ctx, newName, update, user } = params;
     const nameFound = await findAdvertiserHandler.byName(newName);
-    nameFound.match({
+    await nameFound.match({
       some(_) {
         throw ErrorUpdatingProfile.nameAlreadyExist(newName);
       },
       nothing: async () => {
         const newData = this.getNewData(user, update);
-        await updateUser.profile({
+        await updateUserHandler.profile({
           userId: user.id,
           data: newData,
         });
-        userSession.setFromServer(ctx, newData.toPrimitives());
+        userSession.setFromServer(ctx, newData);
       },
     });
   }
 
-  private getNewData(user: User, data: IUpdateProfileProps): User {
+  private getNewData(
+    user: IUserPrimitives,
+    data: IUpdateProfileProps
+  ): IUserPrimitives {
     const { name, profilePic } = data;
-    return new User({
+    return {
       ...user,
-      name: new Name(this.compareDataToUpdate(user.name.name, name)),
-      profilePic: new ProfilePic(
-        this.compareDataToUpdate(user.profilePic.url, profilePic)
-      ),
-    });
+      name: this.compareDataToUpdate(user.name, name),
+      profilePic: this.compareDataToUpdate(user.profilePic, profilePic),
+    };
   }
 
   private compareDataToUpdate(actualData: string, dataToUpdate?: string) {

@@ -32,7 +32,7 @@ export default async function handler(
       await handleUserRoles.forRole({
         BUSINESS: async (user) => {
           await advertiserProfileCtrl.updateAdvertiserProfile({
-            user,
+            user: user.toPrimitives(),
             update: reqData,
             ctx,
           });

@@ -4,10 +4,7 @@ import {
 } from "@/components/src/payments/stripe/infrastructure/pay-with-stripe-container";
 import { useNotification } from "@/components/hooks/useNotification";
 import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe-slice";
-import {
-  AppDispatch,
-  TStripeState,
-} from "@/context/store";
+import { AppDispatch, TStripeState } from "@/context/store";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
@@ -59,8 +56,7 @@ export const useUserStripe = (): IUseStripe => {
       return;
     } catch (err) {
       setNotification({ message: "Algo no fue bien", status: "error" });
-      if (err instanceof Error) throw new Error(err.message);
-      else throw new Error("Something went wrong while paying");
+      console.error(err);
     }
   };
 

@@ -75,21 +75,24 @@ describe("On Api/v1/profile/update, GIVEN a mocked DB and a User and an Advertis
 
     userSession.remove(context);
     userSession.setFromServer(context, advertiser.toPrimitives());
-
+    
     const { req, res } = context;
     await updateProfile(req, res);
-
+    
     expect(res.statusCode).toBe(200);
-
+    
     const updatedAdvertiser: IUserPrimitives = {
       ...advertiser.toPrimitives(),
       ...updateData,
       email: advertiser.email.email,
     };
-
+    
     const usersFound = await usersDB.getAllAdvertisers();
     const found = usersFound?.find((user) => user.id.id === advertiser.id.id);
-
+    
     expect(updatedAdvertiser).toEqual(found?.toPrimitives());
+    expect(userSession.getFromServer(context)?.name).toBe(updateData.name)
+    expect(userSession.getFromServer(context)?.profilePic).toBe(updateData.profilePic)
+    expect(userSession.getFromServer(context)?.email).not.toBe(updateData.email)
   });
 });

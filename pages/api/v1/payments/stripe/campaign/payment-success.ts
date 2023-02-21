@@ -6,12 +6,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { buffer } from "micro";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
-import {
-  findCustomerHandler,
-  paymentSucceeded,
-  updateStripeHandler,
-} from "@/src/modules/payment-methods/stripe/infrastructure/stripe-container";
-import { reqBodyParse } from "@/src/utils/helpers";
 import { StripeCampaignPaymentSuccessController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripeCampaignPaymentSuccessController";
 
 interface IChargesData {
