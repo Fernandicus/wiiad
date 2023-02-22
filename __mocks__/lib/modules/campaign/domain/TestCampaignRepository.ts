@@ -6,4 +6,5 @@ export interface TestCampaignRepository {
   saveMany(campaigns: Campaign[]): Promise<void>;
   getByStatus(status: CampaignStatus): Promise<Campaign[] | null>;
   findById(id: UniqId): Promise<Campaign | null>;
+  findByAdId(id: UniqId): Promise<Campaign | null>;
 }

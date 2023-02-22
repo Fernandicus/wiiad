@@ -23,6 +23,7 @@ import { ExpMonth } from "@/src/modules/payment-methods/stripe/domain/value-obje
 import { ExpYear } from "@/src/modules/payment-methods/stripe/domain/value-objects/ExpYear";
 import { Last4 } from "@/src/modules/payment-methods/stripe/domain/value-objects/Last4";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 
 interface IMockPaymentWithPM extends IPaymentWithPaymentMethod {
   paymentMethod: FakePaymentMethodId;
@@ -46,7 +47,7 @@ const getPaymentMethodDetails = jestFn(
 const getPaymentIntentDetails = jestFn(
   (piId: FakePaymentIntentId): PaymentDetails | null => {
     if (piId.checkIfNotExsits()) return null;
-    return FakePaymentDetails.create(piId);
+    return FakePaymentDetails.createWithRandomPaymentDetails(piId);
   }
 );
 
@@ -60,14 +61,18 @@ const confirmPaymentIntent = jestFn(
 const paymentIntentWithPaymentMethod = jestFn(
   (params: IMockPaymentWithPM): PaymentDetails | null => {
     if (params.paymentMethod.checkIfNotExsits()) return null;
-    return FakePaymentDetails.create(FakePaymentIntentId.create());
+    return FakePaymentDetails.createWithRandomPaymentDetails(
+      FakePaymentIntentId.create()
+    );
   }
 );
 
 const paymentIntentWithoutPaymentMethod = jestFn(
   (params: IMockPaymentWithPM): PaymentDetails | null => {
     if (params.customerId.checkIfNotExsits()) return null;
-    return FakePaymentDetails.create(FakePaymentIntentId.create());
+    return FakePaymentDetails.createWithRandomPaymentDetails(
+      FakePaymentIntentId.create()
+    );
   }
 );
 
@@ -82,7 +87,7 @@ const validateWebhookEvent = jestFn(
     return {
       budget: new CampaignBudget({
         balance: new Balance(object.amount),
-        clicks: 1000,
+        clicks: new Clicks(1000),
       }),
       card: new CardDetails({
         brand: new CardBrand(card.brand),

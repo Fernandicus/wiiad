@@ -5,6 +5,7 @@ import {
   CampaignBudget,
   ICampaignBudgetPrimitives,
 } from "../../domain/value-objects/Budget";
+import { Clicks } from "../../domain/value-objects/Clicks";
 import { CreateCampaign } from "../CreateCampaign";
 
 interface ILaunchCampaignProps {
@@ -25,7 +26,7 @@ export class CreateCampaignHandler {
   }: ILaunchCampaignProps): Promise<void> {
     const campaignBudget = new CampaignBudget({
       balance: new Balance(budget.balance),
-      clicks: budget.clicks,
+      clicks: new Clicks(budget.clicks),
     });
     const campaign = Campaign.new({
       id: new UniqId(id),

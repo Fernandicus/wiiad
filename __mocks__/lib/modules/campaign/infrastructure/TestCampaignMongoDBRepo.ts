@@ -3,6 +3,7 @@ import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 import {
   CampaignModel,
   ICampaignModel,
@@ -56,6 +57,13 @@ export class TestCampaignMongoDBRepo
     return this.toCampaign(campaignFound);
   }
 
+  async findByAdId(id: UniqId): Promise<Campaign | null> {
+    await TestMongoDB.connectMongoDB();
+    const campaignFound = await CampaignModel.findOne({ adId: id.id });
+    if (!campaignFound) return null;
+    return this.toCampaign(campaignFound);
+  }
+
   private toCampaign(campaign: ICampaignModel): Campaign {
     return new Campaign({
       id: new UniqId(campaign._id),
@@ -64,7 +72,7 @@ export class TestCampaignMongoDBRepo
       referrals: campaign.referrals.map((referral) => new UniqId(referral)),
       status: new CampaignStatus(campaign.status),
       budget: new CampaignBudget({
-        clicks: campaign.budget.clicks,
+        clicks: new Clicks(campaign.budget.clicks),
         balance: new Balance(campaign.budget.balance),
       }),
       metrics: new CampaignMetrics({

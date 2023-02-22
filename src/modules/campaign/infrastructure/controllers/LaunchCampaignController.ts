@@ -8,12 +8,12 @@ export class LaunchCampaignController {
     advertiserId: string;
     id: string;
   }): Promise<void> {
-    const { adId, advertiserId, id } = props;
+    const { adId, advertiserId, budget, id } = props;
     await createCampaignHandler.launch({
       id,
       adId,
       advertiserId,
-      budget: props.budget,
+      budget,
     });
   }
 }

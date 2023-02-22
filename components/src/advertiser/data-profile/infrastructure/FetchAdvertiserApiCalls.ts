@@ -17,6 +17,7 @@ import {
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 import {
   CardDetails,
   ICardDetailsParams,
@@ -87,7 +88,7 @@ export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
         advertiserId: new UniqId(campaign.advertiserId),
         budget: new CampaignBudget({
           balance: new Balance(campaign.budget.balance),
-          clicks: campaign.budget.clicks,
+          clicks: new Clicks(campaign.budget.clicks),
         }),
         metrics: new CampaignMetrics({
           totalClicks: campaign.metrics.totalClicks,

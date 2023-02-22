@@ -75,7 +75,7 @@ export class Campaign {
       advertiserId: this.advertiserId.id,
       referrals: this.referrals.map((referral) => referral.id),
       budget: {
-        clicks: this.budget.clicks,
+        clicks: this.budget.clicks.clicks,
         balance: this.budget.balance.total,
       },
       metrics: {

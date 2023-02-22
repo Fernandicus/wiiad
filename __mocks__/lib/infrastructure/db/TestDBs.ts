@@ -17,6 +17,7 @@ interface IDBs {
   users: TestUserDB;
   ads:TestAdDB;
   stripe: TestStripeDB;
+  campaigns: TestCampaignDB;
 }
 
 interface ICampaignsByStatus {
@@ -84,6 +85,7 @@ export class TestDBs {
         users: mockedUsers,
         ads: mockedAdDB,
         stripe: mockedStripe,
+        campaigns: mockedCampaigns,
       },
       campaigns: {
         actives: campaigns.actives!.map((campaign) => campaign),

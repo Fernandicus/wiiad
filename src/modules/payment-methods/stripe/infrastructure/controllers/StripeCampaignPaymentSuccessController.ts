@@ -1,4 +1,3 @@
-import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CardDetails, ICardDetailsPrimitives } from "../../domain/CardDetails";
 import { IStripeMetadata } from "../../domain/interfaces/IStripeMetadata";
 import {

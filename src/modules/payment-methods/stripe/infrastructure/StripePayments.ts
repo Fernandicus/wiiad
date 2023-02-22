@@ -1,7 +1,5 @@
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { UniqId } from "@/src/utils/UniqId";
 import Stripe from "stripe";
-import { CardDetails, ICardDetailsPrimitives } from "../domain/CardDetails";
+import { CardDetails } from "../domain/CardDetails";
 import { CustomerId } from "../domain/value-objects/CustomerId";
 import { IStripeMetadata } from "../domain/interfaces/IStripeMetadata";
 import { PaymentAmount } from "../domain/value-objects/PaymentAmount";
@@ -14,13 +12,12 @@ import { Last4 } from "../domain/value-objects/Last4";
 import { ExpYear } from "../domain/value-objects/ExpYear";
 import { ExpMonth } from "../domain/value-objects/ExpMonth";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
-import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
-import { MongoDB } from "@/src/common/infrastructure/MongoDB";
-import { findCustomerHandler, updateStripeHandler } from "./stripe-container";
 import { ErrorPaymentValidation } from "../domain/errors/ErrorPaymentValidation";
-import { Email } from "@/src/common/domain/Email";
 import { SetupIntentId } from "../domain/value-objects/SetupIntentId";
 import { StripeClientSecret } from "../domain/value-objects/StripeClientSecret";
+import { Balance } from "@/src/common/domain/Balance";
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 
 export interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
@@ -252,7 +249,11 @@ export class StripePayments {
     data: IWebHookPaymentSuccess
   ): IValidatedPaymentData {
     const amount = new PaymentAmount(data.amount);
-    const budget = CampaignBudget.fromAmount(amount);
+    const ppc = PricesPerClick.fromAmount(amount);
+    const budget = new CampaignBudget({
+      balance: new Balance(amount.amount),
+      clicks: new Clicks(ppc.selectedClicks),
+    });
     const card = data.charges.data[0].payment_method_details.card;
     return {
       budget,

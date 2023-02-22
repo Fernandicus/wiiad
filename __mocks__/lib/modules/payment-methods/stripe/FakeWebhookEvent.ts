@@ -70,7 +70,7 @@ export class FakeWebhookEvent {
         adId: UniqId.generate(),
         advertiserId: UniqId.generate(),
       },
-      paymentDetails: FakePaymentDetails.create(FakePaymentIntentId.create()),
+      paymentDetails: FakePaymentDetails.createWithRandomPaymentDetails(FakePaymentIntentId.create()),
     });
   }
 

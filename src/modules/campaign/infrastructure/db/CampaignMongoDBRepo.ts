@@ -9,10 +9,12 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "../../domain/value-objects/CampaignStatus";
+import { Clicks } from "../../domain/value-objects/Clicks";
 import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
   async save(campaign: Campaign): Promise<void> {
+    console.log(campaign);
     await CampaignModel.create({
       ...campaign.toPrimitives(),
       _id: campaign.id.id,
@@ -93,7 +95,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
       ),
       status: new CampaignStatus(campaignModel.status),
       budget: new CampaignBudget({
-        clicks: campaignModel.budget.clicks,
+        clicks: new Clicks(campaignModel.budget.clicks),
         balance: new Balance(campaignModel.budget.balance),
       }),
       metrics: new CampaignMetrics({
