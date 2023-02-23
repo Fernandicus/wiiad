@@ -8,7 +8,7 @@ import { PrimaryButton } from "../../../buttons/PrimaryButton";
 import { ImageInputLoader } from "../../ads/ad-form-items/ImageInputLoader";
 import { useFileUploader } from "../../ads/hooks/useFileUploader";
 import { SectionHeader } from "../../items/SectionHeader";
-import { CardItem } from "./CardItem";
+import { CardItem } from "../../../items/CardItem";
 import { useUpdateProfileDataForm } from "./hooks/useUpdateProfileDataForm";
 
 interface IProfileDataSectionProps {

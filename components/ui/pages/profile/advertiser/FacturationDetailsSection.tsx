@@ -1,6 +1,6 @@
 import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
 import { SectionHeader } from "../../items/SectionHeader";
-import { CardItem } from "./CardItem";
+import { CardItem } from "../../../items/CardItem";
 
 export const FacturationDetailsSection = () => {
   return (

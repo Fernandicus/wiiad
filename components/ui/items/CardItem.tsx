@@ -1,5 +1,7 @@
+import { ReactElement } from "react";
+
 interface ICardItemProps {
-  children: JSX.Element | JSX.Element[];
+  children: ReactElement;
   fullWidth?:boolean;
 }
 

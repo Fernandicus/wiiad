@@ -1,10 +1,13 @@
 import { IProfilePageParams } from "@/pages/profile";
 import { RoleType } from "@/src/common/domain/Role";
 import { assertUnreachable } from "@/src/utils/helpers";
+import { ReactElement } from "react";
+import { PageLayout } from "../../layouts/PageLayout";
+import { ScreenScreenPageLayout } from "../../layouts/ScreenPageLayout";
 import { AdvertiserProfile } from "./advertiser/AdvertiserProfile";
 import { UserProfile } from "./user/UserProfile";
 
-export const UserProfilePage = (props: IProfilePageParams) => {
+export const ProfilePage = (props: IProfilePageParams) => {
   const { user } = props;
   const role = user.role as RoleType;
 
@@ -17,15 +20,23 @@ export const UserProfilePage = (props: IProfilePageParams) => {
       case RoleType.AGENCY:
         return RoleType.AGENCY;
       default:
-        assertUnreachable(roleT);
+        throw assertUnreachable(roleT);
     }
   };
 
-  const profile: Record<RoleType, JSX.Element | null> = {
-    user: <UserProfile user={user} />,
-    business: <AdvertiserProfile />,
+  const profile: Record<RoleType, ReactElement | null> = {
+    user: (
+      <ScreenScreenPageLayout>
+        <UserProfile user={user} />
+      </ScreenScreenPageLayout>
+    ),
+    business: (
+      <PageLayout>
+        <AdvertiserProfile />
+      </PageLayout>
+    ),
     agency: null,
   };
 
-  return <section className="w-full">{profile[roleType(role)]}</section>;
+  return profile[roleType(role)];
 };

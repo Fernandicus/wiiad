@@ -1,16 +1,19 @@
 import { ReactElement } from "react";
 import { Notification } from "../notifications/Notification";
 import { NavBar } from "./App";
+import { UserNavBar } from "./UserNavBar";
 
-interface IPageLayoutProps {
+interface IScreenPageLayoutProps {
   children: ReactElement;
 }
 
-export const PageLayout = ({ children }: IPageLayoutProps) => {
+export const ScreenScreenPageLayout = ({
+  children,
+}: IScreenPageLayoutProps) => {
   return (
-    <div className="bg-slate-100 max-h-full min-h-screen w-full pb-20">
+    <div className="bg-slate-100 max-h-full min-h-screen h-screen w-full pb-20">
       <div className="max-w-5xl mx-auto h-full ">
-        <NavBar />
+        <UserNavBar />
         <section className="w-full h-full">{children}</section>
       </div>
       <Notification />

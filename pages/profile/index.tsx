@@ -4,29 +4,33 @@ import { GetServerSideProps } from "next";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 import { SignInController } from "@/src/common/infrastructure/controllers/LogInController";
-import { UserProfilePage } from "@/components/ui/pages/profile/UserProfilePage";
-import { RoleType } from "@/src/common/domain/Role";
+import { ProfilePage } from "@/components/ui/pages/profile/ProfilePage";
 import { useEffect } from "react";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { PageLayout } from "@/components/ui/layouts/PageLayout";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
+import { useUser } from "@/components/hooks/user/useUser";
 
 export interface IProfilePageParams {
   user: IUserPrimitives;
 }
 
 export default function Profile({ user }: IProfilePageParams) {
-  const advertiser = useAdvertiser();
+  const advertiserStore = useAdvertiser();
+  const userStore = useUser();
 
   useEffect(() => {
-    advertiser.initStore(user);
+    const roleHandler = new HandleRolesHandler(user.role);
+    roleHandler.forRole({
+      BUSINESS: () => advertiserStore.initStore(user),
+      USER: () => userStore.initStore(user),
+      AGENCY: () => {
+        throw new Error("Agency role is not available");
+      },
+    });
   }, []);
 
-  return (
-    <PageLayout>
-      <UserProfilePage user={user} />
-    </PageLayout>
-  );
+  return <ProfilePage user={user} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

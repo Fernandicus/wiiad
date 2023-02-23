@@ -1,13 +1,13 @@
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { CardItem } from "../../../items/CardItem";
 
 interface Props {
   user: IUserPrimitives;
-  children?: JSX.Element;
 }
 
-export function UserProfileCard({ user, children }: Props) {
+export function UserDataProfile({ user }: Props) {
   return (
-    <div className=" inline-flex items-center p-5 h-full space-x-5 bg-white rounded-lg shadow-lg shadow-slate-200">
+    <div className="flex items-center space-x-5">
       <img
         src={user.profilePic}
         width={200}
@@ -16,10 +16,8 @@ export function UserProfileCard({ user, children }: Props) {
       ></img>
       <div className="flex items-center ">
         <div className=" ">
-          <p className="">
-            Hola <span className="text-lg">{user.name}</span>,
-          </p>
-          <p className="italic text-gray-500">wiiad.com/{user.name}</p>
+          <p className="text-lg">{user.name}</p>
+          <p className="italic text-gray-500 text-sm">wiiad.com/{user.name}</p>
         </div>
       </div>
     </div>

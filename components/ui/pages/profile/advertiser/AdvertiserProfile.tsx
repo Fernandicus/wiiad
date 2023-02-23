@@ -1,16 +1,5 @@
-import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { ProfileDataSection } from "@/components/ui/pages/profile/advertiser/ProfileDataSection";
-import { WalletDataSection } from "@/components/ui/pages/profile/advertiser/WalletDataSection";
+
 import { useEffect, useState } from "react";
-import { AddCreditCardDialog } from "./items/AddCreditCardDialog";
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
-import { SectionHeader } from "../../items/SectionHeader";
-import { CardItem } from "./CardItem";
-import { PrimaryButton } from "@/components/ui/buttons/PrimaryButton";
-import { SecondaryNavBarItem } from "@/components/ui/layouts/navbar-items/SecondaryNavBarItem";
-import { NavBarButton } from "@/components/ui/layouts/navbar-items/NavBarButton";
-import Link from "next/link";
-import { SecondaryNavBarButton } from "@/components/ui/layouts/navbar-items/SecondaryNavBarButton";
 import {
   ProfileSecondaryNavBar,
   TProfileSeconadaryNavBar,
@@ -41,7 +30,7 @@ export function AdvertiserProfile() {
           <FacturationProfileSection />
         ) : (
           <AdvertiserProfileSection />
-        )}
+          )}
       </div>
     </>
   );

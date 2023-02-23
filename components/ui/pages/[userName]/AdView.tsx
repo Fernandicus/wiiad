@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useNotification } from "../../hooks/useNotification";
+import { useNotification } from "../../../hooks/useNotification";
 
 interface AdViewParams {
   user: IUserPrimitives | null;
@@ -104,7 +104,7 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
               ></img>
               <div className="flex items-center ">
                 <div className=" ">
-                  <p className="">{referrer.name}</p>
+                  <p className="">Apolla a {referrer.name} viendo este anuncio</p>
                   <p className="italic text-gray-500">
                     wiiad.com/{referrer.name}
                   </p>
