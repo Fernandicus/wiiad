@@ -29,16 +29,6 @@ export function UserProfile({ user }: Props) {
           totalReferrers={totalReferrers}
           user={user}
         />
-        <InterestBox
-          interests={[
-            "tech",
-            "tech",
-            "finanzas",
-            "fitness",
-            "cultura",
-            "finanzas",
-          ]}
-        />
       </div>
     </div>
   );

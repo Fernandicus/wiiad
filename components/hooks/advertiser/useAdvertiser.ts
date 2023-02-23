@@ -17,7 +17,9 @@ export const useAdvertiser = (): IUseSession => {
     if (profileData.stripeCustomer) storeStripe(profileData.stripeCustomer);
   };
 
-  const profile = useSession({ onStoreProfileData: storeProfile });
+  const { initStore, session, status } = useSession({
+    onStoreProfileData: storeProfile,
+  });
 
-  return profile;
+  return { initStore, session, status };
 };

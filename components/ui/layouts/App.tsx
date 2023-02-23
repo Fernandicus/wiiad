@@ -1,12 +1,13 @@
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
-import { Logout } from "../login/Logout";
+import { useAccount } from "@/components/hooks/useAccount";
+import { RoleType } from "@/src/common/domain/Role";
 import { AdvertiserNavBar } from "./AdvertiserNavBar";
 import { UserNavBar } from "./UserNavBar";
 
 export const NavBar = () => {
-  const advertiser = useAdvertiser();
+  const {session} = useAccount();
 
   return (
-    <> {advertiser.session.id !== "" ? <AdvertiserNavBar /> : <UserNavBar />}</>
+    <> {session.role === RoleType.BUSINESS ? <AdvertiserNavBar /> : <UserNavBar />}</>
   );
 };

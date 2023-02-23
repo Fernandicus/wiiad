@@ -13,7 +13,7 @@ export const ScreenScreenPageLayout = ({
   return (
     <div className="bg-slate-100 max-h-full min-h-screen h-screen w-full pb-20">
       <div className="max-w-5xl mx-auto h-full ">
-        <UserNavBar />
+        <NavBar />
         <section className="w-full h-full">{children}</section>
       </div>
       <Notification />

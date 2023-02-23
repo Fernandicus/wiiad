@@ -10,24 +10,17 @@ import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 import { useUser } from "@/components/hooks/user/useUser";
+import { useAccount } from "@/components/hooks/useAccount";
 
 export interface IProfilePageParams {
   user: IUserPrimitives;
 }
 
 export default function Profile({ user }: IProfilePageParams) {
-  const advertiserStore = useAdvertiser();
-  const userStore = useUser();
+  const account = useAccount();
 
   useEffect(() => {
-    const roleHandler = new HandleRolesHandler(user.role);
-    roleHandler.forRole({
-      BUSINESS: () => advertiserStore.initStore(user),
-      USER: () => userStore.initStore(user),
-      AGENCY: () => {
-        throw new Error("Agency role is not available");
-      },
-    });
+    account.initStore(user);
   }, []);
 
   return <ProfilePage user={user} />;

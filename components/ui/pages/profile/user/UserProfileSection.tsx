@@ -6,6 +6,7 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { ReactElement } from "react";
 import { UserDataProfile } from "./UserDataProfile";
 import { DataCard } from "./items/DataCard";
+import { InterestBox } from "./items/InterestsBox";
 
 interface Props {
   totalReferrers?: number;
@@ -17,41 +18,53 @@ interface Props {
 export const UserProfileSection = (props: Props) => {
   const { campaignsWatched, totalBalance, totalReferrers, user } = props;
   return (
-    <div className="relative">
+    <div className="relative max-w-2xl">
       <CristalCardItem>
         <div className="space-y-10">
-          <div className="flex justify-center">
-            <UserDataProfile user={user} />
+          <div className="space-y-10">
+            <div className="flex justify-center">
+              <UserDataProfile user={user} />
+            </div>
+            <div className="flex justify-center space-x-5">
+              <DataCard title="Dinero acumulado">
+                {totalBalance || totalBalance == 0 ? (
+                  <p className="font-bold">{totalBalance.toFixed(2)}€</p>
+                ) : (
+                  <div className="w-full h-6 flex justify-center items-center">
+                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                  </div>
+                )}
+              </DataCard>
+              <DataCard title="Anuncios vistos">
+                {campaignsWatched || campaignsWatched == 0 ? (
+                  <p className="font-bold">{campaignsWatched.toString()}</p>
+                ) : (
+                  <div className="w-full h-6 flex justify-center items-center">
+                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                  </div>
+                )}
+              </DataCard>
+              <DataCard title="Visitas a tu perfil">
+                {totalReferrers || totalReferrers == 0 ? (
+                  <p className="font-bold">{totalReferrers.toString()}</p>
+                ) : (
+                  <div className="w-full h-6 flex justify-center items-center">
+                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                  </div>
+                )}
+              </DataCard>
+            </div>
           </div>
-          <div className="flex justify-center space-x-5">
-            <DataCard title="Dinero acumulado">
-              {totalBalance || totalBalance == 0 ? (
-                <p className="font-bold">{totalBalance.toFixed(2)}€</p>
-              ) : (
-                <div className="w-full h-6 flex justify-center items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                </div>
-              )}
-            </DataCard>
-            <DataCard title="Anuncios vistos">
-              {campaignsWatched || campaignsWatched == 0 ? (
-                <p className="font-bold">{campaignsWatched.toString()}</p>
-              ) : (
-                <div className="w-full h-6 flex justify-center items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                </div>
-              )}
-            </DataCard>
-            <DataCard title="Visitas a tu perfil">
-            {totalReferrers || totalReferrers == 0 ? (
-                <p className="font-bold">{totalReferrers.toString()}</p>
-              ) : (
-                <div className="w-full h-6 flex justify-center items-center">
-                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                </div>
-              )}
-            </DataCard>
-          </div>
+          <InterestBox
+            interests={[
+              "tech",
+              "finanzas",
+              "tech",
+              "fitness",
+              "cultura",
+              "finanzas",
+            ]}
+          />
         </div>
         <button className="absolute top-3 right-3 text-sky-500">
           <div className="w-5 h-5">
