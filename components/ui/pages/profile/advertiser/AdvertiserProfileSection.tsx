@@ -10,7 +10,7 @@ export const AdvertiserProfileSection = () => {
   const { session } = useAdvertiser();
   const [secret, setSecret] = useState<string>("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
-  
+
   return (
     <>
       <div className="space-y-10">
@@ -18,13 +18,9 @@ export const AdvertiserProfileSection = () => {
         <WalletDataSection
           onAddPaymentMethod={async (e) => {
             e.preventDefault();
-            try {
-              setShowDialog((prev) => !prev);
-              const secret = await setupIntentClientSecret();
-              setSecret(secret);
-            } catch (err) {
-              console.error(err);
-            }
+            setShowDialog((prev) => !prev);
+            const secret = await setupIntentClientSecret();
+            setSecret(secret);
           }}
           paymentMethods={userStripe.paymentMethods}
         />

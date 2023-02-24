@@ -54,7 +54,6 @@ export const AddCreditCardDialog = ({
                   setIsSending(false);
                 } catch (err) {
                   setIsSending(false);
-                  console.error(err);
                   if (err instanceof Error)
                     setNotification({
                       message: "No se pudo guardar la tarjeta",

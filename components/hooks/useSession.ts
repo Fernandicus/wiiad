@@ -10,13 +10,9 @@ export const useSession = ({ onStoreProfileData }: IParams): IUseSession => {
   const { changeStatus, session, status, storeSession } = useUserState();
 
   const initStore = async (session: IUserPrimitives): Promise<void> => {
-    try {
-      storeSession(session);
-      await onStoreProfileData();
-      changeStatus("init");
-    } catch (err) {
-      console.error(err);
-    }
+    storeSession(session);
+    await onStoreProfileData();
+    changeStatus("init");
   };
 
   return {

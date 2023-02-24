@@ -56,7 +56,6 @@ export const useUserStripe = (): IUseStripe => {
       return;
     } catch (err) {
       setNotification({ message: "Algo no fue bien", status: "error" });
-      console.error(err);
     }
   };
 
@@ -105,7 +104,6 @@ export const useUserStripe = (): IUseStripe => {
       });
       setNotification({ message: "Pago completado!", status: "success" });
     } catch (err) {
-      console.error(err);
       setNotification({ message: "Algo no fue bien", status: "error" });
     }
   };

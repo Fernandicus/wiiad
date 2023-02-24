@@ -31,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({});
     return;
   } catch (err) {
-    console.error(err);
+    
     res.status(400).json({ message: "Error creating new ad video" });
     return;
   }

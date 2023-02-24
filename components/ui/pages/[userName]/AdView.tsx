@@ -75,8 +75,6 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
       /* videoRef.current.muted = false; */
       setTimeout(() => {
         setCanEarnMoney(true);
-        console.log("EARN MONEY");
-        console.log(videoRef.current?.duration);
       }, videoRef.current!.duration * 1000);
     } else {
       setTimeout(() => {
@@ -168,7 +166,6 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
             <div>
               <Link
                 onClick={() => {
-                  console.log("REDIRECT");
                   fetch(ApiRoutes.campaign_metrics_increase_clicks, {
                     method: "POST",
                     body: JSON.stringify({

@@ -42,7 +42,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     return await getSSPropsData({ context, queryParams });
   } catch (err) {
-    console.error(err);
     await MongoDB.disconnect();
     return {
       props: {},

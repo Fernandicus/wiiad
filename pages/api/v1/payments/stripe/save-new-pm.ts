@@ -17,7 +17,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<IApiResp>
 ) {
-  console.log("object");
+  
   if (req.method !== "POST")
     return res.status(400).json({ message: "Bad request" });
   const session = userSession.getFromServer({ req, res });

@@ -40,7 +40,7 @@ export default async function handler(
 
     return res.status(200).json({ message: `Email sent to ${data.email}` });
   } catch (err) {
-    console.error(err);
+    
     const errorCreatingUser = err instanceof ErrorCreatingUser;
 
     if (err instanceof ErrorVerificationEmail)

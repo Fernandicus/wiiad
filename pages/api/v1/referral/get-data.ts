@@ -27,7 +27,7 @@ export default async function handler(
 
     return res.status(200).json({ referral: referralFound });
   } catch (err) {
-    console.error(err);
+    
     if (err instanceof ErrorCreatingReferral)
       return res.status(401).json({ message: err.message });
     if (err instanceof Error)

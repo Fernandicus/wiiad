@@ -14,7 +14,7 @@ export class PaymentIntent {
   async withoutPaymentMethod(
     params: IPaymentWithoutPaymentMethod
   ): Promise<PaymentDetails> {
-    console.log(params);
+    
     const details = await this.stripe.paymentIntentWithoutPaymentMethod(params);
     if (!details) throw ErrorPaymentIntent.fail();
     return details;

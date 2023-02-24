@@ -19,8 +19,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const reqBody: AdPropsPrimitives = reqBodyParse(req);
 
-    console.log("create ad");
-
     await MongoDB.connectAndDisconnect(
       async () => await adCreatorHandler.create(reqBody)
     );
@@ -28,7 +26,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ message: "Ad created" });
     return;
   } catch (err) {
-    console.error(err);
     res.status(400).json({ message: "Error creating new ad" });
     return;
   }

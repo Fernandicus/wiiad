@@ -39,7 +39,7 @@ export default async function handler(
 
     return res.status(200).json({ message: "Profile data", data });
   } catch (err) {
-    console.error(err);
+    
     return res.status(400);
   }
 }

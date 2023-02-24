@@ -25,7 +25,7 @@ export class WatchCampaignsController {
     const referrer = await findUserHandler.byName(influencerName);
 
 
-    console.log("DATA", { referrer })
+    
     
     const campaignData = await this.randomActiveCampaign();
 

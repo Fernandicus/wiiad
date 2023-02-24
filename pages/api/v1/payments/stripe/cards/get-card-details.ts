@@ -31,7 +31,7 @@ export default async function handle(
     const pDetails = await MongoDB.connectAndDisconnect(async () => {
       return await getPaymentDetailsHandler.fromPaymentMethod(pmId);
     });
-    console.log(pDetails);
+    
     return res
       .status(200)
       .json({ message: "Card details found!", data: pDetails });

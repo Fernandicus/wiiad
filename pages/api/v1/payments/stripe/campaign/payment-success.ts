@@ -63,7 +63,7 @@ export default async function handler(
 
     res.status(200).end();
   } catch (err) {
-    console.error(err);
+    
     res.status(400).send(`Webhook Error`);
     return;
   }

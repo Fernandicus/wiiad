@@ -9,8 +9,6 @@ export const Notification = (props: INotificationProps) => {
     notification: { message, status },
   } = useNotification();
 
-  console.log({ message, status });
-
   return (
     <>
       {status !== "hidden" && (

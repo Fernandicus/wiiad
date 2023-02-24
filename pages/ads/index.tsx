@@ -29,15 +29,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session || session.role === RoleType.USER)
       throw new Error("The user is not do not have access");
 
-    console.log(session);
-
     return {
       props: {
         advertiser: session,
       },
     };
   } catch (err) {
-    console.error(err);
     return {
       props: {},
       redirect: { destination: "/", permanent: false },

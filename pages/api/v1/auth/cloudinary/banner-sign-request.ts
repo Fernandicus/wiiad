@@ -27,7 +27,7 @@ export default async function handler(
       .status(200)
       .json({ message: "Cloudinary signed params", data: signedParams });
   } catch (err) {
-    console.error(err);
+    
     return res.status(400).json({ message: "Something went wrong" });
   }
 }

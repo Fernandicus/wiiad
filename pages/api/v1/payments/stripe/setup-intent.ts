@@ -13,7 +13,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<IApiRespSetupIntent>
 ) {
-  console.log("session");
+  
   if (req.method !== "GET")
     return res.status(400).json({ message: "Bad request" });
 

@@ -81,7 +81,7 @@ export class NodemailerSendVerificationEmail
   }
 
   async updateEmail(verificationUrl: VerificationURL): Promise<void> {
-    console.log(verificationUrl);
+    
     const result = await this.transport.sendMail({
       from: this.email_from,
       to: verificationUrl.to.email,

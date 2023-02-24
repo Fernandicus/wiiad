@@ -14,7 +14,7 @@ import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
   async save(campaign: Campaign): Promise<void> {
-    console.log(campaign);
+    
     await CampaignModel.create({
       ...campaign.toPrimitives(),
       _id: campaign.id.id,
