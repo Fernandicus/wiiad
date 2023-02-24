@@ -1,19 +1,22 @@
+import { projectConfig } from "@/src/utils/projectConfig";
+
 export abstract class SMTPData {
-    readonly host;
-    readonly port;
-    readonly user;
-    readonly pass;
-  
-    constructor() {
-      if (!process.env.SMTP_USER) throw Error("SMTP_USER env var is empty");
-      if (!process.env.SMTP_SERVER) throw Error("SMTP_SERVER env var is empty");
-      if (!process.env.SMTP_PORT) throw Error("SMTP_PORT env var is empty");
-      if (!process.env.SMTP_PASSWORD)
-        throw Error("SMTP_PASSWORD env var is empty");
-  
-      this.host = process.env.SMTP_SERVER;
-      this.port = parseInt(process.env.SMTP_PORT);
-      this.user = process.env.SMTP_USER;
-      this.pass = process.env.SMTP_PASSWORD;
-    }
+  readonly host;
+  readonly port;
+  readonly user;
+  readonly pass;
+
+  constructor() {
+    const { port, pwd, server, user } = projectConfig.SMTP;
+    
+    if (!user) throw Error("SMTP_USER env var is empty");
+    if (!server) throw Error("SMTP_SERVER env var is empty");
+    if (!port) throw Error("SMTP_PORT env var is empty");
+    if (!pwd) throw Error("SMTP_PASSWORD env var is empty");
+
+    this.host = server;
+    this.port = parseInt(port);
+    this.user = user;
+    this.pass = pwd;
   }
+}

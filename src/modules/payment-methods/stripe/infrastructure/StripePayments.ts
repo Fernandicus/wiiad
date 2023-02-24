@@ -18,6 +18,7 @@ import { StripeClientSecret } from "../domain/value-objects/StripeClientSecret";
 import { Balance } from "@/src/common/domain/Balance";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
+import { projectConfig } from "@/src/utils/projectConfig";
 
 export interface IPaymentWithPaymentMethod {
   customerId: CustomerId;
@@ -273,9 +274,9 @@ export class StripePayments {
     header: string | Buffer | string[];
   }) {
     let { header, payload } = params;
-    const webhookSecret = process.env.STRIPE_SUCCESS_WEBHOOK_SECRET!;
+    const webhookSecret = projectConfig.STRIPE.webhook_secret!;
 
-    if (process.env.NODE_ENV === "test") {
+    if (projectConfig.ENV === "test") {
       header = this.stripe.webhooks.generateTestHeaderString({
         payload: payload as string,
         secret: webhookSecret,

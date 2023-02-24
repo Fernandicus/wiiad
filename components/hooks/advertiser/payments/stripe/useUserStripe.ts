@@ -6,10 +6,10 @@ import { useNotification } from "@/components/hooks/useNotification";
 import { stripeSliceActions } from "@/context/advertisers/payments/stripe/stripe-slice";
 import { AppDispatch, TStripeState } from "@/context/store";
 import { IStripePrimitives } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { PublicKeys } from "@/src/utils/PublicKeys";
 import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
 import { useDispatch, useSelector } from "react-redux";
 import { usePaymentProcess } from "../payment-process/usePaymentProcess";
+import { projectConfig } from "@/src/utils/projectConfig";
 
 interface IConfirmPaymentParams {
   useStripe: Stripe;
@@ -34,7 +34,7 @@ interface IUseStripe {
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
 
-export const stripePromise = loadStripe(PublicKeys.stripe);
+export const stripePromise = loadStripe(projectConfig.Stripe.public_key);
 
 export const useUserStripe = (): IUseStripe => {
   const { setNotification } = useNotification();

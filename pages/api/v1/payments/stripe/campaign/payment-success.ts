@@ -7,6 +7,7 @@ import { buffer } from "micro";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { IStripeMetadata } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeMetadata";
 import { StripeCampaignPaymentSuccessController } from "@/src/modules/payment-methods/stripe/infrastructure/controllers/StripeCampaignPaymentSuccessController";
+import { projectConfig } from "@/src/utils/projectConfig";
 
 interface IChargesData {
   payment_method_details: {
@@ -63,7 +64,6 @@ export default async function handler(
 
     res.status(200).end();
   } catch (err) {
-    
     res.status(400).send(`Webhook Error`);
     return;
   }
@@ -74,7 +74,7 @@ function getStripeSignature(req: NextApiRequest): string | Buffer | string[] {
 }
 
 async function getBufferRequest(req: NextApiRequest): Promise<string | Buffer> {
-  return process.env.NODE_ENV === "test"
+  return projectConfig.environment === "test"
     ? JSON.stringify(req.body)
     : await buffer(req);
 }

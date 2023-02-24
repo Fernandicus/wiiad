@@ -1,9 +1,10 @@
+import { projectConfig } from "@/src/utils/projectConfig";
 import jwt from "jsonwebtoken";
 import { IJsonWebTokenRepo } from "../domain/interfaces/IJsonWebTokenRepo";
 
 export class JsonWebTokenNPM implements IJsonWebTokenRepo {
   verify<T>(token: string): T {
-    return jwt.verify(token, process.env.JWT_SECRET!) as T;
+    return jwt.verify(token, projectConfig.JWT.secret!) as T;
   }
 
   decode<T extends object>(token: string): T {
@@ -11,7 +12,7 @@ export class JsonWebTokenNPM implements IJsonWebTokenRepo {
   }
 
   create(payload: string | object | Buffer): string {
-    return jwt.sign(payload, process.env.JWT_SECRET!);
+    return jwt.sign(payload, projectConfig.JWT.secret!);
   }
 
   /**
@@ -21,6 +22,6 @@ export class JsonWebTokenNPM implements IJsonWebTokenRepo {
     payload: string | object | Buffer,
     expiresIn: number
   ): string {
-    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn });
+    return jwt.sign(payload, projectConfig.JWT.secret!, { expiresIn });
   }
 }

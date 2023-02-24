@@ -20,8 +20,9 @@ import { RemovePM } from "../use-case/RemovePM";
 import { RemovePMHandler } from "../use-case/handlers/RemovePMHandler";
 import { DetachStripePM } from "../use-case/DetachStripePM";
 import { DetachStripePMHandler } from "../use-case/handlers/DetachStripePMHandler";
+import { projectConfig } from "@/src/utils/projectConfig";
 
-export const stripeRepo = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+export const stripeRepo = new Stripe(projectConfig.STRIPE.secret_key!, {
   apiVersion: "2022-08-01",
 });
 
