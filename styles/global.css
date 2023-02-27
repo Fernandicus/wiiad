@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn {
-  @apply px-4 py-2 rounded-md;
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md;
+  }
+}
+
+@layer utilities {
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }

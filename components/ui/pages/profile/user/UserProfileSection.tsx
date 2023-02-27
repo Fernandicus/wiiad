@@ -14,10 +14,11 @@ interface Props {
   totalBalance?: number;
   campaignsWatched?: number;
   user: IUserPrimitives;
+  onEditButton():void;
 }
 
 export const UserProfileSection = (props: Props) => {
-  const { campaignsWatched, totalBalance, totalReferrers, user } = props;
+  const {onEditButton, campaignsWatched, totalBalance, totalReferrers, user } = props;
   return (
     <div className="relative max-w-2xl">
       <CristalCardItem>
@@ -66,7 +67,7 @@ export const UserProfileSection = (props: Props) => {
           />
         </div>
         <div className="absolute top-5 right-5">
-          <EditButton onClick={() => {}} />
+          <EditButton onClick={onEditButton} />
         </div>
       </CristalCardItem>
     </div>
