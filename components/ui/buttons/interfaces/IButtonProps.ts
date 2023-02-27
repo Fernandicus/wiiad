@@ -1,9 +1,9 @@
-import { LegacyRef, MouseEventHandler, RefObject } from "react";
+import { LegacyRef, MouseEventHandler, ReactElement, RefObject } from "react";
 
 type TButton = "button" | "submit" | "reset" | undefined;
 
 export interface IButtonProps {
-  children: JSX.Element | JSX.Element[] | string;
+  children: ReactElement | ReactElement[] | string;
   isLoading?: boolean;
   type: TButton;
   disabled?: boolean;

@@ -10,6 +10,7 @@ import { useFileUploader } from "../../ads/hooks/useFileUploader";
 import { SectionHeader } from "../../items/SectionHeader";
 import { CardItem } from "../../../items/CardItem";
 import { useUpdateProfileDataForm } from "./hooks/useUpdateProfileDataForm";
+import { EditProfilePic } from "@/components/ui/items/EditProfileItem";
 
 interface IProfileDataSectionProps {
   user: IUserPrimitives;
@@ -76,10 +77,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
                   }}
                   imageClassName="rounded-full h-16 w-16 object-cover p-0.5 border-2 border-sky-500 hover:opacity-70 transition ease-in"
                 >
-                  <img
-                    src={user.profilePic}
-                    className="hover:cursor-pointer rounded-full h-16 w-16 object-cover p-0.5 border-2 border-sky-500 hover:opacity-70 transition ease-in "
-                  ></img>
+                  <EditProfilePic profilePic={user.profilePic} />
                 </ImageInputLoader>
               </div>
             </div>

@@ -34,7 +34,7 @@ interface IUseStripe {
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
 
-export const stripePromise = loadStripe(projectConfig.Stripe.public_key);
+export const stripePromise = loadStripe(projectConfig.STRIPE.public_key);
 
 export const useUserStripe = (): IUseStripe => {
   const { setNotification } = useNotification();

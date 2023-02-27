@@ -14,7 +14,7 @@ export const SectionHeader = ({
   onBack,
 }: ISectionHeaderProps) => {
   return (
-    <div className="mb-5 flex items-end justify-between">
+    <div className="mb-5 flex items-start justify-between">
       <div className="flex space-x-5 items-start ">
         {onBack && (
           <button

@@ -7,6 +7,7 @@ import { ReactElement } from "react";
 import { UserDataProfile } from "./UserDataProfile";
 import { DataCard } from "./items/DataCard";
 import { InterestBox } from "./items/InterestsBox";
+import { EditButton } from "../../../buttons/EditButton";
 
 interface Props {
   totalReferrers?: number;
@@ -21,56 +22,52 @@ export const UserProfileSection = (props: Props) => {
     <div className="relative max-w-2xl">
       <CristalCardItem>
         <div className="space-y-10">
-          <div className="space-y-10">
-            <div className="flex justify-center">
-              <UserDataProfile user={user} />
-            </div>
-            <div className="flex justify-center space-x-5">
-              <DataCard title="Dinero acumulado">
-                {totalBalance || totalBalance == 0 ? (
-                  <p className="font-bold">{totalBalance.toFixed(2)}€</p>
-                ) : (
-                  <div className="w-full h-6 flex justify-center items-center">
-                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                  </div>
-                )}
-              </DataCard>
-              <DataCard title="Anuncios vistos">
-                {campaignsWatched || campaignsWatched == 0 ? (
-                  <p className="font-bold">{campaignsWatched.toString()}</p>
-                ) : (
-                  <div className="w-full h-6 flex justify-center items-center">
-                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                  </div>
-                )}
-              </DataCard>
-              <DataCard title="Visitas a tu perfil">
-                {totalReferrers || totalReferrers == 0 ? (
-                  <p className="font-bold">{totalReferrers.toString()}</p>
-                ) : (
-                  <div className="w-full h-6 flex justify-center items-center">
-                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
-                  </div>
-                )}
-              </DataCard>
-            </div>
+          <div className="flex justify-center">
+            <UserDataProfile user={user} />
           </div>
+          <div className="flex justify-center space-x-5">
+            <DataCard title="Dinero acumulado">
+              {totalBalance || totalBalance == 0 ? (
+                <p className="font-bold">{totalBalance.toFixed(2)}€</p>
+              ) : (
+                <div className="w-full h-6 flex justify-center items-center">
+                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                </div>
+              )}
+            </DataCard>
+            <DataCard title="Anuncios vistos">
+              {campaignsWatched || campaignsWatched == 0 ? (
+                <p className="font-bold">{4}</p>
+              ) : (
+                <div className="w-full h-6 flex justify-center items-center">
+                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                </div>
+              )}
+            </DataCard>
+            <DataCard title="Anuncios referidos">
+              {totalReferrers || totalReferrers == 0 ? (
+                <p className="font-bold">{1}</p>
+              ) : (
+                <div className="w-full h-6 flex justify-center items-center">
+                  <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                </div>
+              )}
+            </DataCard>
+          </div>
+
           <InterestBox
             interests={[
-              "tech",
+              "tecnología",
+              "salud",
               "finanzas",
-              "tech",
+              "economía",
               "fitness",
-              "cultura",
-              "finanzas",
             ]}
           />
         </div>
-        <button className="absolute top-3 right-3 text-sky-500">
-          <div className="w-5 h-5">
-            <EditIcon />
-          </div>
-        </button>
+        <div className="absolute top-5 right-5">
+          <EditButton onClick={() => {}} />
+        </div>
       </CristalCardItem>
     </div>
   );
