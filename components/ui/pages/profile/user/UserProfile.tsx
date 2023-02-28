@@ -39,7 +39,7 @@ export function UserProfile({ user }: Props) {
         />
 
         {showDialog && (
-          <UserSettingsDialog user={user} closeDialog={() => setShowDialog(false)} />
+          <UserSettingsDialog  user={user} closeDialog={() => setShowDialog(false)} />
         )}
       </div>
     </>

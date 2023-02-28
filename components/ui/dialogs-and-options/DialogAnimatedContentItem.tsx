@@ -1,14 +1,16 @@
 import { ReactElement } from "react";
 
-export type DialogContentSection = "primary" | "secondary";
-export type DialogContentSections = Record<
-  DialogContentSection,
+type DialogMainSections = "main" | "secondary";
+
+type DialogContentSections = Record<
+  DialogMainSections,
   ReactElement | ReactElement[]
 >;
-export type DialogVisibility = DialogContentSection | "default";
+
+export type DialogViews = DialogMainSections | "default";
 
 interface IAnimatedContentProps {
-  visit: DialogVisibility;
+  visit: DialogViews;
   sections: DialogContentSections;
 }
 
@@ -25,7 +27,9 @@ export const DialogAnimatedContentItem = ({
     ? "animate-slideLeftFromVisible"
     : "animate-slideLeftFromVisibleRev";
 
-  const animateSecondaryContent = isSecondary
+  const animateSecondaryContent = isDefault
+    ? "translate-x-full"
+    : isSecondary
     ? "animate-slideLeftFromHidden"
     : "animate-slideLeftFromHiddenRev";
 
@@ -33,7 +37,7 @@ export const DialogAnimatedContentItem = ({
     <div className={`h-full bg-white overflow-y-scroll scrollbar-hide flex`}>
       <div className="w-full relative transition-all">
         <div className={`${animatePrimaryContent} w-full`}>
-          {sections["primary"]}
+          {sections["main"]}
         </div>
         <div className={`${animateSecondaryContent} w-full absolute top-0`}>
           {sections["secondary"]}
