@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import {
-  DialogAnimatedContentItem,
-  DialogContentSections,
+  DialogAnimatedContentItem, DialogContentSections,
 } from "./DialogAnimatedContentItem";
 import { DialogItem } from "./DialogItem";
 

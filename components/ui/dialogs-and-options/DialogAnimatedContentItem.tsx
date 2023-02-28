@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 type DialogMainSections = "main" | "secondary";
 
-type DialogContentSections = Record<
+export type DialogContentSections = Record<
   DialogMainSections,
   ReactElement | ReactElement[]
 >;
