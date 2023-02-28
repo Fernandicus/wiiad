@@ -16,6 +16,7 @@ import { CreditCard } from "@/components/ui/payment/CreditCard";
 import { CreditCardIcon } from "@/components/ui/icons/CreditCardIcon";
 import { BoxIcon } from "@/components/ui/icons/BoxIcon";
 import { UserIcon } from "@/components/ui/icons/UserIcon";
+import { UserSettingsDialog } from "@/components/ui/dialogs-and-options/user-settings/UserSettingsDialog";
 
 interface Props {
   user: IUserPrimitives;
@@ -38,28 +39,7 @@ export function UserProfile({ user }: Props) {
         />
 
         {showDialog && (
-          <DialogItem title="Ajustes" closeDialog={() => setShowDialog(false)}>
-            <div className="h-full overflow-y-scroll scrollbar-hide">
-              <SectionNavDialog
-                titleLable="Datos de perfil"
-                descriptionLabel="Email, nombre y foto de perfil"
-                onClick={() => {}}
-              >
-                <div className="w-7">
-                  <UserIcon />
-                </div>
-              </SectionNavDialog>
-              <SectionNavDialog
-                titleLable="Tus intereses"
-                descriptionLabel="Selecciona las categorías que más te interesen"
-                onClick={() => {}}
-              >
-                <div className="w-7 h-7">
-                  <BoxIcon />
-                </div>
-              </SectionNavDialog>
-            </div>
-          </DialogItem>
+          <UserSettingsDialog user={user} closeDialog={() => setShowDialog(false)} />
         )}
       </div>
     </>

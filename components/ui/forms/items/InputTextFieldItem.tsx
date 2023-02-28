@@ -33,7 +33,7 @@ export const InputTextFieldItem = (props: InputProps) => {
       name={name}
       maxLength={maxLength}
       className={`rounded-md px-2 block w-full h-10 border ${
-        hasError ? "border-red-300" : "border-gray-300"
+        hasError ? "border-red-300" : "border-gray-300 caret-sky-600 outline-2 outline-sky-500"
       }`}
     />
   );

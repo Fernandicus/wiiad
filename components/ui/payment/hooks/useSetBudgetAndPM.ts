@@ -101,7 +101,7 @@ export const useSetBudgetAndPM = (): IUseSetBudgetAndPM => {
           isPaying: false,
         };
       default:
-        assertUnreachable(action.type);
+        return assertUnreachable(action.type);
     }
   };
 
