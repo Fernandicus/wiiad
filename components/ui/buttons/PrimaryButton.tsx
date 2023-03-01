@@ -2,8 +2,10 @@ import { ForwardedRef, forwardRef } from "react";
 import { LoadingSpinnerAnimation } from "../icons/LoadingSpinnerAnimation";
 import { IButtonProps } from "./interfaces/IButtonProps";
 
+type ButtonProps = IButtonProps & { size?: "sm" | "md" };
+
 export const PrimaryButton = forwardRef(
-  (props: IButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
+  (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
     const {
       isLoading = false,
       disabled = false,
@@ -12,7 +14,10 @@ export const PrimaryButton = forwardRef(
       onClick,
       onSumbit,
       type,
+      size = "md",
     } = props;
+
+    const isSmSize = size == "sm";
 
     return (
       <button
@@ -21,7 +26,7 @@ export const PrimaryButton = forwardRef(
           disabled
             ? "bg-gray-300 text-gray-500"
             : "bg-sky-500 text-white hover:bg-sky-400 transition ease-in duration-150"
-        } ${fullWitdth && "w-full"} btn`}
+        } ${fullWitdth && "w-full"} ${isSmSize && "py-0.5"} btn `}
         type={type}
         disabled={disabled}
         onClick={onClick}

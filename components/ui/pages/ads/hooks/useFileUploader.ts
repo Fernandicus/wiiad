@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from "react";
 
+type Ev = ChangeEvent<HTMLInputElement>;
+
 interface IUseFileUploaderProps {
   fileMaxSize: number;
   onSuccess?(file: string): void;
@@ -10,6 +12,7 @@ interface IUseFileUploaderResp {
   hasError: boolean;
   onSelectFile(event: ChangeEvent<HTMLInputElement>): void;
   filePreview?: string;
+  resetFile(): void;
 }
 
 /**
@@ -23,10 +26,11 @@ export const useFileUploader = (
   const mb = Math.floor(fileMaxSize / mbToBytes);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [hasError, setHasError] = useState<boolean>(false);
-  const [filePreview, setFilePreview] = useState<string>();
+  const [filePreview, setFilePreview] = useState<string | undefined>();
 
   const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+
     const selectedFile = event.target.files![0];
 
     if (!selectedFile) return;
@@ -53,5 +57,6 @@ export const useFileUploader = (
     hasError,
     onSelectFile,
     filePreview,
+    resetFile: () => setFilePreview(undefined),
   };
 };

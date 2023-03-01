@@ -24,7 +24,6 @@ interface Props {
 
 export function UserProfile({ user }: Props) {
   const { campaignsWatched, totalBalance, totalReferrers } = useReferral();
-
   const [showDialog, setShowDialog] = useState(true);
 
   return (

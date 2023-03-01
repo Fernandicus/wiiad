@@ -1,11 +1,10 @@
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { assertUnreachable } from "@/src/utils/helpers";
 import { ReactElement } from "react";
-import { InputTextField } from "../../forms/items/InputTextField";
-import { EditProfilePic } from "../../items/EditProfileItem";
-import { DialogViews } from "../DialogAnimatedContentItem";
 import { DialogAnimatedNav } from "../DialogAnimatedNav";
-import { NavSettingsState, useNavSettings } from "./hooks/useNavSettings";
+import { EditInterestsSectionDialog } from "./EditInterestsSectionDialog";
+import { EditUserProfileSectionDialog } from "./EditUserProfileSectionDialog";
+import { useEditUserProfile } from "./hooks/useEditUserProfile";
+import { SectionNames } from "./hooks/useUserSettingsDialogReducer";
 import { UserDialogSettingsContent } from "./UserDialogSettingsContent";
 
 type RecordKeys = Exclude<SectionNames, "settings">;
@@ -15,102 +14,56 @@ interface UserSettingsProps {
   user: IUserPrimitives;
 }
 
-type SectionNames = "settings" | "profile" | "interests";
-
-const reducer = (
-  state: NavSettingsState<SectionNames, DialogViews>,
-  action: {
-    type: SectionNames;
-  }
-): NavSettingsState<SectionNames, DialogViews> => {
-  switch (action.type) {
-    case "settings":
-      return {
-        ...state,
-        sectionName: "settings",
-        pervSectionName: state.sectionName,
-        sectionTitle: "Ajustes",
-        visit: "main",
-      };
-    case "profile":
-      return {
-        ...state,
-        sectionName: "profile",
-        pervSectionName: state.sectionName,
-        sectionTitle: "Datos de perfil",
-        visit: "secondary",
-      };
-    case "interests":
-      return {
-        ...state,
-        sectionName: "interests",
-        pervSectionName: state.sectionName,
-        sectionTitle: "Tus intereses",
-        visit: "secondary",
-      };
-    default:
-      return assertUnreachable(action.type);
-  }
-};
-
-const initState = {
-  sectionTitle: "Ajustes",
-  visit: "default",
-  pervSectionName: "settings",
-  sectionName: "settings",
-} satisfies NavSettingsState<SectionNames, DialogViews>;
-
 export const UserSettingsDialog = ({
   closeDialog,
   user,
 }: UserSettingsProps) => {
-  const { state, dispatch } = useNavSettings<SectionNames, DialogViews>({
-    initState,
-    reducer,
-  });
+  const { reducer, fileUploader, updateProfile, valuesHaveChanged, resetValues } =
+    useEditUserProfile(user);
+  const { state, dispatch } = reducer;
 
   const section: Record<RecordKeys, ReactElement> = {
     profile: (
-      <div className="p-5">
-        <div className="flex justify-center">
-          <EditProfilePic profilePic={user.profilePic} size="md" />
-        </div>
-        <InputTextField label="Nombre" value={user.name} />
-        <InputTextField label="Email" value={user.email} />
-      </div>
+      <EditUserProfileSectionDialog
+        useFileUploader={fileUploader}
+        useUpdateProfile={updateProfile}
+        user={user}
+      />
     ),
-    interests: (
-      <div className="w-full">
-        <h1>a</h1>
-      </div>
-    ),
+    interests: <EditInterestsSectionDialog />,
   };
 
-  const settingsSection = (
-    <UserDialogSettingsContent
-      onClickProfile={() => dispatch({ type: "profile" })}
-      onClickInterests={() => dispatch({ type: "interests" })}
-    />
-  );
+  const actionButton = state.visit != "secondary" ? "close" : "save";
+  const hasBackButton = state.visit != "secondary" ? false : true;
+
+  const secondarySection =
+    state.visit == "main"
+      ? section[state.pervSectionName as RecordKeys]
+      : section[state.sectionName as RecordKeys];
 
   return (
     <DialogAnimatedNav
-      hasCloseButton={
-        state.visit == "default" || state.visit == "main" ? true : false
-      }
+      onSubmit={(e) => {
+        e.preventDefault();
+        updateProfile.handle.submit(e, { file: fileUploader.filePreview });
+      }}
+      loadingActionBtn={false}
+      disabledActionBtn={!valuesHaveChanged()}
+      actionButton={actionButton}
       visit={state.visit}
-      mainSection={settingsSection}
-      secondarySection={
-        state.visit == "main"
-          ? section[state.pervSectionName as RecordKeys]
-          : section[state.sectionName as RecordKeys]
-      }
+      secondarySection={secondarySection}
       title={`${state.sectionTitle}`}
       closeDialog={closeDialog}
-      onBack={() => dispatch({ type: "settings" })}
-      hasBackButton={
-        state.visit == "default" || state.visit == "main" ? false : true
-      }
-    />
+      onBack={() => {
+        dispatch({ type: "settings" });
+        resetValues()
+      }}
+      hasBackButton={hasBackButton}
+    >
+      <UserDialogSettingsContent
+        onClickProfile={() => dispatch({ type: "profile" })}
+        onClickInterests={() => dispatch({ type: "interests" })}
+      />
+    </DialogAnimatedNav>
   );
 };

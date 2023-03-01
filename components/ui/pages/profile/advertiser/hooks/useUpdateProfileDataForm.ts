@@ -1,26 +1,25 @@
 import { useForm } from "../../../ads/hooks/useForm";
 import * as Yup from "yup";
-import { uploadFileToCloudHandler } from "@/components/src/cloud-file-store/infrastructure/cloud-file-store-container";
 import { useState } from "react";
-import { IApiReqUpdateProfile } from "@/pages/api/v1/profile/update";
 import { useRouter } from "next/router";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { UpdateAdvertiserProfController } from "@/components/src/advertiser/data-profile/infrastructure/controllers/UpdateAdvertiserProfileController";
 import { useNotification } from "@/components/hooks/useNotification";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 
-interface IInputValues {
+type ProfileValues = {
   email: string;
   name: string;
   profilePic: string;
-}
+};
 
-export const useUpdateProfileDataForm = (props: IInputValues) => {
+export const useUpdateProfileDataForm = (user: IUserPrimitives) => {
   const { setNotification } = useNotification();
   const [file, setFile] = useState("");
   const router = useRouter();
 
-  const form = useForm<IInputValues, { file?: string }>({
-    initialValues: props,
+  const form = useForm<ProfileValues, { file?: string }>({
+    initialValues: { ...user },
     inputNames: {
       email: "email",
       name: "name",
@@ -40,13 +39,25 @@ export const useUpdateProfileDataForm = (props: IInputValues) => {
       if (params.file) setFile(params.file);
     },
     handleSubmit: async (params) => {
-      const controller = new UpdateAdvertiserProfController();
-      await controller.update({
-        ...params,
-        profilePic: file,
+      const handleRole = new HandleRolesHandler(user.role);
+
+      await handleRole.forRole({
+        BUSINESS: async () => {
+          const controller = new UpdateAdvertiserProfController();
+          await controller.update({
+            ...params,
+            profilePic: file,
+          });
+        },
+        USER: () => {
+          throw new Error("No handler provided for role user");
+        },
+        AGENCY: () => {
+          throw new Error("No handler provided for role agency");
+        },
       });
 
-      if (params.email.toLowerCase() !== props.email.toLowerCase()) {
+      if (params.email.toLowerCase() !== user.email.toLowerCase()) {
         setNotification({
           message: "Te hemos enviado un email de verificación",
           status: "success",

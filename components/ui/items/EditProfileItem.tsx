@@ -12,7 +12,7 @@ export const EditProfilePic = ({
     <div className={imageSize}>
       <img
         src={profilePic}
-        className={`${imageSize} hover:cursor-pointer rounded-full  object-cover p-0.5 border-2 border-sky-500 hover:opacity-70 transition ease-in `}
+        className={`${imageSize} hover:cursor-pointer rounded-full  object-cover hover:opacity-70 transition ease-in `}
       ></img>
     </div>
   );

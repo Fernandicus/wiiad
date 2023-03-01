@@ -1,9 +1,7 @@
-import { useUserStripe } from "@/components/hooks/advertiser/payments/stripe/useUserStripe";
-import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { useNotification } from "@/components/hooks/useNotification";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { replaceInputTextSpacesWith } from "@/src/utils/helpers";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { PrimaryButton } from "../../../buttons/PrimaryButton";
 import { ImageInputLoader } from "../../ads/ad-form-items/ImageInputLoader";
 import { useFileUploader } from "../../ads/hooks/useFileUploader";
@@ -24,11 +22,7 @@ export const ProfileDataSection = ({ user }: IProfileDataSectionProps) => {
 
   const { setNotification } = useNotification();
 
-  const { error, handle, input, isSubmitting } = useUpdateProfileDataForm({
-    email: user.email,
-    name: user.name,
-    profilePic: user.profilePic,
-  });
+  const { error, handle, input, isSubmitting } = useUpdateProfileDataForm(user);
 
   const emailHasChanged = input.values.email !== user.email;
   const nameHasChanged = input.values.name !== user.name;
