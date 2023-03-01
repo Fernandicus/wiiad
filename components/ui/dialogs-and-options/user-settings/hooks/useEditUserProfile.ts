@@ -1,7 +1,6 @@
 import { useFileUploader } from "@/components/ui/pages/ads/hooks/useFileUploader";
 import { useUpdateProfileDataForm } from "@/components/ui/pages/profile/advertiser/hooks/useUpdateProfileDataForm";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useEffect } from "react";
 import { useUserSettingsDialogReducer } from "./useUserSettingsDialogReducer";
 
 export const useEditUserProfile = (user: IUserPrimitives) => {

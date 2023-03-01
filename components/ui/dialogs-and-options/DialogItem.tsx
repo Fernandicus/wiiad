@@ -58,7 +58,7 @@ export const DialogItem = ({
       />
 
       <form onSubmit={onSubmit} className="absolute inset-10 max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-gray-400 shadow-2xl">
-        <div className="border-b-2 border-slate-100 left-0 p-5 w-full flex justify-between bg-white">
+        <div className="border-b border-slate-100 left-0 p-5 w-full flex justify-between bg-white">
           <div className="flex space-x-5 items-center">
             {hasBackButton && (
               <button type="reset" onClick={onBack} className="w-7 h-7">

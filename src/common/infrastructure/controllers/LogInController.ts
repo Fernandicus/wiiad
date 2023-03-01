@@ -201,10 +201,18 @@ export class SignInController {
     data: IVerificationEmailData
   ): Promise<IUserPrimitives> {
     const findUser = findUserHandler.byEmail(data.email);
-    const response = await Promise.all([findUser]);
-    const userFound = response[0];
-    const userId = userFound.id;
-    return this.user({ data, id: userId, profilePic: userFound.profilePic });
+    const [userFound] = await Promise.all([findUser]);
+
+    const { id, profilePic } = userFound.match({
+      some(user) {
+        return { id: user.id, profilePic: user.profilePic };
+      },
+      nothing() {
+        throw ErrorFindingUser.byEmail(data.email);
+      },
+    });
+    
+    return this.user({ data, id, profilePic });
   }
 
   private userInitSession(context: IReqAndRes, payload: IUserPrimitives): void {

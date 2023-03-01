@@ -1,5 +1,5 @@
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   user: IUserPrimitives;

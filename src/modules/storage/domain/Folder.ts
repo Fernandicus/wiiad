@@ -1,5 +1,4 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { Name } from "../../../common/domain/Name";
 
 export class Folder {
   readonly path;
@@ -19,6 +18,11 @@ export class Folder {
 
   static advertiserProfilePic(userId: UniqId) {
     const path = `advertisers/${userId.id}/profilePic/`;
+    return new Folder(path);
+  }
+
+  static userProfilePic(userId: UniqId) {
+    const path = `users/${userId.id}/profilePic/`;
     return new Folder(path);
   }
 }

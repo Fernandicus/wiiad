@@ -37,9 +37,7 @@ import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { getApiResponse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
 import { ErrorFetchingAdvertiser } from "../domain/errors/ErrorFetchingAdvertiser";
-import {
-  IAdvertiserApiCall
-} from "../domain/interfaces/IAdvertiserApiCall";
+import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
 import { IUpdateProfileDataProps } from "../use-case/UpdateAdvertiserProfileData";
 
 export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
@@ -66,7 +64,7 @@ export class FetchAdvertiserApiCalls implements IAdvertiserApiCall {
     });
     const apiResp = await getApiResponse<IApiProfileResp>(resp);
 
-    if (resp.status !== 200)
+    if (!resp.ok)
       throw ErrorFetchingAdvertiser.getAdvertiserProfileData(apiResp.message);
     if (!apiResp.data)
       throw ErrorFetchingAdvertiser.noDataAvailable(apiResp.message);

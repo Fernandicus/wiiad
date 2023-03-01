@@ -8,14 +8,14 @@ import { FindUser } from "../use-case/FindUser";
 export class FindUserHandler {
   constructor(private findUser: FindUser) {}
 
-  async byEmail(email: string): Promise<IUserPrimitives> {
+  async byEmail(email: string): Promise<Maybe<IUserPrimitives>> {
     const userFound = await this.findUser.byEmail(new Email(email));
-    return userFound.toPrimitives();
+    return this.match(userFound);
   }
 
-  async byName(name: string): Promise<IUserPrimitives> {
+  async byName(name: string): Promise<Maybe<IUserPrimitives>> {
     const userFound = await this.findUser.byName(new Name(name));
-    return userFound.toPrimitives();
+    return this.match(userFound);
   }
 
   async byId(id:string): Promise<Maybe<IUserPrimitives>> {

@@ -21,4 +21,9 @@ export class GetSignedParamsHandler {
     const folder = Folder.advertiserProfilePic(new UniqId(userId));
     return this.getSignedParams.get(folder);
   }
+
+  forUserProfilePic(userId: string): ICloudinarySignedParams {
+    const folder = Folder.userProfilePic(new UniqId(userId));
+    return this.getSignedParams.get(folder);
+  }
 }

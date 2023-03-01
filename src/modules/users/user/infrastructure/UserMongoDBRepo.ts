@@ -51,15 +51,15 @@ export class UserMongoDBRepo implements IUserRepo {
     });
   }
 
-  async findUserByEmail(email: Email): Promise<User | null> {
+  async findUserByEmail(email: Email): Promise<Maybe<User>> {
     const userModel = await UserModel.findOne<IUserModel>({
       email: email.email,
       role: RoleType.USER,
     } as IUserModel);
 
-    if (!userModel) return null;
+    if (!userModel) return Maybe.nothing();
 
-    return this.toUser(userModel);
+    return Maybe.some(this.toUser(userModel));
   }
 
   async findAdvertiserByEmail(email: Email): Promise<Maybe<User>> {
@@ -72,15 +72,14 @@ export class UserMongoDBRepo implements IUserRepo {
     return Maybe.some(this.toUser(userModel));
   }
 
-  async findUserByName(name: Name): Promise<User | null> {
+  async findUserByName(name: Name): Promise<Maybe<User>> {
     const userModel = await UserModel.findOne<IUserModel>({
       name: name.name,
       role: RoleType.USER,
     } as IUserModel);
 
-    if (!userModel) return null;
-
-    return this.toUser(userModel);
+    if (!userModel) return Maybe.nothing();
+    return Maybe.some(this.toUser(userModel));
   }
 
   async findAdvertiserByName(name: Name): Promise<Maybe<User>> {

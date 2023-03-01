@@ -7,6 +7,7 @@ import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSignedParamsHandler } from "@/src/modules/storage/infrastructure/storage-container";
 import { IApiRespCloudinarySignature } from "./video-sign-request";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,24 +19,25 @@ export default async function handler(
   try {
     const session = userSession.getFromServer({ req, res });
 
-    if (!session)
-      return res.status(400).end({ message: "No session provided" });
-    if (session.role == RoleType.USER)
-      return res.status(400).end({ message: "Action no authorized" });
+    const roleHandler = HandleRolesHandler.givenUser(session!);
 
-    let signedParams;
-
-    if (session.role !== RoleType.USER) {
-      signedParams = getSignedParamsHandler.forAdvertiserProfilePic(
-        session.id
-      );
-    }
+    const signedParams = roleHandler.forRole({
+      AGENCY: (_) => {
+        throw new Error("Could not sign profile pic for the given role");
+      },
+      BUSINESS: (user) => {
+        return getSignedParamsHandler.forAdvertiserProfilePic(user.id.id);
+      },
+      USER: (user) => {
+        return getSignedParamsHandler.forUserProfilePic(user.id.id);
+      },
+    });
 
     return res
       .status(200)
       .json({ message: "Cloudinary signed params", data: signedParams });
   } catch (err) {
-    
-    return res.status(400).json({ message: "Something went wrong" });
+    if (err instanceof Error)
+      return res.status(400).json({ message: err.message });
   }
 }

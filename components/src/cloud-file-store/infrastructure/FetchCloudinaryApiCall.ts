@@ -77,7 +77,7 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     cloudinaryEndPoint: string;
   }) {
     const { file, cloudinaryEndPoint, signedDataEndPoint } = params;
-    
+
     const signedData = await this.getSignedData(signedDataEndPoint);
     const formData = this.formDataParse({
       file,
@@ -111,8 +111,9 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
       method: "GET",
     });
     const apiResp = await getApiResponse<IApiRespCloudinarySignature>(resp);
-    if (resp.status !== 200 || !apiResp.data)
+    if (!resp.ok || !apiResp.data) {
       throw ErrorFetchingCloudinary.gettingSignedData(apiResp.message);
+    }
 
     return apiResp.data;
   }
@@ -136,7 +137,7 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     size?: { width: number; height: number }
   ): CloudinaryImage {
     const { width, height } = !size ? { width: 576, height: 324 } : size;
-    
+
     const myImage = this.cld.image(public_id);
     const transformedImage = myImage
       .resize(fill().width(width).height(height).gravity("center"))

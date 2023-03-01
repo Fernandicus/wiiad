@@ -4,7 +4,7 @@ import { updateAdvertiserProfHandler } from "../advertiser-container";
 const updateFunc = updateAdvertiserProfHandler.update;
 type IUpdateProps = Parameters<typeof updateFunc>[0];
 
-export class UpdateAdvertiserProfController {
+export class UpdateProfileController {
   constructor() {}
 
   async update(props: IUpdateProps): Promise<void> {

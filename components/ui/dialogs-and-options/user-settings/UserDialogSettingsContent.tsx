@@ -1,6 +1,6 @@
 import { BoxIcon } from "../../icons/BoxIcon";
 import { UserIcon } from "../../icons/UserIcon";
-import { SectionNavDialog } from "../SectionNavDialog";
+import { NavDialogButton } from "../../buttons/NavDialogButton";
 
 interface UserSettingsContentProps {
   onClickProfile(): void;
@@ -14,7 +14,7 @@ export const UserDialogSettingsContent = ({
 
   return (
     <>
-      <SectionNavDialog
+      <NavDialogButton
         titleLable="Datos de perfil"
         descriptionLabel="Email, nombre y foto de perfil"
         onClick={onClickProfile}
@@ -22,8 +22,8 @@ export const UserDialogSettingsContent = ({
         <div className="w-7">
           <UserIcon />
         </div>
-      </SectionNavDialog>
-      <SectionNavDialog
+      </NavDialogButton>
+      <NavDialogButton
         titleLable="Tus intereses"
         descriptionLabel="Selecciona las categorías que más te interesen"
         onClick={onClickInterests}
@@ -31,7 +31,7 @@ export const UserDialogSettingsContent = ({
         <div className="w-7 h-7">
           <BoxIcon />
         </div>
-      </SectionNavDialog>
+      </NavDialogButton>
     </>
   );
 };

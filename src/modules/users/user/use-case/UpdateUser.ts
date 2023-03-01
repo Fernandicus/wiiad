@@ -9,7 +9,7 @@ export interface IUpdateData {
   profilePic?: ProfilePic;
 }
 
-export interface IUpdateProfileProps {
+export interface IUpdateUserProfileProps {
   userId: UniqId;
   data: IUpdateData;
 }
@@ -17,7 +17,7 @@ export interface IUpdateProfileProps {
 export class UpdateUser {
   constructor(private repo: IUserRepo) {}
 
-  async profile(params: IUpdateProfileProps): Promise<void> {
+  async profile(params: IUpdateUserProfileProps): Promise<void> {
     await this.repo.updateProfile(params);
   }
 

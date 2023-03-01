@@ -7,7 +7,7 @@ import { HandleUserRolesHandler } from "./HandleUserRolesHandler";
 export class HandleRolesHandler implements HandleRoles{
   readonly role;
 
-  constructor(role: string) {
+  constructor(role: string | RoleType) {
     this.role = new Role(role);
   }
 
