@@ -33,24 +33,14 @@ describe("On FindUser, GIVEN a user", () => {
   it(`WHEN call create, THEN user repo save method should be called with user email`, async () => {
     const userFound = await findUser.byEmail(user.email);
     expect(userRepo.findUserByEmail).toBeCalledWith(user.email);
-    userFound.match({
-      nothing() {},
-      some(value) {
-        expect(value).toEqual(user);
-      },
-    });
+    userFound.map(value => expect(value).toEqual(user))
   });
 
   it(`WHEN call byUserName for an existing user name, 
   THEN user repo byUserName method should be called with user name`, async () => {
     const userFound = await findUser.byName(user.name);
     expect(userRepo.findUserByName).toBeCalledWith(user.name);
-    userFound.match({
-      nothing() {},
-      some(value) {
-        expect(value).toEqual(user);
-      },
-    });
+    userFound.map(value => expect(value).toEqual(user))
   });
 
   it(`WHEN call findByUserName for a not existing user name, 
@@ -58,38 +48,20 @@ describe("On FindUser, GIVEN a user", () => {
     const nonExistingName = new Name("X");
 
     const userFound = await findUser.byName(nonExistingName);
-
-    userFound.match({
-      nothing() {
-        expect(null).toBeNull();
-      },
-      some(value) {},
-    });
+    userFound.map(value => expect(value).toBeNull())
   });
 
   it(`WHEN call findByEmail for an existing user email, 
   THEN user repo findByEmail method should be called with user email`, async () => {
     const userFound = await findUser.byEmail(user.email);
-    userFound.match({
-      nothing() {},
-      some(value) {
-        expect(value).toEqual(user);
-      },
-    });
-
     expect(userRepo.findUserByEmail).toBeCalledWith(user.email);
-    //expect(userFound).toEqual(user);
+    userFound.map(value => expect(value).toEqual(user))
   });
 
   it(`WHEN call findByUserName for a not existing user email, 
   THEN an ErrorFingindUser exception should be thrown`, async () => {
     const nonExistingEmail = new Email("x@x.com");
     const userFound = await findUser.byEmail(nonExistingEmail);
-    userFound.match({
-      nothing() {
-        expect(null).toBeNull();
-      },
-      some(value) {},
-    });
+    userFound.map(value => expect(value).toBeNull())
   });
 });
