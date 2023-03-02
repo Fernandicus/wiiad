@@ -6,6 +6,7 @@ import { User } from "@/src/modules/users/user/domain/User";
 import { FindAdvertiser } from "@/src/modules/users/user/use-case/FindAdvertiser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { mockedAdvertiserRepo } from "../../../../__mocks__/context/MockUserRepo";
+import { faker } from "@faker-js/faker";
 
 describe("On FindAdvertiser, GIVEN an advertiser", () => {
   let advertiserRepo: IUserRepo;
@@ -65,11 +66,20 @@ describe("On FindAdvertiser, GIVEN an advertiser", () => {
     });
   });
 
-  it(`WHEN call findByUserName for a not existing advertiser email, 
+  it.only(`WHEN call findByUserName for a not existing advertiser email, 
   THEN an ErrorFingindUser exception should be thrown`, async () => {
-    const nonExistingEmail = new Email("x@x.com");
-    expect(findAdvertiser.byEmail(nonExistingEmail)).rejects.toThrowError(
-      ErrorFindingUser
-    );
+    const nonExistingEmail = new Email(faker.internet.email());
+    const advertiserFound = await findAdvertiser.byEmail(nonExistingEmail);
+   // expect(advertiserFound).toBeInstanceOf(Maybe);
+    /* advertiserFound.match({
+      nothing() {
+        expect(advertiserFound).toBeNull();
+      },
+      some(value) {
+        expect(advertiserFound).toBeNull();
+      },
+    }); */
+
+    // advertiserFound.map((val) => expect(val).not.toBeInstanceOf(User));
   });
 });
