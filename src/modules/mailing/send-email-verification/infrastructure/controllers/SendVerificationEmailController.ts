@@ -14,9 +14,8 @@ import {
 } from "../email-verification-container";
 
 export class SendVerificationEmailController {
-  constructor() {}
-
   async sendToNewUser(data: IVerificationEmailData): Promise<void> {
+    debugger;
     await this.checkIsNewUser(data);
     await sendVerificationEmailHandler.sendSignUp({
       sendTo: data.email,
@@ -69,13 +68,36 @@ export class SendVerificationEmailController {
     const findUserByName = findUserHandler.byName(data.userName!);
     const findUserByEmail = findUserHandler.byEmail(data.email);
 
-    const resp = await Promise.allSettled([findUserByName, findUserByEmail]);
+    const [userByName, userByEmail] = await Promise.allSettled([
+      findUserByName,
+      findUserByEmail,
+    ]);
 
-    if (resp[0].status == "fulfilled" || resp[1].status == "fulfilled")
-      throw ErrorSendVerificationEmail.userOrEmailAlreadyExists(
-        data.userName!,
-        data.email
-      );
+    this.handlePromise({
+      promiseResolved: userByName,
+      error: ErrorSendVerificationEmail.userNameAlreadyExists(data.userName!),
+    });
+    
+    this.handlePromise({
+      promiseResolved: userByEmail,
+      error: ErrorSendVerificationEmail.userEmailAlreadyExists(data.email),
+    });
+  }
+
+  private handlePromise(props: {
+    promiseResolved: PromiseSettledResult<Maybe<IUserPrimitives>>;
+    error: Error;
+  }) {
+    const { error, promiseResolved } = props;
+
+    if (promiseResolved.status == "fulfilled") {
+      promiseResolved.value.match({
+        nothing() {},
+        some(_) {
+          throw error;
+        },
+      });
+    }
   }
 
   private async checkIsNewAdvertiser(

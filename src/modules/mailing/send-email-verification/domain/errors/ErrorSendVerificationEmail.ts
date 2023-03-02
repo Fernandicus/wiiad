@@ -31,6 +31,12 @@ export class ErrorSendVerificationEmail extends Error {
     );
   }
 
+  static userEmailAlreadyExists(email: string): ErrorSendVerificationEmail {
+    return new ErrorSendVerificationEmail(
+      `The user email '${email}' already exists`
+    );
+  }
+
   static emailAlreadyExists(email: string): ErrorSendVerificationEmail {
     return new ErrorSendVerificationEmail(
       `El email '${email}' ya está asignado a un anunciante`

@@ -7,6 +7,8 @@ import { ErrorCreatingUser } from "@/src/modules/users/user/domain/ErrorCreating
 import { reqBodyParse } from "@/src/utils/helpers";
 import { RoleType } from "@/src/common/domain/Role";
 import { verificationEmailController } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
+import { ErrorSendVerificationEmail } from "@/src/modules/mailing/send-email-verification/domain/errors/ErrorSendVerificationEmail";
 
 export interface IApiReqSendEmailVerification {
   data: IVerificationEmailData;
@@ -18,12 +20,34 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "POST") return res.status(400);
-
-  const { data, isNewUser }: IApiReqSendEmailVerification = reqBodyParse(req);
   
+  const { data, isNewUser }: IApiReqSendEmailVerification = reqBodyParse(req);
+
   try {
+    
+    const roleHandler = new HandleRolesHandler(data.role);
     await MongoDB.connectAndDisconnect(async () => {
-      if (data.role === RoleType.USER) {
+      await roleHandler.forRole({
+        USER: async () => {
+          if (isNewUser) {
+            await verificationEmailController.sendToNewUser(data);
+          } else {
+            await verificationEmailController.sendToUser(data);
+          }
+        },
+        BUSINESS: async () => {
+          if (isNewUser) {
+            await verificationEmailController.sendToNewAdvertiser(data);
+          } else {
+            await verificationEmailController.sendToAdvertiser(data);
+          }
+        },
+        AGENCY() {
+          throw new ErrorSendVerificationEmail("The role is not authorized");
+        },
+      });
+
+      /* if (data.role === RoleType.USER) {
         if (isNewUser) {
           await verificationEmailController.sendToNewUser(data);
         } else {
@@ -35,14 +59,11 @@ export default async function handler(
         } else {
           await verificationEmailController.sendToAdvertiser(data);
         }
-      }
+      } */
     });
 
     return res.status(200).json({ message: `Email sent to ${data.email}` });
   } catch (err) {
-    
-    const errorCreatingUser = err instanceof ErrorCreatingUser;
-
     if (err instanceof ErrorVerificationEmail)
       return res.status(400).json({ message: err.message });
 

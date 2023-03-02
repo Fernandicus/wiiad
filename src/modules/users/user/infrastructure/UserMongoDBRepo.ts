@@ -67,7 +67,7 @@ export class UserMongoDBRepo implements IUserRepo {
       email: email.email,
       role: RoleType.BUSINESS,
     } as IUserModel);
-
+    debugger;
     if (!userModel) return Maybe.nothing();
     return Maybe.some(this.toUser(userModel));
   }
