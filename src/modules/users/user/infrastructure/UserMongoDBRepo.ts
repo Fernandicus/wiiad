@@ -6,7 +6,7 @@ import { Role, RoleType } from "@/src/common/domain/Role";
 import { UniqId } from "@/src/utils/UniqId";
 import { IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";
-import { IUpdateProfileProps } from "../use-case/UpdateUser";
+import { IUpdateUserProfileProps } from "../use-case/UpdateUser";
 import { UserModel, IUserModel } from "./UserModel";
 
 export class UserMongoDBRepo implements IUserRepo {
@@ -32,7 +32,7 @@ export class UserMongoDBRepo implements IUserRepo {
     await UserModel.updateOne({ _id: id.id }, { $set: body });
   }
 
-  async updateProfile(params: IUpdateProfileProps): Promise<void> {
+  async updateProfile(params: IUpdateUserProfileProps): Promise<void> {
     const { userId, data } = params;
     const { name, profilePic } = data;
 

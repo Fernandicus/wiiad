@@ -22,16 +22,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await MongoDB.connectAndDisconnect(
       async () =>
         await adCreatorHandler.create({
-          adProps: reqBody,
+          ...reqBody,
           advertiserId: session.id,
-          adId: UniqId.generate(),
+          id: UniqId.generate(),
         })
     );
 
     res.status(200).json({});
     return;
   } catch (err) {
-    
     res.status(400).json({ message: "Error creating new ad video" });
     return;
   }

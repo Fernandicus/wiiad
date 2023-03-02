@@ -112,7 +112,7 @@ export class FetchCloudinaryApiCall implements ICloudFileStoreApiCall {
     });
     const apiResp = await getApiResponse<IApiRespCloudinarySignature>(resp);
     if (!resp.ok || !apiResp.data) {
-      throw ErrorFetchingCloudinary.gettingSignedData(apiResp.message);
+      throw ErrorFetchingCloudinary.gettingSignedData();
     }
 
     return apiResp.data;

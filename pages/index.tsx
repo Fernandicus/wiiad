@@ -25,7 +25,7 @@ export default function Home(props: { session: IUserPrimitives }) {
             userRole={userRole}
             onErrorSubmit={(err) => {
               setNotification({
-                message: err.cause as string,
+                message: err.message as string,
                 status: "error",
               });
             }}

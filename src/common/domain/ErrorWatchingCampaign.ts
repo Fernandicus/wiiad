@@ -4,5 +4,9 @@ export class ErrorWatchingCampaign extends Error {
       super(errorMessage);
       this.info = info;
     }
+
+    static referrerDoesNotExist(referrerName:string):ErrorWatchingCampaign{
+      return new ErrorWatchingCampaign(`Referrer ${referrerName} does not exist`)
+    }
   }
   

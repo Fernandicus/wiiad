@@ -25,19 +25,19 @@ export class SendVerificationEmailController {
   }
 
   async sendToUser(data: IVerificationEmailData): Promise<void> {
-    try {
-      const { name } = await findUserHandler.byEmail(data.email);
-      const payload = { ...data, userName: name };
-
-      await sendVerificationEmailHandler.sendLogin({
-        sendTo: data.email,
-        payload,
-      });
-    } catch (error) {
-      if (error instanceof ErrorFindingUser)
+    const userFound = await findUserHandler.byEmail(data.email);
+    await userFound.match({
+      nothing() {
         throw ErrorSendVerificationEmail.emailNotExists(data.email);
-      throw error;
-    }
+      },
+      some: async (user) => {
+        const payload = { ...data, userName: user.name };
+        await sendVerificationEmailHandler.sendLogin({
+          sendTo: data.email,
+          payload,
+        });
+      },
+    });
   }
 
   async sendToNewAdvertiser(data: IVerificationEmailData): Promise<void> {

@@ -91,7 +91,6 @@ export class StripeCampaignPaymentController {
       );
       return paymentDetails;
     } catch (err) {
-      
       if (err instanceof ErrorFindingStripe) {
         const customerId = await this.createNewStripeCustomer(userId);
         const paymentDetails = await paymentIntentHandler.withoutPaymentMethod(
@@ -132,8 +131,7 @@ export class StripeCampaignPaymentController {
         );
         return paymentDetails;
       }
-      if (err instanceof Error)
-      
+
       throw new Error("Something Went Wrong Creating a Payment");
     }
   }

@@ -1,5 +1,5 @@
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { APISendEmailVerification } from "@/pages/api/v1/auth/login";
+import { IApiReqSendEmailVerification } from "@/pages/api/v1/auth/login";
 import {  RoleType } from "@/src/common/domain/Role";
 import { ISignInApiCalls } from "../domain/interfaces/ISignInApiCalls";
 import { IVerificationEmailData } from "@/src/modules/mailing/send-email-verification/domain/interfaces/IVerificationEmailData";
@@ -40,7 +40,7 @@ export class FetchSignInApiCalls implements ISignInApiCalls {
   }
 
   private async fetchLogInUser(data: IVerificationEmailData): Promise<void> {
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: false,
       data,
     };
@@ -49,7 +49,7 @@ export class FetchSignInApiCalls implements ISignInApiCalls {
   }
 
   private async fetchSingUpUser(data: IVerificationEmailData): Promise<void> {
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: true,
       data,
     };

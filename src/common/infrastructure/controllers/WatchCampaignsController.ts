@@ -1,4 +1,3 @@
-
 import { ICampaignPrimitives } from "../../../modules/campaign/domain/Campaign";
 import {
   campaignMetricsHandler,
@@ -9,6 +8,7 @@ import { adFinderHandler } from "../../../modules/ad/infraestructure/ad-containe
 import { findUserHandler } from "../../../modules/users/user/container";
 import { updateReferralHandler } from "../../../modules/referrals/infrastructure/referral-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { ErrorWatchingCampaign } from "../../domain/ErrorWatchingCampaign";
 
 export interface IWatchCampaignData {
   activeCampaign: ICampaignPrimitives;
@@ -21,18 +21,24 @@ export class WatchCampaignsController {
     influencerName: string;
     session: IUserPrimitives | null;
   }): Promise<IWatchCampaignData> {
-    const { influencerName, session } = params;;
+    const { influencerName, session } = params;
     const referrer = await findUserHandler.byName(influencerName);
 
+    const data = await referrer.match({
+      nothing() {
+        throw ErrorWatchingCampaign.referrerDoesNotExist(influencerName);
+      },
+      some: async (referrer) => {
+        const campaignData = await this.randomActiveCampaign();
 
-    
-    
-    const campaignData = await this.randomActiveCampaign();
+        updateReferralHandler.increaseReferredUsers(referrer.id);
+        if (session) updateReferralHandler.increaseWatchedAds(session.id);
 
-    updateReferralHandler.increaseReferredUsers(referrer.id)
-    if (session) updateReferralHandler.increaseWatchedAds(session.id);
+        return { ...campaignData, referrer };
+      },
+    });
 
-    return { ...campaignData, referrer };
+    return data;
   }
 
   static async randomActiveCampaign(): Promise<{

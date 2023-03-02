@@ -74,7 +74,7 @@ function getStripeSignature(req: NextApiRequest): string | Buffer | string[] {
 }
 
 async function getBufferRequest(req: NextApiRequest): Promise<string | Buffer> {
-  return projectConfig.environment === "test"
+  return projectConfig.ENV === "test"
     ? JSON.stringify(req.body)
     : await buffer(req);
 }

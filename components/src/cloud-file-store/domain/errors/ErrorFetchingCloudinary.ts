@@ -1,9 +1,9 @@
 export class ErrorFetchingCloudinary extends Error {
-  constructor(message: string, options: { cause?: string }) {
-    super(message, options);
+  constructor(message: string) {
+    super(message);
   }
 
-  static gettingSignedData(cause?: string): ErrorFetchingCloudinary {
-    return new ErrorFetchingCloudinary("Couldnt get signed data", { cause });
+  static gettingSignedData(): ErrorFetchingCloudinary {
+    return new ErrorFetchingCloudinary("Couldnt get signed data");
   }
 }

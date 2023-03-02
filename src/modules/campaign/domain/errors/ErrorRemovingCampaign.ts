@@ -1,5 +1,5 @@
 export class ErrorRemovingCampaign extends Error {
-  constructor(message: string, cause?: string) {
-    super(message, { cause });
+  constructor(message: string) {
+    super(message);
   }
 }

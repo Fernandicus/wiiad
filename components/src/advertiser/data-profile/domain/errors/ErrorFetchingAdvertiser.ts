@@ -1,34 +1,27 @@
 export class ErrorFetchingAdvertiser extends Error {
-  constructor(params: { message: string; cause?: string }) {
-    const { message, cause } = params;
-    super(message, { cause });
+  constructor(message: string) {
+    super(message);
   }
 
   static gettingAllCampaigns(cause?: string): ErrorFetchingAdvertiser {
-    return new ErrorFetchingAdvertiser({
-      message: "Something went wrong getting campaigns",
-      cause,
-    });
+    return new ErrorFetchingAdvertiser(
+      "Something went wrong getting campaigns"
+    );
   }
 
-  static getAdvertiserProfileData(cause?:string):ErrorFetchingAdvertiser{
-    return new ErrorFetchingAdvertiser({
-      message: "Something went wrong getting advertiser profile",
-      cause,
-    });
+  static getAdvertiserProfileData(cause?: string): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser(
+      "Something went wrong getting advertiser profile"
+    );
   }
 
-  static noDataAvailable(cause?:string):ErrorFetchingAdvertiser{
-    return new ErrorFetchingAdvertiser({
-      message: "Advertiser data is empty",
-      cause,
-    });
+  static noDataAvailable(cause?: string): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser("Advertiser data is empty");
   }
 
-  static updateProfile(cause?:string):ErrorFetchingAdvertiser{
-    return new ErrorFetchingAdvertiser({
-      message: "Something went wrong updating advertiser profile",
-      cause,
-    });
+  static updateProfile(cause?: string): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser(
+      "Something went wrong updating advertiser profile"
+    );
   }
 }

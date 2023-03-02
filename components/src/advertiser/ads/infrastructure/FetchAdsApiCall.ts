@@ -11,9 +11,8 @@ export class FetchAdsApiCalls implements IAdsApiCalls {
       method: "DELETE",
       body: JSON.stringify({ adId: ad.id }),
     });
-    if (resp.status !== 200) {
-      const apiResp = await getApiResponse(resp);
-      throw ErrorFetchingAdvertiser.remoingAd(apiResp.message);
+    if (!resp.ok) {
+      throw ErrorFetchingAdvertiser.remoingAd();
     }
   }
 
@@ -22,9 +21,9 @@ export class FetchAdsApiCalls implements IAdsApiCalls {
       method: "POST",
       body: JSON.stringify(ad.toPrimitives()),
     });
-    if (resp.status !== 200) {
+    if (!resp.ok) {
       const apiResp = await getApiResponse(resp);
-      throw ErrorFetchingAdvertiser.creatingAd(apiResp.message);
+      throw ErrorFetchingAdvertiser.creatingAd();
     }
   }
 }

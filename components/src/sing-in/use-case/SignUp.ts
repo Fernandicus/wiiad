@@ -1,4 +1,4 @@
-import { IApiCalls } from "@/components/src/sing-in/domain/interfaces/ISignInApiCalls";
+import { ISignInApiCalls } from "@/components/src/sing-in/domain/interfaces/ISignInApiCalls";
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 
@@ -8,7 +8,7 @@ interface ISignInParams {
 }
 
 export class SignUp {
-  constructor(private apiCall: IApiCalls) {}
+  constructor(private apiCall: ISignInApiCalls) {}
 
   async user(params: ISignInParams): Promise<void> {
     const { email, userName } = params;

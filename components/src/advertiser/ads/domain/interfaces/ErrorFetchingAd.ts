@@ -1,14 +1,13 @@
 export class ErrorFetchingAdvertiser extends Error {
-  constructor(params: { message: string; cause?: string }) {
-    const { message, cause } = params;
-    super(message, { cause });
+  constructor(message: string) {
+    super(message);
   }
 
-  static creatingAd(cause?: string): ErrorFetchingAdvertiser {
-    return new ErrorFetchingAdvertiser({ message: "Error creating ad", cause });
+  static creatingAd(): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser("Error creating ad");
   }
 
-  static remoingAd(cause?: string): ErrorFetchingAdvertiser {
-    return new ErrorFetchingAdvertiser({ message: "Error removing ad", cause });
+  static remoingAd(): ErrorFetchingAdvertiser {
+    return new ErrorFetchingAdvertiser("Error removing ad");
   }
 }

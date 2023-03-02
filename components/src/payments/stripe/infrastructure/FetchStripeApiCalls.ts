@@ -33,15 +33,14 @@ export class FetchStripeApiCalls implements IStripeApiCalls {
       method: "DELETE",
       body: JSON.stringify(body),
     });
-    const apiResp = await getApiResponse(resp);
-    if (!resp.ok) throw ErrorFetchingStripePayment.removingPM(apiResp.message);
+
+    if (!resp.ok) throw ErrorFetchingStripePayment.removingPM();
   }
 
   async getCardDetails(pm: PaymentMethodId): Promise<CardDetails> {
     const resp = await fetch(ApiRoutes.stripeGetCardDetails(pm.id));
     const apiResp = await getApiResponse<IApiRespGetCardDetails>(resp);
-    if (!resp.ok)
-      throw ErrorFetchingStripePayment.gettingCreditCard(apiResp.message);
+    if (!resp.ok) throw ErrorFetchingStripePayment.gettingCreditCard();
     if (!apiResp.data) throw ErrorFetchingStripePayment.noDataProvided();
     return new CardDetails({
       brand: new CardBrand(apiResp.data.brand),
@@ -55,7 +54,7 @@ export class FetchStripeApiCalls implements IStripeApiCalls {
   async setupIntent(): Promise<StripeClientSecret> {
     const resp = await fetch(ApiRoutes.stripeSetupIntent);
     const apiResp = await getApiResponse<IApiRespSetupIntent>(resp);
-    if (!resp.ok) throw ErrorFetchingStripePayment.setupIntent(apiResp.message);
+    if (!resp.ok) throw ErrorFetchingStripePayment.setupIntent();
     if (!apiResp.data) throw ErrorFetchingStripePayment.noDataProvided();
     return new StripeClientSecret(apiResp.data.client_secret);
   }
@@ -68,11 +67,10 @@ export class FetchStripeApiCalls implements IStripeApiCalls {
       method: "POST",
       body: JSON.stringify(body),
     });
-    const apiResp = await getApiResponse(resp);
-    if (resp.status !== 200)
+
+    if (!resp.ok)
       throw new ErrorFetchingStripePayment(
-        "Somethign went wrong saving new payment method",
-        { cause: apiResp.message }
+        "Somethign went wrong saving new payment method"
       );
   }
 
@@ -111,9 +109,6 @@ export class FetchStripeApiCalls implements IStripeApiCalls {
       body: JSON.stringify(body),
     });
 
-    const apiResp = await getApiResponse(resp);
-
-    if (resp.status !== 200)
-      throw ErrorFetchingStripePayment.payWithPMethod(apiResp.message);
+    if (resp.status !== 200) throw ErrorFetchingStripePayment.payWithPMethod();
   }
 }

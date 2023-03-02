@@ -41,12 +41,12 @@ const reducer = (
   }
 };
 
-const initState = {
+const initState: NavSettingsState<SectionNames, DialogViews> = {
   sectionTitle: "Ajustes",
   visit: "default",
   pervSectionName: "settings",
   sectionName: "settings",
-} satisfies NavSettingsState<SectionNames, DialogViews>;
+};
 
 export const useUserSettingsDialogReducer = (): {
   state: NavSettingsState<SectionNames, DialogViews>;
