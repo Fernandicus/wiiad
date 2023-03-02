@@ -8,6 +8,13 @@ import {
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { UniqId } from "@/src/utils/UniqId";
 
+function handlePromise(
+  resp: PromiseSettledResult<Campaign[] | null>
+): Campaign[] | null {
+  if (resp.status !== "rejected") return resp.value;
+  throw new Error(resp.reason);
+}
+
 describe("On api/v1/campaign/metrics/increase-views, GIVEN some Campaigns", () => {
   let activeCampaigns: Campaign[] | null;
   let finisehdCampaigns: Campaign[] | null;
@@ -16,13 +23,15 @@ describe("On api/v1/campaign/metrics/increase-views, GIVEN some Campaigns", () =
 
   beforeAll(async () => {
     campaignsRepo = await autoSetTestCampaignDB();
-    activeCampaigns = await campaignsRepo.findByStatus(CampaignStatus.active());
-    standByCampaigns = await campaignsRepo.findByStatus(
-      CampaignStatus.standBy()
-    );
-    finisehdCampaigns = await campaignsRepo.findByStatus(
-      CampaignStatus.finished()
-    );
+    const [active, standby, finished] = await Promise.allSettled([
+      campaignsRepo.findByStatus(CampaignStatus.active()),
+      campaignsRepo.findByStatus(CampaignStatus.standBy()),
+      campaignsRepo.findByStatus(CampaignStatus.finished()),
+    ]);
+
+    activeCampaigns = handlePromise(active);
+    standByCampaigns = handlePromise(standby);
+    finisehdCampaigns = handlePromise(finished);
   });
 
   it(`WHEN send a not 'POST' request, 

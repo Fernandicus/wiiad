@@ -3,13 +3,10 @@ import {
   IPaymentWithPaymentMethod,
   StripePayments,
 } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
-import { CreateStripeCustomer } from "@/src/modules/payment-methods/stripe/use-case/CreateStripeCustomer";
 import Stripe from "stripe";
 import { FakePaymentIntentId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
 import { mockedStripe } from "../../../../../__mocks__/context/MockStripe";
-import { mockedStripePayments } from "../../../../../__mocks__/context/MockStripePayments";
 import { PaymentStatus } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentStatus";
-import { FakePaymentDetails } from "__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
 import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { FakeCustomerId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCustomerId";
 import { FakePaymentMethodId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";

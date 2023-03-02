@@ -8,6 +8,7 @@ import { FakeUniqId } from "../../__mocks__/lib/domain/FakeUniqId";
 import { FakePaymentDetails } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
 import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentIntentId";
 import { FakeWebhookEvent } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
+import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 
 type StripeEventType =
   | "payment_intent.succeeded"
@@ -54,9 +55,10 @@ const paymentIntent_confirm = jestFn(
 const paymentIntent_create = jestFn(
   (params: IStripePaymentIntentParams): IStripePaymentIntentParams | null => {
     if (FakeUniqId.checkIfIdNotExist(params.customer!)) return null;
-    const details = FakePaymentDetails.create(
-      FakePaymentIntentId.create()
-    ).toPrimitives();
+    const details = FakePaymentDetails.create({
+      id: FakePaymentIntentId.create(),
+      ppc: new PricesPerClick(),
+    }).toPrimitives();
     return {
       id: details.id,
       amount: details.amount,
@@ -70,9 +72,10 @@ const paymentIntent_retrieve = jestFn(
   (pmId: string): IStripePaymentIntentParams | null => {
     if (FakeUniqId.checkIfIdNotExist(pmId)) return null;
 
-    const details = FakePaymentDetails.create(
-      new PaymentIntentId(pmId)
-    ).toPrimitives();
+    const details = FakePaymentDetails.create({
+      id: new PaymentIntentId(pmId),
+      ppc: new PricesPerClick(),
+    }).toPrimitives();
     return {
       id: details.id,
       amount: details.amount,
