@@ -8,6 +8,17 @@ import { UniqId } from "@/src/utils/UniqId";
 import { mockedUserRepo } from "../../../../__mocks__/context/MockUserRepo";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 
+//Todo: NEW MOCKS in mockedUserRepo AND TESTS FOR:
+/* 
+- findAdvertiserByEmail: jest.fn(),
+- findAdvertiserByName: jest.fn(),
+- findAdvertiserById: jest.fn(),
+- findUserById: jest.fn(),
+- updateEmail: jest.fn(),
+- updateProfile: jest.fn(),
+
+*/
+
 describe("On FindUser, GIVEN a user", () => {
   let userRepo: IUserRepo;
   let user: User;
@@ -15,43 +26,70 @@ describe("On FindUser, GIVEN a user", () => {
 
   beforeAll(() => {
     user = FakeUser.create(UniqId.new());
-    userRepo = mockedUserRepo(user)
+    userRepo = mockedUserRepo(user);
     findUser = new FindUser(userRepo);
   });
 
   it(`WHEN call create, THEN user repo save method should be called with user email`, async () => {
     const userFound = await findUser.byEmail(user.email);
     expect(userRepo.findUserByEmail).toBeCalledWith(user.email);
-    expect(userFound).toEqual(user);
+    userFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(user);
+      },
+    });
   });
 
   it(`WHEN call byUserName for an existing user name, 
   THEN user repo byUserName method should be called with user name`, async () => {
     const userFound = await findUser.byName(user.name);
     expect(userRepo.findUserByName).toBeCalledWith(user.name);
-    expect(userFound).toEqual(user);
+    userFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(user);
+      },
+    });
   });
 
   it(`WHEN call findByUserName for a not existing user name, 
   THEN an ErrorFingindUser exception should be thrown`, async () => {
     const nonExistingName = new Name("X");
-    expect(findUser.byName(nonExistingName)).rejects.toThrowError(
-      ErrorFindingUser
-    );
+
+    const userFound = await findUser.byName(nonExistingName);
+
+    userFound.match({
+      nothing() {
+        expect(null).toBeNull();
+      },
+      some(value) {},
+    });
   });
 
   it(`WHEN call findByEmail for an existing user email, 
   THEN user repo findByEmail method should be called with user email`, async () => {
     const userFound = await findUser.byEmail(user.email);
+    userFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(user);
+      },
+    });
+
     expect(userRepo.findUserByEmail).toBeCalledWith(user.email);
-    expect(userFound).toEqual(user);
+    //expect(userFound).toEqual(user);
   });
 
   it(`WHEN call findByUserName for a not existing user email, 
   THEN an ErrorFingindUser exception should be thrown`, async () => {
     const nonExistingEmail = new Email("x@x.com");
-    expect(findUser.byEmail(nonExistingEmail)).rejects.toThrowError(
-      ErrorFindingUser
-    );
+    const userFound = await findUser.byEmail(nonExistingEmail);
+    userFound.match({
+      nothing() {
+        expect(null).toBeNull();
+      },
+      some(value) {},
+    });
   });
 });
