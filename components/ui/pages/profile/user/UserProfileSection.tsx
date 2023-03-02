@@ -38,7 +38,7 @@ export const UserProfileSection = (props: Props) => {
             </DataCard>
             <DataCard title="Anuncios vistos">
               {campaignsWatched || campaignsWatched == 0 ? (
-                <p className="font-bold">{4}</p>
+                <p className="font-bold">{campaignsWatched}</p>
               ) : (
                 <div className="w-full h-6 flex justify-center items-center">
                   <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
@@ -47,7 +47,7 @@ export const UserProfileSection = (props: Props) => {
             </DataCard>
             <DataCard title="Anuncios referidos">
               {totalReferrers || totalReferrers == 0 ? (
-                <p className="font-bold">{1}</p>
+                <p className="font-bold">{totalReferrers}</p>
               ) : (
                 <div className="w-full h-6 flex justify-center items-center">
                   <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>

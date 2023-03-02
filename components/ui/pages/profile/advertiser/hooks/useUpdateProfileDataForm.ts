@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { UpdateProfileController } from "@/components/src/advertiser/data-profile/infrastructure/controllers/UpdateProfileController";
 import { useNotification } from "@/components/hooks/useNotification";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 
 type ProfileValues = {
   email: string;

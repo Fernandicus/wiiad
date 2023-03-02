@@ -48,6 +48,7 @@ export const useForm = <T extends object, P>({
     handle: {
       change: form.handleChange,
       submit: (e, params) => {
+        if (isSubmitting) return;
         setIsSubmitting(true);
         if (onSubmit) onSubmit(params);
         form.handleSubmit(e);

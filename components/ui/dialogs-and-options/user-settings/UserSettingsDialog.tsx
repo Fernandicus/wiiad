@@ -47,7 +47,7 @@ export const UserSettingsDialog = ({
         e.preventDefault();
         updateProfile.handle.submit(e, { file: fileUploader.filePreview });
       }}
-      loadingActionBtn={false}
+      loadingActionBtn={updateProfile.isSubmitting}
       disabledActionBtn={!valuesHaveChanged()}
       actionButton={actionButton}
       visit={state.visit}
