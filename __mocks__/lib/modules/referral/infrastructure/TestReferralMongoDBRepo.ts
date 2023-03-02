@@ -1,14 +1,10 @@
-import { Balance } from "@/src/domain/Balance";
-import {
-  IReferralPrimitives,
-  Referral,
-} from "@/src/modules/referrals/domain/Referral";
+import { Balance } from "@/src/common/domain/Balance";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import {
   IReferralModel,
   ReferralModel,
-} from "@/src/modules/referrals/infrastructure/ReferralModel";
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
+} from "@/src/modules/referrals/infrastructure/db/ReferralModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../lib/infrastructure/TestMongoDB";

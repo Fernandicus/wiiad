@@ -4,4 +4,6 @@ import { UniqId } from "@/src/utils/UniqId";
 export interface TestStripeRepository {
   save(stripe: Stripe): Promise<void>;
   getByUserId(id: UniqId): Promise<Stripe | null>;
+  getAllUsers(): Promise<Stripe[] | null>;
+  saveMany(stripe: Stripe[]): Promise<void>;
 }

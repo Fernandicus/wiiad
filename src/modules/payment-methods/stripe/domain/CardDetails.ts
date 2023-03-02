@@ -1,4 +1,3 @@
-import { UniqId } from "@/src/utils/UniqId";
 import { PaymentMethodId } from "./value-objects/PaymentMethodId";
 import { CardBrand } from "./value-objects/CardBrand";
 import { ExpMonth } from "./value-objects/ExpMonth";
@@ -13,7 +12,7 @@ export interface ICardDetailsPrimitives {
   paymentMethodId: string;
 }
 
-interface ICardDetailsParams {
+export interface ICardDetailsParams {
   brand: CardBrand;
   last4: Last4;
   expMonth: ExpMonth;

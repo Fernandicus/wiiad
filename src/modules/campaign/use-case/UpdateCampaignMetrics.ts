@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { ICampaignRepo } from "../domain/ICampaignRepo";
+import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
 
 export class UpdateCampaignMetrics {
   constructor(private campaignRepo: ICampaignRepo) {}

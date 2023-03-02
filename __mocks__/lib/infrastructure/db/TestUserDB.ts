@@ -1,13 +1,21 @@
-import {  User } from "@/src/modules/user/domain/User";
+import { User } from "@/src/modules/users/user/domain/User";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { TestUserRepository } from "../../modules/user/domain/TestUserRepository";
 import { FakeUser } from "../../modules/user/FakeUser";
 import { TestUserMongoDBRepo } from "../../modules/user/infrastructure/TestUserMongoDBRepo";
 
-export const setTestUserDB = async (
-  amount: number
-): Promise<TestUserDB> => {
+export const setTestUserDB = async ({
+  usersAmount,
+  advertisersAmount,
+}: {
+  usersAmount?: number;
+  advertisersAmount?: number;
+}): Promise<TestUserDB> => {
   const testUserRepo = await TestUserMongoDBRepo.init();
-  return TestUserDB.setAndInit(testUserRepo, amount);
+  return TestUserDB.setAndInit(testUserRepo, {
+    usersAmount,
+    advertisersAmount,
+  });
 };
 
 export class TestUserDB {
@@ -19,10 +27,17 @@ export class TestUserDB {
 
   static async setAndInit(
     testUserRepo: TestUserRepository,
-    amount: number
+    {
+      usersAmount,
+      advertisersAmount,
+    }: {
+      usersAmount?: number;
+      advertisersAmount?: number;
+    }
   ): Promise<TestUserDB> {
-    const users = this.setUsers(amount);
-    await testUserRepo.saveMany(users);
+    const users = this.setUsers(usersAmount);
+    const advertisers = this.setAdvertisers(advertisersAmount);
+    await testUserRepo.saveMany([...users, ...advertisers]);
 
     return new TestUserDB(testUserRepo);
   }
@@ -31,12 +46,21 @@ export class TestUserDB {
     await this.testUserRepo.saveMany(users);
   }
 
-  async getAll(): Promise<User[] | null> {
-    const users = await this.testUserRepo.getAll();
+  async getAllUsers(): Promise<User[] | null> {
+    const users = await this.testUserRepo.getAllUsers();
     return users;
   }
 
-  private static setUsers(amount: number): User[] {
+  async getAllAdvertisers(): Promise<User[] | null> {
+    const users = await this.testUserRepo.getAllAdvertisers();
+    return users;
+  }
+
+  private static setUsers(amount?: number): User[] {
     return FakeUser.createMany(amount);
+  }
+
+  private static setAdvertisers(amount?: number): User[] {
+    return FakeAdvertiser.createMany(amount);
   }
 }

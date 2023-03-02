@@ -1,4 +1,3 @@
-import { ErrorCreatingAd } from "../ErrorCreatingAd";
 
 export enum AdSegmentType {
   HEALTH = "health",
@@ -15,7 +14,7 @@ export class AdSegments {
 
   private constructor(segmentsArray: string[]) {
     if (segmentsArray.length == 0)
-      throw new ErrorCreatingAd("Ad Segment is mandatory");
+      throw new Error("Ad Segment is mandatory");
     this.segments = segmentsArray;
   }
 

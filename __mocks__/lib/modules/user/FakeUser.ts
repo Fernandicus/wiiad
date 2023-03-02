@@ -1,13 +1,12 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
-import { ProfilePic } from "@/src/domain/ProfilePic";
-import { Role, RoleType } from "@/src/domain/Role";
-import { BankAccount } from "@/src/modules/user/domain/BankAccount";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
+import { Role, RoleType } from "@/src/common/domain/Role";
 import {
   IUserPrimitives,
   IUserProps,
   User,
-} from "@/src/modules/user/domain/User";
+} from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { faker } from "@faker-js/faker";
 
@@ -23,12 +22,11 @@ export class FakeUser extends User {
       email: new Email(userPrimitives.email),
       name: new Name(userPrimitives.name),
       role: new Role(userPrimitives.role),
-      bankAccount: new BankAccount(userPrimitives.bankAccount!),
       profilePic: ProfilePic.withDefaultUserPic(),
     });
   }
 
-  static createMany(amount: number): User[] {
+  static createMany(amount = 5): User[] {
     let users: User[] = [];
 
     for (let i = 0; i < amount; i++) {
@@ -59,7 +57,6 @@ export class FakeUser extends User {
       name: faker.name.firstName(),
       role: RoleType.USER,
       profilePic: ProfilePic.defaultUserPic,
-      bankAccount: `ES${Math.floor(Math.random() * 1000000)}`,
     };
   }
 }

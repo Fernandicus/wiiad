@@ -1,13 +1,12 @@
-import { Email } from "@/src/domain/Email";
-import { Name } from "@/src/domain/Name";
-import { ProfilePic } from "@/src/domain/ProfilePic";
-import { Role } from "@/src/domain/Role";
-import { BankAccount } from "@/src/modules/user/domain/BankAccount";
-import { IUserPrimitives, User } from "@/src/modules/user/domain/User";
+import { Email } from "@/src/common/domain/Email";
+import { Name } from "@/src/common/domain/Name";
+import { ProfilePic } from "@/src/common/domain/ProfilePic";
+import { Role, RoleType } from "@/src/common/domain/Role";
+import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import {
   UserModel,
   IUserModel,
-} from "@/src/modules/user/infrastructure/UserMode";
+} from "@/src/modules/users/user/infrastructure/UserModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose, { HydratedDocument } from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
@@ -41,8 +40,8 @@ export class TestUserMongoDBRepo
     await UserModel.insertMany<IUserModel>(userModels);
   }
 
-  async getAll(): Promise<User[] | null> {
-    const usersModel = await UserModel.find<IUserModel>();
+  async getAllUsers(): Promise<User[] | null> {
+    const usersModel = await UserModel.find<IUserModel>({role: RoleType.USER} as IUserModel);
     if (usersModel.length == 0) return null;
     const users = usersModel.map((user): User => {
       return new User({
@@ -50,12 +49,25 @@ export class TestUserMongoDBRepo
         email: new Email(user.email),
         name: new Name(user.name),
         role: new Role(user.role),
-        bankAccount: user.bankAccount
-          ? new BankAccount(user.bankAccount!)
-          : undefined,
         profilePic: new ProfilePic(user.profilePic),
       });
     });
     return users;
+  }
+
+  async getAllAdvertisers(): Promise<User[] | null> {
+    await TestMongoDB.connectMongoDB();
+    const advertiserModels = await UserModel.find<IUserModel>({role: RoleType.BUSINESS} as IUserModel);
+    if (advertiserModels.length == 0) return null;
+    const advertisers = advertiserModels.map((advertiser) => {
+      return new User({
+        id: new UniqId(advertiser._id),
+        name: new Name(advertiser.name),
+        email: new Email(advertiser.email),
+        role: new Role(advertiser.role),
+        profilePic: new ProfilePic(advertiser.profilePic),
+      });
+    });
+    return advertisers;
   }
 }

@@ -1,23 +1,20 @@
-import { Email } from "@/src/domain/Email";
-import { LogStates } from "@/src/domain/LogStates";
-import { Name } from "@/src/domain/Name";
-import { AuthToken } from "./AuthToken";
+import { Email } from "@/src/common/domain/Email";
+import { LoginQuery } from "@/src/common/domain/LoginQueries";
+import { LogStates } from "@/src/common/domain/LogStates";
+import { AuthToken } from "./value-objects/AuthToken";
 
 export interface IVerificationURLProps {
-  userName: Name;
   to: Email;
   authToken: AuthToken;
 }
 
 export class VerificationURL {
   readonly to;
-  readonly userName;
   readonly authToken;
 
   constructor(props: IVerificationURLProps) {
-    const { to, authToken, userName } = props;
+    const { to, authToken } = props;
     this.to = to;
-    this.userName = userName;
     this.authToken = authToken;
   }
 
@@ -29,9 +26,14 @@ export class VerificationURL {
     return this.verificationUrl(LogStates.SignUp);
   }
 
-  private verificationUrl(log: LogStates) {
-    const name = this.userName.name;
+  updateEmail(): string {
+    return this.verificationUrl(LogStates.UpdateEmail);
+  }
+
+  private verificationUrl(logState: LogStates) {
     const token = this.authToken.token;
-    return `profile?userName=${name}&log=${log}&authToken=${token}`;
+    const log = LoginQuery.Log;
+    const authToken = LoginQuery.AuthToken;
+    return `profile?${log}=${logState}&${authToken}=${token}`;
   }
 }

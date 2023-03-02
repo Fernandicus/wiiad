@@ -1,21 +1,21 @@
 import httpMock from "node-mocks-http";
 import removeAd from "@/pages/api/v1/ads/remove";
 import { NextApiResponse } from "next";
-import { AdModel } from "@/src/modules/ad/infraestructure/AdModel";
+import { AdModel } from "@/src/modules/ad/infraestructure/db/AdModel";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { TestAdMongoDBRepository } from "../../../../../__mocks__/lib/modules/ads/infraestructure/TestAdMongoDBRepository";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { userSession } from "@/src/use-case/container";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 describe("On api/ads/remove-ad route", () => {
-  let advertiser: AdvertiserPropsPrimitives;
+  let advertiser: IUserPrimitives;
 
   beforeEach(async () => {
-    await setTestAdDB(5);
-    advertiser = FakeAdvertiser.createPrimitives();
+    const advertisers = FakeAdvertiser.createMany(5);
+    await setTestAdDB(advertisers);
+    advertiser = advertisers[0].toPrimitives();
   }, 8000);
 
   it("WHEN send 'DELETE' method with correct ad id and a user session, THEN response with status 200", async () => {

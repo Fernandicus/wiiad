@@ -1,5 +1,5 @@
-import { Balance } from "@/src/domain/Balance";
-import { IReferralRepo } from "@/src/modules/referrals/domain/IReferralRepo";
+import { Balance } from "@/src/common/domain/Balance";
+import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
@@ -19,26 +19,26 @@ describe(`On UpdateReferral, GIVEN a Referral and a Repo`, () => {
   });
 
   it(`WHEN call increaseReferrerBalance, 
-  THEN increaseReferrerData should be called with UserId, Balance and a Referrers of 1`, async () => {
+  THEN increaseReferrerData should be called with UserId, Balance and a Referrers of zero`, async () => {
     const uId = UniqId.new();
     const balance = new Balance(5);
     await updateReferral.increaseReferrerBalance(uId, balance);
     expect(mockedRepo.increaseReferrerData).toBeCalledWith({
       userId: uId,
       balance: balance,
-      counter: ReferralCounter.one(),
+      counter: ReferralCounter.zero(),
     });
   });
 
   it(`WHEN call increaseRefereeBalance, 
-  THEN increaseRefereeData should be called with UserId, Balance and a Referrers of 1`, async () => {
+  THEN increaseRefereeData should be called with UserId, Balance and a Referrers of zero`, async () => {
     const uId = UniqId.new();
     const balance = new Balance(5);
     await updateReferral.increaseRefereeBalance(uId, balance);
     expect(mockedRepo.increaseRefereeData).toBeCalledWith({
       userId: uId,
       balance: balance,
-      counter: ReferralCounter.one(),
+      counter: ReferralCounter.zero(),
     });
   });
 });

@@ -1,5 +1,5 @@
 import { Ad } from "../domain/Ad";
-import { IAdRepository } from "../domain/IAdRepository";
+import { IAdRepository } from "../domain/interfaces/IAdRepository";
 
 export class CreateAd {
   constructor(private adRepository: IAdRepository) {}

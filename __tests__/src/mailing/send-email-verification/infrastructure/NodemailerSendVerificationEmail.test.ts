@@ -1,5 +1,5 @@
 import { VerificationURL } from "@/src/modules/mailing/send-email-verification/domain/VerificationURL";
-import { authTokenCreator } from "@/src/modules/mailing/send-email-verification/email-verification-container";
+import { createAuthTokenHandler } from "@/src/modules/mailing/send-email-verification/infrastructure/email-verification-container";
 import { NodemailerSendVerificationEmail } from "@/src/modules/mailing/send-email-verification/infrastructure/NodemailerSendVerificationEmail";
 
 import { FakeVerificationURL } from "../../../../../__mocks__/lib/modules/send-email-verification/FakeVerificationURL";
@@ -10,7 +10,8 @@ describe("On NodemailerSendVerificationEmail, GIVEN a SMTP service", () => {
 
   beforeAll(() => {
     nodemailer = new NodemailerSendVerificationEmail();
-    const token = authTokenCreator.generate();
+    const payload = { user: "name", email: "email@email.com" };
+    const token = createAuthTokenHandler.jwtExpiresIn15Min(payload);
     verificationUrl = FakeVerificationURL.create(token);
   });
 

@@ -1,23 +1,24 @@
 import {
   AdModel,
-  AdModelProps,
-} from "@/src/modules/ad/infraestructure/AdModel";
+  IAdModelProps,
+} from "@/src/modules/ad/infraestructure/db/AdModel";
 import { UniqId } from "@/src/utils/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
-import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/AdMongoDBRepository";
 import { setTestAdDB } from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { Advertiser } from "@/src/modules/advertiser/domain/Advertiser";
-import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
+import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";
+import { User } from "@/src/modules/users/user/domain/User";
+import { AdMongoDBRepository } from "@/src/modules/ad/infraestructure/db/AdMongoDBRepository";
 
 describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () => {
   let fakeAds: Ad[];
   let adMongoDBRepo: AdMongoDBRepository;
-  let advertiser: Advertiser;
+  let advertiser: User;
 
   beforeAll(async () => {
-    const testAdDB = await setTestAdDB(5);
-    advertiser = FakeAdvertiser.create();
+    const advertisers = FakeAdvertiser.createMany(5);
+    const testAdDB = await setTestAdDB(advertisers);
+    advertiser = advertisers[0];
     fakeAds = FakeAd.createMany(advertiser.id, 5);
     await testAdDB.saveMany(fakeAds);
     adMongoDBRepo = new AdMongoDBRepository();
@@ -47,7 +48,7 @@ describe("On AdMongoDBRepository, GIVEN an advertiserId and a list of ads", () =
     const adsFound = await adMongoDBRepo.findAllByAdvertiserId(advertiserId);
     const count = await AdModel.count({
       advertiserId: advertiserId.id,
-    } as AdModelProps);
+    } as IAdModelProps);
 
     expect(count).toBe(adsFound!.length);
   }, 8000);

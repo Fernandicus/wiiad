@@ -1,5 +1,5 @@
 import { Campaign } from "../domain/Campaign";
-import { ICampaignRepo } from "../domain/ICampaignRepo";
+import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
 
 export class CreateCampaign {
   constructor(private campaignRepo: ICampaignRepo) {}

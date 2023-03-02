@@ -1,17 +1,18 @@
 import createAdvertise from "@/pages/api/v1/ads/create/banner";
 import { FakeAd } from "../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { userSession } from "@/src/use-case/container";
-import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/advertiser/FakeAdvertiser";
-import { AdvertiserPropsPrimitives } from "@/src/modules/advertiser/domain/Advertiser";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { setTestAdDB } from "../../../../../__mocks__/lib/infrastructure/db/TestAdDB";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 
 describe("On 'api/ads/create-ad', GIVEN Ad MongoDB Repository and an Advertiser", () => {
-  let advertiser: AdvertiserPropsPrimitives;
+  let advertiser: IUserPrimitives;
 
   beforeAll(async () => {
-    await setTestAdDB(5);
-    advertiser = FakeAdvertiser.createPrimitives();
+    const advertisers = FakeAdvertiser.createMany(5);
+    await setTestAdDB(advertisers);
+    advertiser = advertisers[0].toPrimitives();
   }, 8000);
 
   it(`WHEN sending a 'POST' request with all the required params and a valid user session, 

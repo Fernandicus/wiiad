@@ -1,5 +1,5 @@
-import { Balance } from "@/src/domain/Balance";
-import { Ad, AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
+import { Balance } from "@/src/common/domain/Balance";
+import { Ad } from "@/src/modules/ad/domain/Ad";
 import {
   Campaign,
   CampaignProps,
@@ -11,8 +11,8 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 import { UniqId } from "@/src/utils/UniqId";
-import { v4 } from "uuid";
 
 export class FakeCampaign extends Campaign {
   constructor(params: CampaignProps) {
@@ -31,7 +31,7 @@ export class FakeCampaign extends Campaign {
       status: new CampaignStatus(props.status),
       budget: new CampaignBudget({
         balance: new Balance(5),
-        clicks: 5,
+        clicks: new Clicks(5),
       }),
       metrics: new CampaignMetrics({
         totalViews: 3,
@@ -68,7 +68,7 @@ export class FakeCampaign extends Campaign {
       status: new CampaignStatus(props.status),
       budget: new CampaignBudget({
         balance: new Balance(5),
-        clicks: 5,
+        clicks: new Clicks(5),
       }),
       metrics: new CampaignMetrics({
         totalViews: 3,

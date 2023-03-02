@@ -1,39 +1,22 @@
-import { LoginQueries } from "@/src/domain/LoginQueries";
-import { MongoDB } from "@/src/infrastructure/MongoDB";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { AuthController } from "@/src/controllers/AuthController";
-import { IGenericUserPrimitives } from "@/src/domain/IGenericUser";
+import { LoginQueries } from "@/src/common/domain/LoginQueries";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
+import { GetServerSideProps } from "next";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import {
   IWatchCampaignData,
   WatchCampaignsController,
-} from "@/src/controllers/WatchCampaignsController";
-import AdView from "../../components/ui/watch-ad/AdView";
-import { RoleType } from "@/src/domain/Role";
+} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
+import AdView from "../../components/ui/pages/[userName]/AdView";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/use-case/container";
-import { UserProfile } from "../../components/ui/profile/user/UserProfile";
-import { AdvertiserHeader } from "../../components/ui/profile/advertiser/AdvertiserHeader";
-import { useEffect, useRef, useState } from "react";
-import { adFinderHandler } from "@/src/modules/ad/ad-container";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import {
-  NotificationData,
-  Notifications,
-  RefNotifications,
-} from "../../components/ui/notifications/Notifications";
-import { IUserPrimitives } from "@/src/modules/user/domain/User";
-import { Logout } from "../../components/ui/login/Logout";
-import { findCampaignHandler } from "@/src/modules/campaign/container";
-import CampaignsPage from "../campaigns";
-import { AdvertiserDataController } from "@/src/modules/advertiser/controller/AdvertiserDataController";
-import { LogStates } from "@/src/domain/LogStates";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
+import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 
 export interface IWatchCampaignPage {
-  user: IGenericUserPrimitives | null;
+  user: IUserPrimitives | null;
   campaign: ICampaignPrimitives | ICampaignPrimitives[];
   ad: AdPropsPrimitives | AdPropsPrimitives[];
-  referrer: IGenericUserPrimitives | null;
+  referrer: IUserPrimitives | null;
 }
 
 export default function Profile({
@@ -54,39 +37,11 @@ export default function Profile({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
-
   const queryParams = new LoginQueries(query);
 
   try {
-    const session = userSession.getFromServer(context);
-
-    if (session && isUserNamePath(session, queryParams))
-      return {
-        props: {},
-        redirect: { destination: "/profile", permanent: false },
-      };
-
-    const { ad, activeCampaign, referrer } = await getCampaignToWatch(
-      queryParams,
-      session
-    );
-
-    return {
-      props: {
-        user: session,
-        campaign: activeCampaign,
-        ad,
-        referrer: {
-          email: referrer.email,
-          id: referrer.id,
-          name: referrer.name,
-          role: referrer.role,
-          profilePic: referrer.profilePic,
-        },
-      } as IWatchCampaignPage,
-    };
+    return await getSSPropsData({ context, queryParams });
   } catch (err) {
-    console.error(err);
     await MongoDB.disconnect();
     return {
       props: {},
@@ -95,9 +50,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
+async function getSSPropsData(params: {
+  context: IReqAndRes;
+  queryParams: LoginQueries;
+}) {
+  const { queryParams, context } = params;
+  const session = userSession.getFromServer(context);
+  if (session && isUserNamePath(session, queryParams))
+    return {
+      props: {},
+      redirect: { destination: "/profile", permanent: false },
+    };
+
+  const { ad, activeCampaign, referrer } = await getCampaignToWatch(
+    queryParams,
+    session
+  );
+
+  return {
+    props: {
+      user: session,
+      campaign: activeCampaign,
+      ad,
+      referrer: {
+        email: referrer.email,
+        id: referrer.id,
+        name: referrer.name,
+        role: referrer.role,
+        profilePic: referrer.profilePic,
+      },
+    } as IWatchCampaignPage,
+  };
+}
+
 async function getCampaignToWatch(
   loginQueries: LoginQueries,
-  session: IGenericUserPrimitives | null
+  session: IUserPrimitives | null
 ): Promise<IWatchCampaignData> {
   const data = await MongoDB.connectAndDisconnect<IWatchCampaignData>(
     async () => {
@@ -111,7 +99,7 @@ async function getCampaignToWatch(
 }
 
 function isUserNamePath(
-  user: IGenericUserPrimitives,
+  user: IUserPrimitives,
   loginQueries: LoginQueries
 ): boolean {
   return user.name == loginQueries.userName;

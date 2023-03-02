@@ -10,14 +10,14 @@ import {
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { FakeCampaign } from "../../modules/campaign/FakeCampaign";
 
-interface ITestCampaignDB {
+interface ICampaignSorted {
   activeCampaignAds: Ad[];
   finishedCampaignAds: Ad[];
   standByCampaignAds: Ad[];
 }
 
 export const setTestCampaignDB = async (
-  campaigns: ITestCampaignDB
+  campaigns: ICampaignSorted
 ): Promise<TestCampaignDB> => {
   const testCampaignRepo = await TestCampaignMongoDBRepo.init();
   return TestCampaignDB.setAndInit({
@@ -32,11 +32,7 @@ export const autoSetTestCampaignDB = async () => {
 };
 
 export class TestCampaignDB {
-  private readonly campaignRepo;
-
-  private constructor(campaignRepo: TestCampaignRepository) {
-    this.campaignRepo = campaignRepo;
-  }
+  private constructor(private campaignRepo: TestCampaignRepository) {}
 
   static async setAndInit(params: {
     campaignRepo: TestCampaignRepository;
@@ -74,6 +70,15 @@ export class TestCampaignDB {
   async findByStatus(status: CampaignStatus): Promise<Campaign[] | null> {
     const campaigns = await this.campaignRepo.getByStatus(status);
     return campaigns;
+  }
+
+  async findByAdId(id: UniqId): Promise<Campaign | null> {
+    const campaigns = await this.campaignRepo.findByAdId(id);
+    return campaigns;
+  }
+
+  async findById(id: UniqId): Promise<Campaign | null> {
+    return await this.campaignRepo.findById(id);
   }
 
   private static setActiveCampaigns(ads: Ad[]): Campaign[] {

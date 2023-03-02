@@ -1,10 +1,21 @@
-import { AuthToken } from "../domain/AuthToken";
-import { IAuthTokenRepo } from "../domain/IAuthTokenRepo";
+import { AuthToken } from "../domain/value-objects/AuthToken";
+import {
+  IAuthJWTParams,
+  IAuthTokenRepo,
+} from "../domain/interfaces/IAuthTokenRepo";
 
 export class CreateAuthToken {
   constructor(private authToken: IAuthTokenRepo) {}
 
-  generate(): AuthToken {
-    return this.authToken.generate();
+  generateString(): AuthToken {
+    return this.authToken.generateString();
+  }
+
+  generateExpirationJWT<T extends object>({
+    expiresIn,
+    jwt,
+    payload,
+  }: IAuthJWTParams<T>): AuthToken {
+    return this.authToken.generateExpirationJWT({ jwt, payload, expiresIn });
   }
 }

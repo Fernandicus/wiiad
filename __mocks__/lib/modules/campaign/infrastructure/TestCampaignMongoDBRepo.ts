@@ -1,15 +1,13 @@
-import { Balance } from "@/src/domain/Balance";
-import {
-  Campaign,
-  ICampaignPrimitives,
-} from "@/src/modules/campaign/domain/Campaign";
+import { Balance } from "@/src/common/domain/Balance";
+import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { CampaignMetrics } from "@/src/modules/campaign/domain/value-objects/CampaignMetrics";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
+import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
 import {
   CampaignModel,
   ICampaignModel,
-} from "@/src/modules/campaign/infrastructure/CampaignModel";
+} from "@/src/modules/campaign/infrastructure/db/CampaignModel";
 import { UniqId } from "@/src/utils/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
@@ -39,7 +37,7 @@ export class TestCampaignMongoDBRepo
 
   async getByStatus(status: CampaignStatus): Promise<Campaign[] | null> {
     await TestMongoDB.connectMongoDB();
-    
+
     const campaignModel = await CampaignModel.find<ICampaignModel>({
       status: status.status,
     } as ICampaignModel);
@@ -47,22 +45,40 @@ export class TestCampaignMongoDBRepo
     if (campaignModel.length == 0) return null;
 
     const campaigns = campaignModel.map((campaign): Campaign => {
-      return new Campaign({
-        id: new UniqId(campaign._id),
-        adId: new UniqId(campaign.adId),
-        advertiserId: new UniqId(campaign.advertiserId),
-        referrals: campaign.referrals.map((referral) => new UniqId(referral)),
-        status: new CampaignStatus(campaign.status),
-        budget: new CampaignBudget({
-          clicks: campaign.budget.clicks,
-          balance: new Balance(campaign.budget.balance),
-        }),
-        metrics: new CampaignMetrics({
-          totalClicks: campaign.metrics.totalClicks,
-          totalViews: campaign.metrics.totalViews,
-        }),
-      });
+      return this.toCampaign(campaign);
     });
     return campaigns;
+  }
+
+  async findById(id: UniqId): Promise<Campaign | null> {
+    await TestMongoDB.connectMongoDB();
+    const campaignFound = await CampaignModel.findById(id.id);
+    if (!campaignFound) return null;
+    return this.toCampaign(campaignFound);
+  }
+
+  async findByAdId(id: UniqId): Promise<Campaign | null> {
+    await TestMongoDB.connectMongoDB();
+    const campaignFound = await CampaignModel.findOne({ adId: id.id });
+    if (!campaignFound) return null;
+    return this.toCampaign(campaignFound);
+  }
+
+  private toCampaign(campaign: ICampaignModel): Campaign {
+    return new Campaign({
+      id: new UniqId(campaign._id),
+      adId: new UniqId(campaign.adId),
+      advertiserId: new UniqId(campaign.advertiserId),
+      referrals: campaign.referrals.map((referral) => new UniqId(referral)),
+      status: new CampaignStatus(campaign.status),
+      budget: new CampaignBudget({
+        clicks: new Clicks(campaign.budget.clicks),
+        balance: new Balance(campaign.budget.balance),
+      }),
+      metrics: new CampaignMetrics({
+        totalClicks: campaign.metrics.totalClicks,
+        totalViews: campaign.metrics.totalViews,
+      }),
+    });
   }
 }

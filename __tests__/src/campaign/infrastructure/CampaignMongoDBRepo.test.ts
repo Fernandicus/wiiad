@@ -1,9 +1,9 @@
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
-import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/CampaignMongoDBRepo";
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 import { CampaignStatus, CampaignStatusType } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { UniqId } from "@/src/utils/UniqId";
 import { autoSetTestCampaignDB } from "../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
+import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/db/CampaignMongoDBRepo";
 
 describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () => {
   let campaignRepo: CampaignMongoDBRepo;
@@ -26,10 +26,7 @@ describe("On CampaignMongoDBRepo.test, GIVEN a some campaigns in MongoDB", () =>
     const campaignsFound = await campaignRepo.findAllByAdvertiserId(
       newCampaign.advertiserId
     );
-    const newCampaignSaved = campaignsFound?.find(
-      (campaign) => campaign.id.id == newCampaign.id.id
-    );
-    expect(newCampaignSaved!).toEqual(newCampaign);
+    expect(campaignsFound).toContainEqual(newCampaign);
   }, 8000);
 
   it(`WHEN call findAllByStatus method, 
