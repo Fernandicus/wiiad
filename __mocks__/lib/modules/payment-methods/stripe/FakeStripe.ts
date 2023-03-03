@@ -3,6 +3,7 @@ import {
   Stripe,
 } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { UniqId } from "@/src/utils/UniqId";
+import { FakeCardDetails } from "./FakeCardDetails";
 import { FakeCustomerId } from "./FakeCustomerId";
 
 export class FakeStripe extends Stripe {
@@ -15,7 +16,7 @@ export class FakeStripe extends Stripe {
       id: UniqId.new(),
       userId,
       customerId: FakeCustomerId.create(),
-      paymentMethods: [],
+      paymentMethods: [FakeCardDetails.create()],
     });
   }
 

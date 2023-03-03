@@ -8,6 +8,7 @@ import { FakeStripe } from "../../__mocks__/lib/modules/payment-methods/stripe/F
 
 export const mockedStripeRepo = (): IStripeRepo => {
   return {
+    removePM: jest.fn(),
     save: jest.fn(),
     addNewCardDetails: jest.fn(),
     findByUserId: jest

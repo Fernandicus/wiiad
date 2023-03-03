@@ -1,5 +1,5 @@
 import apiSendLoginEmail, {
-  APISendEmailVerification,
+  IApiReqSendEmailVerification,
 } from "@/pages/api/v1/auth/login/index";
 import { User } from "@/src/modules/users/user/domain/User";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
@@ -35,7 +35,7 @@ describe("On api/v1/auth/login/index, GIVEN some existing users and advertisers.
   THEN return status 400`, async () => {
     const user = users[0];
 
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: true,
       data: {
         email: user.email.email,
@@ -54,7 +54,7 @@ describe("On api/v1/auth/login/index, GIVEN some existing users and advertisers.
   THEN return status 200`, async () => {
     const user = users[0];
 
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: false,
       data: {
         email: user.email.email,
@@ -73,7 +73,7 @@ describe("On api/v1/auth/login/index, GIVEN some existing users and advertisers.
   THEN return status 400`, async () => {
     const advertiser = advertisers[0];
 
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: true,
       data: {
         email: advertiser.email.email,
@@ -92,7 +92,7 @@ describe("On api/v1/auth/login/index, GIVEN some existing users and advertisers.
   THEN return status 200`, async () => {
     const advertiser = advertisers[0];
 
-    const body: APISendEmailVerification = {
+    const body: IApiReqSendEmailVerification = {
       isNewUser: false,
       data: {
         email: advertiser.email.email,
