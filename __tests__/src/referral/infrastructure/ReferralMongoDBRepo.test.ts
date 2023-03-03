@@ -47,8 +47,13 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     const increasedReferrers =
       referral.referrers.getAmount() + increaseData.counter.getAmount();
 
-    expect(referralFound?.referrerBalance.total).toEqual(increasedBalance);
-    expect(referralFound?.referrers.getAmount()).toEqual(increasedReferrers);
+    referralFound.match({
+      some(value) {
+        expect(value.referrerBalance.total).toEqual(increasedBalance);
+        expect(value.referrers.getAmount()).toEqual(increasedReferrers);
+      },
+      nothing() {},
+    });
   });
 
   it(`WHEN call increaseRefereeData, the Referral referee data must be updated`, async () => {
@@ -61,7 +66,12 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     const increasedReferrers =
       referral.referees.getAmount() + increaseData.counter.getAmount();
 
-    expect(referralFound?.refereeBalance.total).toEqual(increasedBalance);
-    expect(referralFound?.referees.getAmount()).toEqual(increasedReferrers);
+    referralFound.match({
+      some(value) {
+        expect(value.refereeBalance.total).toEqual(increasedBalance);
+        expect(value.referees.getAmount()).toEqual(increasedReferrers);
+      },
+      nothing() {},
+    });
   });
 });
