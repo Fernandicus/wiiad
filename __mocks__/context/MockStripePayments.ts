@@ -29,7 +29,7 @@ interface IMockPaymentWithPM extends IPaymentWithPaymentMethod {
   paymentMethod: FakePaymentMethodId;
 }
 
-interface IMockPaymentWithPM extends IPaymentWithoutPaymentMethod {
+interface IMockPaymentWithCustomer extends IPaymentWithoutPaymentMethod {
   customerId: FakeCustomerId;
 }
 
@@ -68,7 +68,7 @@ const paymentIntentWithPaymentMethod = jestFn(
 );
 
 const paymentIntentWithoutPaymentMethod = jestFn(
-  (params: IMockPaymentWithPM): PaymentDetails | null => {
+  (params: IMockPaymentWithCustomer): PaymentDetails | null => {
     if (params.customerId.checkIfNotExsits()) return null;
     return FakePaymentDetails.createWithRandomPaymentDetails(
       FakePaymentIntentId.create()
@@ -108,6 +108,8 @@ const setupIntent = jestFn(
   })
 );
 
+const detachPaymentMethod = jest.fn()
+
 export const mockedStripePayments = jestFn(() => {
   return {
     getPaymentMethodDetails,
@@ -118,5 +120,6 @@ export const mockedStripePayments = jestFn(() => {
     createCustomer,
     validateWebhookEvent,
     setupIntent,
+    detachPaymentMethod
   };
 });

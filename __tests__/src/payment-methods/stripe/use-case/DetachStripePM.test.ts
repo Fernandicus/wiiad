@@ -6,22 +6,23 @@ import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { FakeStripe } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeStripe";
 import { SetupIntentId } from "@/src/modules/payment-methods/stripe/domain/value-objects/SetupIntentId";
 import { StripeClientSecret } from "@/src/modules/payment-methods/stripe/domain/value-objects/StripeClientSecret";
+import { DetachStripePM } from "@/src/modules/payment-methods/stripe/use-case/DetachStripePM";
 
-describe("On SetupIntent, GIVEN a stripe mocked repo", () => {
-  let setupIntent: SetupIntent;
+describe("On DetachStripePM, GIVEN a stripe mocked repo", () => {
+  let detachPM: DetachStripePM;
   let mockedSPayments: StripePayments;
   let stripe: Stripe;
 
   beforeAll(async () => {
     stripe = FakeStripe.create(UniqId.new());
     mockedSPayments = mockedStripePayments();
-    setupIntent = new SetupIntent(mockedSPayments);
+    detachPM = new DetachStripePM(mockedSPayments);
   });
 
-  it(`WHEN call setupIntent method, THEN repo should be called with stripe and stripe should be found`, async () => {
-    const resp = await setupIntent.create(stripe.customerId);
-    expect(mockedSPayments.setupIntent).toBeCalledWith(stripe.customerId);
-    expect(resp.id).toBeInstanceOf(SetupIntentId);
-    expect(resp.client_secret).toBeInstanceOf(StripeClientSecret);
+  it(`WHEN call detachPaymentMethod method, THEN repo should be called with stripe and stripe should be found`, async () => {
+    const pmId = stripe.paymentMethods[0].paymentMethodId;
+    await detachPM.detach(pmId);
+
+    expect(mockedSPayments.detachPaymentMethod).toBeCalledWith(pmId);
   });
 });
