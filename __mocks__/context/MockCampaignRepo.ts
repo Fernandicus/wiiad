@@ -6,6 +6,7 @@ import { UniqId } from "@/src/utils/UniqId";
 export const mockedCampaignsRepo = (campaigns: Campaign[]): ICampaignRepo => {
   return {
     save: jest.fn(),
+    removeByAdId: jest.fn(),
     findAllByAdvertiserId: jest
       .fn()
       .mockImplementation((id: UniqId): Campaign[] | null => {
