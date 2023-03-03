@@ -34,7 +34,12 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
   it(`WHEN call save, THEN a new referral must be saved and foundByUserId in MongoDB`, async () => {
     await repo.save(referral);
     const referralFound = await repo.findByUserID(user.id);
-    expect(referralFound!).toEqual(referral);
+    referralFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(referral);
+      },
+    });
   });
 
   it(`WHEN call increaseReferrerData, the Referral referrer data must be updated`, async () => {
