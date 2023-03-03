@@ -1,3 +1,4 @@
+import { getReferralDataHandler } from "@/components/src/user/infrastructure/referral-container";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { IUseSession } from "../interfaces/UserTypes";
 import { useSession } from "../useSession";
@@ -7,22 +8,14 @@ export const useUser = (): IUseSession => {
   const { storeReferral } = useReferral();
 
   const storeProfileData = async () => {
-    await fetch(ApiRoutes.getUserReferralData).then(async (resp) => {
-      if (resp.status === 200) {
-        const respJSON = await resp.json();
-        const referrers = respJSON["referral"]["referrers"];
-        const referrerBalance = respJSON["referral"]["referrerBalance"];
-        const refereeBalance = respJSON["referral"]["refereeBalance"];
-        const total = referrerBalance + refereeBalance;
-        const campaignsWatched = respJSON["referral"]["referees"];
+    const referralData = await getReferralDataHandler.get();
+    const campaignsWatched = referralData.referees;
 
-        storeReferral({
-          refereeBalance,
-          referees: campaignsWatched,
-          referrerBalance,
-          referrers,
-        });
-      }
+    storeReferral({
+      refereeBalance: referralData.refereeBalance,
+      referees: campaignsWatched,
+      referrerBalance: referralData.referrerBalance,
+      referrers: referralData.referrers,
     });
   };
 

@@ -1,4 +1,5 @@
 import { Balance } from "@/src/common/domain/Balance";
+import { Maybe } from "@/src/common/domain/Maybe";
 import { UniqId } from "@/src/utils/UniqId";
 import { IReferralRepo } from "../../domain/interfaces/IReferralRepo";
 import { Referral } from "../../domain/Referral";
@@ -13,19 +14,21 @@ export class ReferralMongoDBRepo implements IReferralRepo {
     } as IReferralModel);
   }
 
-  async findByUserID(id: UniqId): Promise<Referral | null> {
+  async findByUserID(id: UniqId): Promise<Maybe<Referral>> {
     const referralModel = await ReferralModel.findOne<IReferralModel>({
       userId: id.id,
     } as IReferralModel);
-    if (!referralModel) return null;
-    return new Referral({
-      id: new UniqId(referralModel._id),
-      userId: new UniqId(referralModel.userId),
-      referees: new ReferralCounter(referralModel.referees),
-      referrers: new ReferralCounter(referralModel.referrers),
-      refereeBalance: new Balance(referralModel.refereeBalance),
-      referrerBalance: new Balance(referralModel.referrerBalance),
-    });
+    if (!referralModel) return Maybe.nothing();
+    return Maybe.some(
+      Referral.fromPrimitives({
+        id: referralModel._id,
+        userId: referralModel.userId,
+        referees: referralModel.referees,
+        referrers: referralModel.referrers,
+        refereeBalance: referralModel.refereeBalance,
+        referrerBalance: referralModel.referrerBalance,
+      })
+    );
   }
 
   async increaseReferrerData(params: {
