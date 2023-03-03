@@ -26,6 +26,17 @@ export class FakeUser extends User {
     });
   }
 
+  static createWithRole(props: {id: UniqId, role: Role}): User {
+    const userPrimitives = this.generateRandom(props.id.id);
+    return new User({
+      id: props.id,
+      email: new Email(userPrimitives.email),
+      name: new Name(userPrimitives.name),
+      role: props.role,
+      profilePic: ProfilePic.withDefaultUserPic(),
+    });
+  }
+
   static createMany(amount = 5): User[] {
     let users: User[] = [];
 

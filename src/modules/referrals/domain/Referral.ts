@@ -44,6 +44,17 @@ export class Referral {
     this.refereeBalance = params.refereeBalance;
   }
 
+  static fromPrimitives(primitives: IReferralPrimitives) {
+    return new Referral({
+      id: new UniqId(primitives.id),
+      userId: new UniqId(primitives.userId),
+      referees: new ReferralCounter(primitives.referees),
+      referrers: new ReferralCounter(primitives.referrers),
+      refereeBalance: new Balance(primitives.refereeBalance),
+      referrerBalance: new Balance(primitives.referrerBalance),
+    });
+  }
+
   static empty(params: { id: UniqId; userId: UniqId }): Referral {
     return new Referral({
       id: params.id,
