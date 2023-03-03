@@ -15,8 +15,18 @@ describe("On NodemailerSendVerificationEmail, GIVEN a SMTP service", () => {
     verificationUrl = FakeVerificationURL.create(token);
   });
 
-  it(`WHEN call the send method, 
+  it(`WHEN call the login method, 
   THEN do not expect any error`, async () => {
     expect(nodemailer.login(verificationUrl)).resolves.not.toThrowError();
+  });
+
+  it(`WHEN call the signUp method, 
+  THEN do not expect any error`, async () => {
+    expect(nodemailer.signUp(verificationUrl)).resolves.not.toThrowError();
+  });
+
+  it(`WHEN call the updateEmail method, 
+  THEN do not expect any error`, async () => {
+    expect(nodemailer.updateEmail(verificationUrl)).resolves.not.toThrowError();
   });
 });

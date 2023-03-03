@@ -28,9 +28,21 @@ describe("On SendVerificationEmail, GIVEN an Email Sender and an Email Verificat
     sendVerificationEmail = new SendlVerificationEmail(mockedRepo);
   });
 
-  it(`WHEN call SendVerificationEmail send method, 
+  it(`WHEN call login method, 
   THEN Email Sender send method should be called with the VerificationEmail data`, async () => {
     await sendVerificationEmail.login(verificationUrl);
     expect(mockedRepo.login).toBeCalledWith(verificationUrl);
+  });
+
+  it(`WHEN call signup method, 
+  THEN Email Sender send method should be called with the VerificationEmail data`, async () => {
+    await sendVerificationEmail.signUp(verificationUrl);
+    expect(mockedRepo.signUp).toBeCalledWith(verificationUrl);
+  });
+
+  it(`WHEN call updateEmail method, 
+  THEN Email Sender send method should be called with the VerificationEmail data`, async () => {
+    await sendVerificationEmail.updateEmail(verificationUrl);
+    expect(mockedRepo.updateEmail).toBeCalledWith(verificationUrl);
   });
 });
