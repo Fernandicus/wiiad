@@ -17,7 +17,7 @@ export const AdCard = (props: Props) => {
       : ad.redirectionUrl;
 
   return (
-    <div className="w-72">
+    <div className="max-w-xs">
       <AdCardItem image={ad.file}>
         <div className="space-y-2">
           <h3 className="font-medium text-gray-600 truncate">{ad.title}</h3>

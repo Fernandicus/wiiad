@@ -62,23 +62,23 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async increaseViews(id: UniqId): Promise<void> {
-    const campaignFound = await CampaignModel.findOneAndUpdate(
+    /* const campaignFound = */ await CampaignModel.updateOne(
       { _id: id.id, status: CampaignStatusType.ACTIVE },
       {
         $inc: { "metrics.totalViews": 1 },
       }
     );
-    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
+   // if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   async increaseClicks(id: UniqId): Promise<void> {
-    const campaignFound = await CampaignModel.findOneAndUpdate(
+    /* const campaignFound = */ await CampaignModel.updateOne(
       { _id: id.id, status: CampaignStatusType.ACTIVE },
       {
         $inc: { "metrics.totalClicks": 1 },
       }
     );
-    if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
+    //if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   private toCampaign(campaignModel: ICampaignModel): Campaign {

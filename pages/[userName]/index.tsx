@@ -11,6 +11,8 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
+import { Notification } from "@/components/ui/notifications/Notification";
+import { AdViewPage } from "@/components/ui/pages/[userName]/AdViewPage";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;
@@ -26,11 +28,11 @@ export default function Profile({
   referrer,
 }: IWatchCampaignPage) {
   return (
-    <AdView
-      user={user}
-      campaign={campaign as ICampaignPrimitives}
+    <AdViewPage
       ad={ad as AdPropsPrimitives}
+      campaign={campaign as ICampaignPrimitives}
       referrer={referrer!}
+      user={user}
     />
   );
 }
@@ -56,7 +58,8 @@ async function getSSPropsData(params: {
 }) {
   const { queryParams, context } = params;
   const session = userSession.getFromServer(context);
-  if (session && isUserNamePath(session, queryParams))
+
+  if (session && session.name == queryParams.userName)
     return {
       props: {},
       redirect: { destination: "/profile", permanent: false },
@@ -96,11 +99,4 @@ async function getCampaignToWatch(
     }
   );
   return data;
-}
-
-function isUserNamePath(
-  user: IUserPrimitives,
-  loginQueries: LoginQueries
-): boolean {
-  return user.name == loginQueries.userName;
 }
