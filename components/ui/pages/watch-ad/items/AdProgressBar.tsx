@@ -1,7 +1,7 @@
 import { ReactElement, useRef } from "react";
 import { useAdDurationEngine } from "./hooks/useAdDurationEngine";
 
-export const AdDurationBar = ({
+export const AdProgressBar = ({
   children,
   duration = 15,
   startTimer = false,
@@ -10,7 +10,7 @@ export const AdDurationBar = ({
   children: ReactElement;
   duration?: number;
   startTimer: boolean;
-  onEnd?():void,
+  onEnd?(): void;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useAdDurationEngine({ duration, ref, startTimer, onEnd });

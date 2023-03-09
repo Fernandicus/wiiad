@@ -6,13 +6,13 @@ import {
   IWatchCampaignData,
   WatchCampaignsController,
 } from "@/src/common/infrastructure/controllers/WatchCampaignsController";
-import AdView from "../../components/ui/pages/[userName]/AdView";
+import AdView from "../../components/ui/pages/watch-ad/AdView";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 import { Notification } from "@/components/ui/notifications/Notification";
-import { AdViewPage } from "@/components/ui/pages/[userName]/AdViewPage";
+import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;

@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { AdDurationBar } from "./AdDurationBar";
+import { AdProgressBar } from "./AdProgressBar";
 
 interface WatchVideoItemProps {
   adVideoFile: string;
@@ -49,7 +49,7 @@ export const WatchVideoItem = forwardRef(
     }));
 
     return (
-      <AdDurationBar startTimer={props.startTimer} duration={duration}>
+      <AdProgressBar startTimer={props.startTimer} duration={duration}>
         <video
           ref={videoRef}
           muted
@@ -61,7 +61,7 @@ export const WatchVideoItem = forwardRef(
           <source src={adVideoFile} type="video/mp4" />
           Tu navegador no el formato de video mp4
         </video>
-      </AdDurationBar>
+      </AdProgressBar>
     );
   }
 );
