@@ -55,6 +55,9 @@ export default function Home(props: { session: IUserPrimitives }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = userSession.getFromServer(context);
+
+  console.log(process.env.SMTP_USER);
+
   if (session)
     return {
       props: {},
