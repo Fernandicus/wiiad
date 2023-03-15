@@ -18,6 +18,7 @@ export default function Home(props: { session: IUserPrimitives }) {
 
   return (
     <div className=" h-screen bg-slate-50">
+      <p className="text-red-500">{process.env.SMTP_USER}</p>
       <div className="w-full max-w-lg mx-auto flex items-center h-full">
         <div className="space-y-20 w-full">
           <SignInCard
