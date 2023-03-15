@@ -7,8 +7,8 @@ export abstract class SMTPData {
   readonly pass;
 
   constructor() {
-    const { port, pwd, server, user } = projectConfig.SMTP;
-    
+    const { port, pwd, server, /* user */ } = projectConfig.SMTP;
+    const user = process.env.SMTP_USER;
     if (!user) throw Error("SMTP_USER env var is empty");
     if (!server) throw Error("SMTP_SERVER env var is empty");
     if (!port) throw Error("SMTP_PORT env var is empty");
