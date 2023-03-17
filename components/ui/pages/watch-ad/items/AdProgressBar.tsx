@@ -1,5 +1,4 @@
-import { ReactElement, useRef } from "react";
-import { useAdDurationEngine } from "./hooks/useAdDurationEngine";
+import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
 
 export const AdProgressBar = ({
   children,
@@ -12,19 +11,29 @@ export const AdProgressBar = ({
   startTimer: boolean;
   onEnd?(): void;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  useAdDurationEngine({ duration, ref, startTimer, onEnd });
+  const [time, setTime] = useState<number>(0);
+
+  useMemo(() => {
+    if (startTimer == true) {
+      const interval = setInterval(() => {
+        setTime((prev) => (prev += 1));
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(interval);
+      }, duration * 1000);
+    }
+  }, [startTimer]);
 
   return (
     <div className="relative">
       {children}
       <div className="w-full absolute px-1.5 bottom-0">
-        <div className="overflow-hidden rounded-md">
-          <div
-            ref={ref}
-            className={`-translate-x-full w-full h-1 bg-yellow-500`}
-          />
-        </div>
+        <progress
+          className="h-1.5 w-full"
+          value={time}
+          max={duration}
+        ></progress>
       </div>
     </div>
   );

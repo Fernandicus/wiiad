@@ -22,7 +22,7 @@ export const WatchVideoItem = forwardRef(
   (props: WatchVideoItemProps, ref: ForwardedRef<FwdWatchVideoItem>) => {
     const { adVideoFile } = props;
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [duration, setDuration] = useState<number>(5);
+    const [duration, setDuration] = useState<number>(0);
 
     const playVideo = (onEnd?: () => void) => {
       setTimeout(() => {
