@@ -41,4 +41,7 @@ export class ApiRoutes {
     "/api/v1/payments/stripe/remove-pm";
   static readonly stripeGetCardDetails = (pmId: string) =>
     `/api/v1/payments/stripe/cards/get-card-details?pmId=${pmId}`;
+
+    static readonly websocketDisconnect = "api/v1/channel-events/close-connection";
+    static readonly websocketAdWatched = "api/v1/channel-events/ad-watched";
 }

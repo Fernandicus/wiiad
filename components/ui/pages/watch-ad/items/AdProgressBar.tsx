@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 
 export const AdProgressBar = ({
   children,
@@ -20,8 +20,9 @@ export const AdProgressBar = ({
       }, 1000);
 
       setTimeout(() => {
+        if (onEnd) onEnd();
         clearInterval(interval);
-      }, duration * 1000);
+      }, (duration + 1) * 1000);
     }
   }, [startTimer]);
 

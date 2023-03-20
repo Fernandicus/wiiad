@@ -13,7 +13,7 @@ export const WatchBannerItem = ({
 }) => {
 
   return (
-    <AdProgressBar startTimer={startTimer} onEnd={onEnd}>
+    <AdProgressBar onEnd={onEnd} startTimer={startTimer}>
       <img
         src={adBannerFile}
         alt={bannerAlt}

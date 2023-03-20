@@ -20,9 +20,15 @@ export const projectConfig = {
     pwd: process.env.SMTP_PASSWORD,
     email: process.env.EMAIL_FROM,
   },
-  CLOUDINARY:{
+  CLOUDINARY: {
     name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-  }
+  },
+  PUSHER: {
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_KEY,
+    secret: process.env.PUSHER_SECRET,
+    cluster: process.env.PUSHER_CLUSTER,
+  },
 };
