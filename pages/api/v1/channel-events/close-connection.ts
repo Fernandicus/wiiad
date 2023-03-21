@@ -13,7 +13,6 @@ export default async function handler(
   const session = userSession.getFromServer({ req, res });
 
   const userId = !session ? id.no_auth_user_id : session.id;
-
   disconnectWebSocketHandler.disconnect(userId);
 
   return res.status(200);

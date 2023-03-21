@@ -11,7 +11,15 @@ import {
 } from "../domain/interface/IFrontWebSocket";
 
 export class PusherWebSocketJS implements IFrontWebSocket {
-  constructor(private pusher: Pusher) {}
+  private static singletonInstance: PusherWebSocketJS;
+  private constructor(private pusher: Pusher) {}
+
+  static getInstance(pusher: Pusher): PusherWebSocketJS {
+    if (!this.singletonInstance) {
+      this.singletonInstance = new PusherWebSocketJS(pusher);
+    }
+    return this.singletonInstance;
+  }
 
   connectUser({ onError, onSuccess }: TWSConnectOptions): void {
     this.pusher.signin();

@@ -1,5 +1,6 @@
 import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
+import { projectConfig } from "@/src/utils/projectConfig";
 import Pusher from "pusher-js";
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 import { FrontWebSocketConnectChannel } from "../use-case/FrontWebSocketConnectChannel";
@@ -12,7 +13,7 @@ import { FrontWebSocketSendEventHandler } from "../use-case/handlers/FrontWebSoc
 import { PusherWebSocketJS } from "./FrontPusherWebSocket";
 
 const pusherJS = (props: IApiReqWebSocketConnect) =>
-  new Pusher("b013a88394c7777b271d", {
+  new Pusher(projectConfig.PUSHER.key!, {
     cluster: "eu",
     userAuthentication: {
       params: props,
@@ -26,26 +27,29 @@ const pusherJS = (props: IApiReqWebSocketConnect) =>
     },
   });
 
-export const frontWebSocket = (props: IApiReqWebSocketConnect) =>
-  new PusherWebSocketJS(pusherJS(props));
 
-export const frontWebSocketConnectUser = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketConnectUser(webSocket);
+const frontWebSocket = (props: IApiReqWebSocketConnect) =>
+  PusherWebSocketJS.getInstance(pusherJS(props)); 
 
-export const frontWebSocketConnectChannel = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketConnectChannel(webSocket);
+export const frontWebSocketConnectUser = (props: IApiReqWebSocketConnect) =>
+  new FrontWebSocketConnectUser(frontWebSocket(props));
 
-const frontWebSocketDisconnect = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketDisconnect(webSocket);
+export const frontWebSocketConnectChannel = (props: IApiReqWebSocketConnect) =>
+  new FrontWebSocketConnectChannel(frontWebSocket(props));
 
-export const frontWebSocketDisconnectHandler = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketDisconnectHandler(frontWebSocketDisconnect(webSocket));
+const frontWebSocketDisconnect = (props: IApiReqWebSocketConnect) =>
+  new FrontWebSocketDisconnect(frontWebSocket(props));
 
-const frontWebSocketSendEvent = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketSendEvent(webSocket);
+export const frontWebSocketDisconnectHandler = (
+  props: IApiReqWebSocketConnect
+) => new FrontWebSocketDisconnectHandler(frontWebSocketDisconnect(props));
 
-export const frontWebSocketSendEventHandler = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketSendEventHandler(frontWebSocketSendEvent(webSocket));
+const frontWebSocketSendEvent = (props: IApiReqWebSocketConnect) =>
+  new FrontWebSocketSendEvent(frontWebSocket(props));
 
-export const frontWebSocketListenEvent = (webSocket: IFrontWebSocket) =>
-  new FrontWebSocketListenEvent(webSocket);
+export const frontWebSocketSendEventHandler = (
+  props: IApiReqWebSocketConnect
+) => new FrontWebSocketSendEventHandler(frontWebSocketSendEvent(props));
+
+export const frontWebSocketListenEvent = (props: IApiReqWebSocketConnect) =>
+  new FrontWebSocketListenEvent(frontWebSocket(props));

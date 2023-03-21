@@ -2,7 +2,6 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
-import { frontWebSocket } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
 import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
 
 export interface IWatchCampaignPage {

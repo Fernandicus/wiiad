@@ -1,5 +1,5 @@
 import {
-  frontWebSocket,
+  //frontWebSocket,
   frontWebSocketConnectChannel,
   frontWebSocketConnectUser,
   frontWebSocketDisconnectHandler,
@@ -20,23 +20,21 @@ interface IUseWatchingAd {
 export const useWatchingAd = (
   userData: IApiReqWebSocketConnect
 ): IUseWatchingAd => {
-  const webSocket = frontWebSocket(userData);
-
   const [connectionMessage, setConnectionMessage] = useState("");
 
   const connectUser = () => {
-    frontWebSocketConnectUser(webSocket).connect({
+    frontWebSocketConnectUser(userData).connect({
       onSuccess(data) {
-        console.log("signin success");
+        setConnectionMessage("SignedIn")
       },
       onError(data) {
-        console.log("signin Error");
+        setConnectionMessage("Error SingingIn")
       },
     });
   };
 
   const connectChannel = () => {
-    const connectChannel = frontWebSocketConnectChannel(webSocket);
+    const connectChannel = frontWebSocketConnectChannel(userData);
     connectChannel.watchAd({
       onSuccess(data) {
         console.log("connectChannel success");
@@ -48,7 +46,7 @@ export const useWatchingAd = (
   };
 
   const listenUserEvents = () => {
-    const listenEvent = frontWebSocketListenEvent(webSocket);
+    const listenEvent = frontWebSocketListenEvent(userData);
     listenEvent.finishedWatchingAd((data: { message: string }) => {
       console.log(data);
       setConnectionMessage(data.message);
@@ -62,13 +60,14 @@ export const useWatchingAd = (
   };
 
   const disconnect = async () => {
-    frontWebSocketDisconnectHandler(webSocket).disconnect(
+    await frontWebSocketDisconnectHandler(userData).disconnect(
       userData.no_auth_user_id
     );
+    setConnectionMessage("Disconnected")
   };
 
   const sendAdWatchedEvent = async (userId: string) => {
-    const sendEvent = frontWebSocketSendEventHandler(webSocket);
+    const sendEvent = frontWebSocketSendEventHandler(userData);
     sendEvent.finishedWatchingAd(userId);
   };
 

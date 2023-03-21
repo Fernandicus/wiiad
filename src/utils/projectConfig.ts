@@ -8,8 +8,8 @@ export const projectConfig = {
     MongoURL: process.env.MONGODB_URL,
   },
   STRIPE: {
-    public_key:
-      "pk_test_51Lv1JPByzAsF6qVaGrVyT6XijgRvGqFrBDfu5AzCQtv99BuTFykAh9ZUIjTsrXBYPIfd88V6OT2m3PIgApJuOTAo00qpsi6Y4n",
+    //  "pk_test_51Lv1JPByzAsF6qVaGrVyT6XijgRvGqFrBDfu5AzCQtv99BuTFykAh9ZUIjTsrXBYPIfd88V6OT2m3PIgApJuOTAo00qpsi6Y4n",
+    public_key: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     secret_key: process.env.STRIPE_SECRET_KEY,
     webhook_secret: process.env.STRIPE_SUCCESS_WEBHOOK_SECRET,
   },
@@ -27,7 +27,7 @@ export const projectConfig = {
   },
   PUSHER: {
     appId: process.env.PUSHER_APP_ID,
-    key: process.env.PUSHER_KEY,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY,
     secret: process.env.PUSHER_SECRET,
     cluster: process.env.PUSHER_CLUSTER,
   },
