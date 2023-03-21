@@ -1,25 +1,9 @@
-import { LoginQueries } from "@/src/common/domain/LoginQueries";
-import { MongoDB } from "@/src/common/infrastructure/MongoDB";
-import { GetServerSideProps } from "next";
+
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import {
-  IWatchCampaignData,
-  WatchCampaignsController,
-} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
-import AdView from "../../components/ui/pages/watch-ad/AdView";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
-import { Notification } from "@/components/ui/notifications/Notification";
-import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
-import { useEffect, useState } from "react";
-import Pusher, { Channel } from "pusher-js";
 import { UniqId } from "@/src/utils/UniqId";
-import { WebSocketEvent } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { WebSocketChannels } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { useAdWatcher } from "@/components/hooks/ad-watcher/useAdWatcher";
-import { PusherWebSocketJS } from "@/components/src/websocket/pusher-front/infrastructure/FrontPusherWebSocket";
 import { frontWebSocket } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
 
 export interface IWatchCampaignPage {
@@ -34,7 +18,7 @@ const noSessionUser = {
 };
 
 export default function Profile() {
-  const { closePusher, connectPusher, connectionMessage, sendAdWatchedEvent } =
+  const { closePusher, connect, connectionMessage, sendAdWatchedEvent } =
     useAdWatcher(
       frontWebSocket({
         channelAuthParams: noSessionUser,
@@ -57,7 +41,7 @@ export default function Profile() {
               </button>
               <button
                 className="bg-green-500 text-lime-100 font-bold px-2 py-1 rounded-lg"
-                onClick={connectPusher}
+                onClick={connect}
               >
                 Connect Pusher
               </button>

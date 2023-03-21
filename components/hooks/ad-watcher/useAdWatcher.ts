@@ -1,22 +1,28 @@
+import { IFrontWebSocket } from "@/components/src/websocket/pusher-front/domain/interface/IFrontWebSocket";
+import {
+  frontWebSocketConnectChannel,
+  frontWebSocketConnectUser,
+  frontWebSocketDisconnect,
+  frontWebSocketListenEvent,
+  frontWebSocketSendEvent,
+} from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
 import { PusherWebSocketJS } from "@/components/src/websocket/pusher-front/infrastructure/FrontPusherWebSocket";
 import {
   WebSocketChannel,
   WebSocketChannels,
 } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
-import {
-  WebSocketEvent,
-  WebSocketEventName,
-} from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
+import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { UniqId } from "@/src/utils/UniqId";
 import Pusher, { Channel } from "pusher-js";
 import { useState } from "react";
 
-export const useAdWatcher = (webSocket: PusherWebSocketJS) => {
+export const useAdWatcher = (webSocket: IFrontWebSocket) => {
+  const frontWebSocket = webSocket;
   const [connectionMessage, setConnectionMessage] = useState("");
 
-  const authUser = () => {
-    webSocket.authUser({
-      onSuccess: (data: unknown) => {
+  const connectUser = () => {
+    frontWebSocketConnectUser(frontWebSocket).connect({
+      onSuccess(data) {
         console.log("signin success");
       },
       onError(data) {
@@ -26,8 +32,8 @@ export const useAdWatcher = (webSocket: PusherWebSocketJS) => {
   };
 
   const authChannel = () => {
-    webSocket.authChannel(WebSocketChannel.watchAd(), {
-      onSucced(data) {
+    frontWebSocketConnectChannel(webSocket).watchAd({
+      onSuccess(data) {
         console.log("authChannel success");
       },
       onError(data) {
@@ -37,49 +43,31 @@ export const useAdWatcher = (webSocket: PusherWebSocketJS) => {
   };
 
   const listenUserEvents = () => {
-    //*https://pusher.com/docs/channels/using_channels/connection/#connection-states
-
-    webSocket.listenConnectionEvents({
-      onConnect(data) {
-        console.log("connect");
-      },
-      onDisconnect(data) {
-        console.log("disconnect");
-      },
-      onFail(data) {
-        console.log("fail");
-      },
-    });
-
-    webSocket.listenEvent(
-      WebSocketEventName.finishWatchingAd(),
-      (data: { message: string; random: number }) => {
+    frontWebSocketListenEvent(webSocket).finishedWatchingAd(
+      (data: { message: string }) => {
+        console.log(data);
         setConnectionMessage(data.message);
       }
     );
   };
 
-  const connectPusher = () => {
-    //* 1- call pusher signin to authenticate the user
-    authUser();
-    //* 2- call pusher subscribe '[presence/private]-channelName' to authenticate the channelName
+  const connect = () => {
+    connectUser();
     authChannel();
-    //* 3- bind pusher user to listen events
     listenUserEvents();
   };
 
   const closePusher = async () => {
-    console.log("Pusher unsubscribing and disconnecting");
-    await webSocket.disconnect();
+    frontWebSocketDisconnect(webSocket).disconnect();
   };
 
   const sendAdWatchedEvent = async (userId: string) => {
-    await webSocket.sendAdWatchedEvent(new UniqId(userId));
+    frontWebSocketSendEvent(webSocket).finishedWatchingAd(new UniqId(userId));
   };
 
   return {
     closePusher,
-    connectPusher,
+    connect,
     connectionMessage,
     sendAdWatchedEvent,
   };

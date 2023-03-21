@@ -10,7 +10,7 @@ export class SendWebSocketEvent {
   ): Promise<void> {
     const { data, userId } = props;
     await this.pusherWebSocket.sendEventToUser({
-      event: WebSocketEventName.finishWatchingAd(),
+      event: WebSocketEventName.event("finish-watching-ad"),
       userId,
       data,
     });

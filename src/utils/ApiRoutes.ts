@@ -42,6 +42,13 @@ export class ApiRoutes {
   static readonly stripeGetCardDetails = (pmId: string) =>
     `/api/v1/payments/stripe/cards/get-card-details?pmId=${pmId}`;
 
-    static readonly websocketDisconnect = "api/v1/channel-events/close-connection";
-    static readonly websocketAdWatched = "api/v1/channel-events/ad-watched";
+  static readonly websocketDisconnect =
+    "api/v1/channel-events/close-connection";
+  static readonly websocketAdWatched = "api/v1/channel-events/ad-watched";
+  static readonly websocketUserAuthentication =
+    "/api/v1/channel-events/auth-user";
+  static readonly websocketChannelAuthorization =
+    "/api/v1/channel-events/auth-channel";
+  static readonly websocketSendEvent = (eventName: string) =>
+    `api/v1/channel-events?event=${eventName}`;
 }

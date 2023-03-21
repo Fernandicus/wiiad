@@ -41,6 +41,7 @@ export class PusherWebSocket {
 
   async sendEventToUser(params: TPusherSendEvent): Promise<void> {
     const { event, userId, data } = params;
-    const resp = await this.pusher.sendToUser(userId.id, event.name, data);
+    const d = params.event
+    const resp = await this.pusher.sendToUser(userId.id, event.event, data);
   }
 }
