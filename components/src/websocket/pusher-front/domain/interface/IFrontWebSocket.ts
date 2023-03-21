@@ -1,5 +1,7 @@
+import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
+import { UniqId } from "@/src/utils/UniqId";
 
 export type TWSConnectOptions<T = unknown> = {
   onSuccess: (data: T) => void;
@@ -14,9 +16,12 @@ export interface IFrontWebSocket {
     props: TWSConnectOptions<T>
   ): void;
 
-  disconnect(): void;
+  disconnect(userId: UniqId): void;
 
   listenEvent<T>(event: WebSocketEventName, handler: (data: T) => void): void;
 
-  sendEvent<T extends object>(event: WebSocketEventName, data: T): Promise<void>;
+  sendEvent<T extends object>(
+    event: WebSocketEventName,
+    data: T
+  ): Promise<void>;
 }

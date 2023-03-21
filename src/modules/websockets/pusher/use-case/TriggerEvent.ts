@@ -20,7 +20,7 @@ export class TriggerEvent {
         await sendWebSocketEventHandler.finishWatchingAd({
           userId: uniqId.id,
           data: {
-            message: "Ad watched!",
+            message: `Ad watched!: user id ${uniqId.id}`,
             status: 200,
           },
         });

@@ -1,4 +1,5 @@
 import { ErrorWebSocket } from "@/src/modules/websockets/pusher/domain/errors/ErrorWebSocket";
+import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
@@ -28,10 +29,14 @@ export class PusherWebSocketJS implements IFrontWebSocket {
     channel.bind("pusher:subscription_error", onError);
   }
 
-  async disconnect(): Promise<void> {
+  async disconnect(userId: UniqId): Promise<void> {
+    const data: IApiReqWebSocketConnect = { no_auth_user_id: userId.id };
     this.pusher.unbind_all();
     this.pusher.disconnect();
-    const resp = await fetch(ApiRoutes.websocketDisconnect);
+    const resp = await fetch(ApiRoutes.websocketDisconnect, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
     if (!resp.ok) throw ErrorWebSocket.disconnecting();
   }
 
@@ -49,23 +54,4 @@ export class PusherWebSocketJS implements IFrontWebSocket {
   listenEvent<T>(event: WebSocketEventName, handler: (data: T) => void): void {
     this.pusher.user.bind(event.event, handler);
   }
-
-  /*   listenConnectionEvents(props: {
-    onConnect: (data: unknown) => void;
-    onDisconnect: (data: unknown) => void;
-    onFail: (data: unknown) => void;
-  }): void {
-    this.pusher.connection.bind("connected", props.onConnect);
-    this.pusher.connection.bind("failed", props.onFail);
-    this.pusher.connection.bind("disconnected", props.onDisconnect);
-  } */
-
-  /* async sendAdWatchedEvent(userId: UniqId): Promise<void> {
-    await fetch(ApiRoutes.websocketAdWatched, {
-      method: "PUT",
-      body: JSON.stringify({
-        user_id: userId,
-      }),
-    });
-  } */
 }

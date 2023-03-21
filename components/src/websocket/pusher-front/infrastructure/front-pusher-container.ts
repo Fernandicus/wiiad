@@ -1,3 +1,4 @@
+import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import Pusher from "pusher-js";
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
@@ -6,33 +7,27 @@ import { FrontWebSocketConnectUser } from "../use-case/FrontWebSocketConnectUser
 import { FrontWebSocketDisconnect } from "../use-case/FrontWebSocketDisconnect";
 import { FrontWebSocketListenEvent } from "../use-case/FrontWebSocketListenEvent";
 import { FrontWebSocketSendEvent } from "../use-case/FrontWebSocketSendEvent";
+import { FrontWebSocketDisconnectHandler } from "../use-case/handlers/FrontWebSocketDisconnectHandler";
+import { FrontWebSocketSendEventHandler } from "../use-case/handlers/FrontWebSocketSendEventHandler";
 import { PusherWebSocketJS } from "./FrontPusherWebSocket";
 
-type TWebSocketAuthProps = {
-  userAuthParams?: object;
-  channelAuthParams: object;
-};
-
-const pusherJS = (props: TWebSocketAuthProps) =>
+const pusherJS = (props: IApiReqWebSocketConnect) =>
   new Pusher("b013a88394c7777b271d", {
     cluster: "eu",
     userAuthentication: {
-      params: props.userAuthParams,
+      params: props,
       endpoint: ApiRoutes.websocketUserAuthentication,
       transport: "ajax",
     },
     channelAuthorization: {
-      params: props.channelAuthParams,
+      params: props,
       endpoint: ApiRoutes.websocketChannelAuthorization,
       transport: "ajax",
     },
   });
 
-export const frontWebSocket = (props: TWebSocketAuthProps) =>
+export const frontWebSocket = (props: IApiReqWebSocketConnect) =>
   new PusherWebSocketJS(pusherJS(props));
-
-//Todo: Add use-cases
-//ListenEvents, Disconnect, ...
 
 export const frontWebSocketConnectUser = (webSocket: IFrontWebSocket) =>
   new FrontWebSocketConnectUser(webSocket);
@@ -40,11 +35,17 @@ export const frontWebSocketConnectUser = (webSocket: IFrontWebSocket) =>
 export const frontWebSocketConnectChannel = (webSocket: IFrontWebSocket) =>
   new FrontWebSocketConnectChannel(webSocket);
 
-export const frontWebSocketDisconnect = (webSocket: IFrontWebSocket) =>
+const frontWebSocketDisconnect = (webSocket: IFrontWebSocket) =>
   new FrontWebSocketDisconnect(webSocket);
 
-export const frontWebSocketSendEvent = (webSocket: IFrontWebSocket) =>
+export const frontWebSocketDisconnectHandler = (webSocket: IFrontWebSocket) =>
+  new FrontWebSocketDisconnectHandler(frontWebSocketDisconnect(webSocket));
+
+const frontWebSocketSendEvent = (webSocket: IFrontWebSocket) =>
   new FrontWebSocketSendEvent(webSocket);
+
+export const frontWebSocketSendEventHandler = (webSocket: IFrontWebSocket) =>
+  new FrontWebSocketSendEventHandler(frontWebSocketSendEvent(webSocket));
 
 export const frontWebSocketListenEvent = (webSocket: IFrontWebSocket) =>
   new FrontWebSocketListenEvent(webSocket);

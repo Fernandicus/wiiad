@@ -1,10 +1,9 @@
-
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
-import { useAdWatcher } from "@/components/hooks/ad-watcher/useAdWatcher";
 import { frontWebSocket } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
+import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;
@@ -14,17 +13,12 @@ export interface IWatchCampaignPage {
 }
 
 const noSessionUser = {
-  user_id: "anonimous_" + UniqId.generate(),
+  user_id: "anon_" + UniqId.generate(),
 };
 
 export default function Profile() {
-  const { closePusher, connect, connectionMessage, sendAdWatchedEvent } =
-    useAdWatcher(
-      frontWebSocket({
-        channelAuthParams: noSessionUser,
-        userAuthParams: noSessionUser,
-      })
-    );
+  const { disconnect, connect, connectionMessage, sendAdWatchedEvent } =
+    useWatchingAd({no_auth_user_id: noSessionUser.user_id});
 
   return (
     <div className="h-screen flex flex-col text-center">
@@ -35,7 +29,7 @@ export default function Profile() {
             <div className="space-x-10">
               <button
                 className="bg-red-100 text-red-500 font-bold px-2 py-1 rounded-lg"
-                onClick={closePusher}
+                onClick={disconnect}
               >
                 Close Pusher
               </button>

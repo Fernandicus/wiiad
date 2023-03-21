@@ -15,6 +15,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+
+
   const query = new EventQuery(req.query);
   const event = WebSocketEventName.validateFromString(query.event);
   const eventName = event.getName() as TWebSocketEvent;
@@ -23,6 +25,7 @@ export default async function handler(
   const id: IApiReqWebSocketSendEvent = reqBodyParse(req);
   const userId = session ? session.id : id.user_id;
 
+
   const triggerEvent = new TriggerEvent();
   const eventTrigger: Record<TWebSocketEvent, Function> = {
     "start-watching-ad": triggerEvent.startWatchingAd,
@@ -30,6 +33,10 @@ export default async function handler(
       triggerEvent.finishWatchingAd(new UniqId(userId)),
   };
 
+
+  //Todo: Test what happens when the user closes session and the timer is ON,
+  //todo: - in that case avoid sending payment
+  
   eventTrigger[eventName]();
 
   return res.status(200);

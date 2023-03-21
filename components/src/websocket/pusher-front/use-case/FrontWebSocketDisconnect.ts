@@ -5,7 +5,7 @@ import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 export class FrontWebSocketDisconnect {
   constructor(private frontWebSocket: IFrontWebSocket) {}
 
-  disconnect(): void {
-    this.frontWebSocket.disconnect();
+  disconnect(userId: UniqId): void {
+    this.frontWebSocket.disconnect(userId);
   }
 }
