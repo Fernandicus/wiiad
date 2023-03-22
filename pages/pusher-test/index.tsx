@@ -16,7 +16,7 @@ const noSessionUser = {
 };
 
 export default function Profile() {
-  const { disconnect, connect, connectionMessage, sendAdWatchedEvent } =
+  const { disconnect, connect, connectionMessage, sendStartWatchingAdEvent } =
     useWatchingAd({no_auth_user_id: noSessionUser.user_id});
 
   return (
@@ -47,7 +47,7 @@ export default function Profile() {
         <div className="p-20">
           <button
             className="text-center bg-blue-500 px-3 py-1 rounded-lg text-white"
-            onClick={() => sendAdWatchedEvent(noSessionUser.user_id)}
+            onClick={() => sendStartWatchingAdEvent(noSessionUser.user_id)}
           >
             Event
           </button>

@@ -26,12 +26,12 @@ export default async function handler(
   //Todo: 1. On start-watching-ad event send ad data and start timer acording to the ad duration
   //Todo: 2. On finish-watching-ad send event and if user is still connected add referrer data
   const eventTrigger: Record<TWebSocketEvent, Function> = {
-    "finish-watching-ad": () =>
+    "start-watching-ad": () =>
       triggerWSEventHandler.watchingAdTimer(userId, {
         message: "Hey bro",
         data: { status: 200 },
       }),
-    "start-watching-ad": triggerWSEventHandler.startWatchingAd,
+    "finish-watching-ad": triggerWSEventHandler.finishWatchingAd,
   };
 
   //Todo: Test what happens when the user closes session and the timer is ON,

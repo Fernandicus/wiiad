@@ -5,9 +5,9 @@ import { IFrontWSS } from "../domain/interface/IFrontWSS";
 export class FrontWSSSendEvent {
   constructor(private frontWebSocket: IFrontWSS) {}
 
-  finishedWatchingAd(userId: UniqId): void {
+  startWatchingAd(userId: UniqId): void {
     this.frontWebSocket.sendEvent(
-      WebSocketEventName.event("finish-watching-ad"),
+      WebSocketEventName.event("start-watching-ad"),
       { user_id: userId.id }
     );
   }

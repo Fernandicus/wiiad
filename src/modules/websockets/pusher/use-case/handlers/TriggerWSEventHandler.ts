@@ -6,9 +6,8 @@ import { TEventData } from "../../domain/types/types";
 export class TriggerWSEventHandler {
   constructor(private triggerEvent: TriggerWSEvent) {}
 
-  startWatchingAd() {
-    this.triggerEvent.startWatchingAd();
-    console.log("Start watching ad");
+  finishWatchingAd() {
+    this.triggerEvent.finishWatchingAd();
   }
 
   watchingAdTimer(

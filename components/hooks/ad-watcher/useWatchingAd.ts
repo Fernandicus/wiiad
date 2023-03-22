@@ -13,7 +13,7 @@ interface IUseWatchingAd {
   disconnect: () => Promise<void>;
   connect: () => void;
   connectionMessage: string;
-  sendAdWatchedEvent: (userId: string) => Promise<void>;
+  sendStartWatchingAdEvent: (userId: string) => Promise<void>;
 }
 
 export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
@@ -59,14 +59,14 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
     setConnectionMessage("Disconnected");
   };
 
-  const sendAdWatchedEvent = async (userId: string) => {
-    frontWSSSendEventHandler.finishedWatchingAd(userId);
+  const sendStartWatchingAdEvent = async (userId: string) => {
+    frontWSSSendEventHandler.startWatchingAd(userId);
   };
 
   return {
     disconnect,
     connect,
     connectionMessage,
-    sendAdWatchedEvent,
+    sendStartWatchingAdEvent,
   };
 };

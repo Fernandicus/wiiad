@@ -19,10 +19,10 @@ export class TriggerWSEvent {
     private insertUserWatchingAd: InsertUserWatchingAd
   ) {}
 
-  startWatchingAd() {
+  finishWatchingAd() {
     //Todo: add video/banner duration
     //Todo: send data when timer has concluded
-    console.log("Start watching ad");
+    console.log("Finish watching ad");
   }
 
   watchingAdTimer(props: TFinishWatchingAd): void {
