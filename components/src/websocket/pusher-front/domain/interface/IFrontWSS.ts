@@ -8,7 +8,7 @@ export type TWSConnectOptions<T = unknown> = {
   onError: (data: T) => void;
 };
 
-export interface IFrontWebSocket {
+export interface IFrontWSS {
   connectUser<T>(props: TWSConnectOptions<T>): void;
 
   connectChannel<T>(

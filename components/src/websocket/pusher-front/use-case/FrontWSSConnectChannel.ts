@@ -1,8 +1,8 @@
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
-import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
+import { IFrontWSS } from "../domain/interface/IFrontWSS";
 
 export class FrontWSSConnectChannel {
-  constructor(private frontWebSocket: IFrontWebSocket) {}
+  constructor(private frontWebSocket: IFrontWSS) {}
 
   watchAd(props: {
     onError: (data: unknown) => void;

@@ -1,7 +1,7 @@
-import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
+import { IFrontWSS } from "../domain/interface/IFrontWSS";
 
 export class FrontWSSConnectUser {
-  constructor(private frontWebSocket: IFrontWebSocket) {}
+  constructor(private frontWebSocket: IFrontWSS) {}
 
   connect(props: {
     onSuccess: (data: unknown) => void;

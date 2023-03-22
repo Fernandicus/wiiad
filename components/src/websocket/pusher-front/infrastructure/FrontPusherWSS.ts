@@ -6,11 +6,11 @@ import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { UniqId } from "@/src/utils/UniqId";
 import Pusher from "pusher-js";
 import {
-  IFrontWebSocket,
+  IFrontWSS,
   TWSConnectOptions,
-} from "../domain/interface/IFrontWebSocket";
+} from "../domain/interface/IFrontWSS";
 
-export class FrontPusherWSS implements IFrontWebSocket {
+export class FrontPusherWSS implements IFrontWSS {
   private static singletonInstance: FrontPusherWSS;
   private constructor(private pusher: Pusher) {}
 

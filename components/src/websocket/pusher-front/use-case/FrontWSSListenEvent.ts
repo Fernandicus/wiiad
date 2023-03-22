@@ -1,9 +1,9 @@
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
+import { IFrontWSS } from "../domain/interface/IFrontWSS";
 
 export class FrontWSSListenEvent {
-  constructor(private frontWebSocket: IFrontWebSocket) {}
+  constructor(private frontWebSocket: IFrontWSS) {}
 
   finishedWatchingAd(handler: (data:{message: string}) => void): void {
     this.frontWebSocket.listenEvent(
