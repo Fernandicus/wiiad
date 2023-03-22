@@ -2,7 +2,7 @@ import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSo
 import { UniqId } from "@/src/utils/UniqId";
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 
-export class FrontWebSocketDisconnect {
+export class FrontWSSDisconnect {
   constructor(private frontWebSocket: IFrontWebSocket) {}
 
   disconnect(userId: UniqId): void {

@@ -1,14 +1,14 @@
+import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { UniqId } from "@/src/utils/UniqId";
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 
-export class FrontWebSocketSendEvent {
+export class FrontWSSListenEvent {
   constructor(private frontWebSocket: IFrontWebSocket) {}
 
-  finishedWatchingAd(userId: UniqId): void {
-    this.frontWebSocket.sendEvent(
+  finishedWatchingAd(handler: (data:{message: string}) => void): void {
+    this.frontWebSocket.listenEvent(
       WebSocketEventName.event("finish-watching-ad"),
-      { user_id: userId.id }
+      handler
     );
   }
 }

@@ -1,6 +1,6 @@
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 
-export class FrontWebSocketConnectUser {
+export class FrontWSSConnectUser {
   constructor(private frontWebSocket: IFrontWebSocket) {}
 
   connect(props: {

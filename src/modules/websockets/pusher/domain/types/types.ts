@@ -19,6 +19,6 @@ export type TPusherSendEvent = {
   data: object;
 };
 
-export interface IApiReqWebSocketConnect {
+export interface IApiReqWSSConnect {
   no_auth_user_id: string;
 }

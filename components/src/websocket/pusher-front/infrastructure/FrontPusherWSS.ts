@@ -1,5 +1,5 @@
 import { ErrorWebSocket } from "@/src/modules/websockets/pusher/domain/errors/ErrorWebSocket";
-import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
+import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
@@ -10,13 +10,13 @@ import {
   TWSConnectOptions,
 } from "../domain/interface/IFrontWebSocket";
 
-export class FrontPusherWebSocketService implements IFrontWebSocket {
-  private static singletonInstance: FrontPusherWebSocketService;
+export class FrontPusherWSS implements IFrontWebSocket {
+  private static singletonInstance: FrontPusherWSS;
   private constructor(private pusher: Pusher) {}
 
-  static getInstance(pusher: Pusher): FrontPusherWebSocketService {
+  static getInstance(pusher: Pusher): FrontPusherWSS {
     if (!this.singletonInstance) {
-      this.singletonInstance = new FrontPusherWebSocketService(pusher);
+      this.singletonInstance = new FrontPusherWSS(pusher);
     }
     return this.singletonInstance;
   }
@@ -38,7 +38,7 @@ export class FrontPusherWebSocketService implements IFrontWebSocket {
   }
 
   async disconnect(userId: UniqId): Promise<void> {
-    const data: IApiReqWebSocketConnect = { no_auth_user_id: userId.id };
+    const data: IApiReqWSSConnect = { no_auth_user_id: userId.id };
     this.pusher.unbind_all();
     this.pusher.disconnect();
     const resp = await fetch(ApiRoutes.websocketDisconnect, {

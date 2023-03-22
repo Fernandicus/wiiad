@@ -1,7 +1,7 @@
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
 
-export class FrontWebSocketConnectChannel {
+export class FrontWSSConnectChannel {
   constructor(private frontWebSocket: IFrontWebSocket) {}
 
   watchAd(props: {

@@ -1,4 +1,4 @@
-import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
+import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { UniqId } from "@/src/utils/UniqId";

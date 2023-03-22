@@ -1,14 +1,12 @@
 import {
-  //frontWebSocket,
-  frontWebSocketConnectChannel,
-  frontWebSocketConnectUser,
-  frontWebSocketDisconnectHandler,
-  frontWebSocketListenEvent,
-  frontWebSocketSendEventHandler,
+  frontWSSConnectChannel,
+  frontWSSDisconnectHandler,
+  frontWSSListenEvent,
+  frontWSSSendEventHandler,
+  frontWSSConnectUser,
   frontwss,
 } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
-import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
-import { UniqId } from "@/src/utils/UniqId";
+import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { useState } from "react";
 
 interface IUseWatchingAd {
@@ -18,13 +16,11 @@ interface IUseWatchingAd {
   sendAdWatchedEvent: (userId: string) => Promise<void>;
 }
 
-export const useWatchingAd = (
-  userData: IApiReqWebSocketConnect
-): IUseWatchingAd => {
+export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
   const [connectionMessage, setConnectionMessage] = useState("");
 
   const connectUser = () => {
-    frontWebSocketConnectUser.connect({
+    frontWSSConnectUser.connect({
       onSuccess(data) {
         setConnectionMessage("SignedIn");
       },
@@ -35,7 +31,7 @@ export const useWatchingAd = (
   };
 
   const connectChannel = () => {
-    frontWebSocketConnectChannel.watchAd({
+    frontWSSConnectChannel.watchAd({
       onSuccess(data) {
         console.log("connectChannel success");
       },
@@ -46,11 +42,9 @@ export const useWatchingAd = (
   };
 
   const listenUserEvents = () => {
-    frontWebSocketListenEvent.finishedWatchingAd(
-      (data: { message: string }) => {
-        setConnectionMessage(data.message);
-      }
-    );
+    frontWSSListenEvent.finishedWatchingAd((data: { message: string }) => {
+      setConnectionMessage(data.message);
+    });
   };
 
   const connect = () => {
@@ -61,12 +55,12 @@ export const useWatchingAd = (
   };
 
   const disconnect = async () => {
-    await frontWebSocketDisconnectHandler.disconnect(userData.no_auth_user_id);
+    await frontWSSDisconnectHandler.disconnect(userData.no_auth_user_id);
     setConnectionMessage("Disconnected");
   };
 
   const sendAdWatchedEvent = async (userId: string) => {
-    frontWebSocketSendEventHandler.finishedWatchingAd(userId);
+    frontWSSSendEventHandler.finishedWatchingAd(userId);
   };
 
   return {
