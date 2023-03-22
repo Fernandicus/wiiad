@@ -5,6 +5,9 @@ export class WatchAdTimerList {
   readonly adsWatching: WatchAdTimeout[] = [];
 
   add(adTimer: WatchAdTimeout) {
+    if (this.isUserInTheList(adTimer.userId)) {
+      this.removeTimer(adTimer.userId);
+    }
     this.adsWatching.push(adTimer);
   }
 

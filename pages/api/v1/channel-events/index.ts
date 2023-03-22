@@ -4,7 +4,7 @@ import {
   TWebSocketEvent,
   WebSocketEventName,
 } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { TriggerEvent } from "@/src/modules/websockets/pusher/use-case/TriggerEvent";
+import { triggerWSEventHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -23,14 +23,15 @@ export default async function handler(
   const id: IApiReqWebSocketSendEvent = reqBodyParse(req);
   const userId = session ? session.id : id.user_id;
 
-  const triggerEvent = new TriggerEvent();
-
   //Todo: 1. On start-watching-ad event send ad data and start timer acording to the ad duration
   //Todo: 2. On finish-watching-ad send event and if user is still connected add referrer data
   const eventTrigger: Record<TWebSocketEvent, Function> = {
-    "start-watching-ad": triggerEvent.startWatchingAd,
     "finish-watching-ad": () =>
-      triggerEvent.finishWatchingAd(new UniqId(userId)),
+      triggerWSEventHandler.watchingAdTimer(userId, {
+        message: "Hey bro",
+        data: { status: 200 },
+      }),
+    "start-watching-ad": triggerWSEventHandler.startWatchingAd,
   };
 
   //Todo: Test what happens when the user closes session and the timer is ON,

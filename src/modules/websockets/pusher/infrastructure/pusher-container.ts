@@ -5,13 +5,13 @@ import { DisconnectWSS } from "../use-case/DisconnectWSS";
 import { AuthChannelWSSHandler } from "../use-case/handlers/AuthChannelWSSHandler";
 import { AuthUserWSSHandler } from "../use-case/handlers/AuthUserWSSHandler";
 import { DisconnectWSSHandler } from "../use-case/handlers/DisconnectWSSHandler";
-import { InsertUserWatchingAdHandler } from "../use-case/handlers/InsertUserWatchingAdHandler";
-import { SendWSEventHandler } from "../use-case/handlers/SendWSEventHandler";
-import { InsertUserWatchingAd } from "../use-case/InsertUserWatchingAd";
-import { SendWSEvent } from "../use-case/SendWSEvent";
+import { SendWSEvent } from "../domain/services/SendWSEvent";
 import { PusherWSS } from "./PusherWSS";
 import { projectConfig } from "@/src/utils/projectConfig";
 import Pusher from "pusher";
+import { TriggerWSEventHandler } from "../use-case/handlers/TriggerWSEventHandler";
+import { TriggerWSEvent } from "../use-case/TriggerWSEvent";
+import { InsertUserWatchingAd } from "../domain/services/InsertUserWatchingAd";
 
 const { appId, cluster, key, secret } = projectConfig.PUSHER;
 const wss = new Pusher({
@@ -29,13 +29,11 @@ const authChannelWSS = new AuthChannelWSS(pusherWSS);
 export const authChannelWSSHandler = new AuthChannelWSSHandler(authChannelWSS);
 
 const sendWSSEvent = new SendWSEvent(pusherWSS);
-export const sendWSSEventHandler = new SendWSEventHandler(sendWSSEvent);
 
 const disconnectWSS = new DisconnectWSS(pusherWSS);
 export const disconnectWSSHandler = new DisconnectWSSHandler(disconnectWSS);
 
 const watchAdTimerList = new WatchAdTimerList();
 const insertUserWatchingAd = new InsertUserWatchingAd(watchAdTimerList);
-export const insertUserWatchingAdHandler = new InsertUserWatchingAdHandler(
-  insertUserWatchingAd
-);
+const triggerWSEvent = new TriggerWSEvent(sendWSSEvent, insertUserWatchingAd);
+export const triggerWSEventHandler = new TriggerWSEventHandler(triggerWSEvent);

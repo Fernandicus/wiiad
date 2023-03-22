@@ -7,10 +7,11 @@ export class AuthChannelWSS {
   constructor(private pusherWebSocket: PusherWSS) {}
 
   auth(props: TPusherAuthChannel) {
-    const { channelName, socketId } = props;
+    const { channelName, socketId, onAuth } = props;
     return this.pusherWebSocket.authenticateChannel({
       channelName,
-      socketId
+      socketId,
+      onAuth,
     });
   }
 }

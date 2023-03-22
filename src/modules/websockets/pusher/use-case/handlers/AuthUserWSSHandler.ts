@@ -5,10 +5,15 @@ import { AuthUserWSS } from "../AuthUserWSS";
 export class AuthUserWSSHandler {
   constructor(private authUserSocket: AuthUserWSS) {}
 
-  auth(props: { socketId: string; userId: string }) {
+  auth(props: {
+    socketId: string;
+    userId: string;
+    onAuth: (data: unknown) => void;
+  }) {
     return this.authUserSocket.auth({
       userId: new UniqId(props.userId),
       socketId: new PusherWSSId(props.socketId),
+      onAuth: props.onAuth,
     });
   }
 }
