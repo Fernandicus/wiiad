@@ -1,15 +1,15 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { PusherWebSocketId } from "../PusherWebSocketId";
+import { PusherWSSId } from "../PusherWSSId";
 import { WebSocketChannel } from "../WebSocketChannel";
 import { WebSocketEventName } from "../WebSocketEventName";
 
 export type TPusherAuthUser = {
-  socketId: PusherWebSocketId;
+  socketId: PusherWSSId;
   userId: UniqId;
 };
 
 export type TPusherAuthChannel = {
-  socketId: PusherWebSocketId;
+  socketId: PusherWSSId;
   channelName: WebSocketChannel;
 };
 

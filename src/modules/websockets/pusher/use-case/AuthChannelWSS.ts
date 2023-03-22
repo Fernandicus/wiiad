@@ -1,10 +1,10 @@
 import { TPusherAuthChannel } from "../domain/types/types";
 import {
-  PusherWebSocket,
-} from "../infrastructure/PusherWebSocket";
+  PusherWSS,
+} from "../infrastructure/PusherWSS";
 
-export class AuthChannelWebSocket {
-  constructor(private pusherWebSocket: PusherWebSocket) {}
+export class AuthChannelWSS {
+  constructor(private pusherWebSocket: PusherWSS) {}
 
   auth(props: TPusherAuthChannel) {
     const { channelName, socketId } = props;

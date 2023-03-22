@@ -5,8 +5,6 @@ const ALL_WEBSOCKET_EVENTS = [
 type TWebSocketEvents = typeof ALL_WEBSOCKET_EVENTS;
 export type TWebSocketEvent = TWebSocketEvents[number];
 
-//export type TWebSocketEvent = "finish-watching-ad";
-
 export class WebSocketEventName {
   readonly event;
 
@@ -37,5 +35,4 @@ export class WebSocketEventName {
   getName() {
     return this.event.split("event::")[1];
   }
-
 }

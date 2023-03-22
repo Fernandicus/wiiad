@@ -7,15 +7,7 @@ import {
   TPusherSendEvent,
 } from "../domain/types/types";
 
-const { appId, cluster, key, secret } = projectConfig.PUSHER;
-export const pusher = new Pusher({
-  appId: appId!,
-  key: key!,
-  secret: secret!,
-  cluster: cluster!,
-});
-
-export class PusherWebSocket {
+export class PusherWSS {
   constructor(private pusher: Pusher) {}
 
   authenticateUser(params: TPusherAuthUser): Pusher.UserAuthResponse {

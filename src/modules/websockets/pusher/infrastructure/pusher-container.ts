@@ -1,29 +1,41 @@
 import { WatchAdTimerList } from "../domain/WatchAdTimeoutList";
-import { AuthChannelWebSocket } from "../use-case/AuthChannelWebSocket";
-import { AuthUserWebSocket } from "../use-case/AuthUserWebSocket";
-import { DisconnectWebSocket } from "../use-case/DisconnectWebSocket";
-import { AuthChannelWebSocketHandler } from "../use-case/handlers/AuthChannelWebSocketHandler";
-import { AuthUserWebSocketHandler } from "../use-case/handlers/AuthUserWebSocketHandler";
-import { DisconnectWebSocketHandler } from "../use-case/handlers/DisconnectWebSocketHandler";
+import { AuthChannelWSS } from "../use-case/AuthChannelWSS";
+import { AuthUserWSS } from "../use-case/AuthUserWSS";
+import { DisconnectWSS } from "../use-case/DisconnectWSS";
+import { AuthChannelWSSHandler } from "../use-case/handlers/AuthChannelWSSHandler";
+import { AuthUserWSSHandler } from "../use-case/handlers/AuthUserWSSHandler";
+import { DisconnectWSSHandler } from "../use-case/handlers/DisconnectWSSHandler";
 import { InsertUserWatchingAdHandler } from "../use-case/handlers/InsertUserWatchingAdHandler";
-import { SendWebSocketEventHandler } from "../use-case/handlers/SendWebSocketEventHandler";
+import { SendWSEventHandler } from "../use-case/handlers/SendWSEventHandler";
 import { InsertUserWatchingAd } from "../use-case/InsertUserWatchingAd";
-import { SendWebSocketEvent } from "../use-case/SendWebSocketEvent";
-import { pusher, PusherWebSocket } from "./PusherWebSocket";
+import { SendWSEvent } from "../use-case/SendWSEvent";
+import { PusherWSS } from "./PusherWSS";
+import { projectConfig } from "@/src/utils/projectConfig";
+import Pusher from "pusher";
 
-const pusherWebSocket = new PusherWebSocket(pusher)
-const authUserSocket = new AuthUserWebSocket(pusherWebSocket);
-export const authUserSocketHandler = new AuthUserWebSocketHandler(authUserSocket);
+const { appId, cluster, key, secret } = projectConfig.PUSHER;
+const wss = new Pusher({
+  appId: appId!,
+  key: key!,
+  secret: secret!,
+  cluster: cluster!,
+});
 
-const authChannelSocket = new AuthChannelWebSocket(pusherWebSocket);
-export const authChannelSocketHandler = new AuthChannelWebSocketHandler(authChannelSocket);
+const pusherWSS = new PusherWSS(wss);
+const authUserWSS = new AuthUserWSS(pusherWSS);
+export const authUserWSSHandler = new AuthUserWSSHandler(authUserWSS);
 
-const sendWebSocketEvent = new SendWebSocketEvent(pusherWebSocket);
-export const sendWebSocketEventHandler = new SendWebSocketEventHandler(sendWebSocketEvent);
+const authChannelWSS = new AuthChannelWSS(pusherWSS);
+export const authChannelWSSHandler = new AuthChannelWSSHandler(authChannelWSS);
 
-const disconnectWebSocket = new DisconnectWebSocket(pusherWebSocket);
-export const disconnectWebSocketHandler = new DisconnectWebSocketHandler(disconnectWebSocket);
+const sendWSSEvent = new SendWSEvent(pusherWSS);
+export const sendWSSEventHandler = new SendWSEventHandler(sendWSSEvent);
+
+const disconnectWSS = new DisconnectWSS(pusherWSS);
+export const disconnectWSSHandler = new DisconnectWSSHandler(disconnectWSS);
 
 const watchAdTimerList = new WatchAdTimerList();
 const insertUserWatchingAd = new InsertUserWatchingAd(watchAdTimerList);
-export const insertUserWatchingAdHandler = new InsertUserWatchingAdHandler(insertUserWatchingAd);
+export const insertUserWatchingAdHandler = new InsertUserWatchingAdHandler(
+  insertUserWatchingAd
+);

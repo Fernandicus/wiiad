@@ -1,8 +1,8 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { SendWebSocketEvent } from "../SendWebSocketEvent";
+import { SendWSEvent } from "../SendWSEvent";
 
-export class SendWebSocketEventHandler {
-  constructor(private sendEvent: SendWebSocketEvent) {}
+export class SendWSEventHandler {
+  constructor(private sendEvent: SendWSEvent) {}
 
   async finishWatchingAd(props: {
     userId: string;

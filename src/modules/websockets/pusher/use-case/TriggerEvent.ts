@@ -1,7 +1,7 @@
 import { UniqId } from "@/src/utils/UniqId";
 import {
   insertUserWatchingAdHandler,
-  sendWebSocketEventHandler,
+  sendWSSEventHandler,
 } from "../infrastructure/pusher-container";
 
 //Todo: add video/banner duration
@@ -17,7 +17,7 @@ export class TriggerEvent {
       userId: uniqId.id,
       seconds: 2,
       onTimeout: async () => {
-        await sendWebSocketEventHandler.finishWatchingAd({
+        await sendWSSEventHandler.finishWatchingAd({
           userId: uniqId.id,
           data: {
             message: `Ad watched!: user id ${uniqId.id}`,

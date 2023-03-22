@@ -1,4 +1,4 @@
-export class PusherWebSocketId {
+export class PusherWSSId {
   readonly id;
 
   constructor(value: string) {

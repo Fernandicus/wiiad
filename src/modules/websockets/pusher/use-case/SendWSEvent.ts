@@ -1,9 +1,9 @@
 import { TPusherSendEvent } from "../domain/types/types";
 import { WebSocketEventName } from "../domain/WebSocketEventName";
-import { PusherWebSocket } from "../infrastructure/PusherWebSocket";
+import { PusherWSS } from "../infrastructure/PusherWSS";
 
-export class SendWebSocketEvent {
-  constructor(private pusherWebSocket: PusherWebSocket) {}
+export class SendWSEvent {
+  constructor(private pusherWebSocket: PusherWSS) {}
 
   async finishWatchingAd(
     props: Omit<TPusherSendEvent, "event">
