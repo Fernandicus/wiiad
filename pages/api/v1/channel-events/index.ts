@@ -32,6 +32,7 @@ export default async function handler(
         data: { status: 200 },
       }),
     "finish-watching-ad": triggerWSEventHandler.finishWatchingAd,
+    "ad-info": ()=>{}
   };
 
   //Todo: Test what happens when the user closes session and the timer is ON,

@@ -8,11 +8,11 @@ export default async function handler(
 ) {
   const socketId = req.body.socket_id;
 
-  const authUserResponse = authChannelWSSHandler.watchAd({
+  authChannelWSSHandler.watchAd({
     socketId,
     onAuth(data) {
       if (isPusherChannelAuthResponse(data)) {
-        return res.send(authUserResponse);
+        return res.send(data);
       }
     },
   });

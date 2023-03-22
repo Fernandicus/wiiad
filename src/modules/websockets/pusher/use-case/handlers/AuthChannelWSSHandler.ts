@@ -6,9 +6,9 @@ import { AuthChannelWSS } from "../AuthChannelWSS";
 export class AuthChannelWSSHandler {
   constructor(private authChannel: AuthChannelWSS) {}
 
-  watchAd(props: { socketId: string; onAuth: (data: unknown) => void }) {
+  watchAd(props: { socketId: string; onAuth: (data: unknown) => void }):void {
     const { socketId, onAuth } = props;
-    return this.authChannel.auth({
+    this.authChannel.auth({
       channelName: WebSocketChannel.watchAd(),
       socketId: new PusherWSSId(socketId),
       onAuth,

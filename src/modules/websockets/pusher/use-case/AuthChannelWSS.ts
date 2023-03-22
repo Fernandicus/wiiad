@@ -6,9 +6,9 @@ import {
 export class AuthChannelWSS {
   constructor(private pusherWebSocket: PusherWSS) {}
 
-  auth(props: TPusherAuthChannel) {
+  auth(props: TPusherAuthChannel) :void{
     const { channelName, socketId, onAuth } = props;
-    return this.pusherWebSocket.authenticateChannel({
+     this.pusherWebSocket.authenticateChannel({
       channelName,
       socketId,
       onAuth,

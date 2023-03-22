@@ -1,6 +1,7 @@
 const ALL_WEBSOCKET_EVENTS = [
-  "finish-watching-ad",
   "start-watching-ad",
+  "finish-watching-ad",
+  "ad-info",
 ] as const;
 type TWebSocketEvents = typeof ALL_WEBSOCKET_EVENTS;
 export type TWebSocketEvent = TWebSocketEvents[number];

@@ -9,8 +9,8 @@ export class AuthUserWSSHandler {
     socketId: string;
     userId: string;
     onAuth: (data: unknown) => void;
-  }) {
-    return this.authUserSocket.auth({
+  }): void {
+    this.authUserSocket.auth({
       userId: new UniqId(props.userId),
       socketId: new PusherWSSId(props.socketId),
       onAuth: props.onAuth,
