@@ -1,5 +1,4 @@
 import { IFrontWebSocket } from "../domain/interface/IFrontWebSocket";
-import { PusherWebSocketJS } from "../infrastructure/FrontPusherWebSocket";
 
 export class FrontWebSocketConnectUser {
   constructor(private frontWebSocket: IFrontWebSocket) {}

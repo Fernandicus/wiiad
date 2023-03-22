@@ -10,13 +10,13 @@ import {
   TWSConnectOptions,
 } from "../domain/interface/IFrontWebSocket";
 
-export class PusherWebSocketJS implements IFrontWebSocket {
-  private static singletonInstance: PusherWebSocketJS;
+export class FrontPusherWebSocketService implements IFrontWebSocket {
+  private static singletonInstance: FrontPusherWebSocketService;
   private constructor(private pusher: Pusher) {}
 
-  static getInstance(pusher: Pusher): PusherWebSocketJS {
+  static getInstance(pusher: Pusher): FrontPusherWebSocketService {
     if (!this.singletonInstance) {
-      this.singletonInstance = new PusherWebSocketJS(pusher);
+      this.singletonInstance = new FrontPusherWebSocketService(pusher);
     }
     return this.singletonInstance;
   }

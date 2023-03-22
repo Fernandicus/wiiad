@@ -5,6 +5,7 @@ import {
   frontWebSocketDisconnectHandler,
   frontWebSocketListenEvent,
   frontWebSocketSendEventHandler,
+  frontwss,
 } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
 import { IApiReqWebSocketConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { UniqId } from "@/src/utils/UniqId";
@@ -23,19 +24,18 @@ export const useWatchingAd = (
   const [connectionMessage, setConnectionMessage] = useState("");
 
   const connectUser = () => {
-    frontWebSocketConnectUser(userData).connect({
+    frontWebSocketConnectUser.connect({
       onSuccess(data) {
-        setConnectionMessage("SignedIn")
+        setConnectionMessage("SignedIn");
       },
       onError(data) {
-        setConnectionMessage("Error SingingIn")
+        setConnectionMessage("Error SingingIn");
       },
     });
   };
 
   const connectChannel = () => {
-    const connectChannel = frontWebSocketConnectChannel(userData);
-    connectChannel.watchAd({
+    frontWebSocketConnectChannel.watchAd({
       onSuccess(data) {
         console.log("connectChannel success");
       },
@@ -46,29 +46,27 @@ export const useWatchingAd = (
   };
 
   const listenUserEvents = () => {
-    const listenEvent = frontWebSocketListenEvent(userData);
-    listenEvent.finishedWatchingAd((data: { message: string }) => {
-      console.log(data);
-      setConnectionMessage(data.message);
-    });
+    frontWebSocketListenEvent.finishedWatchingAd(
+      (data: { message: string }) => {
+        setConnectionMessage(data.message);
+      }
+    );
   };
 
   const connect = () => {
+    frontwss(userData);
     connectUser();
     connectChannel();
     listenUserEvents();
   };
 
   const disconnect = async () => {
-    await frontWebSocketDisconnectHandler(userData).disconnect(
-      userData.no_auth_user_id
-    );
-    setConnectionMessage("Disconnected")
+    await frontWebSocketDisconnectHandler.disconnect(userData.no_auth_user_id);
+    setConnectionMessage("Disconnected");
   };
 
   const sendAdWatchedEvent = async (userId: string) => {
-    const sendEvent = frontWebSocketSendEventHandler(userData);
-    sendEvent.finishedWatchingAd(userId);
+    frontWebSocketSendEventHandler.finishedWatchingAd(userId);
   };
 
   return {

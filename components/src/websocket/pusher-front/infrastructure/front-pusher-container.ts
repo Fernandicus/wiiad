@@ -10,9 +10,10 @@ import { FrontWebSocketListenEvent } from "../use-case/FrontWebSocketListenEvent
 import { FrontWebSocketSendEvent } from "../use-case/FrontWebSocketSendEvent";
 import { FrontWebSocketDisconnectHandler } from "../use-case/handlers/FrontWebSocketDisconnectHandler";
 import { FrontWebSocketSendEventHandler } from "../use-case/handlers/FrontWebSocketSendEventHandler";
-import { PusherWebSocketJS } from "./FrontPusherWebSocket";
+import { FrontPusherWebSocketService } from "./FrontPusherWebSocketService";
+import { asClass, asFunction, createContainer, InjectionMode } from "awilix";
 
-const pusherJS = (props: IApiReqWebSocketConnect) =>
+const pusherJS = (props?: IApiReqWebSocketConnect) =>
   new Pusher(projectConfig.PUSHER.key!, {
     cluster: "eu",
     userAuthentication: {
@@ -27,29 +28,37 @@ const pusherJS = (props: IApiReqWebSocketConnect) =>
     },
   });
 
+export const frontwss = (props?: IApiReqWebSocketConnect) =>
+   FrontPusherWebSocketService.getInstance(pusherJS(props));
 
-const frontWebSocket = (props: IApiReqWebSocketConnect) =>
-  PusherWebSocketJS.getInstance(pusherJS(props)); 
+export const frontWebSocketConnectUser = new FrontWebSocketConnectUser(
+  frontwss()
+);
 
-export const frontWebSocketConnectUser = (props: IApiReqWebSocketConnect) =>
-  new FrontWebSocketConnectUser(frontWebSocket(props));
+export const frontWebSocketConnectChannel = new FrontWebSocketConnectChannel(
+  frontwss()
+);
 
-export const frontWebSocketConnectChannel = (props: IApiReqWebSocketConnect) =>
-  new FrontWebSocketConnectChannel(frontWebSocket(props));
+const frontWebSocketDisconnect = new FrontWebSocketDisconnect(frontwss());
 
-const frontWebSocketDisconnect = (props: IApiReqWebSocketConnect) =>
-  new FrontWebSocketDisconnect(frontWebSocket(props));
+export const frontWebSocketDisconnectHandler =
+  new FrontWebSocketDisconnectHandler(frontWebSocketDisconnect);
 
-export const frontWebSocketDisconnectHandler = (
-  props: IApiReqWebSocketConnect
-) => new FrontWebSocketDisconnectHandler(frontWebSocketDisconnect(props));
+const frontWebSocketSendEvent = new FrontWebSocketSendEvent(frontwss());
 
-const frontWebSocketSendEvent = (props: IApiReqWebSocketConnect) =>
-  new FrontWebSocketSendEvent(frontWebSocket(props));
+export const frontWebSocketSendEventHandler =
+  new FrontWebSocketSendEventHandler(frontWebSocketSendEvent);
 
-export const frontWebSocketSendEventHandler = (
-  props: IApiReqWebSocketConnect
-) => new FrontWebSocketSendEventHandler(frontWebSocketSendEvent(props));
+export const frontWebSocketListenEvent = new FrontWebSocketListenEvent(
+  frontwss()
+);
 
-export const frontWebSocketListenEvent = (props: IApiReqWebSocketConnect) =>
-  new FrontWebSocketListenEvent(frontWebSocket(props));
+//! USING AWILIX
+/* const container = createContainer();
+
+container.register({
+  wss: asFunction(pusherJS).singleton(),
+  frontWebScoketService: asClass(FrontPusherWebSocketService),
+  frontWebSocketConnectUser: asClass(FrontWebSocketConnectUser),
+});
+ */
