@@ -13,7 +13,7 @@ import { StartWatchingAdWSEvent } from "../use-case/StartWatchingAdWSEvent";
 import { InsertUserWatchingAd } from "../use-case/InsertUserWatchingAd";
 import { StartWatchingAdWSEventHandler } from "../use-case/handlers/StartWatchingAdWSEventHandler";
 import { InsertUserWatchingAdHandler } from "../use-case/handlers/InsertUserWatchingAdHandler";
-import { SendWSEventHandler } from "../use-case/SendWSEventHandler";
+import { SendWSEventHandler } from "../use-case/handlers/SendWSEventHandler";
 
 const { appId, cluster, key, secret } = projectConfig.PUSHER;
 const wss = new Pusher({

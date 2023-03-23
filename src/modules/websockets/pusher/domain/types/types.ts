@@ -29,3 +29,5 @@ export type TEventData<T> = {
   message: string;
   data?: { [K in keyof T]: T[K] };
 };
+
+export type TWatchingAdEventData = { status: number };

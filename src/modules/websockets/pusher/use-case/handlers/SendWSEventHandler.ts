@@ -1,5 +1,5 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { SendWSEvent } from "./SendWSEvent";
+import { SendWSEvent } from "../SendWSEvent";
 
 export class SendWSEventHandler {
   constructor(private sendEvent: SendWSEvent) {}
