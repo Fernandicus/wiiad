@@ -1,6 +1,4 @@
-import { TPusherSendEvent } from "../domain/types/types";
 import { WebSocketEventName } from "../domain/WebSocketEventName";
-import { PusherWSS } from "../infrastructure/PusherWSS";
 import { IWebSocketService } from "../domain/interface/IWebSocketService";
 import { UniqId } from "@/src/utils/UniqId";
 

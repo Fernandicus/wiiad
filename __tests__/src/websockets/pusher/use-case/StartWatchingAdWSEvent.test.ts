@@ -1,25 +1,10 @@
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import {
-  SendWSEvent,
-  TWatchingAdEventData,
-} from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
 import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
-import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/use-case/InsertUserWatchingAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdTimer } from "@/src/modules/websockets/pusher/domain/AdTimer";
-import { IWebSocketService } from "@/src/modules/websockets/pusher/domain/interface/IWebSocketService";
-import {
-  TEventData,
-  TPusherSendEvent,
-} from "@/src/modules/websockets/pusher/domain/types/types";
-import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { mockedWSS } from "../../../../../__mocks__/context/MockedWSS";
-import {
-  WatchAdTimeout,
-  WatchAdTimeoutProps,
-} from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
+import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 
-describe("On StartWatchingAdWSEvent, GIVEN a StartWatchingAdEvent and an empty WatchAdTimerList", () => {
+describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTimeout", () => {
   let watchAdList: WatchAdTimerList;
   let watchAdTimeout: WatchAdTimeout;
   const timer = new AdTimer(2);
