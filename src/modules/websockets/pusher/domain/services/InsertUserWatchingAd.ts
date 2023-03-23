@@ -1,23 +1,18 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { AdTimer } from "../AdTimer";
-import { WatchAdTimeout } from "../WatchAdTimeout";
+import { WatchAdTimeoutProps, WatchAdTimeout } from "../WatchAdTimeout";
 import { WatchAdTimerList } from "../WatchAdTimeoutList";
-
-type TAddUserWatchingAd = {
-  userId: UniqId;
-  onTimeout: () => void;
-  timer: AdTimer;
-};
 
 export class InsertUserWatchingAd {
   constructor(private timeOutList: WatchAdTimerList) {}
 
-  insert({ onTimeout, userId, timer }: TAddUserWatchingAd): void {
+  insert({ onTimeout, userId, timer, campaignId }: WatchAdTimeoutProps): void {
     this.timeOutList.add(
       new WatchAdTimeout({
-        onTimeout,
         userId,
+        campaignId,
         timer,
+        onTimeout,
       })
     );
   }

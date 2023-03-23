@@ -1,9 +1,9 @@
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { SendWSEvent } from "@/src/modules/websockets/pusher/domain/services/SendWSEvent";
 import {
-  TFinishWatchingAdEventData,
-  TriggerWSEvent,
-} from "@/src/modules/websockets/pusher/use-case/TriggerWSEvent";
+  TWatchingAdEventData,
+  StartWatchingAdWSEvent,
+} from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
 import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/domain/services/InsertUserWatchingAd";
 import { UniqId } from "@/src/utils/UniqId";
 import { AdTimer } from "@/src/modules/websockets/pusher/domain/AdTimer";
@@ -15,9 +15,9 @@ import {
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { mockedWSS } from "../../../../../__mocks__/context/MockedWSS";
 
-describe("On TriggerWSEvent, GIVEN a TriggerEvent and an empty WatchAdTimerList", () => {
+describe("On StartWatchingAdWSEvent, GIVEN a StartWatchingAdEvent and an empty WatchAdTimerList", () => {
   let watchAdList: WatchAdTimerList;
-  let triggerEvent: TriggerWSEvent;
+  let startWatchingAdWS: StartWatchingAdWSEvent;
   let webScoketService: IWebSocketService;
 
   beforeAll(() => {
@@ -25,28 +25,31 @@ describe("On TriggerWSEvent, GIVEN a TriggerEvent and an empty WatchAdTimerList"
     const sendEvent = new SendWSEvent(webScoketService);
     watchAdList = new WatchAdTimerList();
     const insertUserWatchingAd = new InsertUserWatchingAd(watchAdList);
-    triggerEvent = new TriggerWSEvent(sendEvent, insertUserWatchingAd);
+    startWatchingAdWS = new StartWatchingAdWSEvent(
+      sendEvent,
+      insertUserWatchingAd
+    );
   });
 
-  it(`WHEN call finishWatchingAd method, 
+  it(`WHEN call start method, 
   THEN WatchAdTimerList should have a new WatchAdTimeout with the userId,
   ONLY when the timer ends the sendEventToUser method should be called one time`, async () => {
     const userId = UniqId.new();
     const timer = new AdTimer(3);
-    const eventData: TEventData<TFinishWatchingAdEventData> = {
+    const eventData: TEventData<TWatchingAdEventData> = {
       message: "Ad watched",
       data: {
         status: 200,
       },
     };
 
-    const event: TPusherSendEvent<TFinishWatchingAdEventData> = {
+    const event: TPusherSendEvent<TWatchingAdEventData> = {
       event: WebSocketEventName.event("finish-watching-ad"),
       userId,
       data: eventData,
     };
 
-    triggerEvent.watchingAdTimer({
+    startWatchingAdWS.start({
       userId,
       timer,
       eventData,
@@ -69,11 +72,11 @@ describe("On TriggerWSEvent, GIVEN a TriggerEvent and an empty WatchAdTimerList"
     await d();
   });
 
-  it(`WHEN call finishWatchingAd method more than one time, 
+  it(`WHEN call start method more than one time, 
   THEN ONLY ONE instance of WatchAdTimeout should be in the WatchAdTimerList`, () => {
     const userId = UniqId.new();
     const timer = new AdTimer(2);
-    const eventData: TEventData<TFinishWatchingAdEventData> = {
+    const eventData: TEventData<TWatchingAdEventData> = {
       message: "Ad watched",
       data: {
         status: 200,
@@ -83,7 +86,7 @@ describe("On TriggerWSEvent, GIVEN a TriggerEvent and an empty WatchAdTimerList"
 
     const repeat = Array(5).fill("");
     repeat.forEach((_) => {
-      triggerEvent.watchingAdTimer({
+      startWatchingAdWS.start({
         userId,
         timer,
         eventData,

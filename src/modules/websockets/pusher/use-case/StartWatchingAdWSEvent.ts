@@ -3,34 +3,27 @@ import { UniqId } from "@/src/utils/UniqId";
 import { AdTimer } from "../domain/AdTimer";
 import { InsertUserWatchingAd } from "../domain/services/InsertUserWatchingAd";
 import { TEventData } from "../domain/types/types";
+import { WatchAdTimeoutProps, WatchAdTimeout } from "../domain/WatchAdTimeout";
 
-export type TWatchingAd = { status: number };
+export type TWatchingAdEventData = { status: number };
 
-type TFinishWatchingAd = {
-  userId: UniqId;
-  timer: AdTimer;
-  eventData: TEventData<TWatchingAd>;
+type TStartWatchingAdWSEvent = Omit<WatchAdTimeoutProps, "onTimeout"> & {
+  eventData: TEventData<TWatchingAdEventData>;
 };
 
-export class TriggerWSEvent {
+export class StartWatchingAdWSEvent {
   constructor(
     private sendEvent: SendWSEvent,
     private insertUserWatchingAd: InsertUserWatchingAd
   ) {}
 
-  finishWatchingAd() {
-    //Todo: add video/banner duration
-    //Todo: send data when timer has concluded
-    console.log("Finish watching ad");
-  }
-
-  watchingAdTimer(props: TFinishWatchingAd): void {
-    const { eventData, timer, userId } = props;
+  start(props: TStartWatchingAdWSEvent): void {
+    const { campaignId, eventData, timer, userId } = props;
     this.insertUserWatchingAd.insert({
+      campaignId,
       userId,
       timer,
       onTimeout: async () => {
-        console.log("sending event...");
         await this.sendEvent.finishWatchingAd({
           userId,
           data: eventData,

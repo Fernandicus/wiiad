@@ -10,7 +10,7 @@ import {
   IApiReqWSSConnect,
   TEventData,
 } from "@/src/modules/websockets/pusher/domain/types/types";
-import { TWatchingAd } from "@/src/modules/websockets/pusher/use-case/TriggerWSEvent";
+import { TWatchingAdEventData } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
 import { useState } from "react";
 
 interface IUseWatchingAd {
@@ -78,6 +78,6 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
 
 function isEventData(
   value: unknown
-): value is TEventData<TWatchingAd> {
+): value is TEventData<TWatchingAdEventData> {
   return Object.keys(value as object).includes("message");
 }

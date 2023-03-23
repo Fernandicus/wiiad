@@ -1,3 +1,4 @@
+import { Maybe } from "@/src/common/domain/Maybe";
 import { UniqId } from "@/src/utils/UniqId";
 import { WatchAdTimeout } from "./WatchAdTimeout";
 
@@ -21,6 +22,12 @@ export class WatchAdTimerList {
     const found = this.adsWatching.find((t) => t.userId.id === userId.id);
     if (!found) return false;
     return true;
+  }
+
+  findAdByUserId(userId: UniqId): Maybe<WatchAdTimeout> {
+    const adFound = this.adsWatching.find((ad) => ad.userId.id === userId.id);
+    if (!adFound) return Maybe.nothing();
+    return Maybe.some(adFound);
   }
 
   private removeAndClean(index: number) {
