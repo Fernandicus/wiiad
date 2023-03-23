@@ -9,11 +9,11 @@ type TWatchAdTimeout = {
 };
 
 export class WatchAdTimeout {
-  private timeout: NodeJS.Timeout;
   readonly userId;
+  private timeout: NodeJS.Timeout;
 
   constructor(props: TWatchAdTimeout) {
-    const { onTimeout, userId, timer = new AdTimer(3) } = props;
+    const { onTimeout, userId, timer = new AdTimer(15) } = props;
     this.userId = userId;
     this.timeout = setTimeout(onTimeout, timer.milliseconds);
   }

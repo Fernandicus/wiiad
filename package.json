@@ -17,6 +17,7 @@
     "cloudinary": "^1.32.0",
     "cookies-next": "^2.1.1",
     "formik": "^2.2.9",
+    "get-video-duration": "^4.1.0",
     "jsonwebtoken": "^9.0.0",
     "micro": "^9.4.1",
     "mongodb": "^4.10.0",

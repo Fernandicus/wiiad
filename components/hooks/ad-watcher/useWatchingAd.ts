@@ -6,7 +6,11 @@ import {
   frontWSSConnectUser,
   frontwss,
 } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
-import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/types";
+import {
+  IApiReqWSSConnect,
+  TEventData,
+} from "@/src/modules/websockets/pusher/domain/types/types";
+import { TWatchingAd } from "@/src/modules/websockets/pusher/use-case/TriggerWSEvent";
 import { useState } from "react";
 
 interface IUseWatchingAd {
@@ -42,8 +46,8 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
   };
 
   const listenUserEvents = () => {
-    frontWSSListenEvent.finishedWatchingAd((data: { message: string }) => {
-      setConnectionMessage(data.message);
+    frontWSSListenEvent.finishedWatchingAd((data: unknown) => {
+      if (isEventData(data)) setConnectionMessage(data.message);
     });
   };
 
@@ -61,6 +65,7 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
 
   const sendStartWatchingAdEvent = async (userId: string) => {
     frontWSSSendEventHandler.startWatchingAd(userId);
+    setConnectionMessage("Waiting response ...");
   };
 
   return {
@@ -70,3 +75,9 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
     sendStartWatchingAdEvent,
   };
 };
+
+function isEventData(
+  value: unknown
+): value is TEventData<TWatchingAd> {
+  return Object.keys(value as object).includes("message");
+}

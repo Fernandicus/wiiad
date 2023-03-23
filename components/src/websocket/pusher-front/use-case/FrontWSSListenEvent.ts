@@ -5,7 +5,7 @@ import { IFrontWSS } from "../domain/interface/IFrontWSS";
 export class FrontWSSListenEvent {
   constructor(private frontWebSocket: IFrontWSS) {}
 
-  finishedWatchingAd(handler: (data:{message: string}) => void): void {
+  finishedWatchingAd(handler: (data:unknown) => void): void {
     this.frontWebSocket.listenEvent(
       WebSocketEventName.event("finish-watching-ad"),
       handler

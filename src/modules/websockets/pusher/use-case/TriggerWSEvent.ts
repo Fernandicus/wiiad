@@ -4,13 +4,12 @@ import { AdTimer } from "../domain/AdTimer";
 import { InsertUserWatchingAd } from "../domain/services/InsertUserWatchingAd";
 import { TEventData } from "../domain/types/types";
 
-//export type TFinishWatchingAdEventData = TEventData<{ status: number }>;
-export type TFinishWatchingAdEventData = { status: number };
+export type TWatchingAd = { status: number };
 
 type TFinishWatchingAd = {
   userId: UniqId;
   timer: AdTimer;
-  eventData: TEventData<{ status: number }>; //TFinishWatchingAdEventData;
+  eventData: TEventData<TWatchingAd>;
 };
 
 export class TriggerWSEvent {
@@ -31,6 +30,7 @@ export class TriggerWSEvent {
       userId,
       timer,
       onTimeout: async () => {
+        console.log("sending event...");
         await this.sendEvent.finishWatchingAd({
           userId,
           data: eventData,
