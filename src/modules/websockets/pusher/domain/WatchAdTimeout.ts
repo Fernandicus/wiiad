@@ -12,22 +12,33 @@ export type WatchAdTimeoutProps = {
 export class WatchAdTimeout {
   readonly userId;
   readonly campaignId;
-  private timeout: NodeJS.Timeout;
+  private onTimeout: () => void;
+  private timer: AdTimer;
   private hasEnded = false;
+  private timeoutId?: NodeJS.Timeout;
+  private timeout = () =>
+    setTimeout(() => {
+      this.hasEnded = true;
+      this.onTimeout();
+    }, this.timer.milliseconds);
 
   constructor(props: WatchAdTimeoutProps) {
     const { userId, campaignId, timer = new AdTimer(15), onTimeout } = props;
     this.campaignId = campaignId;
     this.userId = userId;
-    this.timeout = setTimeout(() => {
-      this.hasEnded = true;
-      onTimeout();
-    }, timer.milliseconds);
+    this.onTimeout = onTimeout;
+    this.timer = timer;
   }
 
-  isEnded = () => this.hasEnded;
+  startTimer(): void {
+    if (!this.timeoutId) {
+      this.timeoutId = this.timeout();
+    }
+  }
 
-  clearTimeOut() {
-    clearTimeout(this.timeout);
+  isEnded = (): boolean => this.hasEnded;
+
+  clearTimeOut(): void {
+    clearTimeout(this.timeoutId);
   }
 }

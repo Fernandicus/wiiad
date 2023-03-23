@@ -3,6 +3,13 @@ import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
+import { GetServerSideProps } from "next";
+import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
+import {
+  insertUserWatchingAdHandler,
+  sendWSSEventHandler,
+} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+import getVideoDurationInSeconds from "get-video-duration";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;
@@ -17,7 +24,7 @@ const noSessionUser = {
 
 export default function Profile() {
   const { disconnect, connect, connectionMessage, sendStartWatchingAdEvent } =
-    useWatchingAd({no_auth_user_id: noSessionUser.user_id});
+    useWatchingAd({ no_auth_user_id: noSessionUser.user_id });
 
   return (
     <div className="h-screen flex flex-col text-center">
@@ -61,3 +68,39 @@ export default function Profile() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const ad: AdPropsPrimitives = {
+    id: UniqId.generate(),
+    advertiserId: UniqId.generate(),
+    title: "Title ...",
+    description: "Description ...",
+    segments: AdSegments.withAllAvailables().segments,
+    redirectionUrl: "www.redirectionUrl....",
+    file: "fileUrl",
+  };
+
+  const adDuration = await getVideoDurationInSeconds(
+    "https://res.cloudinary.com/fernanprojects/video/upload/f_mp4/q_auto/du_30/c_scale,h_405,w_750/fps_30/v1/advertisers/777b5fec-dee5-4bde-a0c3-c32a36aa0184/ads/videos/f0pgpzw3epvfw0h28fuc.mp4"
+  );
+
+  //Todo: 1. On insert campaign in the watching ad list
+  //?     2 => pages/api/v1/channel-events/index.ts
+
+  const userId = "userId-1234";
+
+  insertUserWatchingAdHandler.insert({
+    campaignId: "campaignId-1234",
+    userId,
+    timer: adDuration,
+   /*  onTimeout: async () => {
+      await sendWSSEventHandler.finishWatchingAd(userId);
+    }, */
+  });
+
+  return {
+    props: {
+      ad,
+    },
+  };
+};

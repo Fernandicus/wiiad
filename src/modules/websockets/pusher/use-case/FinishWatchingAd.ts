@@ -4,7 +4,7 @@ import { WatchAdTimerList } from "../domain/WatchAdTimeoutList";
 export class FinishWatchingAd {
   constructor(private watchingAdList: WatchAdTimerList) {}
 
-  hasFinish(userId: UniqId) {
+  async hasFinish(userId: UniqId): Promise<void> {
     this.watchingAdList.findAdByUserId(userId).match({
       some(adTimeout) {
         if (adTimeout.isEnded()) {

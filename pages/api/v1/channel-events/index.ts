@@ -24,27 +24,10 @@ export default async function handler(
   const id: IApiReqWebSocketSendEvent = reqBodyParse(req);
   const userId = session ? session.id : id.user_id;
 
-  //Todo: 1. catch ad id from req and get the ad Url from DB
-  const adDuration = await getVideoDurationInSeconds(
-    "https://res.cloudinary.com/fernanprojects/video/upload/f_mp4/q_auto/du_30/c_scale,h_405,w_750/fps_30/v1/advertisers/777b5fec-dee5-4bde-a0c3-c32a36aa0184/ads/videos/f0pgpzw3epvfw0h28fuc.mp4"
-  );
-  const campaignId = UniqId.generate();
-
-  //Todo: 1. On start-watching-ad event send ad data and start timer acording to the ad duration
-  //Todo: 2. On finish-watching-ad send event and if user is still connected add referrer data
+  //Todo: 2. On "start-watching-ad" event start counter
   const eventTrigger: Record<TWebSocketEvent, Function> = {
-    "start-watching-ad": () =>
-      startWatchingAdWSEventHandler.start({
-        userId,
-        campaignId,
-        timer: adDuration,
-        eventData: {
-          message: "Ad timer finished",
-          data: { status: 200 },
-        },
-      }),
+    "start-watching-ad": () => startWatchingAdWSEventHandler.start(userId),
     "finish-watching-ad": () => {},
-    "ad-info": () => {},
   };
 
   //Todo: Test what happens when the user closes session and the timer is ON,

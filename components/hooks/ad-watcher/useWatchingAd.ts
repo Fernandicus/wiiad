@@ -6,11 +6,11 @@ import {
   frontWSSConnectUser,
   frontwss,
 } from "@/components/src/websocket/pusher-front/infrastructure/front-pusher-container";
+import { TWatchingAdEventData } from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
 import {
   IApiReqWSSConnect,
   TEventData,
 } from "@/src/modules/websockets/pusher/domain/types/types";
-import { TWatchingAdEventData } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
 import { useState } from "react";
 
 interface IUseWatchingAd {
