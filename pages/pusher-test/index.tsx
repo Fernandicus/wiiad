@@ -10,21 +10,25 @@ import {
   sendWSSEventHandler,
 } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import getVideoDurationInSeconds from "get-video-duration";
+import { LoginQueries } from "@/src/common/domain/LoginQueries";
+import {
+  IWatchCampaignData,
+  WatchCampaignsController,
+} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
+import { userSession } from "@/src/modules/session/infrastructure/session-container";
 
-export interface IWatchCampaignPage {
-  user: IUserPrimitives | null;
-  campaign: ICampaignPrimitives | ICampaignPrimitives[];
-  ad: AdPropsPrimitives | AdPropsPrimitives[];
-  referrer: IUserPrimitives | null;
+export interface IWatchAdPage {
+  userId: string;
+  ad: AdPropsPrimitives;
 }
 
-const noSessionUser = {
-  user_id: "anon_" + UniqId.generate(),
-};
-
-export default function Profile() {
+export default function Profile(props: {
+  userId: string;
+  ad: AdPropsPrimitives;
+}) {
   const { disconnect, connect, connectionMessage, sendStartWatchingAdEvent } =
-    useWatchingAd({ no_auth_user_id: noSessionUser.user_id });
+    useWatchingAd({ no_auth_user_id: props.userId });
 
   return (
     <div className="h-screen flex flex-col text-center">
@@ -54,7 +58,7 @@ export default function Profile() {
         <div className="p-20">
           <button
             className="text-center bg-blue-500 px-3 py-1 rounded-lg text-white"
-            onClick={() => sendStartWatchingAdEvent(noSessionUser.user_id)}
+            onClick={() => sendStartWatchingAdEvent(props.userId)}
           >
             Event
           </button>
@@ -70,37 +74,44 @@ export default function Profile() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const ad: AdPropsPrimitives = {
-    id: UniqId.generate(),
-    advertiserId: UniqId.generate(),
-    title: "Title ...",
-    description: "Description ...",
-    segments: AdSegments.withAllAvailables().segments,
-    redirectionUrl: "www.redirectionUrl....",
-    file: "fileUrl",
-  };
 
-  const adDuration = await getVideoDurationInSeconds(
-    "https://res.cloudinary.com/fernanprojects/video/upload/f_mp4/q_auto/du_30/c_scale,h_405,w_750/fps_30/v1/advertisers/777b5fec-dee5-4bde-a0c3-c32a36aa0184/ads/videos/f0pgpzw3epvfw0h28fuc.mp4"
-  );
 
-  //Todo: 1. On insert campaign in the watching ad list
-  //?     2 => pages/api/v1/channel-events/index.ts
+  const session = userSession.getFromServer(context);
+  const referrerName = context.resolvedUrl.split("/")[1];
+  const data = await getCampaignToWatch(referrerName, session);
 
-  const userId = "userId-1234";
+  const isVideo = data.ad.file.includes(".mp4");
+  const adDuration = isVideo
+    ? await getVideoDurationInSeconds(data.ad.file)
+    : undefined;
+
+  const userId = session ? session.id : `anonimous-` + UniqId.generate();
 
   insertUserWatchingAdHandler.insert({
-    campaignId: "campaignId-1234",
     userId,
+    campaignId: data.activeCampaign.id,
     timer: adDuration,
-   /*  onTimeout: async () => {
-      await sendWSSEventHandler.finishWatchingAd(userId);
-    }, */
   });
 
   return {
     props: {
-      ad,
+      userId,
+      ad: data.ad,
     },
   };
 };
+
+async function getCampaignToWatch(
+  referrerName: string,
+  session: IUserPrimitives | null
+): Promise<IWatchCampaignData> {
+  const data = await MongoDB.connectAndDisconnect<IWatchCampaignData>(
+    async () => {
+      return await WatchCampaignsController.forInfluencer({
+        influencerName: referrerName,
+        session,
+      });
+    }
+  );
+  return data;
+}

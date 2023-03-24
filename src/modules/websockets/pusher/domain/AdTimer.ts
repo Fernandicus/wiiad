@@ -6,4 +6,8 @@ export class AdTimer extends Integer {
     super(seconds);
     this.milliseconds = seconds * 1000;
   }
+
+  static defaultTime(){
+    return new AdTimer(15);
+  }
 }

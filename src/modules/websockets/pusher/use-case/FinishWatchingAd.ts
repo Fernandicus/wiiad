@@ -28,7 +28,9 @@ export class FinishWatchingAd {
   }
 
   /**
-   * The referral saved is the Referee User
+   * The referral saved is the Referrer User.
+   * This is because the Referee maybe is not logged and the referee id is not available.
+   * that's not the case for the Referrer id
    */
   async validateAndAirdrop(props: {
     refereeId: UniqId;
@@ -47,8 +49,7 @@ export class FinishWatchingAd {
     await this.watchingAdList.findAdByUserId(refereeId).match({
       some: async (adTimeout) => {
         if (adTimeout.isEnded()) {
-          console.log("Ad finished, adding referral");
-         //* await update(adTimeout.campaignId);
+          await update(adTimeout.campaignId);
         } else {
           throw new Error("Ad has not finished");
         }
@@ -73,7 +74,7 @@ export class FinishWatchingAd {
         referrerId: props.referrerId,
       }),
       this.addReferralToCampaign.givenRefereeId({
-        refereeId: props.refereeId,
+        referrerId: props.referrerId,
         campaignId: props.campaignId,
       }),
     ]);

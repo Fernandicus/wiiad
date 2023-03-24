@@ -1,8 +1,8 @@
+import { IWebSocketService } from "../domain/interface/IWebSocketService";
 import { TPusherAuthUser } from "../domain/types/types";
-import { PusherWSS } from "../infrastructure/PusherWSS";
 
 export class AuthUserWSS {
-  constructor(private webSocketService: PusherWSS) {}
+  constructor(private webSocketService: IWebSocketService) {}
 
   auth(params: TPusherAuthUser): void {
     const { userId, socketId, onAuth } = params;

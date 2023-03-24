@@ -1,10 +1,8 @@
+import { IWebSocketService } from "../domain/interface/IWebSocketService";
 import { TPusherAuthChannel } from "../domain/types/types";
-import {
-  PusherWSS,
-} from "../infrastructure/PusherWSS";
 
 export class AuthChannelWSS {
-  constructor(private pusherWebSocket: PusherWSS) {}
+  constructor(private pusherWebSocket: IWebSocketService) {}
 
   auth(props: TPusherAuthChannel) :void{
     const { channelName, socketId, onAuth } = props;

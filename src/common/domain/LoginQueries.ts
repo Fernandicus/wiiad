@@ -7,11 +7,6 @@ export enum LoginQuery {
   Log = "log",
 }
 
-/* export interface ILogingInParams {
-  authToken: string;
-  userName: string;
-} */
-
 export class LoginQueries {
   readonly authToken: string;
   readonly log: string;

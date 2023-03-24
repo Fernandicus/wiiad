@@ -6,7 +6,7 @@ import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
 import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
 
 type TAddReferralToCampaignGivenRefereeId = {
-  refereeId: UniqId;
+  referrerId: UniqId;
   campaignId: UniqId;
 };
 
@@ -26,9 +26,9 @@ export class AddReferralToCampaign {
 
   async givenRefereeId({
     campaignId,
-    refereeId,
+    referrerId,
   }: TAddReferralToCampaignGivenRefereeId): Promise<void> {
-    const referral = await this.findReferral.findByUserId(refereeId);
+    const referral = await this.findReferral.findByUserId(referrerId);
     await referral.match({
       some: async (referralFound) => {
         await this.updateCampaign.addReferral({
@@ -37,7 +37,7 @@ export class AddReferralToCampaign {
         });
       },
       nothing() {
-        throw ErrorFindingReferral.byUserId(refereeId.id);
+        throw ErrorFindingReferral.byUserId(referrerId.id);
       },
     });
   }

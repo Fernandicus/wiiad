@@ -23,7 +23,6 @@ export class WatchCampaignsController {
   }): Promise<IWatchCampaignData> {
     const { influencerName, session } = params;
     const referrer = await findUserHandler.byName(influencerName);
-
     const data = await referrer.match({
       nothing() {
         throw ErrorWatchingCampaign.referrerDoesNotExist(influencerName);
