@@ -6,4 +6,8 @@ export class AdFileUrl {
 
     this.file = file;
   }
+
+  isVideo(): boolean {
+    return this.file.includes(".mp4");
+  }
 }

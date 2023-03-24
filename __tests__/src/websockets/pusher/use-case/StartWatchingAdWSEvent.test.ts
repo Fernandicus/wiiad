@@ -1,7 +1,7 @@
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdTimer } from "@/src/modules/websockets/pusher/domain/AdTimer";
+import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 
 describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTimeout", () => {

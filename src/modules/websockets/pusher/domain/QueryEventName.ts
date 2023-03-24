@@ -1,6 +1,4 @@
-type Query = Partial<{
-  [key: string]: string | string[];
-}>;
+import { Query } from "@/src/common/domain/types/types";
 
 export class EventQuery {
   readonly event: string;

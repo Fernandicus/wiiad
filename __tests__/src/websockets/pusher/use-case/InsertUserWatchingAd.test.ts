@@ -1,5 +1,5 @@
 import { User } from "@/src/modules/users/user/domain/User";
-import { AdTimer } from "@/src/modules/websockets/pusher/domain/AdTimer";
+import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/use-case/InsertUserWatchingAd";

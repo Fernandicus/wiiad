@@ -5,7 +5,7 @@ import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampai
 import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { IncreaseReferralBalance } from "@/src/modules/referrals/use-case/IncreaseReferralBalance";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
-import { AdTimer } from "@/src/modules/websockets/pusher/domain/AdTimer";
+import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { FinishWatchingAd } from "@/src/modules/websockets/pusher/use-case/FinishWatchingAd";

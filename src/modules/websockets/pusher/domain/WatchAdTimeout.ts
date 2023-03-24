@@ -1,6 +1,6 @@
 import { Integer } from "@/src/common/domain/Integer";
 import { UniqId } from "@/src/utils/UniqId";
-import { AdTimer } from "./AdTimer";
+import { AdTimer } from "../../../ad/domain/value-objects/AdTimer";
 
 export type WatchAdTimeoutProps = {
   userId: UniqId;

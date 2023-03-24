@@ -1,22 +1,16 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { UniqId } from "@/src/utils/UniqId";
 import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
 import { GetServerSideProps } from "next";
-import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
-import {
-  insertUserWatchingAdHandler,
-  sendWSSEventHandler,
-} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+import { insertUserWatchingAdHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import getVideoDurationInSeconds from "get-video-duration";
-import { LoginQueries } from "@/src/common/domain/LoginQueries";
-import {
-  IWatchCampaignData,
-  WatchCampaignsController,
-} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
+import { TGetSelectedWatchAdData } from "@/src/modules/campaign/use-case/SelectCampaignToWatch";
+import { selectCampaignToWatch } from "@/src/modules/campaign/infrastructure/campaign-container";
+import { Name } from "@/src/common/domain/Name";
+import { GetAdDuration } from "@/src/modules/ad/infraestructure/GetAdDuration";
 
 export interface IWatchAdPage {
   userId: string;
@@ -74,23 +68,20 @@ export default function Profile(props: {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
-
   const session = userSession.getFromServer(context);
   const referrerName = context.resolvedUrl.split("/")[1];
   const data = await getCampaignToWatch(referrerName, session);
 
-  const isVideo = data.ad.file.includes(".mp4");
-  const adDuration = isVideo
-    ? await getVideoDurationInSeconds(data.ad.file)
-    : undefined;
+  
+  const getAdDuration = new GetAdDuration(data.ad.file);
+  const adTimer = await getAdDuration.getAdTimer();
 
   const userId = session ? session.id : `anonimous-` + UniqId.generate();
 
   insertUserWatchingAdHandler.insert({
     userId,
-    campaignId: data.activeCampaign.id,
-    timer: adDuration,
+    campaignId: data.campaignId.id,
+    seconds: adTimer.value,
   });
 
   return {
@@ -104,12 +95,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 async function getCampaignToWatch(
   referrerName: string,
   session: IUserPrimitives | null
-): Promise<IWatchCampaignData> {
-  const data = await MongoDB.connectAndDisconnect<IWatchCampaignData>(
+): Promise<TGetSelectedWatchAdData> {
+  const data = await MongoDB.connectAndDisconnect<TGetSelectedWatchAdData>(
     async () => {
-      return await WatchCampaignsController.forInfluencer({
-        influencerName: referrerName,
-        session,
+      return await selectCampaignToWatch.get({
+        referrerName: new Name(referrerName),
+        sessionId: session ? new UniqId(session.id) : undefined,
       });
     }
   );

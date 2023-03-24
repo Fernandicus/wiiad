@@ -33,7 +33,13 @@ export default async function handler(
   );
 
   const eventTrigger: Record<TWebSocketEvent, Function> = {
-    "start-watching-ad": () => startWatchingAdWSEventHandler.start(userId),
+    "start-watching-ad": () => {
+      //* this.updateReferral.increaseReferredUsers(referrer.id);
+      //* update this value only when the user clicks watch ad
+      //* this.updateCampagin.increaseViews(randomCampaign.id);
+      //* => this.updateReferral.increaseWatchedAds(sessionId);
+      startWatchingAdWSEventHandler.start(userId);
+    },
     "finish-watching-ad": async () => {
       await MongoDB.connectAndDisconnect(async () => {
         await finishWatchingAdHandler.validateAndAirdrop({
@@ -48,17 +54,17 @@ export default async function handler(
     const query = new EventQuery(req.query);
     const event = WebSocketEventName.validateFromString(query.event);
     const eventName = event.getName() as TWebSocketEvent;
-    
+
     //Todo: Test what happens when the user closes session and the timer is ON,
     //todo: - in that case avoid sending payment
     await eventTrigger[eventName]();
 
     return res.status(200);
   } catch (err) {
-    if(err instanceof Error)
-    return res.status(400).json({
-      message: err.message,
-    });
+    if (err instanceof Error)
+      return res.status(400).json({
+        message: err.message,
+      });
   }
 }
 

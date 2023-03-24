@@ -7,6 +7,10 @@ import { FindCampaign } from "../use-case/FindCampaign";
 import { UpdateCampaignData } from "../use-case/UpdateCampaignData";
 import { RemoveCampaign } from "../use-case/RemoveCampaign";
 import { RemoveCampaignHandler } from "../use-case/handlers/RemoveCampaignHandler";
+import { SelectCampaignToWatch } from "../use-case/SelectCampaignToWatch";
+import { findAd } from "../../ad/infraestructure/ad-container";
+import { findUser, findUserHandler } from "../../users/user/container";
+import { updateReferral } from "../../referrals/infrastructure/referral-container";
 
 export const campaignRepo = new CampaignMongoDBRepo();
 export const createCampaign = new CreateCampaign(campaignRepo);
@@ -20,3 +24,9 @@ export const campaignMetricsHandler = new UpdateCampaignDataHandler(
   updateCampaignMetrics
 );
 export const removeCampaignHandler = new RemoveCampaignHandler(removeCampaign);
+export const selectCampaignToWatch = new SelectCampaignToWatch({
+  findAd: findAd,
+  findCampaign,
+  findUser: findUser,
+  updateReferral: updateReferral,
+});
