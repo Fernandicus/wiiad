@@ -1,7 +1,7 @@
 import { UniqId } from "@/src/utils/UniqId";
 import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
 
-export class UpdateCampaignMetrics {
+export class UpdateCampaignData {
   constructor(private campaignRepo: ICampaignRepo) {}
 
   async addReferral(params: {

@@ -4,11 +4,14 @@ import {
   TWebSocketEvent,
   WebSocketEventName,
 } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { startWatchingAdWSEventHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+import {
+  finishWatchingAdHandler,
+  startWatchingAdWSEventHandler,
+} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { UniqId } from "@/src/utils/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getVideoDurationInSeconds } from "get-video-duration";
+import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 
 export type IApiReqWebSocketSendEvent = { user_id: string };
 
@@ -24,10 +27,24 @@ export default async function handler(
   const id: IApiReqWebSocketSendEvent = reqBodyParse(req);
   const userId = session ? session.id : id.user_id;
 
-  //Todo: 2. On "start-watching-ad" event start counter
   const eventTrigger: Record<TWebSocketEvent, Function> = {
     "start-watching-ad": () => startWatchingAdWSEventHandler.start(userId),
-    "finish-watching-ad": () => {},
+    "finish-watching-ad": async () => {
+      try {
+        await MongoDB.connectAndDisconnect(async () => {
+          await finishWatchingAdHandler.validateAndAirdrop({
+            refereeId: userId,
+            referrerId: UniqId.generate(), //Todo: Add a real referrer id
+          });
+        });
+      } catch (err) {
+        return res
+          .status(500)
+          .json({
+            message: "Something went wrong validating the finish watching ad",
+          });
+      }
+    },
   };
 
   //Todo: Test what happens when the user closes session and the timer is ON,

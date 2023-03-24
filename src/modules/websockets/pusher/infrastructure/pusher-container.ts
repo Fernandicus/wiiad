@@ -14,6 +14,17 @@ import { InsertUserWatchingAd } from "../use-case/InsertUserWatchingAd";
 import { StartWatchingAdWSEventHandler } from "../use-case/handlers/StartWatchingAdWSEventHandler";
 import { InsertUserWatchingAdHandler } from "../use-case/handlers/InsertUserWatchingAdHandler";
 import { SendWSEventHandler } from "../use-case/handlers/SendWSEventHandler";
+import { FinishWatchingAd } from "../use-case/FinishWatchingAd";
+import { FinishWatchingAdHandler } from "../use-case/handlers/FinishWatchingAdHandler";
+import {
+  findReferral,
+  increaseReferralBalance,
+} from "@/src/modules/referrals/infrastructure/referral-container";
+import {
+  findCampaign,
+  updateCampaignMetrics,
+} from "@/src/modules/campaign/infrastructure/campaign-container";
+import { addReferralToCampaign } from "@/src/common/infrastructure/common-src-container";
 
 const { appId, cluster, key, secret } = projectConfig.PUSHER;
 const wss = new Pusher({
@@ -43,6 +54,16 @@ export const insertUserWatchingAdHandler = new InsertUserWatchingAdHandler(
 const startWatchingAdWSEvent = new StartWatchingAdWSEvent(watchAdTimerList);
 export const startWatchingAdWSEventHandler = new StartWatchingAdWSEventHandler(
   startWatchingAdWSEvent
+);
+
+const finishWatchingAd = new FinishWatchingAd({
+  watchingAdList: watchAdTimerList,
+  findCampaign: findCampaign,
+  increaseBalance: increaseReferralBalance,
+  addReferralToCampaign: addReferralToCampaign,
+});
+export const finishWatchingAdHandler = new FinishWatchingAdHandler(
+  finishWatchingAd
 );
 
 const disconnectWSS = new DisconnectWSS(pusherWSS);

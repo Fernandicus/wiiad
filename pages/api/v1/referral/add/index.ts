@@ -6,7 +6,6 @@ import { userSession } from "@/src/modules/session/infrastructure/session-contai
 import { RoleType } from "@/src/common/domain/Role";
 import { ErrorCreatingReferral } from "@/src/modules/referrals/domain/errors/ErrorCreatingReferral";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import { ReferralController } from "@/src/modules/referrals/infrastructure/controllers/ReferralController";
 
 //!     *** ESTA CONEXIÓN API ES TEMPORAL Y NO ES VÁLIDA
 //TODO:     ** ESTA LOGICA DEBE IR EN EL WEBSOCKET
@@ -35,12 +34,12 @@ export default async function handler(
       const campaignBalance = reqBody.campaign.budget.balance;
       const clicks = reqBody.campaign.budget.clicks;
       const balanceToAdd = Math.floor(campaignBalance / clicks);
-      const referralController = new ReferralController();
-      await referralController.updateBalance({
+      //const referralController = new ReferralController();
+     /*  await increaseReferralBalance.increase({
         balance: balanceToAdd,
         refereeId: session.id,
         referrerId: reqBody.referrerId,
-      });
+      }); */
 
       return balanceToAdd;
     });

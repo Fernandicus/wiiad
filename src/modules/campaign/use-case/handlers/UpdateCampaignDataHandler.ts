@@ -1,8 +1,8 @@
 import { UniqId } from "@/src/utils/UniqId";
-import { UpdateCampaignMetrics } from "../UpdateCampaignMetrics";
+import { UpdateCampaignData } from "../UpdateCampaignData";
 
-export class UpdateCampaignMetricsHandler {
-  constructor(private updateMetrics: UpdateCampaignMetrics) {}
+export class UpdateCampaignDataHandler {
+  constructor(private updateMetrics: UpdateCampaignData) {}
 
   async addReferral(params: {
     referralId: string;
@@ -16,12 +16,12 @@ export class UpdateCampaignMetricsHandler {
     });
   }
 
-  async increaseViews(campaignId: string):Promise<void>{
+  async increaseViews(campaignId: string): Promise<void> {
     const id = new UniqId(campaignId);
     await this.updateMetrics.increaseViews(id);
   }
 
-  async increaseClicks(campaignId: string):Promise<void>{
+  async increaseClicks(campaignId: string): Promise<void> {
     const id = new UniqId(campaignId);
     await this.updateMetrics.increaseClicks(id);
   }

@@ -56,7 +56,7 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }): Promise<void> {
     const campaignId = params.campaignId.id;
     const campaign = await CampaignModel.findByIdAndUpdate(campaignId, {
-      $push: { referrals: campaignId },
+      $push: { referrals: params.referralId.id },
     });
     if (!campaign) throw ErrorFindingCampaign.byId(params.campaignId.id);
   }

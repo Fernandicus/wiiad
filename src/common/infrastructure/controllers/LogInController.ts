@@ -1,9 +1,7 @@
 import { IReqAndRes } from "../../../modules/session/domain/interfaces/IAuthCookies";
-import { Role, RoleType } from "../../domain/Role";
 import { userSession } from "../../../modules/session/infrastructure/session-container";
 import { UniqId } from "../../../utils/UniqId";
 import { ProfilePic } from "../../domain/ProfilePic";
-import { ReferralController } from "../../../modules/referrals/infrastructure/controllers/ReferralController";
 import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import {
   createUserHandler,
@@ -23,6 +21,8 @@ import { HandleRoles } from "@/src/modules/users/user/use-case/HandleRoles";
 import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 import { ErrorUpdatingProfile } from "../../domain/errors/ErrorUpdatingProfile";
 import { ErrorSingingIn } from "../../domain/errors/ErrorSingingIn";
+import { createReferralHandler } from "@/src/modules/referrals/infrastructure/referral-container";
+import { Referral } from "@/src/modules/referrals/domain/Referral";
 
 interface ILogingInParams {
   jwtData: IVerificationEmailData;
@@ -109,9 +109,10 @@ export class SignInController {
       },
       USER: async () => {
         const user = await this.getAndCreateNewUser(this.jwtData);
-
-        const referralController = new ReferralController();
-        await referralController.createNew(user.id);
+        await createReferralHandler.new({
+          id: UniqId.generate(),
+          userId: user.id,
+        });
 
         this.userInitSession(this.context, user);
         return user;
@@ -211,7 +212,7 @@ export class SignInController {
         throw ErrorFindingUser.byEmail(data.email);
       },
     });
-    
+
     return this.user({ data, id, profilePic });
   }
 
