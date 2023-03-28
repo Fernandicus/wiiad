@@ -4,7 +4,7 @@ import {
   CampaignStatus,
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { autoSetTestCampaignDB } from "../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
 import { CampaignMongoDBRepo } from "@/src/modules/campaign/infrastructure/db/CampaignMongoDBRepo";
 

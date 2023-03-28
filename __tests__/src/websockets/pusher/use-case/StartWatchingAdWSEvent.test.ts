@@ -1,8 +1,10 @@
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
 describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTimeout", () => {
   let watchAdList: WatchAdTimerList;
@@ -14,7 +16,8 @@ describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTime
   beforeAll(() => {
     watchAdList = new WatchAdTimerList();
     watchAdTimeout = new WatchAdTimeout({
-      userId: UniqId.new(),
+      refereeId:  RefereeId.new(),
+      referrerId:  ReferrerId.new(),
       campaignId: UniqId.new(),
       timer,
       onTimeout() {
@@ -29,7 +32,7 @@ describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTime
   THEN the WatchAdTimeout.onTimeout method should be called once`, async () => {
     const repeat = Array(5).fill("");
     repeat.forEach((_) => {
-      startWatchingAdWS.start(watchAdTimeout.userId);
+      startWatchingAdWS.start(watchAdTimeout.refereeId);
     });
 
     const waitToTimeout = (resolve: Function) =>
@@ -45,7 +48,7 @@ describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTime
     await promise(() => expect(counter).toBe(1));
 
     repeat.forEach((_) => {
-      startWatchingAdWS.start(watchAdTimeout.userId);
+      startWatchingAdWS.start(watchAdTimeout.refereeId);
     });
 
     await promise(() => expect(counter).toBe(1));

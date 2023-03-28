@@ -4,7 +4,7 @@ import { AdFileUrl } from "../../domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "../../domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "../../domain/value-objects/AdSegments";
 import { AdTitle } from "../../domain/value-objects/AdTitle";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { CreateAd } from "../CreateAd";
 
 /* interface CreateAdParams {

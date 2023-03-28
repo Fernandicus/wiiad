@@ -3,7 +3,7 @@ import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/
 import { WebSocketChannel } from "@/src/modules/websockets/pusher/domain/WebSocketChannel";
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import Pusher from "pusher-js";
 import {
   IFrontWSS,

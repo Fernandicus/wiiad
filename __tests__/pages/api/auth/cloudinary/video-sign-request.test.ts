@@ -1,6 +1,6 @@
 import api_v1_CloudinarySignVideoRequest, { IApiRespCloudinarySignature } from "@/pages/api/v1/auth/cloudinary/video-sign-request";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeUser } from "../../../../../__mocks__/lib/modules/user/FakeUser";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
 import { FakeAdvertiser } from "../../../../../__mocks__/lib/modules/user/FakeAdvertiser";

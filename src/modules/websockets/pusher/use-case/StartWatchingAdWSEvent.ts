@@ -1,11 +1,12 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { WatchAdTimerList } from "../domain/WatchAdTimeoutList";
 
 export class StartWatchingAdWSEvent {
   constructor(private watchAdList: WatchAdTimerList) {}
 
-  start(userId: UniqId): void {
-    this.watchAdList.findAdByUserId(userId).match({
+  start(refereeId: RefereeId): void {
+    this.watchAdList.findAdByRefereeId(refereeId).match({
       some(ad) {
         ad.startTimer();
       },

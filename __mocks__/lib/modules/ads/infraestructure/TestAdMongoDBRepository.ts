@@ -8,7 +8,7 @@ import {
   AdModel,
   IAdModelProps,
 } from "@/src/modules/ad/infraestructure/db/AdModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../infrastructure/TestMongoDB";
 import { TestAdRepository } from "../domain/TestAdRepository";

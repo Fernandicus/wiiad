@@ -7,7 +7,7 @@ import {
   paymentIntentHandler,
   saveStripeHandler,
 } from "../stripe-container";
-import { UniqId } from "../../../../../utils/UniqId";
+import { UniqId } from "../../../../../common/domain/UniqId";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { PaymentAmount } from "../../domain/value-objects/PaymentAmount";
 import { adFinderHandler } from "@/src/modules/ad/infraestructure/ad-container";

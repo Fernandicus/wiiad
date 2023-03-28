@@ -1,9 +1,12 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
 import { GetServerSideProps } from "next";
-import { insertUserWatchingAdHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+import {
+  insertUserWatchingAd,
+  insertUserWatchingAdHandler,
+} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import getVideoDurationInSeconds from "get-video-duration";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
@@ -11,18 +14,19 @@ import { TGetSelectedWatchAdData } from "@/src/modules/campaign/use-case/SelectC
 import { selectCampaignToWatch } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { Name } from "@/src/common/domain/Name";
 import { GetAdDuration } from "@/src/modules/ad/infraestructure/GetAdDuration";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { AnonymReferenceId } from "@/src/common/domain/AnonymReferenceId";
 
 export interface IWatchAdPage {
-  userId: string;
+  refereeId: string;
+  referrerProfile: IUserPrimitives;
   ad: AdPropsPrimitives;
 }
 
-export default function Profile(props: {
-  userId: string;
-  ad: AdPropsPrimitives;
-}) {
+export default function Profile(props: IWatchAdPage) {
   const { disconnect, connect, connectionMessage, sendStartWatchingAdEvent } =
-    useWatchingAd({ no_auth_user_id: props.userId });
+    useWatchingAd({ no_auth_user_id: props.refereeId });
 
   return (
     <div className="h-screen flex flex-col text-center">
@@ -52,7 +56,7 @@ export default function Profile(props: {
         <div className="p-20">
           <button
             className="text-center bg-blue-500 px-3 py-1 rounded-lg text-white"
-            onClick={() => sendStartWatchingAdEvent(props.userId)}
+            onClick={() => sendStartWatchingAdEvent(props.refereeId)}
           >
             Event
           </button>
@@ -70,25 +74,31 @@ export default function Profile(props: {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = userSession.getFromServer(context);
   const referrerName = context.resolvedUrl.split("/")[1];
-  const data = await getCampaignToWatch(referrerName, session);
+  const { ad, campaignId, referrerProfile } = await getCampaignToWatch(
+    referrerName,
+    session
+  );
 
-  
-  const getAdDuration = new GetAdDuration(data.ad.file);
+  const getAdDuration = new GetAdDuration(ad.file);
   const adTimer = await getAdDuration.getAdTimer();
 
-  const userId = session ? session.id : `anonimous-` + UniqId.generate();
+  const refereeId = session
+    ? new RefereeId({ uniqId: new UniqId(session.id) })
+    : new AnonymReferenceId(new RefereeId({ uniqId: UniqId.new() }));
 
-  insertUserWatchingAdHandler.insert({
-    userId,
-    campaignId: data.campaignId.id,
-    seconds: adTimer.value,
+  insertUserWatchingAd.insert({
+    refereeId,
+    referrerId: new ReferrerId({ uniqId: referrerProfile.id }),
+    campaignId: campaignId,
+    timer: adTimer,
   });
 
   return {
     props: {
-      userId,
-      ad: data.ad,
-    },
+      refereeId: refereeId.uniqId.id,
+      referrerProfile: referrerProfile.toPrimitives(),
+      ad: ad.toPrimitives(),
+    } satisfies IWatchAdPage,
   };
 };
 

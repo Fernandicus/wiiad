@@ -3,7 +3,7 @@ import getReferralData, { IApiRespReferralGetData } from "@/pages/api/v1/referra
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { User } from "@/src/modules/users/user/domain/User";
 import { IReferralPrimitives } from "@/src/modules/referrals/domain/Referral";

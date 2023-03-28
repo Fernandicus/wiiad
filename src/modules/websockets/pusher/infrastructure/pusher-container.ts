@@ -44,7 +44,7 @@ export const authChannelWSSHandler = new AuthChannelWSSHandler(authChannelWSS);
 const sendWSSEvent = new SendWSEvent(pusherWSS);
 export const sendWSSEventHandler = new SendWSEventHandler(sendWSSEvent);
 const watchAdTimerList = new WatchAdTimerList();
-const insertUserWatchingAd = new InsertUserWatchingAd(
+export const insertUserWatchingAd = new InsertUserWatchingAd(
   watchAdTimerList,
   sendWSSEvent
 );

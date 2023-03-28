@@ -6,7 +6,7 @@ import {
   TestCampaignDB,
 } from "../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { FakeAdvertiser } from "../../../../__mocks__/lib/modules/user/FakeAdvertiser";

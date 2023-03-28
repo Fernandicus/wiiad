@@ -1,5 +1,5 @@
 import { Maybe } from "@/src/common/domain/Maybe";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IReferralPrimitives, Referral } from "../../domain/Referral";
 import { FindReferral } from "../FindReferral";
 

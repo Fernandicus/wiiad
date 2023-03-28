@@ -1,23 +1,26 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export class FakeUniqId extends UniqId {
-  constructor(params: string) {
-    super(params);
+  readonly existis;
+
+  constructor({ uniqId, exists = true }: { uniqId: string; exists?: boolean }) {
+    super(uniqId);
+    this.existis = exists;
   }
 
   static noExist(): FakeUniqId {
-    return new FakeUniqId("[no-exist]");
+    return new FakeUniqId({uniqId: UniqId.generate(), exists: false});
   }
 
   static create(): FakeUniqId {
-    return new FakeUniqId(UniqId.generate());
+    return new FakeUniqId({uniqId: UniqId.generate()});
   }
 
-  checkIfNotExsits(): boolean {
+  /*   checkIfNotExsits(): boolean {
     return this.id.includes("[no-exist]");
   }
 
   static checkIfIdNotExist(id: string): boolean {
     return id.includes("[no-exist]");
-  }
+  } */
 }

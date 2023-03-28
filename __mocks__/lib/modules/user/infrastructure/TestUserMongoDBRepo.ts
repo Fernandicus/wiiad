@@ -7,7 +7,7 @@ import {
   UserModel,
   IUserModel,
 } from "@/src/modules/users/user/infrastructure/UserModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import mongoose, { HydratedDocument } from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 import { TestUserRepository } from "../domain/TestUserRepository";

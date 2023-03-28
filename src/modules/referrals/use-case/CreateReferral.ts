@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IReferralRepo } from "../domain/interfaces/IReferralRepo";
 import { Referral } from "../domain/Referral";
 

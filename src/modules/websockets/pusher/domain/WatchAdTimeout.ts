@@ -1,16 +1,20 @@
 import { Integer } from "@/src/common/domain/Integer";
-import { UniqId } from "@/src/utils/UniqId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { AdTimer } from "../../../ad/domain/value-objects/AdTimer";
 
 export type WatchAdTimeoutProps = {
-  userId: UniqId;
+  refereeId: RefereeId;
+  referrerId: ReferrerId;
   campaignId: UniqId;
   timer?: AdTimer;
   onTimeout: () => void;
 };
 
 export class WatchAdTimeout {
-  readonly userId;
+  readonly refereeId;
+  readonly referrerId;
   readonly campaignId;
   private onTimeout: () => void;
   private timer: AdTimer;
@@ -23,9 +27,10 @@ export class WatchAdTimeout {
     }, this.timer.milliseconds);
 
   constructor(props: WatchAdTimeoutProps) {
-    const { userId, campaignId, timer = new AdTimer(15), onTimeout } = props;
+    const { refereeId, referrerId, campaignId, timer = new AdTimer(15), onTimeout } = props;
     this.campaignId = campaignId;
-    this.userId = userId;
+    this.refereeId = refereeId;
+    this.referrerId = referrerId;
     this.onTimeout = onTimeout;
     this.timer = timer;
   }

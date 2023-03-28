@@ -7,7 +7,7 @@ import {
   IUserProps,
   User,
 } from "@/src/modules/users/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { faker } from "@faker-js/faker";
 
 export class FakeUser extends User {

@@ -8,7 +8,7 @@ import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSo
 import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/use-case/InsertUserWatchingAd";
 import { SendWSEvent } from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
 import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../__mocks__/context/MockedWSS";
 import { futureTimeout } from "../../../../__mocks__/lib/utils/helpers";
 import { mockedContext } from "../../../../__mocks__/context/MockContext";
@@ -20,6 +20,8 @@ import { GetServerSidePropsContext, PreviewData } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { TestDBs } from "../../../../__mocks__/lib/infrastructure/db/TestDBs";
 import { User } from "@/src/modules/users/user/domain/User";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 
 describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList", () => {
   let timer = new AdTimer(3);
@@ -54,9 +56,11 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
   it(`WHEN send a request without a valid request method,
   THEN status code should be 400`, async () => {
     const event = WebSocketEventName.event("finish-watching-ad");
+    const referrerId = ReferrerId.new();
+    const refereeId = RefereeId.new();
     const body: IApiReqWebSocketSendEvent = {
-      referrerId: UniqId.generate(),
-      userId: UniqId.generate(),
+      referrerId: referrerId.value(),
+      refereeId: refereeId.value(),
     };
     const { req, res } = mockedContext({
       method: "GET",
@@ -84,9 +88,11 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
   it(`WHEN send a request with valid data and req method but without starting the WatchingAdTimeout,
   THEN status code should be 400`, async () => {
     const event = WebSocketEventName.event("finish-watching-ad");
+    const referrerId = ReferrerId.new();
+    const refereeId = RefereeId.new();
     const body: IApiReqWebSocketSendEvent = {
-      referrerId: UniqId.generate(),
-      userId: UniqId.generate(),
+      referrerId: referrerId.value(),
+      refereeId: refereeId.value(),
     };
     const { req, res } = mockedContext({
       method: "PUT",
@@ -101,9 +107,11 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
   it(`WHEN send a request with valid data and req method but without starting the WatchingAdTimeout,
   THEN status code should be 400`, async () => {
     const event = WebSocketEventName.event("finish-watching-ad");
+    const referrerId = ReferrerId.new();
+    const refereeId = RefereeId.new();
     const body: IApiReqWebSocketSendEvent = {
-      referrerId: UniqId.generate(),
-      userId: UniqId.generate(),
+      referrerId: referrerId.value(),
+      refereeId: refereeId.value(),
     };
     const { req, res } = mockedContext({
       method: "PUT",
@@ -120,12 +128,20 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
   THEN status code should be 200`, async () => {
     const resp = await visitWatchAdPage(users[0].name.name);
 
-    const userId = users.at(-1)!.id.id;
-    const referrerId = resp.userId;
+    const userId = users.at(-1)!.id;
+    const refereeId = new RefereeId({ uniqId: userId });
+    const referrerId = new RefereeId({
+      uniqId: new UniqId(resp.referrerProfile.id),
+    });
 
-    await sendStartEvent({ userId, referrerId });
+    const body = {
+      refereeId: refereeId.value(),
+      referrerId: referrerId.value(),
+    };
 
-    const finishResp = await sendFinishEvent({ userId, referrerId });
+    await sendStartEvent(body);
+
+    const finishResp = await sendFinishEvent(body);
     expect(finishResp.statusCode).toBe(200);
   }, 25000);
 });
@@ -142,20 +158,26 @@ async function visitWatchAdPage(influencerName: string): Promise<IWatchAdPage> {
   return resp.props;
 }
 
-async function sendStartEvent(props: { referrerId: string; userId: string }) {
+async function sendStartEvent(props: {
+  referrerId: string;
+  refereeId: string;
+}) {
   const startEvent = WebSocketEventName.event("start-watching-ad");
   const startAdCtx = mockedContext({
     method: "PUT",
     query: { event: startEvent.getName() },
     body: {
       referrerId: props.referrerId,
-      userId: props.userId,
+      refereeId: props.refereeId,
     } as IApiReqWebSocketSendEvent,
   });
   await channelEvents(startAdCtx.req, startAdCtx.res);
 }
 
-async function sendFinishEvent(props: { referrerId: string; userId: string }) {
+async function sendFinishEvent(props: {
+  referrerId: string;
+  refereeId: string;
+}) {
   const event = WebSocketEventName.event("finish-watching-ad");
 
   const finishAdCtx = mockedContext({
@@ -163,7 +185,7 @@ async function sendFinishEvent(props: { referrerId: string; userId: string }) {
     query: { event: event.getName() },
     body: {
       referrerId: props.referrerId,
-      userId: props.userId,
+      refereeId: props.refereeId,
     } as IApiReqWebSocketSendEvent,
   });
 

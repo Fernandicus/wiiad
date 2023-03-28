@@ -15,11 +15,17 @@ import { Notification } from "@/components/ui/notifications/Notification";
 import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
 import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { GetAdDuration } from "@/src/modules/ad/infraestructure/GetAdDuration";
-import { UniqId } from "@/src/utils/UniqId";
-import { insertUserWatchingAdHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+import { UniqId } from "@/src/common/domain/UniqId";
+import {
+  insertUserWatchingAd,
+  insertUserWatchingAdHandler,
+} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import { Query } from "@/src/common/domain/types/types";
 import { Name } from "@/src/common/domain/Name";
 import { selectCampaignToWatch } from "@/src/modules/campaign/infrastructure/campaign-container";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { AnonymReferenceId } from "@/src/common/domain/AnonymReferenceId";
 
 export interface IWatchCampaignPage {
   user: IUserPrimitives | null;
@@ -48,29 +54,34 @@ function getReferrerName(context: GetServerSidePropsContext): string {
   return context.resolvedUrl.split("/")[1];
 }
 
-function getUserId(session: IUserPrimitives | null): string {
-  return session ? session.id : `anonimous-` + UniqId.generate();
+function getRefereeId(session: IUserPrimitives | null): RefereeId {
+  return session
+    ? new RefereeId({ uniqId: new UniqId(session.id) })
+    : new AnonymReferenceId(new RefereeId({ uniqId: UniqId.new() }));
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = userSession.getFromServer(context);
   const referrerName = getReferrerName(context);
-  const userId = getUserId(session);
+  const refereeId = getRefereeId(session);
+
+  console.log(referrerName);
 
   const data = await getCampaignToWatch(referrerName, session);
   const getAdDuration = new GetAdDuration(data.ad.file);
   const adTimer = await getAdDuration.getAdTimer();
 
-
-  insertUserWatchingAdHandler.insert({
-    userId,
-    campaignId: data.campaignId.id,
-    seconds: adTimer.value,
+  insertUserWatchingAd.insert({
+    refereeId,
+    referrerId: new ReferrerId({ uniqId: data.referrerProfile.id }),
+    campaignId: data.campaignId,
+    timer: adTimer,
   });
 
   return {
     props: {
-      userId,
+      referrerProfile: data.referrerProfile,
+      refereeId,
       ad: data.ad,
     },
   };

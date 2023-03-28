@@ -1,7 +1,7 @@
 import { Maybe } from "@/src/common/domain/Maybe";
 import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { Referral } from "@/src/modules/referrals/domain/Referral";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export const mockedReferralRepo = (referrals: Referral[]): IReferralRepo => {
   return {

@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { DisconnectWSS } from "../DisconnectWSS";
 
 export class DisconnectWSSHandler {

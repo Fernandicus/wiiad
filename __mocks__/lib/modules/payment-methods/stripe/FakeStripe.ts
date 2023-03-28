@@ -2,7 +2,7 @@ import {
   IStripeParams,
   Stripe,
 } from "@/src/modules/payment-methods/stripe/domain/Stripe";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeCardDetails } from "./FakeCardDetails";
 import { FakeCustomerId } from "./FakeCustomerId";
 

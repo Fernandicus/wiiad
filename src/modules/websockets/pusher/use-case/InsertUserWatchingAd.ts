@@ -11,14 +11,15 @@ export class InsertUserWatchingAd {
   ) {}
 
   //todo: pass by params a WatchAdTimeout to have a better testability using the
-  insert({ userId, timer, campaignId }: TInsertUserWatchingAd): void {
+  insert({ refereeId, referrerId, timer, campaignId }: TInsertUserWatchingAd): void {
     this.timeOutList.add(
       new WatchAdTimeout({
-        userId,
+        refereeId,
+        referrerId,
         campaignId,
         timer,
         onTimeout: async () => {
-          await this.sendEvent.finishWatchingAd(userId);
+          await this.sendEvent.finishWatchingAd(refereeId);
         },
       })
     );

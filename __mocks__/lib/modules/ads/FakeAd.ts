@@ -8,7 +8,7 @@ import {
   AdSegments,
   AdSegmentType,
 } from "@/src/modules/ad/domain/value-objects/AdSegments";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export class FakeAd extends Ad {
   constructor(adProps: AdProps) {

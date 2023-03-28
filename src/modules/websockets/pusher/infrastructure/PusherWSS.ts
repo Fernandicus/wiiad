@@ -1,5 +1,5 @@
 import { projectConfig } from "@/src/utils/projectConfig";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import Pusher from "pusher";
 import { IWebSocketService } from "../domain/interface/IWebSocketService";
 import {

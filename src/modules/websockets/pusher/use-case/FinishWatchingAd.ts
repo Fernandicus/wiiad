@@ -2,9 +2,11 @@ import { AddReferralToCampaign } from "@/src/common/use-case/AddReferralToCampai
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
 import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
 import { ErrorFindingReferral } from "@/src/modules/referrals/domain/errors/ErrorFindingReferral";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
 import { IncreaseReferralBalance } from "@/src/modules/referrals/use-case/IncreaseReferralBalance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { WatchAdTimerList } from "../domain/WatchAdTimeoutList";
 
 export type TFinishWatchingAdProps = {
@@ -28,13 +30,13 @@ export class FinishWatchingAd {
   }
 
   /**
-   * The referral saved is the Referrer User.
+   * The referral saved in the Campaign referrals is the Referrer User.
    * This is because the Referee maybe is not logged and the referee id is not available.
    * that's not the case for the Referrer id
    */
   async validateAndAirdrop(props: {
-    refereeId: UniqId;
-    referrerId: UniqId;
+    refereeId: RefereeId;
+    referrerId: ReferrerId;
   }): Promise<void> {
     const { refereeId, referrerId } = props;
 
@@ -46,7 +48,9 @@ export class FinishWatchingAd {
       });
     };
 
-    await this.watchingAdList.findAdByUserId(refereeId).match({
+    //todo: Pass by parameter the: refereeId,  onFinished(), onNotFinished(), so I can pass the update function from the outside
+    //! Think about passing a Maybe or Either and update the campaign referral data in another Use Case
+    await this.watchingAdList.findAdByRefereeId(refereeId).match({
       some: async (adTimeout) => {
         if (adTimeout.isEnded()) {
           await update(adTimeout.campaignId);
@@ -62,8 +66,8 @@ export class FinishWatchingAd {
 
   private async updateData(props: {
     campaignId: UniqId;
-    refereeId: UniqId;
-    referrerId: UniqId;
+    refereeId: RefereeId;
+    referrerId: ReferrerId;
   }) {
     const campaignData = await this.findCampaign.byId(props.campaignId);
 
@@ -73,15 +77,15 @@ export class FinishWatchingAd {
         refereeId: props.refereeId,
         referrerId: props.referrerId,
       }),
-      this.addReferralToCampaign.givenRefereeId({
+      this.addReferralToCampaign.givenReferrerId({
         referrerId: props.referrerId,
         campaignId: props.campaignId,
       }),
     ]);
 
     if (increaseBalanceResp.status === "rejected")
-      throw new Error("Error increasing balances");
+      throw new Error(increaseBalanceResp.reason);
     if (addReferralResp.status === "rejected")
-      throw new Error("Error adding referral");
+      throw new Error(addReferralResp.reason);
   }
 }

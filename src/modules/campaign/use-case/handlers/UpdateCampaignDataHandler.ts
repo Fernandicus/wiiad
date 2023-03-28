@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { UpdateCampaignData } from "../UpdateCampaignData";
 
 export class UpdateCampaignDataHandler {

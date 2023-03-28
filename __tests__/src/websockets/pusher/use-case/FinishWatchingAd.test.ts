@@ -10,29 +10,34 @@ import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTi
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { FinishWatchingAd } from "@/src/modules/websockets/pusher/use-case/FinishWatchingAd";
 import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedReferralRepo } from "../../../../../__mocks__/context/MockedReferralRepo";
 import { FakeReferral } from "../../../../../__mocks__/lib/modules/referral/FakeReferral";
 import { mockedCampaignsRepo } from "../../../../../__mocks__/context/MockCampaignRepo";
 import { FakeCampaign } from "../../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 import { AddReferralToCampaign } from "@/src/common/use-case/AddReferralToCampaign";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { futureTimeout } from "../../../../../__mocks__/lib/utils/helpers";
 
 describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   let finishWatchingAd: FinishWatchingAd;
   let timer = new AdTimer(3);
   let startWatching: StartWatchingAdWSEvent;
-  let userWatchingAd: UniqId;
+  let refereeId: RefereeId;
+  let referrerId: ReferrerId;
   let mockedCampaignsRep: ICampaignRepo;
   let mockedReferralsRep: IReferralRepo;
 
   beforeAll(() => {
-    userWatchingAd = UniqId.new();
+    refereeId = RefereeId.new();
+    referrerId =  ReferrerId.new();
     const campaign = FakeCampaign.create({
       status: CampaignStatusType.ACTIVE,
       advertiserId: UniqId.new(),
     });
-    const referrals = FakeReferral.create(userWatchingAd);
+    const referrals = FakeReferral.create(referrerId.uniqId);
 
     mockedCampaignsRep = mockedCampaignsRepo([campaign]);
     mockedReferralsRep = mockedReferralRepo([referrals]);
@@ -50,7 +55,8 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
 
     watchingAds.add(
       new WatchAdTimeout({
-        userId: userWatchingAd,
+        refereeId,
+        referrerId,
         campaignId: campaign.id,
         timer,
         onTimeout() {},
@@ -70,8 +76,8 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   THEN the Campaigns Repo validateAndAirdrop method should not be called`, async () => {
     expect(
       finishWatchingAd.validateAndAirdrop({
-        refereeId: userWatchingAd,
-        referrerId: UniqId.new(),
+        refereeId,
+        referrerId,
       })
     ).rejects.toThrowError(Error);
     expect(mockedCampaignsRep.addReferral).not.toBeCalled();
@@ -84,8 +90,8 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   THEN an Error should be thrown`, async () => {
     expect(
       finishWatchingAd.validateAndAirdrop({
-        refereeId: userWatchingAd,
-        referrerId: UniqId.new(),
+        refereeId,
+        referrerId,
       })
     ).rejects.toThrowError(Error);
   });
@@ -93,12 +99,12 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   it(`WHEN call StartWatchingAdWSEvent.startTimeout method,
     THEN WHEN validateAndAirdrop method is called WITHOUT waiting ad timer to end,
     the Campaigns Repo validateAndAirdrop method SHOULD NOT be called `, async () => {
-    startWatching.start(userWatchingAd);
+    startWatching.start(refereeId);
 
     expect(
       finishWatchingAd.validateAndAirdrop({
-        refereeId: userWatchingAd,
-        referrerId: UniqId.new(),
+        refereeId,
+        referrerId,
       })
     ).rejects.toThrowError(Error);
     expect(mockedCampaignsRep.addReferral).not.toBeCalled();
@@ -110,28 +116,17 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   it(`WHEN call StartWatchingAdWSEvent.startTimeout method,
     THEN WHEN validateAndAirdrop method is called waiting ad timer to end,
     the Campaigns Repo validateAndAirdrop method SHOULD be called `, async () => {
-    startWatching.start(userWatchingAd);
+    startWatching.start(refereeId);
 
-    const waitTimeout = (resolve: (value: boolean) => void) =>
-      setTimeout(() => {
-        resolve(true);
-      }, timer.milliseconds);
-
-    const promise = async (expected: () => void) => {
-      return new Promise(waitTimeout).then(async (_) => {
-        expected();
-      });
-    };
-
-    await promise(async () => {
+    await futureTimeout(async () => {
       await finishWatchingAd.validateAndAirdrop({
-        refereeId: userWatchingAd,
-        referrerId: UniqId.new(),
+        refereeId,
+        referrerId,
       });
       expect(mockedCampaignsRep.addReferral).toBeCalled();
       expect(mockedCampaignsRep.byId).toBeCalled();
       expect(mockedReferralsRep.increaseRefereeData).toBeCalled();
       expect(mockedReferralsRep.increaseReferrerData).toBeCalled();
-    });
+    }, timer.milliseconds);
   });
 });

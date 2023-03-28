@@ -1,6 +1,6 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { IAdRepository } from "@/src/modules/ad/domain/interfaces/IAdRepository";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeAd } from "../../__mocks__/lib/modules/ads/FakeAd";
 
 export const mockedAdRepo = (adsToFind: Ad[]): IAdRepository => {

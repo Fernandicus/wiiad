@@ -1,5 +1,5 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ReferralCounter } from "./ReferralCounter";
 
 export interface IReferralPrimitives {

@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";
 
 export class RemoveCampaign {

@@ -2,7 +2,7 @@ import { userSession } from "@/src/modules/session/infrastructure/session-contai
 import { IApiReqWSSConnect } from "@/src/modules/websockets/pusher/domain/types/types";
 import { authUserWSSHandler } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import { reqBodyParse } from "@/src/utils/helpers";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import Pusher from "pusher";
 

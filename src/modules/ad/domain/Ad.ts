@@ -3,7 +3,7 @@ import { AdFileUrl } from "./value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "./value-objects/AdRedirectionUrl";
 import { AdSegments } from "./value-objects/AdSegments";
 import { AdTitle } from "./value-objects/AdTitle";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export interface AdPropsPrimitives {
   id: string;

@@ -1,10 +1,12 @@
 import { StartWatchingAdWSEvent } from "../StartWatchingAdWSEvent";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 
 export class StartWatchingAdWSEventHandler {
   constructor(private startWatchingAd: StartWatchingAdWSEvent) {}
 
-  start(userId: string): void {
-    this.startWatchingAd.start(new UniqId(userId));
+  start(refereeId: string): void {
+    const referee = RefereeId.fromString(refereeId);
+    this.startWatchingAd.start(referee);
   }
 }

@@ -10,7 +10,7 @@ import { PaymentStatus } from "@/src/modules/payment-methods/stripe/domain/value
 import { PaymentAmount } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentAmount";
 import { FakeCustomerId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCustomerId";
 import { FakePaymentMethodId } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { PaymentDetails } from "@/src/modules/payment-methods/stripe/domain/PaymentDetails";
 import { CardDetails } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { FakeWebhookEvent } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";

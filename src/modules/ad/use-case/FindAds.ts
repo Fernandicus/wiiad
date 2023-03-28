@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Ad } from "../domain/Ad";
 import { IAdRepository } from "../domain/interfaces/IAdRepository";
 import { ErrorFindingAd } from "../domain/errors/ErrorFindingAd";

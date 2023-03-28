@@ -1,5 +1,5 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IReferralPrimitives, Referral } from "../../domain/Referral";
 import { ReferralCounter } from "../../domain/ReferralCounter";
 import { CreateReferral } from "../CreateReferral";

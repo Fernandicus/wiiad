@@ -2,7 +2,7 @@ import { ErrorFindingReferral } from "@/src/modules/referrals/domain/errors/Erro
 import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
 import { User } from "@/src/modules/users/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedReferralRepo } from "../../../../__mocks__/context/MockedReferralRepo";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";

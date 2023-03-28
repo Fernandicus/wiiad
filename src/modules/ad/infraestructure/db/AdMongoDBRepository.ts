@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { AdTitle } from "../../domain/value-objects/AdTitle";
 import { Ad } from "../../domain/Ad";
 import { IAdRepository } from "../../domain/interfaces/IAdRepository";

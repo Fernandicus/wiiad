@@ -9,13 +9,13 @@ import {
   startWatchingAdWSEventHandler,
 } from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
 import { reqBodyParse } from "@/src/utils/helpers";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
 
 export type IApiReqWebSocketSendEvent = {
-  userId: string;
+  refereeId: string;
   referrerId: string;
 };
 
@@ -27,25 +27,25 @@ export default async function handler(
     return res.status(400).json({ message: "Bad request method" });
 
   const reqBody: IApiReqWebSocketSendEvent = reqBodyParse(req);
-  const { referrerId, userId } = getUserIdAndReferrerName(
+  const { referrerId, refereeId } = getUserIdAndReferrerName(
     { req, res },
     reqBody
   );
 
   const eventTrigger: Record<TWebSocketEvent, Function> = {
     "start-watching-ad": () => {
-      //* this.updateReferral.increaseReferredUsers(referrer.id);
       //* update this value only when the user clicks watch ad
-      //* this.updateCampagin.increaseViews(randomCampaign.id);
-      //* => this.updateReferral.increaseWatchedAds(sessionId);
-      startWatchingAdWSEventHandler.start(userId);
+      //* this.updateReferral.increaseReferredUsers(referrer.id);
+      //* this.updateCampagin.increaseViews(campaign.id);
+      startWatchingAdWSEventHandler.start(refereeId);
     },
     "finish-watching-ad": async () => {
       await MongoDB.connectAndDisconnect(async () => {
         await finishWatchingAdHandler.validateAndAirdrop({
-          refereeId: userId,
+          refereeId,
           referrerId,
         });
+        //* => this.updateReferral.increaseWatchedAds(sessionId);
       });
     },
   };
@@ -71,11 +71,11 @@ export default async function handler(
 function getUserIdAndReferrerName(
   context: IReqAndRes,
   reqBody: IApiReqWebSocketSendEvent
-): { userId: string; referrerId: string } {
+): { refereeId: string; referrerId: string } {
   const session = userSession.getFromServer(context);
-  const userId = session ? session.id : reqBody.userId;
+  const refereeId = session ? session.id : reqBody.refereeId;
   return {
-    userId,
+    refereeId,
     referrerId: reqBody.referrerId,
   };
 }

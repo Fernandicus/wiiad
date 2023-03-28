@@ -1,5 +1,5 @@
 import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FrontWSSSendEvent } from "../FrontWSSSendEvent";
 
 export class FrontWSSSendEventHandler {

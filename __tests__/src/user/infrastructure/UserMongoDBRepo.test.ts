@@ -1,6 +1,6 @@
 import { User } from "@/src/modules/users/user/domain/User";
 import { UserMongoDBRepo } from "@/src/modules/users/user/infrastructure/UserMongoDBRepo";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { setTestUserDB } from "../../../../__mocks__/lib/infrastructure/db/TestUserDB";
 import { Email } from "@/src/common/domain/Email";

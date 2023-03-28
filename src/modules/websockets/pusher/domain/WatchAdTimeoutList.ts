@@ -1,31 +1,32 @@
 import { Maybe } from "@/src/common/domain/Maybe";
-import { UniqId } from "@/src/utils/UniqId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { WatchAdTimeout } from "./WatchAdTimeout";
 
 export class WatchAdTimerList {
   readonly adsWatching: WatchAdTimeout[] = [];
 
   add(adTimer: WatchAdTimeout) {
-    if (this.isUserInTheList(adTimer.userId)) {
-      this.removeTimer(adTimer.userId);
+    if (this.isUserInTheList(adTimer.refereeId)) {
+      this.removeTimer(adTimer.refereeId);
     }
     this.adsWatching.push(adTimer);
   }
 
-  removeTimer(id: UniqId) {
-    const index = this.adsWatching.findIndex((t) => t.userId.id === id.id);
+  removeTimer(refereeId: RefereeId) {
+    const index = this.adsWatching.findIndex((t) => t.refereeId.uniqId === refereeId.uniqId);
     if (index === -1) return;
     this.removeAndClean(index);
   }
 
-  isUserInTheList(userId: UniqId): boolean {
-    const found = this.adsWatching.find((t) => t.userId.id === userId.id);
+  isUserInTheList(refereeId: RefereeId): boolean {
+    const found = this.adsWatching.find((t) => t.refereeId.uniqId === refereeId.uniqId);
     if (!found) return false;
     return true;
   }
 
-  findAdByUserId(userId: UniqId): Maybe<WatchAdTimeout> {
-    const adFound = this.adsWatching.find((ad) => ad.userId.id === userId.id);
+  findAdByRefereeId(refereeId: RefereeId): Maybe<WatchAdTimeout> {
+    const adFound = this.adsWatching.find((ad) => ad.refereeId.uniqId === refereeId.uniqId);
     if (!adFound) return Maybe.nothing();
     return Maybe.some(adFound);
   }

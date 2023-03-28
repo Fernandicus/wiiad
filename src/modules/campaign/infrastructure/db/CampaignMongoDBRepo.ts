@@ -1,5 +1,5 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Campaign } from "../../domain/Campaign";
 import { ErrorFindingCampaign } from "../../domain/errors/ErrorFindingCampaign";
 import { ICampaignRepo } from "../../domain/interfaces/ICampaignRepo";
@@ -14,7 +14,6 @@ import { CampaignModel, ICampaignModel } from "./CampaignModel";
 
 export class CampaignMongoDBRepo implements ICampaignRepo {
   async save(campaign: Campaign): Promise<void> {
-    
     await CampaignModel.create({
       ...campaign.toPrimitives(),
       _id: campaign.id.id,
@@ -62,13 +61,12 @@ export class CampaignMongoDBRepo implements ICampaignRepo {
   }
 
   async increaseViews(id: UniqId): Promise<void> {
-    /* const campaignFound = */ await CampaignModel.updateOne(
+    await CampaignModel.updateOne(
       { _id: id.id, status: CampaignStatusType.ACTIVE },
       {
         $inc: { "metrics.totalViews": 1 },
       }
     );
-   // if (!campaignFound) throw ErrorFindingCampaign.byActiveStatus(id.id);
   }
 
   async increaseClicks(id: UniqId): Promise<void> {

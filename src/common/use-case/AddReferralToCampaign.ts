@@ -1,12 +1,13 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ErrorFindingReferral } from "../../modules/referrals/domain/errors/ErrorFindingReferral";
 import { IReferralRepo } from "../../modules/referrals/domain/interfaces/IReferralRepo";
 import { ICampaignRepo } from "../../modules/campaign/domain/interfaces/ICampaignRepo";
 import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
 import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
 type TAddReferralToCampaignGivenRefereeId = {
-  referrerId: UniqId;
+  referrerId: ReferrerId;
   campaignId: UniqId;
 };
 
@@ -24,11 +25,11 @@ export class AddReferralToCampaign {
     this.findReferral = findReferral;
   }
 
-  async givenRefereeId({
+  async givenReferrerId({
     campaignId,
     referrerId,
   }: TAddReferralToCampaignGivenRefereeId): Promise<void> {
-    const referral = await this.findReferral.findByUserId(referrerId);
+    const referral = await this.findReferral.findByUserId(referrerId.uniqId);
     await referral.match({
       some: async (referralFound) => {
         await this.updateCampaign.addReferral({
@@ -37,7 +38,7 @@ export class AddReferralToCampaign {
         });
       },
       nothing() {
-        throw ErrorFindingReferral.byUserId(referrerId.id);
+        throw ErrorFindingReferral.byUserId(referrerId.uniqId.id);
       },
     });
   }

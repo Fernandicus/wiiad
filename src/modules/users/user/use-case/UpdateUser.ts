@@ -1,7 +1,7 @@
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IUserRepo } from "../domain/IUserRepo";
 
 export interface IUpdateData {

@@ -1,6 +1,6 @@
 import { IReqAndRes } from "../../../modules/session/domain/interfaces/IAuthCookies";
 import { userSession } from "../../../modules/session/infrastructure/session-container";
-import { UniqId } from "../../../utils/UniqId";
+import { UniqId } from "../../domain/UniqId";
 import { ProfilePic } from "../../domain/ProfilePic";
 import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
 import {

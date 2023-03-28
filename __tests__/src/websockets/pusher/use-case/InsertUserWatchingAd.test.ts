@@ -4,8 +4,10 @@ import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTi
 import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/use-case/InsertUserWatchingAd";
 import { SendWSEvent } from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../../__mocks__/context/MockedWSS";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
 describe("ON InsertUserWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   let insertUser: InsertUserWatchingAd;
@@ -19,13 +21,14 @@ describe("ON InsertUserWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   });
 
   it(`WHEN call insert method,
-  THEN a WatchAdTimeout with the userId should be saved in the adsWatching array`, () => {
-    const userId = UniqId.new();
+  THEN a WatchAdTimeout with the refereeId should be saved in the adsWatching array`, () => {
+    const refereeId =  RefereeId.new();
+    const referrerId =  ReferrerId.new();
     const campaignId = UniqId.new();
     const timer = new AdTimer(3);
-    insertUser.insert({ campaignId, userId, timer });
+    insertUser.insert({ campaignId, referrerId, refereeId, timer });
 
-    expect(watchAdTimeoutList.isUserInTheList(userId)).toBeTruthy();
+    expect(watchAdTimeoutList.isUserInTheList(refereeId)).toBeTruthy();
   });
 
 });

@@ -1,5 +1,5 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { TestCampaignRepository } from "../../modules/campaign/domain/TestCampaignRepository";
 import { FakeAd } from "../../modules/ads/FakeAd";
 import { TestCampaignMongoDBRepo } from "../../modules/campaign/infrastructure/TestCampaignMongoDBRepo";

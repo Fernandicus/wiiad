@@ -4,7 +4,7 @@ import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { AdRedirectionUrl } from "@/src/modules/ad/domain/value-objects/AdRedirectionUrl";
 import { AdSegments } from "@/src/modules/ad/domain/value-objects/AdSegments";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { CreateAd } from "../CreateAd";
 
 export class CreateAdHandler {

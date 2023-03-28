@@ -8,7 +8,7 @@ import {
   CampaignModel,
   ICampaignModel,
 } from "@/src/modules/campaign/infrastructure/db/CampaignModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 import { TestCampaignRepository } from "../domain/TestCampaignRepository";

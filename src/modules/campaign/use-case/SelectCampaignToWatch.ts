@@ -5,7 +5,7 @@ import { ErrorWatchingCampaign } from "../../../common/domain/ErrorWatchingCampa
 import { FindUser } from "@/src/modules/users/user/use-case/FindUser";
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
 import { Name } from "../../../common/domain/Name";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
 import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
 import { FindAds } from "@/src/modules/ad/use-case/FindAds";
@@ -13,7 +13,7 @@ import { FindAds } from "@/src/modules/ad/use-case/FindAds";
 export type TGetSelectedWatchAdData = {
   campaignId: UniqId;
   ad: Ad;
-  referrer: User;
+  referrerProfile: User;
 };
 
 type TSelectCampaignToWatchProps = {
@@ -50,7 +50,7 @@ export class SelectCampaignToWatch {
         const campaignData = await this.randomActiveCampaign();
         return {
           campaignId: campaignData.campaign.id,
-          referrer,
+          referrerProfile: referrer,
           ad: campaignData.ad,
         };
       },

@@ -1,21 +1,22 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
+import { RefereeId } from "../domain/RefereeId";
+import { ReferrerId } from "../domain/ReferrerId";
 import { UpdateReferral } from "./UpdateReferral";
 
 export class IncreaseReferralBalance {
   constructor(private updateReferral: UpdateReferral) {}
 
   async increase(params: {
-    referrerId: UniqId;
-    refereeId: UniqId;
+    referrerId: ReferrerId;
+    refereeId: RefereeId;
     balance: Balance;
   }): Promise<void> {
     const { refereeId, referrerId, balance } = params;
-    const increaseReferrer = () =>
-      this.updateReferral.increaseReferrerBalance(referrerId, balance);
-    const increaseReferee = () =>
-      this.updateReferral.increaseRefereeBalance(refereeId, balance);
 
-    await Promise.allSettled([increaseReferrer(), increaseReferee()]);
+    await Promise.allSettled([
+      this.updateReferral.increaseReferrerBalance(referrerId, balance),
+      this.updateReferral.increaseRefereeBalance(refereeId, balance),
+    ]);
   }
 }

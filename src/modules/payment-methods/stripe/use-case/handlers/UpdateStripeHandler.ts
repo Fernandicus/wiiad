@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { CardDetails, ICardDetailsPrimitives } from "../../domain/CardDetails";
 import { CardBrand } from "../../domain/value-objects/CardBrand";
 import { ExpMonth } from "../../domain/value-objects/ExpMonth";

@@ -1,5 +1,5 @@
 import { Referral } from "@/src/modules/referrals/domain/Referral";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeReferral } from "../../modules/referral/FakeReferral";
 import { TestReferralMongoDBRepo } from "../../modules/referral/infrastructure/TestReferralMongoDBRepo";
 import { TestReferralRepo } from "../../modules/referral/domain/TestReferralRepo";

@@ -1,5 +1,5 @@
 import { Name } from "@/src/common/domain/Name";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Folder } from "../../../domain/Folder";
 import { ICloudinarySignedParams } from "../CloudinaryCloudStorageRepo";
 import { GetCloudinarySignedParams } from "../services/GetCloudinarySignedParams";

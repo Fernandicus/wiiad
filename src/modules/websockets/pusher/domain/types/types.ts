@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { PusherWSSId } from "../PusherWSSId";
 import { WebSocketChannel } from "../WebSocketChannel";
 import { WebSocketEventName } from "../WebSocketEventName";

@@ -6,7 +6,7 @@ import {
   IStripePayload,
   StripeEventType,
 } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { faker } from "@faker-js/faker";
 import { FakeCardDetails } from "./FakeCardDetails";
 import { FakePaymentDetails } from "./FakePaymentDetails";

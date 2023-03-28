@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { SetupIntent } from "@/src/modules/payment-methods/stripe/use-case/SetupIntent";
 import { StripePayments } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
 import { mockedStripePayments } from "../../../../../__mocks__/context/MockStripePayments";

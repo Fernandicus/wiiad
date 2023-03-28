@@ -5,7 +5,7 @@ import { useNotification } from "@/components/hooks/useNotification";
 import { AdType } from "@/pages/ads";
 import { AdDescription } from "@/src/modules/ad/domain/value-objects/AdDescription";
 import { AdTitle } from "@/src/modules/ad/domain/value-objects/AdTitle";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { useFormik } from "formik";
 import { ChangeEvent, FormEvent, useState } from "react";
 import * as Yup from "yup";

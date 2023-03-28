@@ -2,7 +2,7 @@ import {
   AdModel,
   IAdModelProps,
 } from "@/src/modules/ad/infraestructure/db/AdModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeAd } from "../../../../__mocks__/lib/modules/ads/FakeAd";
 import { setTestAdDB } from "../../../../__mocks__/lib/infrastructure/db/TestAdDB";
 import { Ad } from "@/src/modules/ad/domain/Ad";

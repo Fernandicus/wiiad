@@ -7,7 +7,7 @@ import {
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
 import { RemoveCampaign } from "@/src/modules/campaign/use-case/RemoveCampaign";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedCampaignsRepo } from "../../../../__mocks__/context/MockCampaignRepo";
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 
