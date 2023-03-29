@@ -28,24 +28,24 @@ import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { AnonymReferenceId } from "@/src/common/domain/AnonymReferenceId";
 
 export interface IWatchCampaignPage {
-  user: IUserPrimitives | null;
-  campaign: ICampaignPrimitives | ICampaignPrimitives[];
-  ad: AdPropsPrimitives | AdPropsPrimitives[];
-  referrer: IUserPrimitives | null;
+  refereeId: string;
+  campaign: ICampaignPrimitives;
+  ad: AdPropsPrimitives;
+  referrerProfile: IUserPrimitives;
 }
 
 export default function Profile({
-  user,
+  refereeId,
   ad,
   campaign,
-  referrer,
+  referrerProfile,
 }: IWatchCampaignPage) {
   return (
     <AdViewPage
-      ad={ad as AdPropsPrimitives}
-      campaign={campaign as ICampaignPrimitives}
-      referrer={referrer!}
-      user={user}
+      ad={ad}
+      campaign={campaign}
+      referrer={referrerProfile!}
+      refereeId={refereeId}
     />
   );
 }
@@ -61,30 +61,41 @@ function getRefereeId(session: IUserPrimitives | null): RefereeId {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = userSession.getFromServer(context);
-  const referrerName = getReferrerName(context);
-  const refereeId = getRefereeId(session);
+  try {
+    const session = userSession.getFromServer(context);
+    const referrerName = getReferrerName(context);
+    const data = await getCampaignToWatch(referrerName, session);
 
-  console.log(referrerName);
+    const refereeId = getRefereeId(session);
+    const referrerId = new ReferrerId({ uniqId: data.referrerProfile.id });
 
-  const data = await getCampaignToWatch(referrerName, session);
-  const getAdDuration = new GetAdDuration(data.ad.file);
-  const adTimer = await getAdDuration.getAdTimer();
+    const getAdDuration = new GetAdDuration(data.ad.file);
+    const adTimer = await getAdDuration.getAdTimer();
 
-  insertUserWatchingAd.insert({
-    refereeId,
-    referrerId: new ReferrerId({ uniqId: data.referrerProfile.id }),
-    campaignId: data.campaignId,
-    timer: adTimer,
-  });
-
-  return {
-    props: {
-      referrerProfile: data.referrerProfile,
+    insertUserWatchingAd.insert({
       refereeId,
-      ad: data.ad,
-    },
-  };
+      referrerId,
+      campaignId: data.campaignId,
+      timer: adTimer,
+    });
+
+    return {
+      props: {
+        //todo: Create an Interface of ID so I can pass a UniqId, ReferrerId, ReferralId, etc..
+        referrerProfile: {
+          ...data.referrerProfile.toPrimitives(),
+          id: referrerId.value(),
+        },
+        refereeId: refereeId.value(),
+        ad: data.ad.toPrimitives(),
+      } as IWatchCampaignPage,
+    };
+  } catch (err) {
+    return {
+      props: {},
+      redirect: { destination: "/", permanent: false },
+    };
+  }
 };
 
 async function getCampaignToWatch(

@@ -6,6 +6,7 @@ import { UniqId } from "@/src/common/domain/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import Pusher from "pusher";
 
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -14,6 +15,7 @@ export default async function handler(
   const socketId = req.body.socket_id;
   const noauthUser: IApiReqWSSConnect = reqBodyParse(req);
   const userId = !session ? noauthUser.no_auth_user_id : session.id;
+
 
   authUserWSSHandler.auth({
     userId,

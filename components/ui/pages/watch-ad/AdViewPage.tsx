@@ -5,11 +5,11 @@ import AdView from "./AdView";
 
 type AdViewPage = Parameters<typeof AdView>[0];
 
-export const AdViewPage = ({ ad, campaign, referrer, user }: AdViewPage) => {
+export const AdViewPage = ({ ad, campaign, referrer, refereeId }: AdViewPage) => {
   return (
     <>
       <AdView
-        user={user}
+        refereeId={refereeId}
         campaign={campaign as ICampaignPrimitives}
         ad={ad as AdPropsPrimitives}
         referrer={referrer!}

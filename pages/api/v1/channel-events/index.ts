@@ -23,6 +23,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+
   if (req.method !== "PUT")
     return res.status(400).json({ message: "Bad request method" });
 
@@ -31,6 +32,7 @@ export default async function handler(
     { req, res },
     reqBody
   );
+
 
   const eventTrigger: Record<TWebSocketEvent, Function> = {
     "start-watching-ad": () => {
@@ -61,6 +63,7 @@ export default async function handler(
 
     return res.status(200);
   } catch (err) {
+    console.error(err);
     if (err instanceof Error)
       return res.status(400).json({
         message: err.message,

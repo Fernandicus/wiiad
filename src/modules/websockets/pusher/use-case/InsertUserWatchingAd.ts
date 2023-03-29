@@ -10,8 +10,12 @@ export class InsertUserWatchingAd {
     private sendEvent: SendWSEvent
   ) {}
 
-  //todo: pass by params a WatchAdTimeout to have a better testability using the
-  insert({ refereeId, referrerId, timer, campaignId }: TInsertUserWatchingAd): void {
+  insert({
+    refereeId,
+    referrerId,
+    timer,
+    campaignId,
+  }: TInsertUserWatchingAd): void {
     this.timeOutList.add(
       new WatchAdTimeout({
         refereeId,

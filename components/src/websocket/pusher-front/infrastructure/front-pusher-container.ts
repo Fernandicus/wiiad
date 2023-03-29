@@ -11,8 +11,8 @@ import { FrontWSSDisconnectHandler } from "../use-case/handlers/FrontWSSDisconne
 import { FrontWSSSendEventHandler } from "../use-case/handlers/FrontWSSSendEventHandler";
 import { FrontPusherWSS } from "./FrontPusherWSS";
 
-const wss = (props?: IApiReqWSSConnect) =>
-  new Pusher(projectConfig.PUSHER.key!, {
+const wss = (props?: IApiReqWSSConnect) => {
+  return new Pusher(projectConfig.PUSHER.key!, {
     cluster: "eu",
     userAuthentication: {
       params: props,
@@ -25,20 +25,19 @@ const wss = (props?: IApiReqWSSConnect) =>
       transport: "ajax",
     },
   });
+};
 
 export const frontwss = (props?: IApiReqWSSConnect) =>
   FrontPusherWSS.getInstance(wss(props));
+export const frontWSSConnectUser = () => new FrontWSSConnectUser(frontwss());
 
-export const frontWSSConnectUser = new FrontWSSConnectUser(frontwss());
+export const frontWSSConnectChannel = () =>
+  new FrontWSSConnectChannel(frontwss());
 
-export const frontWSSConnectChannel = new FrontWSSConnectChannel(frontwss());
+export const frontWSSDisconnectHandler = () =>
+  new FrontWSSDisconnectHandler(new FrontWSSDisconnect(frontwss()));
 
-export const frontWSSDisconnectHandler = new FrontWSSDisconnectHandler(
-  new FrontWSSDisconnect(frontwss())
-);
+export const frontWSSSendEventHandler = () =>
+  new FrontWSSSendEventHandler(new FrontWSSSendEvent(frontwss()));
 
-export const frontWSSSendEventHandler = new FrontWSSSendEventHandler(
-  new FrontWSSSendEvent(frontwss())
-);
-
-export const frontWSSListenEvent = new FrontWSSListenEvent(frontwss());
+export const frontWSSListenEvent = () => new FrontWSSListenEvent(frontwss());

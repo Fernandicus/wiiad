@@ -1,27 +1,42 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { RoleType } from "@/src/common/domain/Role";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useNotification } from "../../../hooks/useNotification";
 import { WatchAdSection } from "./WatchAdSection";
 import { CristalCardItem } from "../../items/CristalCardItem";
+import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
 
 interface AdViewParams {
-  user: IUserPrimitives | null;
+  refereeId: string;
   campaign: ICampaignPrimitives;
   ad: AdPropsPrimitives;
   referrer: IUserPrimitives;
 }
 
-export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
+export default function AdView({
+  campaign,
+  ad,
+  referrer,
+  refereeId,
+}: AdViewParams) {
   const [canEarnMoney, setCanEarnMoney] = useState<boolean>(false);
   const { setNotification } = useNotification();
   const [showTitle, setShowTitle] = useState(true);
 
-  const increaseMetrics = () => {
+  const { disconnect, connect, connectionMessage, events } = useWatchingAd({
+    no_auth_user_id: refereeId,
+    referrerId: referrer.id,
+  });
+
+ /*  useMemo(() => {
+    setNotification({ message: connectionMessage, status: "info" });
+  }, [connectionMessage]); */
+
+  /*   const increaseMetrics = () => {
     fetch(ApiRoutes.campaign_metrics_increase_clicks, {
       method: "POST",
       body: JSON.stringify({
@@ -32,7 +47,8 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
 
   const pay = () => {
     // if (!canEarnMoney) return;
-    if (user && user.role !== RoleType.USER) {
+    if (refereeId.includes("anonym")) {
+      console.log(refereeId);
       setNotification({
         message: `Los perfiles de anunciante no pueden ganar dinero viendo anuncios`,
         status: "error",
@@ -81,7 +97,7 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
       message: "Tienes que terminar de ver el anuncio",
       status: "info",
     });
-  };
+  }; */
 
   return (
     <div className="w-full min-h-screen bg-slate-100 flex justify-center items-center">
@@ -97,9 +113,14 @@ export default function AdView({ campaign, ad, referrer, user }: AdViewParams) {
             </h1>
 
             <WatchAdSection
-              onMonetizeAd={pay}
+              onMonetizeAd={() => {
+                events.finishWatchingAd();
+              }}
               adBannerAlt={ad.title}
-              onWatchAd={() => setShowTitle(false)}
+              onWatchAd={() => {
+                setShowTitle(false);
+                events.startWatchingAd();
+              }}
               adDescription={ad.description}
               adRedirectionUrl={ad.redirectionUrl}
               adFile={ad.file}

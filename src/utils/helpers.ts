@@ -53,6 +53,9 @@ export function verifyIdFromString(
     throw new Error(`No reference found in ${value}`);
 
   const uniqId = new UniqId(value);
-  const prefix = value.split(reference)[0];
+  const prefix = value.split(`_${reference}`)[0];
+
+  console.log(prefix);
+  
   return { uniqId, prefix };
 }

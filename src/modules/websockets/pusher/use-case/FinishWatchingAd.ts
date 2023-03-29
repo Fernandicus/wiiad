@@ -39,7 +39,7 @@ export class FinishWatchingAd {
     referrerId: ReferrerId;
   }): Promise<void> {
     const { refereeId, referrerId } = props;
-
+    
     const update = async (campaignId: UniqId) => {
       await this.updateData({
         campaignId,
@@ -87,5 +87,7 @@ export class FinishWatchingAd {
       throw new Error(increaseBalanceResp.reason);
     if (addReferralResp.status === "rejected")
       throw new Error(addReferralResp.reason);
+
+    console.log(campaignData.id);
   }
 }

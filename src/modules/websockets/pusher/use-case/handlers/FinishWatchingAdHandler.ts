@@ -15,9 +15,10 @@ export class FinishWatchingAdHandler {
     refereeId: string;
     referrerId: string;
   }): Promise<void> {
+    const { refereeId, referrerId } = props;
     await this.finishWatchingAd.validateAndAirdrop({
-      refereeId: RefereeId.fromString(props.refereeId),
-      referrerId: ReferrerId.fromString(props.refereeId),
+      refereeId: RefereeId.fromString(refereeId),
+      referrerId: ReferrerId.fromString(referrerId),
     });
   }
 }

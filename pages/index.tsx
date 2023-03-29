@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {},
       redirect: {
-        destination: `/${session.name}`,
+        destination: `/profile` //`/${session.name}`,
       },
     };
   return {

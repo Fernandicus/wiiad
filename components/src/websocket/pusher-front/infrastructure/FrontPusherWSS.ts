@@ -9,6 +9,7 @@ import {
   IFrontWSS,
   TWSConnectOptions,
 } from "../domain/interface/IFrontWSS";
+import { getApiResponse } from "@/src/utils/helpers";
 
 export class FrontPusherWSS implements IFrontWSS {
   private static singletonInstance: FrontPusherWSS;
@@ -52,10 +53,14 @@ export class FrontPusherWSS implements IFrontWSS {
     event: WebSocketEventName,
     data: T
   ): Promise<void> {
-    await fetch(ApiRoutes.websocketSendEvent(event.getName()), {
+    
+    const resp = await fetch(ApiRoutes.websocketSendEvent(event.getName()), {
       method: "PUT",
       body: JSON.stringify(data),
     });
+    console.log(resp.status);
+    const json = await getApiResponse(resp)
+    console.log(json.message);
   }
 
   //? https://pusher.com/docs/channels/using_channels/connection/#connection-states

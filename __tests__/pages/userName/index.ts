@@ -83,12 +83,12 @@ describe.skip("On getServerSideProps WatchAd, GIVEN a user and some Active Campa
 
     const campaign = resp.props.campaign as ICampaignPrimitives;
     const ad = resp.props.ad as AdPropsPrimitives;
-    const user = resp.props.user as IUserPrimitives;
-    const referrer = resp.props.referrer as IUserPrimitives;
+    const refereeId = resp.props.refereeId;
+    const referrer = resp.props.referrerProfile as IUserPrimitives;
 
     expect(campaign).not.toBe(undefined);
     expect(ad.id).toBe(campaign.adId);
-    expect(user.id).toBe(myUser.id);
+    expect(refereeId).toBe(myUser.id);
     expect(referrer.id).toBe(influencer.id.id);
   }, 12000);
 

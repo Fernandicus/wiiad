@@ -22,6 +22,7 @@ export abstract class AReferenceId<T extends string> {
   }
 
   value(): string {
-    return this.type + "_" + this.uniqId.id;
+    const pref = this.prefix && this.prefix + "_";
+    return pref + this.type + "_" + this.uniqId.id;
   }
 }

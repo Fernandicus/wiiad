@@ -11,31 +11,47 @@ import {
   TEventData,
   TWatchingAdEventData,
 } from "@/src/modules/websockets/pusher/domain/types/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNotification } from "../useNotification";
 
 interface IUseWatchingAd {
   disconnect: () => Promise<void>;
   connect: () => void;
   connectionMessage: string;
-  sendStartWatchingAdEvent: (userId: string) => Promise<void>;
+  events: {
+    startWatchingAd: () => Promise<void>;
+    finishWatchingAd: () => void;
+  };
 }
 
-export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
-  const [connectionMessage, setConnectionMessage] = useState("");
+export const useWatchingAd = (
+  data: IApiReqWSSConnect & { referrerId: string }
+): IUseWatchingAd => {
+   const [connectionMessage, setConnectionMessage] = useState(""); 
+  const { setNotification } = useNotification();
+
+  useEffect(() => {
+    connect();
+    return () => {
+      disconnect();
+    };
+  }, []);
 
   const connectUser = () => {
-    frontWSSConnectUser.connect({
+    console.log("connectUser");
+    frontWSSConnectUser().connect({
       onSuccess(data) {
-        setConnectionMessage("SignedIn");
+        setNotification({message:"SignedIn",status:"info"})
       },
       onError(data) {
-        setConnectionMessage("Error SingingIn");
+        setNotification({message:"Error SingingIn",status:"info"})
       },
     });
   };
 
   const connectChannel = () => {
-    frontWSSConnectChannel.watchAd({
+    console.log("connectChannel");
+    frontWSSConnectChannel().watchAd({
       onSuccess(data) {
         console.log("connectChannel success");
       },
@@ -46,33 +62,49 @@ export const useWatchingAd = (userData: IApiReqWSSConnect): IUseWatchingAd => {
   };
 
   const listenUserEvents = () => {
-    frontWSSListenEvent.finishedWatchingAd((data: unknown) => {
-      if (isEventData(data)) setConnectionMessage(data.message);
+    console.log("listenUserEvents");
+    frontWSSListenEvent().finishedWatchingAd((data: unknown) => {
+      if (isEventData(data)) setNotification({message:data.message,status:"info"});
     });
   };
 
   const connect = () => {
-    frontwss(userData);
+    console.log("connect");
+    frontwss(data);
     connectUser();
     connectChannel();
     listenUserEvents();
   };
 
   const disconnect = async () => {
-    await frontWSSDisconnectHandler.disconnect(userData.no_auth_user_id);
-    setConnectionMessage("Disconnected");
+    await frontWSSDisconnectHandler().disconnect(data.no_auth_user_id);
+    setNotification({message:"Disconnected",status:"info"})
   };
 
-  const sendStartWatchingAdEvent = async (userId: string) => {
-    frontWSSSendEventHandler.startWatchingAd(userId);
-    setConnectionMessage("Waiting response ...");
+  const startWatchingAd = async () => {
+    frontWSSSendEventHandler().startWatchingAd({
+      refereeValue: data.no_auth_user_id,
+      referrerId: data.referrerId,
+    });
+    setNotification({message:"Waiting response ...",status:"info"})
+  };
+
+  const finishWatchingAd = async () => {
+    frontWSSSendEventHandler().finishWatchingAd({
+      refereeValue: data.no_auth_user_id,
+      referrerId: data.referrerId,
+    });
+    setNotification({message:"Finish watching add",status:"info"})
   };
 
   return {
     disconnect,
     connect,
     connectionMessage,
-    sendStartWatchingAdEvent,
+    events: {
+      startWatchingAd,
+      finishWatchingAd,
+    },
   };
 };
 
