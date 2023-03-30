@@ -1,4 +1,4 @@
-import { IWebSocketService } from "@/src/modules/websockets/pusher/domain/interface/IWebSocketService";
+import { IWebSocketService } from "@/src/watching-ad/pusher/domain/interface/IWebSocketService";
 
 export const mockedWSS = (): IWebSocketService => {
   return {

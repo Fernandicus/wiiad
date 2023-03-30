@@ -1,40 +1,30 @@
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { ApiRoutes } from "@/src/utils/ApiRoutes";
-import { RoleType } from "@/src/common/domain/Role";
+import { useState } from "react";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { useNotification } from "../../../hooks/useNotification";
 import { WatchAdSection } from "./WatchAdSection";
 import { CristalCardItem } from "../../items/CristalCardItem";
-import { useWatchingAd } from "@/components/hooks/ad-watcher/useWatchingAd";
+import { useWatchingAdActions } from "@/components/hooks/ad-watcher/useWatchingAdActions";
 
 interface AdViewParams {
-  refereeId: string;
-  campaign: ICampaignPrimitives;
+  refereeValue: string;
   ad: AdPropsPrimitives;
-  referrer: IUserPrimitives;
+  referrerProfile: IUserPrimitives;
 }
 
 export default function AdView({
-  campaign,
   ad,
-  referrer,
-  refereeId,
+  referrerProfile,
+  refereeValue,
 }: AdViewParams) {
   const [canEarnMoney, setCanEarnMoney] = useState<boolean>(false);
   const { setNotification } = useNotification();
   const [showTitle, setShowTitle] = useState(true);
 
-  const { disconnect, connect, connectionMessage, events } = useWatchingAd({
-    no_auth_user_id: refereeId,
-    referrerId: referrer.id,
+  const { finishWatchingAd, startWatchingAd } = useWatchingAdActions({
+    referrerValue: referrerProfile.id,
+    refereeValue: refereeValue,
   });
-
- /*  useMemo(() => {
-    setNotification({ message: connectionMessage, status: "info" });
-  }, [connectionMessage]); */
 
   /*   const increaseMetrics = () => {
     fetch(ApiRoutes.campaign_metrics_increase_clicks, {
@@ -114,18 +104,18 @@ export default function AdView({
 
             <WatchAdSection
               onMonetizeAd={() => {
-                events.finishWatchingAd();
+                finishWatchingAd();
               }}
               adBannerAlt={ad.title}
               onWatchAd={() => {
                 setShowTitle(false);
-                events.startWatchingAd();
+                startWatchingAd();
               }}
               adDescription={ad.description}
               adRedirectionUrl={ad.redirectionUrl}
               adFile={ad.file}
-              referrerProfilePic={referrer.profilePic}
-              referrerName={referrer.name}
+              referrerProfilePic={referrerProfile.profilePic}
+              referrerName={referrerProfile.name}
             />
           </div>
         </div>

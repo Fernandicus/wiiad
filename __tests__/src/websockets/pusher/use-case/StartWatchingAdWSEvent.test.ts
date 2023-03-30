@@ -1,20 +1,20 @@
-import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
+import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
+import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
 import { UniqId } from "@/src/common/domain/UniqId";
-import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
+import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
-describe("On StartWatchingAdWSEvent, GIVEN a WatchAdTimerList with a WatchAdTimeout", () => {
-  let watchAdList: WatchAdTimerList;
+describe("On StartWatchingAdWSEvent, GIVEN a WatchAdDurationList with a WatchAdTimeout", () => {
+  let watchAdList: WatchAdDurationList;
   let watchAdTimeout: WatchAdTimeout;
-  const timer = new AdTimer(2);
+  const timer = new AdDuration(2);
   let startWatchingAdWS: StartWatchingAdWSEvent;
   let counter = 0;
 
   beforeAll(() => {
-    watchAdList = new WatchAdTimerList();
+    watchAdList = new WatchAdDurationList();
     watchAdTimeout = new WatchAdTimeout({
       refereeId:  RefereeId.new(),
       referrerId:  ReferrerId.new(),

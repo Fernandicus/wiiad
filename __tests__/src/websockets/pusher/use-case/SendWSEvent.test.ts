@@ -1,12 +1,12 @@
-import { IWebSocketService } from "@/src/modules/websockets/pusher/domain/interface/IWebSocketService";
-import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { SendWSEvent } from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
+import { IWebSocketService } from "@/src/watching-ad/pusher/domain/interface/IWebSocketService";
+import { WebSocketEventName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { SendWSEvent } from "@/src/watching-ad/pusher/use-case/SendWSEvent";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../../__mocks__/context/MockedWSS";
-import { TPusherSendEvent, TWatchingAdEventData } from "@/src/modules/websockets/pusher/domain/types/types";
+import { TPusherSendEvent, TWatchingAdEventData } from "@/src/watching-ad/pusher/domain/types/types";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 
-describe("On SendWSEvent, GIVEN a StartWatchingAdEvent and an empty WatchAdTimerList", () => {
+describe("On SendWSEvent, GIVEN a StartWatchingAdEvent and an empty WatchAdDurationList", () => {
   let mock: IWebSocketService;
   let sendEvent: SendWSEvent;
 

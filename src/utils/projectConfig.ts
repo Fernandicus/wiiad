@@ -25,10 +25,4 @@ export const projectConfig = {
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   },
-  PUSHER: {
-    appId: process.env.PUSHER_APP_ID,
-    key: process.env.NEXT_PUBLIC_PUSHER_KEY,
-    secret: process.env.PUSHER_SECRET,
-    cluster: process.env.PUSHER_CLUSTER,
-  },
 };

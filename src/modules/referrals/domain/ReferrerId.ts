@@ -12,6 +12,10 @@ export class ReferrerId extends AReferenceId<TReferrerId> {
     super({ type: "referrer", uniqId, prefix });
   }
 
+  static givenUniqId(uniqId:UniqId):ReferrerId{
+    return new ReferrerId({uniqId})
+  }
+
   static fromString(value: string): ReferrerId {
     const referrer: TReferrerId = "referrer";
     const verifiedData = verifyIdFromString(value, referrer);

@@ -1,18 +1,17 @@
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { EventQuery } from "@/src/modules/websockets/pusher/domain/QueryEventName";
-import {
-  TWebSocketEvent,
-  WebSocketEventName,
-} from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
+import { EventQuery } from "@/src/watching-ad/pusher/domain/QueryEventName";
 import {
   finishWatchingAdHandler,
   startWatchingAdWSEventHandler,
-} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
+} from "@/src/watching-ad/pusher/infrastructure/watching-ad-container";
 import { reqBodyParse } from "@/src/utils/helpers";
-import { UniqId } from "@/src/common/domain/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
+import {
+  TWatchingAdAction,
+  WatchingAdActionName,
+} from "@/src/watching-ad/pusher/domain/WebSocketEventName";
 
 export type IApiReqWebSocketSendEvent = {
   refereeId: string;
@@ -23,7 +22,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-
   if (req.method !== "PUT")
     return res.status(400).json({ message: "Bad request method" });
 
@@ -33,33 +31,32 @@ export default async function handler(
     reqBody
   );
 
-
-  const eventTrigger: Record<TWebSocketEvent, Function> = {
-    "start-watching-ad": () => {
+  const eventTrigger: Record<TWatchingAdAction, Function> = {
+    "start-watching-ad": async () => {
       //* update this value only when the user clicks watch ad
       //* this.updateReferral.increaseReferredUsers(referrer.id);
       //* this.updateCampagin.increaseViews(campaign.id);
-      startWatchingAdWSEventHandler.start(refereeId);
+      await startWatchingAdWSEventHandler.start(refereeId);
     },
     "finish-watching-ad": async () => {
-      await MongoDB.connectAndDisconnect(async () => {
-        await finishWatchingAdHandler.validateAndAirdrop({
-          refereeId,
-          referrerId,
-        });
-        //* => this.updateReferral.increaseWatchedAds(sessionId);
+      await finishWatchingAdHandler.validateAndAirdrop({
+        refereeId,
+        referrerId,
       });
+      //* => this.updateReferral.increaseWatchedAds(sessionId);
     },
   };
 
   try {
     const query = new EventQuery(req.query);
-    const event = WebSocketEventName.validateFromString(query.event);
-    const eventName = event.getName() as TWebSocketEvent;
+    const event = WatchingAdActionName.validateFromString(query.event);
+    const eventName = event.getName() as TWatchingAdAction;
 
-    //Todo: Test what happens when the user closes session and the timer is ON,
-    //todo: - in that case avoid sending payment
-    await eventTrigger[eventName]();
+    await MongoDB.connectAndDisconnect(async () => {
+      //Todo: Test what happens when the user closes session and the timer is ON,
+      //todo: - in that case avoid sending payment
+      await eventTrigger[eventName]();
+    });
 
     return res.status(200);
   } catch (err) {

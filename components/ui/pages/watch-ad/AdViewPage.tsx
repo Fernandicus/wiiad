@@ -1,18 +1,17 @@
-import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { Notification } from "../../notifications/Notification";
 import AdView from "./AdView";
 
 type AdViewPage = Parameters<typeof AdView>[0];
 
-export const AdViewPage = ({ ad, campaign, referrer, refereeId }: AdViewPage) => {
+export const AdViewPage = (props: AdViewPage) => {
+  const { ad, refereeValue, referrerProfile } = props;
+
   return (
     <>
       <AdView
-        refereeId={refereeId}
-        campaign={campaign as ICampaignPrimitives}
-        ad={ad as AdPropsPrimitives}
-        referrer={referrer!}
+        refereeValue={refereeValue}
+        ad={ad}
+        referrerProfile={referrerProfile}
       />
       <div className="fixed top-5 right-5">
         <Notification />

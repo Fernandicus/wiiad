@@ -1,51 +1,36 @@
-import { LoginQueries } from "@/src/common/domain/LoginQueries";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import {
-  TGetSelectedWatchAdData,
-  SelectCampaignToWatch,
-} from "@/src/modules/campaign/use-case/SelectCampaignToWatch";
-import AdView from "../../components/ui/pages/watch-ad/AdView";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
+import { TGetSelectedWatchAdData } from "@/src/modules/campaign/use-case/SelectCampaignToWatch";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
-import { Notification } from "@/components/ui/notifications/Notification";
 import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
-import { AdFileUrl } from "@/src/modules/ad/domain/value-objects/AdFileUrl";
 import { GetAdDuration } from "@/src/modules/ad/infraestructure/GetAdDuration";
 import { UniqId } from "@/src/common/domain/UniqId";
-import {
-  insertUserWatchingAd,
-  insertUserWatchingAdHandler,
-} from "@/src/modules/websockets/pusher/infrastructure/pusher-container";
-import { Query } from "@/src/common/domain/types/types";
+import { insertUserWatchingAd } from "@/src/watching-ad/pusher/infrastructure/watching-ad-container";
 import { Name } from "@/src/common/domain/Name";
 import { selectCampaignToWatch } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { AnonymReferenceId } from "@/src/common/domain/AnonymReferenceId";
+import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
 
 export interface IWatchCampaignPage {
-  refereeId: string;
-  campaign: ICampaignPrimitives;
+  refereeValue: string;
   ad: AdPropsPrimitives;
   referrerProfile: IUserPrimitives;
 }
 
 export default function Profile({
-  refereeId,
+  refereeValue,
   ad,
-  campaign,
   referrerProfile,
 }: IWatchCampaignPage) {
   return (
     <AdViewPage
       ad={ad}
-      campaign={campaign}
-      referrer={referrerProfile!}
-      refereeId={refereeId}
+      referrerProfile={referrerProfile!}
+      refereeValue={refereeValue}
     />
   );
 }
@@ -63,32 +48,51 @@ function getRefereeId(session: IUserPrimitives | null): RefereeId {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const session = userSession.getFromServer(context);
+    if (session) {
+      const handleRol = HandleRolesHandler.givenUser(session);
+      handleRol.isRole("USER", {
+        else(_) {
+          throw new Error("User role is not of type 'User'");
+        },
+        then(user) {},
+      });
+    }
+
     const referrerName = getReferrerName(context);
-    const data = await getCampaignToWatch(referrerName, session);
 
-    const refereeId = getRefereeId(session);
-    const referrerId = new ReferrerId({ uniqId: data.referrerProfile.id });
+    const props = await MongoDB.connectAndDisconnect<IWatchCampaignPage>(
+      async () => {
+        const { ad, campaignId, referrerProfile } = await getCampaignToWatch(
+          referrerName,
+          session
+        );
 
-    const getAdDuration = new GetAdDuration(data.ad.file);
-    const adTimer = await getAdDuration.getAdTimer();
+        const refereeId = getRefereeId(session);
+        const referrerId = new ReferrerId({ uniqId: referrerProfile.id });
 
-    insertUserWatchingAd.insert({
-      refereeId,
-      referrerId,
-      campaignId: data.campaignId,
-      timer: adTimer,
-    });
+        const getAdDuration = new GetAdDuration(ad.file);
+        const adTimer = await getAdDuration.getAdDuration();
+
+        await insertUserWatchingAd.insert({
+          adDuration: adTimer,
+          refereeId,
+          referrerId,
+          campaignId,
+        });
+
+        return {
+          referrerProfile: {
+            ...referrerProfile.toPrimitives(),
+            id: referrerId.value(),
+          },
+          refereeValue: refereeId.value(),
+          ad: ad.toPrimitives(),
+        };
+      }
+    );
 
     return {
-      props: {
-        //todo: Create an Interface of ID so I can pass a UniqId, ReferrerId, ReferralId, etc..
-        referrerProfile: {
-          ...data.referrerProfile.toPrimitives(),
-          id: referrerId.value(),
-        },
-        refereeId: refereeId.value(),
-        ad: data.ad.toPrimitives(),
-      } as IWatchCampaignPage,
+      props: props as IWatchCampaignPage,
     };
   } catch (err) {
     return {
@@ -102,79 +106,11 @@ async function getCampaignToWatch(
   referrerName: string,
   session: IUserPrimitives | null
 ): Promise<TGetSelectedWatchAdData> {
-  const data = await MongoDB.connectAndDisconnect<TGetSelectedWatchAdData>(
-    async () => {
-      //Todo: Implement a better algorithm to select an Ad inside the get method
-      return await selectCampaignToWatch.get({
-        referrerName: new Name(referrerName),
-        sessionId: session ? new UniqId(session.id) : undefined,
-      });
-    }
-  );
+  //Todo: Implement a better algorithm to select an Ad inside the get method
+  const data = await selectCampaignToWatch.get({
+    referrerName: new Name(referrerName),
+    sessionId: session ? new UniqId(session.id) : undefined,
+  });
+
   return data;
 }
-
-/* export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-  const queryParams = new LoginQueries(query);
-
-  try {
-    return await getSSPropsData({ context, queryParams });
-  } catch (err) {
-    await MongoDB.disconnect();
-    return {
-      props: {},
-      redirect: { destination: "/", permanent: false },
-    };
-  }
-};
-
-async function getSSPropsData(params: {
-  context: IReqAndRes;
-  queryParams: LoginQueries;
-}) {
-  const { queryParams, context } = params;
-  const session = userSession.getFromServer(context);
-
-  if (session && session.name == queryParams.userName)
-    return {
-      props: {},
-      redirect: { destination: "/profile", permanent: false },
-    };
-
-  const { ad, activeCampaign, referrer } = await getCampaignToWatch(
-    queryParams,
-    session
-  );
-
-  return {
-    props: {
-      user: session,
-      campaign: activeCampaign,
-      ad,
-      referrer: {
-        email: referrer.email,
-        id: referrer.id,
-        name: referrer.name,
-        role: referrer.role,
-        profilePic: referrer.profilePic,
-      },
-    } as IWatchCampaignPage,
-  };
-}
-
-async function getCampaignToWatch(
-  loginQueries: LoginQueries,
-  session: IUserPrimitives | null
-): Promise<TGetSelectedWatchAdData> {
-  const data = await MongoDB.connectAndDisconnect<TGetSelectedWatchAdData>(
-    async () => {
-      return await SelectCampaignToWatch.forInfluencer({
-        influencerName: loginQueries.userName,
-        session,
-      });
-    }
-  );
-  return data;
-}
- */

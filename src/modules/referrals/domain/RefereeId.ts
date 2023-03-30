@@ -9,6 +9,10 @@ export class RefereeId extends AReferenceId<TRefereeId> {
     super({ uniqId, type: "referee", prefix });
   }
 
+  static givenUniqId(uniqId:UniqId):RefereeId{
+    return new RefereeId({uniqId})
+  }
+
   static new(): RefereeId {
     return new RefereeId({
       uniqId: UniqId.new(),

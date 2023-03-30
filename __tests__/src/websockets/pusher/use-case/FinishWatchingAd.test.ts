@@ -5,11 +5,11 @@ import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampai
 import { IReferralRepo } from "@/src/modules/referrals/domain/interfaces/IReferralRepo";
 import { IncreaseReferralBalance } from "@/src/modules/referrals/use-case/IncreaseReferralBalance";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
-import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
+import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
-import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import { FinishWatchingAd } from "@/src/modules/websockets/pusher/use-case/FinishWatchingAd";
-import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
+import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
+import { FinishWatchingAd } from "@/src/watching-ad/pusher/use-case/FinishWatchingAd";
+import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedReferralRepo } from "../../../../../__mocks__/context/MockedReferralRepo";
 import { FakeReferral } from "../../../../../__mocks__/lib/modules/referral/FakeReferral";
@@ -23,7 +23,7 @@ import { futureTimeout } from "../../../../../__mocks__/lib/utils/helpers";
 
 describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   let finishWatchingAd: FinishWatchingAd;
-  let timer = new AdTimer(3);
+  let timer = new AdDuration(3);
   let startWatching: StartWatchingAdWSEvent;
   let refereeId: RefereeId;
   let referrerId: ReferrerId;
@@ -49,7 +49,7 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
       findReferral,
     });
     const findCampaign = new FindCampaign(mockedCampaignsRep);
-    const watchingAds = new WatchAdTimerList();
+    const watchingAds = new WatchAdDurationList();
     const updateReferral = new UpdateReferral(mockedReferralsRep);
     const increaseBalance = new IncreaseReferralBalance(updateReferral);
 

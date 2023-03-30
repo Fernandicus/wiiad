@@ -1,15 +1,15 @@
 import getVideoDurationInSeconds from "get-video-duration";
-import { AdTimer } from "../domain/value-objects/AdTimer";
+import { AdDuration } from "../domain/value-objects/AdDuration";
 import { AdFileUrl } from "../domain/value-objects/AdFileUrl";
 
 export class GetAdDuration {
   constructor(private adFile: AdFileUrl) {}
 
-  async getAdTimer(): Promise<AdTimer> {
+  async getAdDuration(): Promise<AdDuration> {
     if (this.adFile.isVideo()) {
       const duration = await getVideoDurationInSeconds(this.adFile.file);
-      return new AdTimer(duration);
+      return new AdDuration(duration);
     }
-    return AdTimer.defaultTime();
+    return AdDuration.defaultTime();
   }
 }

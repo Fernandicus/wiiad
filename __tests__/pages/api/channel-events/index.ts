@@ -1,13 +1,13 @@
 import channelEvents, {
   IApiReqWebSocketSendEvent,
 } from "@/pages/api/v1/channel-events/index";
-import { AdTimer } from "@/src/modules/ad/domain/value-objects/AdTimer";
+import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
-import { WatchAdTimerList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import { WebSocketEventName } from "@/src/modules/websockets/pusher/domain/WebSocketEventName";
-import { InsertUserWatchingAd } from "@/src/modules/websockets/pusher/use-case/InsertUserWatchingAd";
-import { SendWSEvent } from "@/src/modules/websockets/pusher/use-case/SendWSEvent";
-import { StartWatchingAdWSEvent } from "@/src/modules/websockets/pusher/use-case/StartWatchingAdWSEvent";
+import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
+import { WebSocketEventName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { InsertUserWatchingAd } from "@/src/watching-ad/pusher/use-case/InsertUserWatchingAd";
+import { SendWSEvent } from "@/src/watching-ad/pusher/use-case/SendWSEvent";
+import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../__mocks__/context/MockedWSS";
 import { futureTimeout } from "../../../../__mocks__/lib/utils/helpers";
@@ -24,11 +24,11 @@ import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 
 describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList", () => {
-  let timer = new AdTimer(3);
+  let timer = new AdDuration(3);
   let userWatchingAd: UniqId;
   let startWatching: StartWatchingAdWSEvent;
   let insertWatchingAd: InsertUserWatchingAd;
-  const watchList = new WatchAdTimerList();
+  const watchList = new WatchAdDurationList();
   let users: User[];
 
   beforeAll(async () => {
@@ -191,7 +191,7 @@ async function sendFinishEvent(props: {
 
   await futureTimeout(async () => {
     await channelEvents(finishAdCtx.req, finishAdCtx.res);
-  }, AdTimer.defaultTime().milliseconds + 1000);
+  }, AdDuration.defaultTime().milliseconds + 1000);
 
   return finishAdCtx.res;
 }
