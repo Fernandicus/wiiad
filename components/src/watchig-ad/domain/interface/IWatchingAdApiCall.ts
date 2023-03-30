@@ -1,4 +1,4 @@
-import { WatchingAdActionName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventName";
 
 export interface IWatchingAdApiCall {
   sendEvent<T extends object>(

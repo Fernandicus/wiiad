@@ -1,7 +1,7 @@
 import { IApiReqWebSocketSendEvent } from "@/pages/api/v1/channel-events";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
-import { WatchingAdActionName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventName";
 import { IWatchingAdApiCall } from "../domain/interface/IWatchingAdApiCall";
 
 export class SendWatchingAdAction {

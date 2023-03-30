@@ -1,4 +1,4 @@
-import { sendWatchingAdActionHandler } from "@/components/src/websocket/pusher-front/infrastructure/front-watching-ad-container";
+import { sendWatchingAdActionHandler } from "@/components/src/watchig-ad/infrastructure/front-watching-ad-container";
 import { useState } from "react";
 import { useNotification } from "../useNotification";
 

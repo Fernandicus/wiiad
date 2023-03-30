@@ -1,9 +1,9 @@
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 import { UniqId } from "@/src/common/domain/UniqId";
-import { AdDuration } from "../../../../modules/ad/domain/value-objects/AdDuration";
 import { InsertUserWatchingAd } from "../InsertUserWatchingAd";
 import { TNewWatchingAdTimeout } from "../../domain/WatchingAdTimeout";
+import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 
 type TInsertUserWatchingAd = {
   referrerId: string;

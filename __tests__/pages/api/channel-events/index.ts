@@ -4,7 +4,7 @@ import channelEvents, {
 import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import { WebSocketEventName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { WebSocketEventName } from "@/src/watching-ad/domain/WebSocketEventName";
 import { InsertUserWatchingAd } from "@/src/watching-ad/pusher/use-case/InsertUserWatchingAd";
 import { SendWSEvent } from "@/src/watching-ad/pusher/use-case/SendWSEvent";
 import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";

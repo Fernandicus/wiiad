@@ -7,13 +7,13 @@ import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
 import { GetAdDuration } from "@/src/modules/ad/infraestructure/GetAdDuration";
 import { UniqId } from "@/src/common/domain/UniqId";
-import { insertUserWatchingAd } from "@/src/watching-ad/pusher/infrastructure/watching-ad-container";
 import { Name } from "@/src/common/domain/Name";
 import { selectCampaignToWatch } from "@/src/modules/campaign/infrastructure/campaign-container";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { AnonymReferenceId } from "@/src/common/domain/AnonymReferenceId";
 import { HandleRolesHandler } from "@/src/modules/users/user/handler/HandleRolesHandler";
+import { insertUserWatchingAd } from "@/src/watching-ad/infrastructure/watching-ad-container";
 
 export interface IWatchCampaignPage {
   refereeValue: string;

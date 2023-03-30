@@ -1,7 +1,7 @@
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { IWatchingAdApiCall } from "../domain/interface/IWatchingAdApiCall";
 import { getApiResponse } from "@/src/utils/helpers";
-import { WatchingAdActionName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventName";
 
 export class WatchingAdFetchApiCall implements IWatchingAdApiCall {
   async sendEvent<T extends object>(

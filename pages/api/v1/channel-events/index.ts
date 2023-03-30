@@ -1,9 +1,5 @@
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
-import { EventQuery } from "@/src/watching-ad/pusher/domain/QueryEventName";
-import {
-  finishWatchingAdHandler,
-  startWatchingAdWSEventHandler,
-} from "@/src/watching-ad/pusher/infrastructure/watching-ad-container";
+import { EventQuery } from "@/src/watching-ad/domain/QueryEventName";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
@@ -11,7 +7,8 @@ import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies
 import {
   TWatchingAdAction,
   WatchingAdActionName,
-} from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+} from "@/src/watching-ad/domain/WebSocketEventName";
+import { finishWatchingAdHandler, startWatchingAdWSEventHandler } from "@/src/watching-ad/infrastructure/watching-ad-container";
 
 export type IApiReqWebSocketSendEvent = {
   refereeId: string;

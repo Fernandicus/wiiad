@@ -1,5 +1,5 @@
 import { IWebSocketService } from "@/src/watching-ad/pusher/domain/interface/IWebSocketService";
-import { WebSocketEventName } from "@/src/watching-ad/pusher/domain/WebSocketEventName";
+import { WebSocketEventName } from "@/src/watching-ad/domain/WebSocketEventName";
 import { SendWSEvent } from "@/src/watching-ad/pusher/use-case/SendWSEvent";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../../__mocks__/context/MockedWSS";
