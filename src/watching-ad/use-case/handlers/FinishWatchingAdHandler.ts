@@ -12,13 +12,13 @@ export class FinishWatchingAdHandler {
    * that's not the case for the Referrer id
    */
   async validateAndAirdrop(props: {
-    refereeId: string;
-    referrerId: string;
+    refereeValue: string;
+    referrerValue: string;
   }): Promise<void> {
-    const { refereeId, referrerId } = props;
+    const { refereeValue, referrerValue } = props;
     await this.finishWatchingAd.validateAndAirdrop({
-      refereeId: RefereeId.fromString(refereeId),
-      referrerId: ReferrerId.fromString(referrerId),
+      refereeId: RefereeId.fromString(refereeValue),
+      referrerId: ReferrerId.fromString(referrerValue),
     });
   }
 }

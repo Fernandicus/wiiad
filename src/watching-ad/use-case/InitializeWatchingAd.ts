@@ -20,7 +20,7 @@ type TInitializeWatchingAdResponse = {
   referrerProfile: User;
 };
 
-export class InitWatchingAd {
+export class InitializeWatchingAd {
   private selectCampaign;
   private findUser;
   private getAdDuration;
@@ -38,7 +38,7 @@ export class InitWatchingAd {
     this.insertUserWatchingAd = props.insertUserWatchingAd;
   }
 
-  async initialize({
+  async init({
     referrerName,
     referee,
   }: TInitializeWatchingAd): Promise<TInitializeWatchingAdResponse> {

@@ -9,9 +9,6 @@ import { IWatchingAdModel, WatchingAdModel } from "./WatchingAdModel";
 
 export class MongoDBWatchingAdRepo implements IWatchingAdRepo {
   async add(watchingAd: WatchingAdTimeout): Promise<void> {
-    //todo: If referee id exists in the WatchingAdTimeout DB replace it
-    //* Only one WatchingAdTimeout per referee
-
     const watchingAdPrimitives = watchingAd.toPrimitives();
     const model: IWatchingAdModel = {
       ...watchingAdPrimitives,

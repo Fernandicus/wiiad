@@ -1,4 +1,4 @@
-import { StartWatchingAd } from "../use-case/StartWatchingAd";
+import { InitWatchingAdTimer } from "../use-case/InitWatchingAdTimer";
 import { InsertUserWatchingAd } from "../use-case/InsertUserWatchingAd";
 import { InsertUserWatchingAdHandler } from "../use-case/handlers/InsertUserWatchingAdHandler";
 import { FinishWatchingAd } from "../use-case/FinishWatchingAd";
@@ -7,18 +7,25 @@ import {
   increaseReferralBalance,
   updateReferral,
 } from "@/src/modules/referrals/infrastructure/referral-container";
-import { findCampaign } from "@/src/modules/campaign/infrastructure/campaign-container";
+import {
+  findCampaign,
+  updateCampaignMetrics,
+} from "@/src/modules/campaign/infrastructure/campaign-container";
 import { addReferralToCampaign } from "@/src/common/infrastructure/common-src-container";
 import { MongoDBWatchingAdRepo } from "./db/MongoDBWatchingAdRepo";
-import { StartWatchingAdHandler } from "../use-case/handlers/StartWatchingAdHandler";
-import { InitWatchingAd } from "../use-case/InitWatchingAd";
+import { InitWatchingAdTimerHandler } from "../use-case/handlers/InitWatchingAdTimerHandler";
+import { InitializeWatchingAd } from "../use-case/InitializeWatchingAd";
 import { findUser } from "@/src/modules/users/user/container";
 import {
   findAd,
   getAdDuration,
 } from "@/src/modules/ad/infraestructure/ad-container";
 import { SelectCampaignToWatch } from "../use-case/SelectCampaignToWatch";
-import { InitWatchingAdHandler } from "../use-case/handlers/InitWatchingAdHandler";
+import { InitializeWatchingAdHandler } from "../use-case/handlers/InitializeWatchingAdHandler";
+import { FindWatchingAd } from "../use-case/FindWatchingAd";
+import { FindWatchingAdHandler } from "../use-case/handlers/FindWatchingAdHandler";
+import { StartWatchingAd } from "../use-case/StartWatchingAd";
+import { StartWatchingAdHandler } from "../use-case/handlers/StartWatchingAdHandler";
 
 const watchAdRepo = new MongoDBWatchingAdRepo();
 
@@ -26,9 +33,9 @@ export const insertUserWatchingAd = new InsertUserWatchingAd(watchAdRepo);
 export const insertUserWatchingAdHandler = new InsertUserWatchingAdHandler(
   insertUserWatchingAd
 );
-const startWatchingAdWSEvent = new StartWatchingAd(watchAdRepo);
-export const startWatchingAdWSEventHandler = new StartWatchingAdHandler(
-  startWatchingAdWSEvent
+export const initWatchingAdTimer = new InitWatchingAdTimer(watchAdRepo);
+export const initWatchingAdTimerHandler = new InitWatchingAdTimerHandler(
+  initWatchingAdTimer
 );
 
 const finishWatchingAd = new FinishWatchingAd({
@@ -48,11 +55,26 @@ const selectCampaign = new SelectCampaignToWatch({
   updateReferral,
 });
 
-const initWatchingAd = new InitWatchingAd({
+const initializeWatchingAd = new InitializeWatchingAd({
   findUser,
   getAdDuration,
   insertUserWatchingAd,
   selectCampaign,
 });
 
-export const initWatchingAdHandler = new InitWatchingAdHandler(initWatchingAd);
+export const initializeWatchingAdHandler = new InitializeWatchingAdHandler(
+  initializeWatchingAd
+);
+
+export const findWatchingAd = new FindWatchingAd(watchAdRepo);
+export const findWatchingAdHandler = new FindWatchingAdHandler(findWatchingAd);
+
+const startWatchingAd = new StartWatchingAd({
+  findWatchingAd,
+  initWatchingAdTimer,
+  updateCampaignMetrics,
+  updateReferral,
+});
+
+export const startWatchingAdHandler = new StartWatchingAdHandler(startWatchingAd);
+

@@ -1,12 +1,17 @@
-import { StartWatchingAd } from "../StartWatchingAd";
-import { UniqId } from "@/src/common/domain/UniqId";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { StartWatchingAd } from "../StartWatchingAd";
 
 export class StartWatchingAdHandler {
   constructor(private startWatchingAd: StartWatchingAd) {}
 
- async start(refereeId: string): Promise<void> {
-    const referee = RefereeId.fromString(refereeId);
-    await this.startWatchingAd.start(referee);
+  async start(props:{refereeValue:string, referrerValue:string}){
+    const refereeId = RefereeId.fromString(props.refereeValue);
+    const referrerId = ReferrerId.fromString(props.referrerValue);
+
+    await this.startWatchingAd.start({
+        refereeId,
+        referrerId,
+    })
   }
 }

@@ -1,7 +1,7 @@
 import { Name } from "@/src/common/domain/Name";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { IUserPrimitives, User } from "@/src/modules/users/user/domain/User";
-import { InitWatchingAd } from "../InitWatchingAd";
+import { InitializeWatchingAd } from "../InitializeWatchingAd";
 
 type IInitializeWatchingAd = {
   referrerName: string;
@@ -14,14 +14,14 @@ type IInitializeWatchingAdResp = {
   refereeValue: string;
 };
 
-export class InitWatchingAdHandler {
-  constructor(private initWatchingAd: InitWatchingAd) {}
+export class InitializeWatchingAdHandler {
+  constructor(private initWatchingAd: InitializeWatchingAd) {}
 
-  async initialize({
+  async init({
     referrerName,
     referee,
   }: IInitializeWatchingAd): Promise<IInitializeWatchingAdResp> {
-    const requiredData = await this.initWatchingAd.initialize({
+    const requiredData = await this.initWatchingAd.init({
       referrerName: new Name(referrerName),
       referee: referee && User.fromPrimitives(referee),
     });

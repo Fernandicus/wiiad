@@ -1,11 +1,11 @@
 import { Query } from "@/src/common/domain/types/types";
 
-export class EventQuery {
-  readonly event: string;
+export class ActionQuery {
+  readonly action: string;
 
   constructor(query: Query) {
-    const event = query["event"];
-    this.event = this.getQuery(event);
+    const action = query["action"];
+    this.action = this.getQuery(action);
   }
 
   private getQuery(query: string | string[] | undefined): string {

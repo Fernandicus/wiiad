@@ -4,7 +4,7 @@ import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
 import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
-import { initWatchingAdHandler } from "@/src/watching-ad/infrastructure/watching-ad-container";
+import { initializeWatchingAdHandler } from "@/src/watching-ad/infrastructure/watching-ad-container";
 import { RoleType } from "@/src/common/domain/Role";
 
 export interface IWatchCampaignPage {
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         const referrerName = getReferrerNameFromURL(resolvedUrl);
 
-        return await initWatchingAdHandler.initialize({
+        return await initializeWatchingAdHandler.init({
           referrerName,
           referee: session ? session : undefined,
         });

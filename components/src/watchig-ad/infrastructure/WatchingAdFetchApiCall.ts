@@ -1,16 +1,16 @@
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { IWatchingAdApiCall, TWatchingAdApiCallAction } from "../domain/interface/IWatchingAdApiCall";
 import { getApiResponse } from "@/src/utils/helpers";
-import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventName";
-import { IApiReqWatchingAdAction } from "@/pages/api/v1/channel-events";
+import { WatchingAdActionName } from "@/src/watching-ad/domain/WatchingAdActionName";
+import { IApiReqWatchingAdAction } from "@/pages/api/v1/watch-ad";
 
 export class WatchingAdFetchApiCall implements IWatchingAdApiCall {
   async finishWatchingAd(data: TWatchingAdApiCallAction): Promise<void> {
     await this.fetchAction({
       actionName: WatchingAdActionName.action("finish-watching-ad"),
       body: {
-        refereeId: data.refereeId.value(),
-        referrerId: data.referrerId.value(),
+        refereeValue: data.refereeId.value(),
+        referrerValue: data.referrerId.value(),
       },
     });
   }
@@ -19,8 +19,8 @@ export class WatchingAdFetchApiCall implements IWatchingAdApiCall {
     await this.fetchAction({
       actionName: WatchingAdActionName.action("start-watching-ad"),
       body: {
-        refereeId: data.refereeId.value(),
-        referrerId: data.referrerId.value(),
+        refereeValue: data.refereeId.value(),
+        referrerValue: data.referrerId.value(),
       },
     });
   }
