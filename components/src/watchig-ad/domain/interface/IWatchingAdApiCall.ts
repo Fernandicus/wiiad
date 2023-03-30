@@ -1,14 +1,12 @@
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
-export interface IWatchingAdApiCall {
-  startWatchingAd(data: {
-    refereeId: RefereeId;
-    referrerId: ReferrerId;
-  }): Promise<void>;
+export type TWatchingAdApiCallAction = {
+  refereeId: RefereeId;
+  referrerId: ReferrerId;
+};
 
-  finishWatchingAd(data: {
-    refereeId: RefereeId;
-    referrerId: ReferrerId;
-  }): Promise<void>;
+export interface IWatchingAdApiCall {
+  startWatchingAd(data: TWatchingAdApiCallAction): Promise<void>;
+  finishWatchingAd(data: TWatchingAdApiCallAction): Promise<void>;
 }
