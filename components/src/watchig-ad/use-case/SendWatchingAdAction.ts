@@ -5,31 +5,33 @@ import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventNam
 import { IWatchingAdApiCall } from "../domain/interface/IWatchingAdApiCall";
 
 export class SendWatchingAdAction {
-  constructor(private frontWebSocket: IWatchingAdApiCall) {}
+  constructor(private watchingAdApiCall: IWatchingAdApiCall) {}
 
-  startWatchingAd(props: {
+  async startWatchingAd(props: {
     refereeId: RefereeId;
     referrerId: ReferrerId;
-  }): void {
-    this.frontWebSocket.sendEvent(
-      WatchingAdActionName.event("start-watching-ad"),
-      {
-        refereeId: props.refereeId.value(),
-        referrerId: props.referrerId.value(),
-      } as IApiReqWebSocketSendEvent
-    );
+  }): Promise<void> {
+    const data: IApiReqWebSocketSendEvent = {
+      refereeId: props.refereeId.value(),
+      referrerId: props.referrerId.value(),
+    };
+    await this.watchingAdApiCall.sendEvent({
+      event: WatchingAdActionName.action("start-watching-ad"),
+      data,
+    });
   }
 
-  finishWatchingAd(props: {
+  async finishWatchingAd(props: {
     refereeId: RefereeId;
     referrerId: ReferrerId;
-  }): void {
-    this.frontWebSocket.sendEvent(
-      WatchingAdActionName.event("finish-watching-ad"),
-      {
-        refereeId: props.refereeId.value(),
-        referrerId: props.referrerId.value(),
-      } as IApiReqWebSocketSendEvent
-    );
+  }): Promise<void> {
+    const data: IApiReqWebSocketSendEvent = {
+      refereeId: props.refereeId.value(),
+      referrerId: props.referrerId.value(),
+    };
+    await this.watchingAdApiCall.sendEvent({
+      event: WatchingAdActionName.action("finish-watching-ad"),
+      data,
+    });
   }
 }

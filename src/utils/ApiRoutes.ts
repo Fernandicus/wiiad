@@ -49,6 +49,6 @@ export class ApiRoutes {
     "/api/v1/channel-events/auth-user";
   static readonly websocketChannelAuthorization =
     "/api/v1/channel-events/auth-channel";
-  static readonly websocketSendEvent = (eventName: string) =>
+  static readonly watchingAdSendAction = (eventName: string) =>
     `api/v1/channel-events?event=${eventName}`;
 }

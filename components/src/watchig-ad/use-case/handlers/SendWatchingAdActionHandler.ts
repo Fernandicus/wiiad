@@ -4,31 +4,31 @@ import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
 export class SendWatchingAdActionHandler {
-  constructor(private webSocketSendEvent: SendWatchingAdAction) {}
+  constructor(private sendWatchingAdAction: SendWatchingAdAction) {}
 
-  startWatchingAd(props: {
+  async startWatchingAd(props: {
     refereeValue: string;
     referrerValue: string;
-  }): void {
+  }): Promise<void> {
     const refereeId = RefereeId.fromString(props.refereeValue);
     const referrerId = new ReferrerId({
       uniqId: new UniqId(props.referrerValue),
     });
-    this.webSocketSendEvent.startWatchingAd({
+    await this.sendWatchingAdAction.startWatchingAd({
       refereeId,
       referrerId,
     });
   }
 
-  finishWatchingAd(props: {
+  async finishWatchingAd(props: {
     refereeValue: string;
     referrerValue: string;
-  }): void {
+  }): Promise<void> {
     const refereeId = RefereeId.fromString(props.refereeValue);
     const referrerId = new ReferrerId({
       uniqId: new UniqId(props.referrerValue),
     });
-    this.webSocketSendEvent.finishWatchingAd({
+    await this.sendWatchingAdAction.finishWatchingAd({
       refereeId,
       referrerId,
     });

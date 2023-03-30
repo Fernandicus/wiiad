@@ -12,14 +12,15 @@ type TUseWatchingAdActionsProps = {
   referrerValue: string;
 };
 
-export const useWatchingAdActions = (
-  {referrerValue,refereeValue}: TUseWatchingAdActionsProps
-): TUseWatchingAdActionsResponse => {
+export const useWatchingAdActions = ({
+  referrerValue,
+  refereeValue,
+}: TUseWatchingAdActionsProps): TUseWatchingAdActionsResponse => {
   const [connectionMessage, setConnectionMessage] = useState("");
   const { setNotification } = useNotification();
 
   const startWatchingAd = async () => {
-    sendWatchingAdActionHandler.startWatchingAd({
+    await sendWatchingAdActionHandler.startWatchingAd({
       refereeValue,
       referrerValue,
     });
@@ -27,7 +28,7 @@ export const useWatchingAdActions = (
   };
 
   const finishWatchingAd = async () => {
-    sendWatchingAdActionHandler.finishWatchingAd({
+    await sendWatchingAdActionHandler.finishWatchingAd({
       refereeValue,
       referrerValue,
     });

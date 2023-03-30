@@ -8,33 +8,24 @@ type TWatchingAdActions = typeof all_watching_ad_actions;
 export type TWatchingAdAction = TWatchingAdActions[number];
 
 export class WatchingAdActionName {
-  readonly event;
+  readonly action;
 
-  private constructor(value: string) {
-    if (!value.includes("event::"))
-      throw new Error("Event Name must be start with 'event::'");
-    this.event = value;
+  constructor(value: string) {
+    if (!value) throw new Error("Watching Ad Action Name cant be empty");
+    this.action = value;
   }
 
-  static event(name: TWatchingAdAction) {
-    return WatchingAdActionName.fromString(name);
+  static action(name: TWatchingAdAction): WatchingAdActionName {
+    return new WatchingAdActionName(name);
   }
 
-  static fromString(name: string) {
-    return new WatchingAdActionName("event::" + name);
-  }
-
-  static validateFromString(name: string) {
+  static validateFromString(name: string): WatchingAdActionName {
     if (!this.isValidEvent(name))
       throw new Error(`Event name ${name} is not a valid event`);
-    return WatchingAdActionName.event(name);
+    return new WatchingAdActionName(name);
   }
 
   private static isValidEvent(name: string): name is TWatchingAdAction {
     return all_watching_ad_actions.includes(name as TWatchingAdAction);
-  }
-
-  getName() {
-    return this.event.split("event::")[1];
   }
 }
