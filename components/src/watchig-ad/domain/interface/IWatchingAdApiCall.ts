@@ -1,8 +1,14 @@
-import { WatchingAdActionName } from "@/src/watching-ad/domain/WebSocketEventName";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
 export interface IWatchingAdApiCall {
-  sendEvent<T extends object>(props: {
-    event: WatchingAdActionName;
-    data: T;
+  startWatchingAd(data: {
+    refereeId: RefereeId;
+    referrerId: ReferrerId;
+  }): Promise<void>;
+
+  finishWatchingAd(data: {
+    refereeId: RefereeId;
+    referrerId: ReferrerId;
   }): Promise<void>;
 }

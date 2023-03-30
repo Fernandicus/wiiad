@@ -10,7 +10,7 @@ import {
 } from "@/src/watching-ad/domain/WebSocketEventName";
 import { finishWatchingAdHandler, startWatchingAdWSEventHandler } from "@/src/watching-ad/infrastructure/watching-ad-container";
 
-export type IApiReqWebSocketSendEvent = {
+export type IApiReqWatchingAdAction = {
   refereeId: string;
   referrerId: string;
 };
@@ -22,7 +22,7 @@ export default async function handler(
   if (req.method !== "PUT")
     return res.status(400).json({ message: "Bad request method" });
 
-  const reqBody: IApiReqWebSocketSendEvent = reqBodyParse(req);
+  const reqBody: IApiReqWatchingAdAction = reqBodyParse(req);
   const { referrerId, refereeId } = getUserIdAndReferrerName(
     { req, res },
     reqBody
@@ -46,13 +46,13 @@ export default async function handler(
 
   try {
     const query = new EventQuery(req.query);
-    const event = WatchingAdActionName.validateFromString(query.event);
-    const eventName = event.getName() as TWatchingAdAction;
+    const action = WatchingAdActionName.validateFromString(query.event);
+    const actionName = action.action as TWatchingAdAction;
 
     await MongoDB.connectAndDisconnect(async () => {
       //Todo: Test what happens when the user closes session and the timer is ON,
       //todo: - in that case avoid sending payment
-      await eventTrigger[eventName]();
+      await eventTrigger[actionName]();
     });
 
     return res.status(200);
@@ -67,7 +67,7 @@ export default async function handler(
 
 function getUserIdAndReferrerName(
   context: IReqAndRes,
-  reqBody: IApiReqWebSocketSendEvent
+  reqBody: IApiReqWatchingAdAction
 ): { refereeId: string; referrerId: string } {
   const session = userSession.getFromServer(context);
   const refereeId = session ? session.id : reqBody.refereeId;

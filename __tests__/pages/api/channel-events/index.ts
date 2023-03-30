@@ -1,5 +1,5 @@
 import channelEvents, {
-  IApiReqWebSocketSendEvent,
+  IApiReqWatchingAdAction,
 } from "@/pages/api/v1/channel-events/index";
 import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
@@ -58,7 +58,7 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
     const event = WebSocketEventName.event("finish-watching-ad");
     const referrerId = ReferrerId.new();
     const refereeId = RefereeId.new();
-    const body: IApiReqWebSocketSendEvent = {
+    const body: IApiReqWatchingAdAction = {
       referrerId: referrerId.value(),
       refereeId: refereeId.value(),
     };
@@ -90,7 +90,7 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
     const event = WebSocketEventName.event("finish-watching-ad");
     const referrerId = ReferrerId.new();
     const refereeId = RefereeId.new();
-    const body: IApiReqWebSocketSendEvent = {
+    const body: IApiReqWatchingAdAction = {
       referrerId: referrerId.value(),
       refereeId: refereeId.value(),
     };
@@ -109,7 +109,7 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
     const event = WebSocketEventName.event("finish-watching-ad");
     const referrerId = ReferrerId.new();
     const refereeId = RefereeId.new();
-    const body: IApiReqWebSocketSendEvent = {
+    const body: IApiReqWatchingAdAction = {
       referrerId: referrerId.value(),
       refereeId: refereeId.value(),
     };
@@ -169,7 +169,7 @@ async function sendStartEvent(props: {
     body: {
       referrerId: props.referrerId,
       refereeId: props.refereeId,
-    } as IApiReqWebSocketSendEvent,
+    } as IApiReqWatchingAdAction,
   });
   await channelEvents(startAdCtx.req, startAdCtx.res);
 }
@@ -186,7 +186,7 @@ async function sendFinishEvent(props: {
     body: {
       referrerId: props.referrerId,
       refereeId: props.refereeId,
-    } as IApiReqWebSocketSendEvent,
+    } as IApiReqWatchingAdAction,
   });
 
   await futureTimeout(async () => {
