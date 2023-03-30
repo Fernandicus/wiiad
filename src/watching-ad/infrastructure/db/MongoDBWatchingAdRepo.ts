@@ -3,8 +3,8 @@ import { UniqId } from "@/src/common/domain/UniqId";
 import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
-import { IWatchingAdRepo } from "../domain/interface/IWatchingAdRepo";
-import { WatchingAdTimeout } from "../domain/WatchingAdTimeout";
+import { IWatchingAdRepo } from "../../domain/interface/IWatchingAdRepo";
+import { WatchingAdTimeout } from "../../domain/WatchingAdTimeout";
 import { IWatchingAdModel, WatchingAdModel } from "./WatchingAdModel";
 
 export class MongoDBWatchingAdRepo implements IWatchingAdRepo {

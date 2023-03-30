@@ -7,7 +7,7 @@ import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/Watc
 import { WebSocketEventName } from "@/src/watching-ad/domain/WebSocketEventName";
 import { InsertUserWatchingAd } from "@/src/watching-ad/pusher/use-case/InsertUserWatchingAd";
 import { SendWSEvent } from "@/src/watching-ad/pusher/use-case/SendWSEvent";
-import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
+import { StartWatchingAd } from "@/src/watching-ad/pusher/use-case/StartWatchingAd";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedWSS } from "../../../../__mocks__/context/MockedWSS";
 import { futureTimeout } from "../../../../__mocks__/lib/utils/helpers";
@@ -26,7 +26,7 @@ import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList", () => {
   let timer = new AdDuration(3);
   let userWatchingAd: UniqId;
-  let startWatching: StartWatchingAdWSEvent;
+  let startWatching: StartWatchingAd;
   let insertWatchingAd: InsertUserWatchingAd;
   const watchList = new WatchAdDurationList();
   let users: User[];
@@ -39,7 +39,7 @@ describe("ON api/v1/channel-events, GIVEN a WatchingAdTimeout in a WatchingList"
     const sendEvent = new SendWSEvent(mock);
     insertWatchingAd = new InsertUserWatchingAd(watchList, sendEvent);
 
-    startWatching = new StartWatchingAdWSEvent(watchList);
+    startWatching = new StartWatchingAd(watchList);
   });
 
   it(`WHEN send a request without a valid event name,

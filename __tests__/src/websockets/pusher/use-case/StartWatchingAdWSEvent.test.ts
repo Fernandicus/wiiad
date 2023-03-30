@@ -1,16 +1,16 @@
 import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
-import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
+import { StartWatchingAd } from "@/src/watching-ad/pusher/use-case/StartWatchingAd";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
 
-describe("On StartWatchingAdWSEvent, GIVEN a WatchAdDurationList with a WatchAdTimeout", () => {
+describe("On StartWatchingAd, GIVEN a WatchAdDurationList with a WatchAdTimeout", () => {
   let watchAdList: WatchAdDurationList;
   let watchAdTimeout: WatchAdTimeout;
   const timer = new AdDuration(2);
-  let startWatchingAdWS: StartWatchingAdWSEvent;
+  let startWatchingAdWS: StartWatchingAd;
   let counter = 0;
 
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe("On StartWatchingAdWSEvent, GIVEN a WatchAdDurationList with a WatchAdT
       },
     });
     watchAdList.add(watchAdTimeout);
-    startWatchingAdWS = new StartWatchingAdWSEvent(watchAdList);
+    startWatchingAdWS = new StartWatchingAd(watchAdList);
   });
 
   it(`WHEN call start method more than one time, 

@@ -7,7 +7,7 @@ import { FindCampaign } from "../use-case/FindCampaign";
 import { UpdateCampaignData } from "../use-case/UpdateCampaignData";
 import { RemoveCampaign } from "../use-case/RemoveCampaign";
 import { RemoveCampaignHandler } from "../use-case/handlers/RemoveCampaignHandler";
-import { SelectCampaignToWatch } from "../use-case/SelectCampaignToWatch";
+import { SelectCampaignToWatch } from "../../../watching-ad/use-case/SelectCampaignToWatch";
 import { findAd } from "../../ad/infraestructure/ad-container";
 import { findUser, findUserHandler } from "../../users/user/container";
 import { updateReferral } from "../../referrals/infrastructure/referral-container";

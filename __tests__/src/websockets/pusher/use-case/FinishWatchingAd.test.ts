@@ -9,7 +9,7 @@ import { AdDuration } from "@/src/modules/ad/domain/value-objects/AdDuration";
 import { WatchAdTimeout } from "@/src/modules/websockets/pusher/domain/WatchAdTimeout";
 import { WatchAdDurationList } from "@/src/modules/websockets/pusher/domain/WatchAdTimeoutList";
 import { FinishWatchingAd } from "@/src/watching-ad/pusher/use-case/FinishWatchingAd";
-import { StartWatchingAdWSEvent } from "@/src/watching-ad/pusher/use-case/StartWatchingAdWSEvent";
+import { StartWatchingAd } from "@/src/watching-ad/pusher/use-case/StartWatchingAd";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedReferralRepo } from "../../../../../__mocks__/context/MockedReferralRepo";
 import { FakeReferral } from "../../../../../__mocks__/lib/modules/referral/FakeReferral";
@@ -24,7 +24,7 @@ import { futureTimeout } from "../../../../../__mocks__/lib/utils/helpers";
 describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
   let finishWatchingAd: FinishWatchingAd;
   let timer = new AdDuration(3);
-  let startWatching: StartWatchingAdWSEvent;
+  let startWatching: StartWatchingAd;
   let refereeId: RefereeId;
   let referrerId: ReferrerId;
   let mockedCampaignsRep: ICampaignRepo;
@@ -63,7 +63,7 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
       })
     );
 
-    startWatching = new StartWatchingAdWSEvent(watchingAds);
+    startWatching = new StartWatchingAd(watchingAds);
     finishWatchingAd = new FinishWatchingAd({
       watchingAdList: watchingAds,
       addReferralToCampaign,
@@ -96,7 +96,7 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
     ).rejects.toThrowError(Error);
   });
 
-  it(`WHEN call StartWatchingAdWSEvent.startTimeout method,
+  it(`WHEN call StartWatchingAd.startTimeout method,
     THEN WHEN validateAndAirdrop method is called WITHOUT waiting ad timer to end,
     the Campaigns Repo validateAndAirdrop method SHOULD NOT be called `, async () => {
     startWatching.start(refereeId);
@@ -113,7 +113,7 @@ describe("ON FinishWatchingAd, GIVEN an InsertUserWatchingAd", () => {
     expect(mockedReferralsRep.increaseReferrerData).not.toBeCalled();
   });
 
-  it(`WHEN call StartWatchingAdWSEvent.startTimeout method,
+  it(`WHEN call StartWatchingAd.startTimeout method,
     THEN WHEN validateAndAirdrop method is called waiting ad timer to end,
     the Campaigns Repo validateAndAirdrop method SHOULD be called `, async () => {
     startWatching.start(refereeId);

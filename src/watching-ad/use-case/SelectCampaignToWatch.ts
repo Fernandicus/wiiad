@@ -1,13 +1,12 @@
-import { Campaign } from "../domain/Campaign";
-import { Ad } from "../../ad/domain/Ad";
+import { Campaign } from "../../modules/campaign/domain/Campaign";
+import { Ad } from "../../modules/ad/domain/Ad";
 import { User } from "@/src/modules/users/user/domain/User";
-import { ErrorWatchingCampaign } from "../../../common/domain/ErrorWatchingCampaign";
+import { ErrorWatchingCampaign } from "../../common/domain/ErrorWatchingCampaign";
 import { FindUser } from "@/src/modules/users/user/use-case/FindUser";
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
-import { Name } from "../../../common/domain/Name";
+import { Name } from "../../common/domain/Name";
 import { UniqId } from "@/src/common/domain/UniqId";
 import { UpdateReferral } from "@/src/modules/referrals/use-case/UpdateReferral";
-import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
 import { FindAds } from "@/src/modules/ad/use-case/FindAds";
 
 export type TGetSelectedWatchAdData = {
@@ -34,8 +33,7 @@ export class SelectCampaignToWatch {
     this.findAd = findAd;
   }
 
-  //Todo: implement a better algorithm to select the correct ad according to the user/referrer interests
-  async get(params: {
+/*   async get(params: {
     referrerName: Name;
     sessionId?: UniqId;
   }): Promise<TGetSelectedWatchAdData> {
@@ -57,8 +55,9 @@ export class SelectCampaignToWatch {
     });
 
     return data;
-  }
+  } */
 
+  //Todo: implement a better algorithm to select the correct ad according to the user/referrer interests
   async randomActiveCampaign(): Promise<{
     campaign: Campaign;
     ad: Ad;
