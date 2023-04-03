@@ -5,7 +5,7 @@ import { WatchingAdTimeout } from "../WatchingAdTimeout";
 export interface IWatchingAdRepo {
   add(adTimer: WatchingAdTimeout): Promise<void>;
 
-  removeTimer(refereeId: RefereeId): Promise<void>;
+  removeByRefereeId(refereeId: RefereeId): Promise<void>;
 
   findAdByRefereeId(refereeId: RefereeId): Promise<Maybe<WatchingAdTimeout>>;
 

@@ -26,6 +26,8 @@ import { FindWatchingAd } from "../use-case/FindWatchingAd";
 import { FindWatchingAdHandler } from "../use-case/handlers/FindWatchingAdHandler";
 import { StartWatchingAd } from "../use-case/StartWatchingAd";
 import { StartWatchingAdHandler } from "../use-case/handlers/StartWatchingAdHandler";
+import { RemoveWatchingAd } from "../use-case/RemoveWatchingAd";
+import { UpdateWatchingAdStakeHoldersData } from "../use-case/UpdateWatchingAdStakeHoldersData";
 
 const watchAdRepo = new MongoDBWatchingAdRepo();
 
@@ -38,12 +40,23 @@ export const initWatchingAdTimerHandler = new InitWatchingAdTimerHandler(
   initWatchingAdTimer
 );
 
-const finishWatchingAd = new FinishWatchingAd({
-  watchAdRepo: watchAdRepo,
-  findCampaign: findCampaign,
+export const findWatchingAd = new FindWatchingAd(watchAdRepo);
+export const findWatchingAdHandler = new FindWatchingAdHandler(findWatchingAd);
+const removeWatchingAd = new RemoveWatchingAd(watchAdRepo);
+
+const updateWatchingAdStakeHolders = new UpdateWatchingAdStakeHoldersData({
   increaseBalance: increaseReferralBalance,
-  addReferralToCampaign: addReferralToCampaign,
+  addReferralToCampaign,
+  findCampaign,
+  updateReferral
 });
+
+const finishWatchingAd = new FinishWatchingAd({
+  updateWatchingAdStakeHolders,
+  findWatchingAd,
+  removeWatchingAd,
+});
+
 export const finishWatchingAdHandler = new FinishWatchingAdHandler(
   finishWatchingAd
 );
@@ -66,9 +79,6 @@ export const initializeWatchingAdHandler = new InitializeWatchingAdHandler(
   initializeWatchingAd
 );
 
-export const findWatchingAd = new FindWatchingAd(watchAdRepo);
-export const findWatchingAdHandler = new FindWatchingAdHandler(findWatchingAd);
-
 const startWatchingAd = new StartWatchingAd({
   findWatchingAd,
   initWatchingAdTimer,
@@ -76,5 +86,6 @@ const startWatchingAd = new StartWatchingAd({
   updateReferral,
 });
 
-export const startWatchingAdHandler = new StartWatchingAdHandler(startWatchingAd);
-
+export const startWatchingAdHandler = new StartWatchingAdHandler(
+  startWatchingAd
+);

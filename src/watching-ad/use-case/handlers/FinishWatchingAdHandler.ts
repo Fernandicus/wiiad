@@ -11,12 +11,12 @@ export class FinishWatchingAdHandler {
    * This is because the Referee maybe is not logged and the referee id is not available.
    * that's not the case for the Referrer id
    */
-  async validateAndAirdrop(props: {
+  async finish(props: {
     refereeValue: string;
     referrerValue: string;
   }): Promise<void> {
     const { refereeValue, referrerValue } = props;
-    await this.finishWatchingAd.validateAndAirdrop({
+    await this.finishWatchingAd.finish({
       refereeId: RefereeId.fromString(refereeValue),
       referrerId: ReferrerId.fromString(referrerValue),
     });

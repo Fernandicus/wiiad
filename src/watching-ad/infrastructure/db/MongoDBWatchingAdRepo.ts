@@ -42,7 +42,7 @@ export class MongoDBWatchingAdRepo implements IWatchingAdRepo {
     return Maybe.some(this.toWathingAd(modelFound));
   }
 
-  async removeTimer(refereeId: RefereeId): Promise<void> {
+  async removeByRefereeId(refereeId: RefereeId): Promise<void> {
     await WatchingAdModel.deleteOne({
       refereeId: refereeId.uniqId.id,
     });

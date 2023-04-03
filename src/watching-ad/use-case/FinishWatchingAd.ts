@@ -1,32 +1,24 @@
-import { AddReferralToCampaign } from "@/src/common/use-case/AddReferralToCampaign";
-import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
-import { UpdateCampaignData } from "@/src/modules/campaign/use-case/UpdateCampaignData";
-import { ErrorFindingReferral } from "@/src/modules/referrals/domain/errors/ErrorFindingReferral";
 import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
-import { FindReferral } from "@/src/modules/referrals/use-case/FindReferral";
-import { IncreaseReferralBalance } from "@/src/modules/referrals/use-case/IncreaseReferralBalance";
-import { UniqId } from "@/src/common/domain/UniqId";
-import { IWatchingAdRepo } from "../domain/interface/IWatchingAdRepo";
+import { FindWatchingAd } from "./FindWatchingAd";
+import { RemoveWatchingAd } from "./RemoveWatchingAd";
+import { UpdateWatchingAdStakeHoldersData } from "./UpdateWatchingAdStakeHoldersData";
 
 export type TFinishWatchingAdProps = {
-  increaseBalance: IncreaseReferralBalance;
-  addReferralToCampaign: AddReferralToCampaign;
-  watchAdRepo: IWatchingAdRepo;
-  findCampaign: FindCampaign;
+  findWatchingAd: FindWatchingAd;
+  removeWatchingAd: RemoveWatchingAd;
+  updateWatchingAdStakeHolders: UpdateWatchingAdStakeHoldersData;
 };
 
 export class FinishWatchingAd {
-  private watchAdRepo;
-  private increaseBalance;
-  private findCampaign;
-  private addReferralToCampaign;
+  private findWatchingAd;
+  private removeWatchingAd;
+  private updateWatchingAdStakeHolders;
 
   constructor(props: TFinishWatchingAdProps) {
-    this.watchAdRepo = props.watchAdRepo;
-    this.increaseBalance = props.increaseBalance;
-    this.findCampaign = props.findCampaign;
-    this.addReferralToCampaign = props.addReferralToCampaign;
+    this.findWatchingAd = props.findWatchingAd;
+    this.removeWatchingAd = props.removeWatchingAd;
+    this.updateWatchingAdStakeHolders = props.updateWatchingAdStakeHolders;
   }
 
   /**
@@ -34,62 +26,29 @@ export class FinishWatchingAd {
    * This is because the Referee maybe is not logged and the referee id is not available.
    * that's not the case for the Referrer id
    */
-  async validateAndAirdrop(props: {
+  async finish(props: {
     refereeId: RefereeId;
     referrerId: ReferrerId;
   }): Promise<void> {
     const { refereeId, referrerId } = props;
+    const watchingAdFound = await this.findWatchingAd.byRefereeId(refereeId);
 
-    const update = async (campaignId: UniqId) => {
-      await this.updateData({
-        campaignId,
-        refereeId,
-        referrerId,
-      });
-    };
-
-    //todo: Pass by parameter the: refereeId,  onFinished(), onNotFinished(), so I can pass the update function from the outside
-    //! Think about passing a Maybe or Either and update the campaign referral data in another Use Case
-    const maybe = await this.watchAdRepo.findAdByRefereeId(refereeId);
-    await maybe.match({
+    await watchingAdFound.match({
       some: async (adTimeout) => {
-        if (adTimeout.hasEnded()) {
-          await this.watchAdRepo.removeTimer(refereeId);
-          await update(adTimeout.campaignId);
-        } else {
-          throw new Error("Ad has not finished");
-        }
+        if (!adTimeout.hasEnded()) throw new Error("Ad has not finished");
+
+        await Promise.allSettled([
+          this.removeWatchingAd.byRefereeId(refereeId),
+          this.updateWatchingAdStakeHolders.updateData({
+            campaignId: adTimeout.campaignId,
+            refereeId,
+            referrerId,
+          }),
+        ]);
       },
       nothing() {
         throw new Error("User id is not in the list");
       },
     });
-  }
-
-  private async updateData(props: {
-    campaignId: UniqId;
-    refereeId: RefereeId;
-    referrerId: ReferrerId;
-  }) {
-    const campaignData = await this.findCampaign.byId(props.campaignId);
-
-    const [increaseBalanceResp, addReferralResp] = await Promise.allSettled([
-      this.increaseBalance.increase({
-        balance: campaignData.budget.balance,
-        refereeId: props.refereeId,
-        referrerId: props.referrerId,
-      }),
-      this.addReferralToCampaign.givenReferrerId({
-        referrerId: props.referrerId,
-        campaignId: props.campaignId,
-      }),
-    ]);
-
-    if (increaseBalanceResp.status === "rejected")
-      throw new Error(increaseBalanceResp.reason);
-    if (addReferralResp.status === "rejected")
-      throw new Error(addReferralResp.reason);
-
-    console.log(campaignData.id);
   }
 }

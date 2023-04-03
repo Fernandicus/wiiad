@@ -39,16 +39,15 @@ export default async function handler(
   const { refereeValue, referrerValue }: IApiReqWatchingAdAction =
     reqBodyParse(req);
 
-  const eventTrigger: Record<TWatchingAdAction, Function> = {
+  const triggerAction: Record<TWatchingAdAction, Function> = {
     "start-watching-ad": async () => {
       await startWatchingAdHandler.start({ refereeValue, referrerValue });
     },
     "finish-watching-ad": async () => {
-      await finishWatchingAdHandler.validateAndAirdrop({
+      await finishWatchingAdHandler.finish({
         refereeValue,
         referrerValue,
       });
-      //* => this.updateReferral.increaseWatchedAds(sessionId);
     },
   };
 
@@ -57,11 +56,9 @@ export default async function handler(
     const action = WatchingAdActionName.validateFromString(query.action);
     const actionName = action.action as TWatchingAdAction;
 
-    await MongoDB.connectAndDisconnect(async () => {
-      //Todo: Test what happens when the user closes session and the timer is ON,
-      //todo: - in that case avoid sending payment
-      await eventTrigger[actionName]();
-    });
+    await MongoDB.connectAndDisconnect(
+      async () => await triggerAction[actionName]()
+    );
 
     return res.status(200).json({ message: "Action processed" });
   } catch (err) {
