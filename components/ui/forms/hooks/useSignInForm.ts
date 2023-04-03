@@ -27,7 +27,7 @@ export const useSignInForm = (props: {
       email: Yup.string()
         .required("Campo obligatorio")
         .email("El email no es válido"),
-      name: Yup.string()
+      userName: Yup.string()
         .required("Campo obligatorio")
         .min(3, "Demasiado corto")
         .max(25),
@@ -37,8 +37,7 @@ export const useSignInForm = (props: {
         await sumbitCreateNewUser(values);
         props.onSuccess();
       } catch (err) {
-        if(err instanceof Error)
-        props.onError(err);
+        if (err instanceof Error) props.onError(err);
       }
     },
   });

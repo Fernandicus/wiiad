@@ -45,7 +45,13 @@ export const SignInForm = (params: {
   });
 
   return (
-    <form className="space-y-10" onSubmit={(e) => handle.submit(e, {})}>
+    <form
+      className="space-y-10"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handle.submit(e, {});
+      }}
+    >
       <div className=" space-y-6">
         <div className="">
           {isNewAccount ? (
