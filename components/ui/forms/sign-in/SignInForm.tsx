@@ -56,7 +56,7 @@ export const SignInForm = (params: {
                 value={input.values.userName}
                 onChange={(e) => {
                   e.target.value = replaceInputTextSpacesWith(e, "_");
-                  handle.change(e)
+                  handle.change(e);
                 }}
                 // ref={userNameRef}
                 type="text"
@@ -76,9 +76,9 @@ export const SignInForm = (params: {
               value={input.values.email}
               onChange={(e) => {
                 e.target.value = replaceInputTextSpacesWith(e, "_");
-                handle.change(e)
+                handle.change(e);
               }}
-              type="email"
+              type="text"
               placeholder={emailPlaceHolder}
               className="border border-gray-300 rounded-md px-2 block w-full h-10"
               required
