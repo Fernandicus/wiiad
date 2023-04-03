@@ -1,7 +1,7 @@
 //? https://stripe.com/docs/webhooks
 
 import { LaunchCampaignController } from "@/src/modules/campaign/infrastructure/controllers/LaunchCampaignController";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { NextApiRequest, NextApiResponse } from "next";
 import { buffer } from "micro";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";

@@ -1,48 +1,56 @@
-import { LoginQueries } from "@/src/common/domain/LoginQueries";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { GetServerSideProps } from "next";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import {
-  IWatchCampaignData,
-  WatchCampaignsController,
-} from "@/src/common/infrastructure/controllers/WatchCampaignsController";
-import AdView from "../../components/ui/pages/[userName]/AdView";
-import { ICampaignPrimitives } from "@/src/modules/campaign/domain/Campaign";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { IUserPrimitives } from "@/src/modules/users/user/domain/User";
-import { IReqAndRes } from "@/src/modules/session/domain/interfaces/IAuthCookies";
+import { AdViewPage } from "@/components/ui/pages/watch-ad/AdViewPage";
+import { initializeWatchingAdHandler } from "@/src/watching-ad/infrastructure/watching-ad-container";
+import { RoleType } from "@/src/common/domain/Role";
 
 export interface IWatchCampaignPage {
-  user: IUserPrimitives | null;
-  campaign: ICampaignPrimitives | ICampaignPrimitives[];
-  ad: AdPropsPrimitives | AdPropsPrimitives[];
-  referrer: IUserPrimitives | null;
+  refereeValue: string;
+  ad: AdPropsPrimitives;
+  referrerProfile: IUserPrimitives;
 }
 
 export default function Profile({
-  user,
+  refereeValue,
   ad,
-  campaign,
-  referrer,
+  referrerProfile,
 }: IWatchCampaignPage) {
   return (
-    <AdView
-      user={user}
-      campaign={campaign as ICampaignPrimitives}
-      ad={ad as AdPropsPrimitives}
-      referrer={referrer!}
+    <AdViewPage
+      ad={ad}
+      referrerProfile={referrerProfile!}
+      refereeValue={refereeValue}
     />
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-  const queryParams = new LoginQueries(query);
+  const { req, res, resolvedUrl } = context;
 
   try {
-    return await getSSPropsData({ context, queryParams });
+    const requiredData = await MongoDB.connectAndDisconnect<IWatchCampaignPage>(
+      async () => {
+        const session = userSession.getFromServer({ req, res });
+
+        if (session && session.role !== RoleType.USER)
+          throw new Error("User role is not of type 'User'");
+
+        const referrerName = getReferrerNameFromURL(resolvedUrl);
+  
+        return await initializeWatchingAdHandler.init({
+          referrerName,
+          referee: session ? session : undefined,
+        });
+      }
+    );
+
+    return {
+      props: requiredData as IWatchCampaignPage,
+    };
   } catch (err) {
-    await MongoDB.disconnect();
     return {
       props: {},
       redirect: { destination: "/", permanent: false },
@@ -50,57 +58,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-async function getSSPropsData(params: {
-  context: IReqAndRes;
-  queryParams: LoginQueries;
-}) {
-  const { queryParams, context } = params;
-  const session = userSession.getFromServer(context);
-  if (session && isUserNamePath(session, queryParams))
-    return {
-      props: {},
-      redirect: { destination: "/profile", permanent: false },
-    };
-
-  const { ad, activeCampaign, referrer } = await getCampaignToWatch(
-    queryParams,
-    session
-  );
-
-  return {
-    props: {
-      user: session,
-      campaign: activeCampaign,
-      ad,
-      referrer: {
-        email: referrer.email,
-        id: referrer.id,
-        name: referrer.name,
-        role: referrer.role,
-        profilePic: referrer.profilePic,
-      },
-    } as IWatchCampaignPage,
-  };
-}
-
-async function getCampaignToWatch(
-  loginQueries: LoginQueries,
-  session: IUserPrimitives | null
-): Promise<IWatchCampaignData> {
-  const data = await MongoDB.connectAndDisconnect<IWatchCampaignData>(
-    async () => {
-      return await WatchCampaignsController.forInfluencer({
-        influencerName: loginQueries.userName,
-        session,
-      });
-    }
-  );
-  return data;
-}
-
-function isUserNamePath(
-  user: IUserPrimitives,
-  loginQueries: LoginQueries
-): boolean {
-  return user.name == loginQueries.userName;
+function getReferrerNameFromURL(resolvedUrl: string): string {
+  return resolvedUrl.split("/")[1];
 }

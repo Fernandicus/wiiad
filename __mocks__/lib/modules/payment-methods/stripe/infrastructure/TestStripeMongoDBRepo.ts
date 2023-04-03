@@ -4,7 +4,7 @@ import {
   IStripeModel,
   StripeModel,
 } from "@/src/modules/payment-methods/stripe/infrastructure/db/StripeModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../../../__mocks__/lib/infrastructure/TestMongoDB";
 import { TestStripeRepository } from "../domain/TestStripeRepository";

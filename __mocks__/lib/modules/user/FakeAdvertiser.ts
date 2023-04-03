@@ -1,7 +1,7 @@
 import { Role, RoleType } from "@/src/common/domain/Role";
 import { Email } from "@/src/common/domain/Email";
 import { Name } from "@/src/common/domain/Name";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { faker } from "@faker-js/faker";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import {

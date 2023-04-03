@@ -11,7 +11,7 @@ import { userSession } from "@/src/modules/session/infrastructure/session-contai
 import { User } from "@/src/modules/users/user/domain/User";
 import { FakeAdvertiser } from "../../../../../../__mocks__/lib/modules/user/FakeAdvertiser";
 import { FakeAd } from "../../../../../../__mocks__/lib/modules/ads/FakeAd";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { TestStripeDB } from "../../../../../../__mocks__/lib/infrastructure/db/TestStripeDB";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";

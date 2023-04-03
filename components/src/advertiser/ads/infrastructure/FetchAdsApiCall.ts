@@ -3,7 +3,7 @@ import { IAdsApiCalls } from "../domain/interfaces/IAdsApiCalls";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { getApiResponse } from "@/src/utils/helpers";
 import { ErrorFetchingAdvertiser } from "../domain/interfaces/ErrorFetchingAd";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export class FetchAdsApiCalls implements IAdsApiCalls {
   async removeAd(ad: UniqId): Promise<void> {

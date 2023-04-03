@@ -5,7 +5,7 @@ import {
   IReferralModel,
   ReferralModel,
 } from "@/src/modules/referrals/infrastructure/db/ReferralModel";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import mongoose from "mongoose";
 import { TestMongoDB } from "../../../../lib/infrastructure/TestMongoDB";
 import { TestReferralRepo } from "../domain/TestReferralRepo";

@@ -12,7 +12,7 @@ import {
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export class FakeCampaign extends Campaign {
   constructor(params: CampaignProps) {

@@ -22,7 +22,8 @@ describe("On FindStripeCustomer, GIVEN a stripe mocked repo", () => {
     expect(stripeFound).toBeInstanceOf(Stripe);
   });
 
-  it(`WHEN call findByUserId method wiht a not existing user id, THEN an ErrorFindingStripe should be thrown`, async () => {
+  it(`WHEN call findByUserId method wiht a not existing user id, 
+  THEN an ErrorFindingStripe should be thrown`, async () => {
     expect(findCustomer.byUserId(FakeUniqId.noExist())).rejects.toThrowError(
       ErrorFindingStripe
     );

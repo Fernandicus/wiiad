@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { TestStripeMongoDBRepo } from "../../../../__mocks__/lib/modules/payment-methods/stripe/infrastructure/TestStripeMongoDBRepo";
 import { TestStripeRepository } from "../../../../__mocks__/lib/modules/payment-methods/stripe/domain/TestStripeRepository";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";

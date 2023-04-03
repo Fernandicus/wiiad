@@ -1,6 +1,6 @@
 import { Ad } from "@/src/modules/ad/domain/Ad";
 import { User } from "@/src/modules/users/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { TestAdRepository } from "../../modules/ads/domain/TestAdRepository";
 import { FakeAd } from "../../modules/ads/FakeAd";
 import { TestAdMongoDBRepository } from "../../modules/ads/infraestructure/TestAdMongoDBRepository";

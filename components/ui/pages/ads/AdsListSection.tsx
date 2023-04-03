@@ -2,7 +2,6 @@ import { useAds } from "@/components/hooks/advertiser/ads/useAds";
 import { useCampaigns } from "@/components/hooks/advertiser/campaigns/useCampaigns";
 import { useAdvertiser } from "@/components/hooks/advertiser/useAdvertiser";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { LoadingSpinnerAnimation } from "../../icons/LoadingSpinnerAnimation";
 import { LoadingSection } from "../items/LoadingSection";
 import { AdsList } from "./AdsList";
 import { EmptyAds } from "./EmptyAds";
@@ -22,24 +21,13 @@ export const AdsListSection = (params: {
         <EmptyAds />
       ) : (
         <div className="w-full mx-auto">
-          {ads.length > 2 ? (
-            <div className={`grid grid-cols-3 w-full`}>
-              <AdsList
-                cols={3}
-                onLaunchCampaign={params.onLaunchCampaign}
-                campaigns={campaigns.actives}
-                ads={ads}
-              />
-            </div>
-          ) : ads.length <= 2 ? (
-            <div className={`w-full inline-flex justify-around`}>
-              <AdsList
-                onLaunchCampaign={params.onLaunchCampaign}
-                campaigns={campaigns.actives}
-                ads={ads}
-              />
-            </div>
-          ) : null}
+          <div className={`grid grid-cols-3 w-full gap-10`}>
+            <AdsList
+              onLaunchCampaign={params.onLaunchCampaign}
+              campaigns={campaigns.actives}
+              ads={ads}
+            />
+          </div>
         </div>
       )}
     </div>

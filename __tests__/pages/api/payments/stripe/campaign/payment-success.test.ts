@@ -2,7 +2,7 @@ import paymentSuccess from "@/pages/api/v1/payments/stripe/campaign/payment-succ
 import { FakeWebhookEvent } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
 import { mockedContext } from "../../../../../../__mocks__/context/MockContext";
 import { FakeCardDetails } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakePaymentDetails } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
 import { FakePaymentIntentId } from "../../../../../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
 import { TestDBs } from "../../../../../../__mocks__/lib/infrastructure/db/TestDBs";

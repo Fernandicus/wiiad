@@ -11,7 +11,7 @@ import { UpdateUser } from "./use-case/UpdateUser";
 
 const userRepo = new UserMongoDBRepo();
 const createUser = new CreateUser(userRepo);
-const findUser = new FindUser(userRepo);
+export const findUser = new FindUser(userRepo);
 const findAdvertiser = new FindAdvertiser(userRepo);
 
 export const createUserHandler = new CreateUserHandler(createUser);

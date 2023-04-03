@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IStripePrimitives } from "../../domain/Stripe";
 import { FindStripeCustomer } from "../FindStripeCustomer";
 

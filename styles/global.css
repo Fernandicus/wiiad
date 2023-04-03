@@ -20,3 +20,31 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+progress {
+  /* style rules */
+  background-color: rgb(200, 200, 200, 0);
+  /* chrome, edge, opera, safari apply "webkit" stylesheet for progress bar*/
+  -webkit-appearance: none;
+  accent-color: orangered; /* sep 2021 - mar 2022 */
+  /*height: 20px;*/
+  border-radius: 10px;
+}
+progress::-webkit-progress-bar {
+  /* style rules background in chrome, edge, opera */
+  background-color: rgb(200, 200, 200, 0);
+  opacity: 1;
+  border-radius: 10px;
+}
+progress::-webkit-progress-value {
+  /* style rules chrome edge opera value bar colour */
+  background-color: rgb(200, 200, 200, 0.5);
+  border-radius: 10px;
+  transition: width 0.4s ease-in;
+}
+progress::-moz-progress-bar {
+  /* style rules ff equivalent to ::-webkit-progress-value */
+  background-color: rgb(200, 200, 200, 0.5);
+  border-radius: 10px;
+  transition: width 0.4s ease-in;
+}

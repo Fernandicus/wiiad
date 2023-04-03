@@ -41,4 +41,6 @@ export class ApiRoutes {
     "/api/v1/payments/stripe/remove-pm";
   static readonly stripeGetCardDetails = (pmId: string) =>
     `/api/v1/payments/stripe/cards/get-card-details?pmId=${pmId}`;
+  static readonly watchingAdSendAction = (actionName: string) =>
+    `api/v1/watch-ad?action=${actionName}`;
 }

@@ -1,11 +1,12 @@
 import { Campaign } from "@/src/modules/campaign/domain/Campaign";
 import { ICampaignRepo } from "@/src/modules/campaign/domain/interfaces/ICampaignRepo";
 import { CampaignStatus } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export const mockedCampaignsRepo = (campaigns: Campaign[]): ICampaignRepo => {
   return {
     save: jest.fn(),
+    removeByAdId: jest.fn(),
     findAllByAdvertiserId: jest
       .fn()
       .mockImplementation((id: UniqId): Campaign[] | null => {

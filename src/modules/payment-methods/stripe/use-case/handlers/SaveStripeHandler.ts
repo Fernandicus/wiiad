@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { CustomerId } from "../../domain/value-objects/CustomerId";
 import { Stripe } from "../../domain/Stripe";
 import { SaveStripe } from "../SaveStripe";

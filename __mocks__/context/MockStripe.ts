@@ -9,6 +9,7 @@ import { FakePaymentDetails } from "../../__mocks__/lib/modules/payment-methods/
 import { PaymentIntentId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentIntentId";
 import { FakeWebhookEvent } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
+import { StripePayments } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
 
 type StripeEventType =
   | "payment_intent.succeeded"
@@ -40,9 +41,9 @@ const jestFn = <R>(callBack: (...vals: any) => R) => {
   return jest.fn().mockImplementation(callBack);
 };
 
-const customers_create = jestFn((): CustomerId => FakeCustomerId.create());
+const mock_customers_create = jestFn((): CustomerId => FakeCustomerId.create());
 
-const paymentIntent_confirm = jestFn(
+const mock_paymentIntent_confirm = jestFn(
   (id: string): { status: Stripe.PaymentIntent.Status } => {
     if (FakeUniqId.checkIfIdNotExist(id)) {
       return { status: "canceled" };
@@ -52,7 +53,7 @@ const paymentIntent_confirm = jestFn(
   }
 );
 
-const paymentIntent_create = jestFn(
+const mock_paymentIntent_create = jestFn(
   (params: IStripePaymentIntentParams): IStripePaymentIntentParams | null => {
     if (FakeUniqId.checkIfIdNotExist(params.customer!)) return null;
     const details = FakePaymentDetails.create({
@@ -85,7 +86,7 @@ const paymentIntent_retrieve = jestFn(
   }
 );
 
-const paymentMethods_retrieve = jestFn((id: string) => {
+const mock_paymentMethods_retrieve = jestFn((id: string) => {
   if (FakeUniqId.checkIfIdNotExist(id)) return null;
   const pmId = new PaymentMethodId(id);
   const fakeCardDetails =
@@ -101,18 +102,24 @@ const paymentMethods_retrieve = jestFn((id: string) => {
   };
 });
 
-export const mockedStripe = jestFn(() => {
+type Strp<T = Stripe> = {
+  [K in keyof T]: object;
+};
+
+type StripeMethods = Partial<Strp<Stripe>>;
+
+export const mockedStripe = jestFn((): StripeMethods => {
   return {
     customers: {
-      create: customers_create,
+      create: mock_customers_create,
     },
     paymentIntents: {
-      confirm: paymentIntent_confirm,
-      create: paymentIntent_create,
+      confirm: mock_paymentIntent_confirm,
+      create: mock_paymentIntent_create,
       retrieve: paymentIntent_retrieve,
     },
     paymentMethods: {
-      retrieve: paymentMethods_retrieve,
+      retrieve: mock_paymentMethods_retrieve,
     },
     webhooks: { constructEvent: jest.fn() },
   };

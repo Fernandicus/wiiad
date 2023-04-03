@@ -1,6 +1,6 @@
 import { PricesPerClick } from "@/src/common/domain/PricesPerClick";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IClientSecret } from "../../domain/interfaces/StripeApiCalls";
 import { PayWithStripe } from "../PayWithStripe";
 

@@ -5,31 +5,31 @@ import { PaymentStatus } from "@/src/modules/payment-methods/stripe/domain/value
 import {
   IPaymentWithoutPaymentMethod,
   IPaymentWithPaymentMethod,
+  ISetupIntent,
   IValidatedPaymentData,
-  StripePayments,
 } from "@/src/modules/payment-methods/stripe/infrastructure/StripePayments";
 import { FakeCustomerId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeCustomerId";
 import { FakeCardDetails } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { FakePaymentDetails } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentDetails";
 import { FakePaymentIntentId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentIntentId";
 import { FakePaymentMethodId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakePaymentMethodId";
-import { FakeWebhookEvent } from "__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
-import { FakeCampaign } from "__mocks__/lib/modules/campaign/FakeCampaign";
+import { FakeWebhookEvent } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeWebhookEvent";
 import { CampaignBudget } from "@/src/modules/campaign/domain/value-objects/Budget";
 import { Balance } from "@/src/common/domain/Balance";
-import { FakeUniqId } from "__mocks__/lib/domain/FakeUniqId";
 import { CardBrand } from "@/src/modules/payment-methods/stripe/domain/value-objects/CardBrand";
 import { ExpMonth } from "@/src/modules/payment-methods/stripe/domain/value-objects/ExpMonth";
 import { ExpYear } from "@/src/modules/payment-methods/stripe/domain/value-objects/ExpYear";
 import { Last4 } from "@/src/modules/payment-methods/stripe/domain/value-objects/Last4";
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
 import { Clicks } from "@/src/modules/campaign/domain/value-objects/Clicks";
+import { FakeStripeClientSecret } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeStripeClientSecret";
+import { FakeSetupIntentId } from "../../__mocks__/lib/modules/payment-methods/stripe/FakeSetupIntent";
 
 interface IMockPaymentWithPM extends IPaymentWithPaymentMethod {
   paymentMethod: FakePaymentMethodId;
 }
 
-interface IMockPaymentWithPM extends IPaymentWithoutPaymentMethod {
+interface IMockPaymentWithCustomer extends IPaymentWithoutPaymentMethod {
   customerId: FakeCustomerId;
 }
 
@@ -68,7 +68,7 @@ const paymentIntentWithPaymentMethod = jestFn(
 );
 
 const paymentIntentWithoutPaymentMethod = jestFn(
-  (params: IMockPaymentWithPM): PaymentDetails | null => {
+  (params: IMockPaymentWithCustomer): PaymentDetails | null => {
     if (params.customerId.checkIfNotExsits()) return null;
     return FakePaymentDetails.createWithRandomPaymentDetails(
       FakePaymentIntentId.create()
@@ -101,6 +101,15 @@ const validateWebhookEvent = jestFn(
   }
 );
 
+const setupIntent = jestFn(
+  (customerId: CustomerId): ISetupIntent => ({
+    client_secret: FakeStripeClientSecret.create(),
+    id: FakeSetupIntentId.create(),
+  })
+);
+
+const detachPaymentMethod = jest.fn()
+
 export const mockedStripePayments = jestFn(() => {
   return {
     getPaymentMethodDetails,
@@ -110,5 +119,7 @@ export const mockedStripePayments = jestFn(() => {
     paymentIntentWithoutPaymentMethod,
     createCustomer,
     validateWebhookEvent,
+    setupIntent,
+    detachPaymentMethod
   };
 });

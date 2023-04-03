@@ -7,7 +7,7 @@ interface IScreenPageLayoutProps {
   children: ReactElement;
 }
 
-export const ScreenScreenPageLayout = ({
+export const ScreenPageLayout = ({
   children,
 }: IScreenPageLayoutProps) => {
   return (

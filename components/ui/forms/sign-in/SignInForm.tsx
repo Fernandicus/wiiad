@@ -3,6 +3,8 @@ import { RoleType } from "@/src/common/domain/Role";
 import { FormEvent, useRef, useState } from "react";
 import { PrimaryButton } from "../../buttons/PrimaryButton";
 import { SecondaryButton } from "../../buttons/SecondaryButton";
+import { useSignInForm } from "../hooks/useSignInForm";
+import { replaceInputTextSpacesWith } from "@/src/utils/helpers";
 
 enum Loader {
   isLoading,
@@ -35,53 +37,28 @@ export const SignInForm = (params: {
   const namePlaceHolder = isUserRole ? `Paquito_Chocolatero` : "Coca-Cola";
   const switcher = () => setNewAccount((isNewAccount) => !isNewAccount);
 
-  const signIn = async (
-    isNewAccount: boolean,
-    data: { role: RoleType; email: string; userName?: string }
-  ): Promise<void> => {
-    const { email, role, userName } = data;
-    const submitForm = new SubmitSignInController();
-    if (isNewAccount)
-      await submitForm.singUp({
-        role,
-        email,
-        userName: userName!,
-      });
-    else
-      await submitForm.logIn({
-        role,
-        email,
-      });
-  };
-
-  const sumbitCreateNewUser = async (
-    e: FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    if (isLoading) return;
-    const email = emailRef.current?.value;
-    const userName = userNameRef.current?.value;
-    if (!email) return;
-    try {
-      setLoader(true);
-      await signIn(isNewAccount, { role: userRole, userName, email });
-      setLoader(false);
-      onSuccess();
-    } catch (err) {
-      setLoader(false);
-      if (err instanceof Error) onError(err);
-    }
-  };
+  const { input, handle } = useSignInForm({
+    isNewAccount,
+    onError,
+    onSuccess,
+    userRole,
+  });
 
   return (
-    <form className="space-y-10" onSubmit={sumbitCreateNewUser}>
+    <form className="space-y-10" onSubmit={(e) => handle.submit(e, {})}>
       <div className=" space-y-6">
         <div className="">
           {isNewAccount ? (
             <div className="space-y-2 mb-4">
               <label htmlFor="myName">{nameInputLabel}</label>
               <input
-                ref={userNameRef}
+                name={input.names.userName}
+                value={input.values.userName}
+                onChange={(e) => {
+                  e.target.value = replaceInputTextSpacesWith(e, "_");
+                  handle.change(e);
+                }}
+                // ref={userNameRef}
                 type="text"
                 placeholder={namePlaceHolder}
                 className="border border-gray-300 rounded-md px-2 block w-full h-10"
@@ -94,8 +71,14 @@ export const SignInForm = (params: {
           <div className="space-y-2">
             <label htmlFor="myEmail">Tu email</label>
             <input
-              ref={emailRef}
-              type="email"
+              //ref={emailRef}
+              name={input.names.email}
+              value={input.values.email}
+              onChange={(e) => {
+                e.target.value = replaceInputTextSpacesWith(e, "_");
+                handle.change(e);
+              }}
+              type="text"
               placeholder={emailPlaceHolder}
               className="border border-gray-300 rounded-md px-2 block w-full h-10"
               required

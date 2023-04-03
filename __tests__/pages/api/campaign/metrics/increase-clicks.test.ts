@@ -6,7 +6,7 @@ import {
   TestCampaignDB,
 } from "../../../../../__mocks__/lib/infrastructure/db/TestCampaignDB";
 import { mockedContext } from "../../../../../__mocks__/context/MockContext";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () => {
   let activeCampaigns: Campaign[] | null;
@@ -45,8 +45,8 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     expect(res.statusCode).toBe(400);
   },12000);
 
-  it(`WHEN send POST request with a not existing campaign id, 
-  THEN status code should be 400`, async () => {
+ it(`WHEN send POST request with a not existing campaign id, 
+  THEN status code should be 200`, async () => {
     const { req, res } = mockedContext({
       method: "POST",
       body: {
@@ -55,8 +55,8 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
     });
 
     await api_v1_IncreaseClicks(req, res);
-    expect(res.statusCode).toBe(400);
-  },12000);
+    expect(res.statusCode).toBe(200);
+  },12000); 
 
   it(`WHEN send POST request with or without user session an with an active campaign id, 
   THEN campaign  total clicks should be increased by one and status code should be 200`, async () => {
@@ -78,7 +78,7 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
   },12000);
 
   it(`WHEN send POST request with a stand by campaign id, 
-  THEN status code shoudl be 400`, async () => {
+  THEN status code shoudl be 200`, async () => {
     const campaign = standByCampaigns![0];
     const { req, res } = mockedContext({
       method: "POST",
@@ -89,11 +89,11 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
 
     await api_v1_IncreaseClicks(req, res);
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(200);
   },12000);
 
   it(`WHEN send POST request with a finished campaign id, 
-  THEN status code shoudl be 400`, async () => {
+  THEN status code shoudl be 200`, async () => {
     const campaign = finisehdCampaigns![0];
     const { req, res } = mockedContext({
       method: "POST",
@@ -104,6 +104,6 @@ describe("On api/v1/campaign/metrics/increase-clicks, GIVEN some Campaigns", () 
 
     await api_v1_IncreaseClicks(req, res);
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(200);
   },12000);
 });

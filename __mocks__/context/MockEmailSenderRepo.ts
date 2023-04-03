@@ -4,5 +4,6 @@ export const mockedEmailSenderRepo = (): IEmailSenderRepo => {
   return {
     login: jest.fn(),
     signUp:jest.fn(),
+    updateEmail: jest.fn(),
   };
 };

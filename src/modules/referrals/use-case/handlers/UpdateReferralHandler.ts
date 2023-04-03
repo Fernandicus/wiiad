@@ -1,35 +1,37 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
+import { RefereeId } from "../../domain/RefereeId";
+import { ReferrerId } from "../../domain/ReferrerId";
 import { UpdateReferral } from "../UpdateReferral";
 
 export class UpdateReferralHandler {
   constructor(private update: UpdateReferral) {}
 
   async increaseReferrerBalance(
-    userId: string,
+    referrerId: string,
     balanceToAdd: number
   ): Promise<void> {
-    const uniqUserId = new UniqId(userId);
+    const referrer =  ReferrerId.fromString(referrerId);
     const balance = new Balance(balanceToAdd);
-    await this.update.increaseReferrerBalance(uniqUserId, balance);
+    await this.update.increaseReferrerBalance(referrer, balance);
   }
 
   async increaseRefereeBalance(
-    userId: string,
+    refereeId: string,
     balanceToAdd: number
   ): Promise<void> {
-    const uniqUserId = new UniqId(userId);
+    const referee = RefereeId.fromString(refereeId);
     const balance = new Balance(balanceToAdd);
-    await this.update.increaseRefereeBalance(uniqUserId, balance);
+    await this.update.increaseRefereeBalance(referee, balance);
   }
 
   async increaseWatchedAds(refereeId:string):Promise<void>{
-    const userId = new UniqId(refereeId);
-    await this.update.increaseWatchedAds(userId)
+    const referee = RefereeId.fromString(refereeId);
+    await this.update.increaseWatchedAds(referee)
   }
 
-  async increaseReferredUsers(refereeId:string):Promise<void>{
-    const userId = new UniqId(refereeId);
-    await this.update.increaseReferredUsers(userId)
+  async increaseReferredUsers(referrerId:string):Promise<void>{
+    const referrer =  ReferrerId.fromString(referrerId);
+    await this.update.increaseReferredUsers(referrer)
   }
 }

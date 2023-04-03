@@ -35,7 +35,7 @@ import { Last4 } from "@/src/modules/payment-methods/stripe/domain/value-objects
 import { PaymentMethodId } from "@/src/modules/payment-methods/stripe/domain/value-objects/PaymentMethodId";
 import { ApiRoutes } from "@/src/utils/ApiRoutes";
 import { getApiResponse } from "@/src/utils/helpers";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ErrorFetchingAdvertiser } from "../domain/errors/ErrorFetchingAdvertiser";
 import { IAdvertiserApiCall } from "../domain/interfaces/IAdvertiserApiCall";
 import { IUpdateProfileDataProps } from "../use-case/UpdateAdvertiserProfileData";

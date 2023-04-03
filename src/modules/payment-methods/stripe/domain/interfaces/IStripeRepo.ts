@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Stripe } from "../Stripe";
 import { CardDetails } from "../CardDetails";
 import { PaymentMethodId } from "../value-objects/PaymentMethodId";

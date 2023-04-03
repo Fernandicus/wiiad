@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { CampaignBudget } from "./value-objects/Budget";
 import { CampaignMetrics } from "./value-objects/CampaignMetrics";
 import { CampaignStatus, CampaignStatusType } from "./value-objects/CampaignStatus";

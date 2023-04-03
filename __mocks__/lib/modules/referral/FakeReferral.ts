@@ -5,7 +5,7 @@ import {
   IReferralPrimitives,
 } from "@/src/modules/referrals/domain/Referral";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 
 export class FakeReferral extends Referral {
   constructor(params: IReferralProps) {

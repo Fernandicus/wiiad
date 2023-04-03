@@ -55,11 +55,12 @@ export default function Home(props: { session: IUserPrimitives }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = userSession.getFromServer(context);
+
   if (session)
     return {
       props: {},
       redirect: {
-        destination: `/${session.name}`,
+        destination: `/profile` //`/${session.name}`,
       },
     };
   return {

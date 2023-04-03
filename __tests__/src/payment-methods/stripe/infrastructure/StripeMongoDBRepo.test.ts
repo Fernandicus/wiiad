@@ -1,7 +1,7 @@
 import { CardDetails } from "@/src/modules/payment-methods/stripe/domain/CardDetails";
 import { Stripe } from "@/src/modules/payment-methods/stripe/domain/Stripe";
 import { StripeMongoDBRepo } from "@/src/modules/payment-methods/stripe/infrastructure/db/StripeMongoDBRepo";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeCardDetails } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { FakeStripe } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeStripe";
 import { TestStripeMongoDBRepo } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/infrastructure/TestStripeMongoDBRepo";

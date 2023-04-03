@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ErrorFindingStripe } from "../domain/errors/ErrorFindingStripe";
 import { IStripeRepo } from "../domain/interfaces/IStripeRepo";
 import { Stripe } from "../domain/Stripe";

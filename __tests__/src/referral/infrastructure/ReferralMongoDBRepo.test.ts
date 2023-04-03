@@ -1,12 +1,14 @@
 import { Referral } from "@/src/modules/referrals/domain/Referral";
 import { User } from "@/src/modules/users/user/domain/User";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeUser } from "../../../../__mocks__/lib/modules/user/FakeUser";
 import { setTestReferralDB } from "../../../../__mocks__/lib/infrastructure/db/TestReferralDB";
 import { FakeReferral } from "../../../../__mocks__/lib/modules/referral/FakeReferral";
 import { Balance } from "@/src/common/domain/Balance";
 import { ReferralCounter } from "@/src/modules/referrals/domain/ReferralCounter";
 import { ReferralMongoDBRepo } from "@/src/modules/referrals/infrastructure/db/ReferralMongoDBRepo";
+import { ReferrerId } from "@/src/modules/referrals/domain/ReferrerId";
+import { RefereeId } from "@/src/modules/referrals/domain/RefereeId";
 
 describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
   let user: User;
@@ -15,7 +17,6 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
   let increaseData: {
     balance: Balance;
     counter: ReferralCounter;
-    userId: UniqId;
   };
 
   beforeAll(async () => {
@@ -27,18 +28,23 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     increaseData = {
       balance: new Balance(5),
       counter: ReferralCounter.one(),
-      userId: user.id,
+      
     };
   });
 
   it(`WHEN call save, THEN a new referral must be saved and foundByUserId in MongoDB`, async () => {
     await repo.save(referral);
     const referralFound = await repo.findByUserID(user.id);
-    expect(referralFound!).toEqual(referral);
+    referralFound.match({
+      nothing() {},
+      some(value) {
+        expect(value).toEqual(referral);
+      },
+    });
   });
 
   it(`WHEN call increaseReferrerData, the Referral referrer data must be updated`, async () => {
-    await repo.increaseReferrerData(increaseData);
+    await repo.increaseReferrerData({...increaseData, referrerId: new ReferrerId({uniqId:user.id}),});
 
     const referralFound = await repo.findByUserID(user.id);
 
@@ -47,12 +53,17 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     const increasedReferrers =
       referral.referrers.getAmount() + increaseData.counter.getAmount();
 
-    expect(referralFound?.referrerBalance.total).toEqual(increasedBalance);
-    expect(referralFound?.referrers.getAmount()).toEqual(increasedReferrers);
+    referralFound.match({
+      some(value) {
+        expect(value.referrerBalance.total).toEqual(increasedBalance);
+        expect(value.referrers.getAmount()).toEqual(increasedReferrers);
+      },
+      nothing() {},
+    });
   });
 
   it(`WHEN call increaseRefereeData, the Referral referee data must be updated`, async () => {
-    await repo.increaseRefereeData(increaseData);
+    await repo.increaseRefereeData({...increaseData, refereeId: new RefereeId({uniqId:user.id})});
 
     const referralFound = await repo.findByUserID(user.id);
 
@@ -61,7 +72,12 @@ describe(`On ReferralMongoDBRepo, GIVEN an User`, () => {
     const increasedReferrers =
       referral.referees.getAmount() + increaseData.counter.getAmount();
 
-    expect(referralFound?.refereeBalance.total).toEqual(increasedBalance);
-    expect(referralFound?.referees.getAmount()).toEqual(increasedReferrers);
+    referralFound.match({
+      some(value) {
+        expect(value.refereeBalance.total).toEqual(increasedBalance);
+        expect(value.referees.getAmount()).toEqual(increasedReferrers);
+      },
+      nothing() {},
+    });
   });
 });

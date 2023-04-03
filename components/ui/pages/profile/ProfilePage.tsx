@@ -3,7 +3,7 @@ import { RoleType } from "@/src/common/domain/Role";
 import { assertUnreachable } from "@/src/utils/helpers";
 import { ReactElement } from "react";
 import { PageLayout } from "../../layouts/PageLayout";
-import { ScreenScreenPageLayout } from "../../layouts/ScreenPageLayout";
+import { ScreenPageLayout } from "../../layouts/ScreenPageLayout";
 import { AdvertiserProfile } from "./advertiser/AdvertiserProfile";
 import { UserProfile } from "./user/UserProfile";
 
@@ -26,9 +26,9 @@ export const ProfilePage = (props: IProfilePageParams) => {
 
   const profile: Record<RoleType, ReactElement | null> = {
     user: (
-      <ScreenScreenPageLayout>
+      <ScreenPageLayout>
         <UserProfile user={user} />
-      </ScreenScreenPageLayout>
+      </ScreenPageLayout>
     ),
     business: (
       <PageLayout>

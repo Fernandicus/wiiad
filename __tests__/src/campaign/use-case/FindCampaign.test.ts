@@ -6,7 +6,7 @@ import {
   CampaignStatusType,
 } from "@/src/modules/campaign/domain/value-objects/CampaignStatus";
 import { FindCampaign } from "@/src/modules/campaign/use-case/FindCampaign";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { mockedCampaignsRepo } from "../../../../__mocks__/context/MockCampaignRepo";
 import { FakeCampaign } from "../../../../__mocks__/lib/modules/campaign/FakeCampaign";
 
@@ -32,7 +32,7 @@ describe("On FindCampaign use case, GIVEN some active campaigns", () => {
       amount: 3,
       status: CampaignStatusType.FINISHED,
     });
-    
+
     campaign = actives[0];
     const campaigns = [...actives, ...finished, ...standby, campaign];
 
@@ -41,7 +41,8 @@ describe("On FindCampaign use case, GIVEN some active campaigns", () => {
     findCampaign = new FindCampaign(mockedRepo);
   });
 
-  it(`WHEN call findAllActives, THEN repo method findAllByStatus should be called with CampaignStatus active`, async () => {
+  it(`WHEN call findAllActives, 
+  THEN repo method findAllByStatus should be called with CampaignStatus active`, async () => {
     const found = await findCampaign.allActives();
     expect(mockedRepo.findAllByStatus).toBeCalledWith(CampaignStatus.active());
   });
@@ -51,20 +52,23 @@ describe("On FindCampaign use case, GIVEN some active campaigns", () => {
     expect(mockedRepo.byId).toBeCalledWith(campaign.id);
   });
 
-  it(`WHEN call byId for a not existing id, THEN an ErrorFindingCampaign should be thrown`, async () => {
+  it(`WHEN call byId for a not existing id, 
+  THEN an ErrorFindingCampaign should be thrown`, async () => {
     expect(findCampaign.byId(UniqId.new())).rejects.toThrowError(
       ErrorFindingCampaign
     );
   });
 
-  it(`WHEN call findAllByAdvertiserId, THEN repo method findAllByAdvertiserId should be called with advertiserId`, async () => {
+  it(`WHEN call findAllByAdvertiserId, 
+  THEN repo method findAllByAdvertiserId should be called with advertiserId`, async () => {
     await findCampaign.findAllByAdvertiserId(campaign.advertiserId);
     expect(mockedRepo.findAllByAdvertiserId).toBeCalledWith(
       campaign.advertiserId
     );
   });
 
-  it(`WHEN call findAllByAdvertiserId for a not existing advertiser id,  THEN an ErrorFindingCampaign should be thrown`, async () => {
+  it(`WHEN call findAllByAdvertiserId for a not existing advertiser id,
+  THEN an ErrorFindingCampaign should be thrown`, async () => {
     expect(
       findCampaign.findAllByAdvertiserId(UniqId.new())
     ).rejects.toThrowError(ErrorFindingCampaign);

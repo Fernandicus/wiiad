@@ -1,7 +1,6 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IStripeRepo } from "../domain/interfaces/IStripeRepo";
 import { PaymentMethodId } from "../domain/value-objects/PaymentMethodId";
-import { StripePayments } from "../infrastructure/StripePayments";
 
 export class RemovePM {
   constructor(private repo: IStripeRepo) {}

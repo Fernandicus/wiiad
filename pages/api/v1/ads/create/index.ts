@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoDB } from "@/src/common/infrastructure/MongoDB";
 import { AdPropsPrimitives } from "@/src/modules/ad/domain/Ad";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { reqBodyParse } from "@/src/utils/helpers";
 import { userSession } from "@/src/modules/session/infrastructure/session-container";
 import { adCreatorHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {  
   if (req.method !== "POST") {
     res.status(400);
     return;

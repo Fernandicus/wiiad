@@ -2,6 +2,7 @@ import { NextApiRequest } from "next";
 import { ChangeEvent, RefObject } from "react";
 import { IApiResp } from "../common/domain/interfaces/IApiResponse";
 import { Role, RoleType } from "../common/domain/Role";
+import { UniqId } from "../common/domain/UniqId";
 import { IUserPrimitives } from "../modules/users/user/domain/User";
 
 export const reqBodyParse = (req: NextApiRequest) =>
@@ -43,3 +44,18 @@ export const isAdvertiser = <T>(
 ): T | void => {
   if (role.role === RoleType.BUSINESS) return fn.then();
 };
+
+export function verifyIdFromString(
+  value: string,
+  reference: string
+): { uniqId: UniqId; prefix: string } {
+  if (!value.includes(reference))
+    throw new Error(`No reference found in ${value}`);
+
+  const uniqId = new UniqId(value);
+  const prefix = value.split(`_${reference}`)[0];
+
+  console.log(prefix);
+  
+  return { uniqId, prefix };
+}

@@ -8,8 +8,8 @@ export const projectConfig = {
     MongoURL: process.env.MONGODB_URL,
   },
   STRIPE: {
-    public_key:
-      "pk_test_51Lv1JPByzAsF6qVaGrVyT6XijgRvGqFrBDfu5AzCQtv99BuTFykAh9ZUIjTsrXBYPIfd88V6OT2m3PIgApJuOTAo00qpsi6Y4n",
+    //  "pk_test_51Lv1JPByzAsF6qVaGrVyT6XijgRvGqFrBDfu5AzCQtv99BuTFykAh9ZUIjTsrXBYPIfd88V6OT2m3PIgApJuOTAo00qpsi6Y4n",
+    public_key: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     secret_key: process.env.STRIPE_SECRET_KEY,
     webhook_secret: process.env.STRIPE_SUCCESS_WEBHOOK_SECRET,
   },
@@ -20,9 +20,9 @@ export const projectConfig = {
     pwd: process.env.SMTP_PASSWORD,
     email: process.env.EMAIL_FROM,
   },
-  CLOUDINARY:{
+  CLOUDINARY: {
     name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-  }
+  },
 };

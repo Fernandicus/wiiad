@@ -1,7 +1,7 @@
 import { Email } from "@/src/common/domain/Email";
 import { Maybe } from "@/src/common/domain/Maybe";
 import { Name } from "@/src/common/domain/Name";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { ErrorFindingUser } from "../domain/ErrorFindingUser";
 import { IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";

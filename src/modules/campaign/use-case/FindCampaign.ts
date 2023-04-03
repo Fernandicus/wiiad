@@ -1,4 +1,4 @@
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { Campaign } from "../domain/Campaign";
 import { ErrorFindingCampaign } from "../domain/errors/ErrorFindingCampaign";
 import { ICampaignRepo } from "../domain/interfaces/ICampaignRepo";

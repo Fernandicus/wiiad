@@ -3,7 +3,7 @@ import { Maybe } from "@/src/common/domain/Maybe";
 import { Name } from "@/src/common/domain/Name";
 import { ProfilePic } from "@/src/common/domain/ProfilePic";
 import { Role, RoleType } from "@/src/common/domain/Role";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IUserRepo } from "../domain/IUserRepo";
 import { User } from "../domain/User";
 import { IUpdateUserProfileProps } from "../use-case/UpdateUser";

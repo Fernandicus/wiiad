@@ -1,6 +1,6 @@
 import { IStripeRepo } from "@/src/modules/payment-methods/stripe/domain/interfaces/IStripeRepo";
 import { UpdateStripe } from "@/src/modules/payment-methods/stripe/use-case/UpdateStripe";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { FakeCardDetails } from "../../../../../__mocks__/lib/modules/payment-methods/stripe/FakeCardDetails";
 import { mockedStripeRepo } from "../../../../../__mocks__/context/MockStripeRepo";
 

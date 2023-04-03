@@ -1,5 +1,5 @@
 import { Balance } from "@/src/common/domain/Balance";
-import { UniqId } from "@/src/utils/UniqId";
+import { UniqId } from "@/src/common/domain/UniqId";
 import { IReferralPrimitives, Referral } from "../../domain/Referral";
 import { ReferralCounter } from "../../domain/ReferralCounter";
 import { CreateReferral } from "../CreateReferral";
@@ -7,23 +7,27 @@ import { CreateReferral } from "../CreateReferral";
 export class CreateReferralHandler {
   constructor(private createReferral: CreateReferral) {}
 
-  async create(params: {
-    id: string;
-    userId: string;
-    referral: IReferralPrimitives;
-  }): Promise<void> {
+  /*   private async create(referral: IReferralPrimitives): Promise<void> {
     const newReferral = new Referral({
-      id: new UniqId(params.id),
-      userId: new UniqId(params.userId),
-      refereeBalance: new Balance(params.referral.refereeBalance),
-      referrerBalance: new Balance(params.referral.referrerBalance),
-      referees: new ReferralCounter(params.referral.referees),
-      referrers: new ReferralCounter(params.referral.referrers),
+      id: new UniqId(referral.id),
+      userId: new UniqId(referral.userId),
+      refereeBalance: new Balance(referral.refereeBalance),
+      referrerBalance: new Balance(referral.referrerBalance),
+      referees: new ReferralCounter(referral.referees),
+      referrers: new ReferralCounter(referral.referrers),
     });
-    await this.createReferral.create(newReferral);
+    await this.createReferral.new(newReferral);
+  } */
+
+  async new(props: { userId: string; id: string }) {
+    const referral = Referral.empty({
+      id: new UniqId(props.id),
+      userId: new UniqId(props.userId),
+    });
+    await this.createReferral.new(referral);
   }
 
-  async forReferee(params: {
+  /*   async forReferee(params: {
     id: string;
     refereeId: string;
     refereeBalance: number;
@@ -71,5 +75,5 @@ export class CreateReferralHandler {
     });
 
     await this.createReferral.create(newReferral);
-  }
+  } */
 }
