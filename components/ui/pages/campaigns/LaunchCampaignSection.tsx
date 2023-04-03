@@ -20,7 +20,7 @@ export const LaunchCampaignSection = () => {
           <div className="col-span-2 p-5 border-r border-slate-100">
             {clientSecret ? (
               <StripePaymentElement
-                buttonLabel=" Pagar y lanzar"
+                buttonLabel="Pagar y lanzar"
                 onSubmit={async ({ elements, stripe }) => {
                   if (isSending) return;
                   setIsSending(true);

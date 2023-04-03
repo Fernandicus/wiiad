@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           throw new Error("User role is not of type 'User'");
 
         const referrerName = getReferrerNameFromURL(resolvedUrl);
-
+  
         return await initializeWatchingAdHandler.init({
           referrerName,
           referee: session ? session : undefined,

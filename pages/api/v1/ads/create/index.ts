@@ -7,7 +7,7 @@ import { userSession } from "@/src/modules/session/infrastructure/session-contai
 import { adCreatorHandler } from "@/src/modules/ad/infraestructure/ad-container";
 import { IApiResp } from "@/src/common/domain/interfaces/IApiResponse";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {  
   if (req.method !== "POST") {
     res.status(400);
     return;
