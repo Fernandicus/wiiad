@@ -14,6 +14,17 @@ export const useSignInForm = (props: {
   onSuccess(): void;
   onError(error: Error): void;
 }) => {
+  const userNameYup = Yup.string().min(3, "Demasiado corto").max(25);
+
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .required("Campo obligatorio")
+      .email("El email no es válido"),
+    userName: props.isNewAccount
+      ? userNameYup.required("Campo obligatorio")
+      : userNameYup,
+  });
+
   const form = useForm({
     inputNames: {
       userName: "userName",
@@ -23,15 +34,7 @@ export const useSignInForm = (props: {
       email: "",
       userName: "",
     },
-    yupSchema: Yup.object().shape({
-      email: Yup.string()
-        .required("Campo obligatorio")
-        .email("El email no es válido"),
-      userName: Yup.string()
-        .required("Campo obligatorio")
-        .min(3, "Demasiado corto")
-        .max(25),
-    }),
+    yupSchema: schema,
     handleSubmit: async (values) => {
       try {
         await sumbitCreateNewUser(values);
@@ -54,11 +57,12 @@ export const useSignInForm = (props: {
         email,
         userName: userName!,
       });
-    } else
+    } else {
       await submitForm.logIn({
         role,
         email,
       });
+    }
   };
 
   const sumbitCreateNewUser = async (values: TSingInValues): Promise<void> => {
