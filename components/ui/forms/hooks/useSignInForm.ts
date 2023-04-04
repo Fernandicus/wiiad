@@ -48,13 +48,13 @@ export const useSignInForm = (props: {
   ): Promise<void> => {
     const { email, role, userName } = data;
     const submitForm = new SubmitSignInController();
-    if (isNewAccount)
+    if (isNewAccount) {
       await submitForm.singUp({
         role,
         email,
         userName: userName!,
       });
-    else
+    } else
       await submitForm.logIn({
         role,
         email,
@@ -62,7 +62,6 @@ export const useSignInForm = (props: {
   };
 
   const sumbitCreateNewUser = async (values: TSingInValues): Promise<void> => {
-    if (form.isSubmitting) return;
     const email = values.email;
     const userName = values.userName;
     if (!email) return;
