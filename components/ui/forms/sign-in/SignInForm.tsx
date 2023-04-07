@@ -50,7 +50,6 @@ export const SignInForm = (params: {
     <form
       className="space-y-10"
       onSubmit={(e) => {
-        console.log("object");
          e.preventDefault();
         handle.submit(e, isNewAccount);
       }}
