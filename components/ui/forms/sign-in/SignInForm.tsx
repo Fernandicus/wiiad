@@ -51,7 +51,8 @@ export const SignInForm = (params: {
       className="space-y-10"
       onSubmit={(e) => {
          e.preventDefault();
-        handle.submit(e, isNewAccount);
+        
+        handle.submit(e, {});
       }}
     >
       <div className=" space-y-6">

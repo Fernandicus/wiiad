@@ -15,17 +15,22 @@ export const useSignInForm = (props: {
   onSuccess(): void;
   onError(error: Error): void;
 }) => {
-  const [isNewAccount, setIsNewAccount] = useState<boolean>(props.newAccount);
-  const userNameYup = Yup.string().min(3, "Demasiado corto").max(25);
-  const emailYup = Yup.string()
-    .required("Campo obligatorio")
-    .email("El email no es válido");
 
-  const schema = Yup.object().shape({
-    email: emailYup,
-    userName: isNewAccount
-      ? userNameYup.required("Campo obligatorio")
-      : userNameYup,
+  const newAccountSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("El email no es válido")
+      .required("Campo obligatorio"),
+    userName: Yup.string()
+      .min(3, "Demasiado corto")
+      .max(25)
+     .required("Campo obligatorio"),
+  });
+
+  const existingAccountSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("Campo obligatorio")
+      .email("El email no es válido"),
+    userName: Yup.string().min(3, "Demasiado corto").max(25),
   });
 
   const form = useForm({
@@ -37,10 +42,7 @@ export const useSignInForm = (props: {
       email: "",
       userName: "",
     },
-    yupSchema: schema,
-    onSubmit: (isNewAccount: boolean) => {
-      setIsNewAccount(isNewAccount);
-    },
+    yupSchema: props.newAccount ? newAccountSchema : existingAccountSchema,
     handleSubmit: async (values) => {
       try {
         await sumbitCreateNewUser(values);
@@ -58,7 +60,7 @@ export const useSignInForm = (props: {
   }): Promise<void> => {
     const { email, role, userName } = data;
     const submitForm = new SubmitSignInController();
-    if (isNewAccount) {
+    if (props.newAccount) {
       await submitForm.singUp({
         role,
         email,

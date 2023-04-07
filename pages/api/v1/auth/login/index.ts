@@ -24,7 +24,6 @@ export default async function handler(
   const { data, isNewUser }: IApiReqSendEmailVerification = reqBodyParse(req);
 
   try {
-    
     const roleHandler = new HandleRolesHandler(data.role);
     await MongoDB.connectAndDisconnect(async () => {
       await roleHandler.forRole({
