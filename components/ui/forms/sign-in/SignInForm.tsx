@@ -35,21 +35,24 @@ export const SignInForm = (params: {
     ? `paco_jimenez@email.com`
     : "info@coca-cola.com";
   const namePlaceHolder = isUserRole ? `Paquito_Chocolatero` : "Coca-Cola";
-  const switcher = () => setNewAccount((isNewAccount) => !isNewAccount);
+  const switcher = ()=> setNewAccount((isNewAccount) => !isNewAccount)
 
   const { input, handle } = useSignInForm({
-    isNewAccount,
+    newAccount:isNewAccount,
     onError,
     onSuccess,
     userRole,
   });
 
+
+
   return (
     <form
       className="space-y-10"
       onSubmit={(e) => {
+        console.log("object");
          e.preventDefault();
-        handle.submit(e, {});
+        handle.submit(e, isNewAccount);
       }}
     >
       <div className=" space-y-6">

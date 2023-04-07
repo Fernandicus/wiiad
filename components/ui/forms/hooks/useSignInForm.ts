@@ -2,6 +2,7 @@ import { RoleType } from "@/src/common/domain/Role";
 import { useForm } from "../../pages/ads/hooks/useForm";
 import * as Yup from "yup";
 import { SubmitSignInController } from "@/components/src/sing-in/infrastructure/controllers/SubmitSignInController";
+import { useState } from "react";
 
 type TSingInValues = {
   userName: string;
@@ -9,18 +10,20 @@ type TSingInValues = {
 };
 
 export const useSignInForm = (props: {
-  isNewAccount: boolean;
+  newAccount: boolean;
   userRole: RoleType;
   onSuccess(): void;
   onError(error: Error): void;
 }) => {
+  const [isNewAccount, setIsNewAccount] = useState<boolean>(props.newAccount);
   const userNameYup = Yup.string().min(3, "Demasiado corto").max(25);
+  const emailYup = Yup.string()
+    .required("Campo obligatorio")
+    .email("El email no es válido");
 
   const schema = Yup.object().shape({
-    email: Yup.string()
-      .required("Campo obligatorio")
-      .email("El email no es válido"),
-    userName: props.isNewAccount
+    email: emailYup,
+    userName: isNewAccount
       ? userNameYup.required("Campo obligatorio")
       : userNameYup,
   });
@@ -35,6 +38,9 @@ export const useSignInForm = (props: {
       userName: "",
     },
     yupSchema: schema,
+    onSubmit: (isNewAccount: boolean) => {
+      setIsNewAccount(isNewAccount);
+    },
     handleSubmit: async (values) => {
       try {
         await sumbitCreateNewUser(values);
@@ -45,10 +51,11 @@ export const useSignInForm = (props: {
     },
   });
 
-  const signIn = async (
-    isNewAccount: boolean,
-    data: { role: RoleType; email: string; userName?: string }
-  ): Promise<void> => {
+  const signIn = async (data: {
+    role: RoleType;
+    email: string;
+    userName?: string;
+  }): Promise<void> => {
     const { email, role, userName } = data;
     const submitForm = new SubmitSignInController();
     if (isNewAccount) {
@@ -69,7 +76,7 @@ export const useSignInForm = (props: {
     const email = values.email;
     const userName = values.userName;
     if (!email) return;
-    await signIn(props.isNewAccount, { role: props.userRole, userName, email });
+    await signIn({ role: props.userRole, userName, email });
   };
 
   return form;
