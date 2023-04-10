@@ -9,17 +9,18 @@ export class AdvertiserProfileDataController {
   async getAdvertiserData(
     advertiserId: string
   ): Promise<IAdvertiserDataPrimitives> {
-    const findCampaigns = findCampaignHandler.byAdvertiserId(advertiserId);
-    const findAds = adFinderHandler.findAll(advertiserId);
-    const findStripeCustomer = findCustomerHandler.ByUserId(advertiserId);
-
     const [campaignsResp, adsResp, stripeCustomerResp] =
-      await Promise.allSettled([findCampaigns, findAds, findStripeCustomer]);
+      await Promise.allSettled([
+        findCampaignHandler.byAdvertiserId(advertiserId),
+        adFinderHandler.findAll(advertiserId),
+        findCustomerHandler.ByUserId(advertiserId),
+      ]);
 
     const campaigns = this.getValueArray(campaignsResp);
     const ads = this.getValueArray(adsResp);
     const stripeCustomer = this.getValue(stripeCustomerResp);
 
+    if (!stripeCustomer) return { campaigns, ads };
     return { campaigns, ads, stripeCustomer };
   }
 

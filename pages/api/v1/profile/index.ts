@@ -19,7 +19,7 @@ export default async function handler(
 
     const handler = HandleRolesHandler.givenUser(session!);
 
-    const data = await handler.forRole({
+    const advertiserProfile = await handler.forRole({
       BUSINESS: async (user) => {
         return await MongoDB.connectAndDisconnect(
           async () => await advertiserProfileCtrl.getAdvertiserData(user.id.id)
@@ -37,9 +37,10 @@ export default async function handler(
       },
     });
 
-    return res.status(200).json({ message: "Profile data", data });
+    return res.status(200).json({ message: "Profile data", data: {...advertiserProfile} });
   } catch (err) {
-    
-    return res.status(400);
+    console.error(err);
+    if (err instanceof Error)
+      return res.status(400).json({ message: err.message });
   }
 }
